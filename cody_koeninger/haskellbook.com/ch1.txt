@@ -1,0 +1,70 @@
+1. b
+2. c
+3. b
+
+1. y
+2. n, z is free
+3. y
+4. y
+5. n, z is free
+
+1. normal
+2. diverge
+3. normal
+
+1.
+(\abc.cba)zz(\wv.w)
+(\bc.cbzz)(\wv.w)
+(\c.c(\wv.w)zz)
+(\c.cz)
+
+wrong, should be
+(\abc.cba)zz(\wv.w)
+(\a.\b.\c.cba)(z)z(\wv.w)
+(\b.\c.cbz)z(\wv.w)
+(\c.czz)(\wv.w)
+(\wv.w)zz
+z
+
+2.
+(\x.\y.xyy)(\a.a)b
+(\y.(\a.a)yy)b
+(\a.a)bb
+bb
+
+3.
+(\y.y)(\x.xx)(\z.zq)
+(\x.xx)(\z.zq)
+(\z.zq)(\z.zq)
+(\z.zq)q
+qq
+
+4.
+(\z.z)(\z.zz)(\z.zy)
+(\a.a)(\b.bb)(\z.zy)
+(\b.bb)(\z.zy)
+(\z.zy)(\z.zy)
+(\z.zy)y
+yy
+
+5.
+(\x.\y.xyy)(\y.y)y
+(\a.\b.abb)(\c.c)y
+(\b.(\c.c)bb)y
+(\c.c)yy
+yy
+
+6.
+(\a.aa)(\b.ba)c
+(\d.dd)(\b.ba)c
+(\b.ba)(\b.ba)c
+(\b.ba)(a)c
+aac
+
+7.
+(\xyz.xz(yz))(\x.z)(\x.a)
+(\ijk.ik(jk))(\b.z)(\c.a)
+(\jk.(\b.z)k(jk))(\c.a)
+(\k.(\b.z)k((\c.a)k))
+(\k.z((\c.a)k))
+(\k.za)
