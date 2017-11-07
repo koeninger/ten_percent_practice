@@ -2,4 +2,4 @@
 
 Learning D3 beginning with a 3hr Treehouse course: 
 https://teamtreehouse.com/library/d3js
-
+dir: /d3_treehouse
