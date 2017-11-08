@@ -8,10 +8,12 @@ object readlog {
       val sc = new SparkContext(conf)
 
       val textFile = sc.textFile("../E1IN64R500NXTW.2017-10-19-12.9c2ba7f3.txt")
-      val cacheMiss = textFile.filter(line => line.contains("Miss"))
-      val cacheHit = textFile.filter(line => line.contains("Hit"))
-      val errors = textFile.filter(line => line.contains("Error"))
-      val cacheMissAndErrors = cacheMiss.intersection(errors)
-      cacheMissAndErrors.take(10).foreach(println)
+      val phpHackers = textFile.filter(line => line.contains(".php"))
+      val num = phpHackers.count()
+      println(s"Number of PHP hack attempts found: $num")
+      phpHackers.take(10).foreach(println)
+
+      val test = textFile.filter(line => line.contains("http")).map(line => line.split("	"))
+      test.take(10).foreach(line => println("Loading in "+line(18)+" seconds"))
     }
 }
