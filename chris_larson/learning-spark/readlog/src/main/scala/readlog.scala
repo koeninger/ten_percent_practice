@@ -13,7 +13,20 @@ object readlog {
       println(s"Number of PHP hack attempts found: $num")
       phpHackers.take(10).foreach(println)
 
-      val test = textFile.filter(line => line.contains("http")).map(line => line.split("	"))
-      test.take(10).foreach(line => println("Loading in "+line(18)+" seconds"))
+      val labels = textFile.filter(line => line.contains("#Fields:")).flatMap(line => line.replace("#Fields: ", "").split(" ")).collect.toList
+      val timeIndex = labels.indexOf("time-taken")
+      labels.foreach(line => println(line))
+      println(s"Index of time-taken: $timeIndex")
+
+      val pairRDD = textFile.filter(line => line.contains("http")).map(x => ("time-taken",x.split("	")(timeIndex).toDouble))
+      val cnt = pairRDD.count()
+      val total = pairRDD.values.reduce((x,y) => x+y)
+      val avg = total / cnt
+      println(s"Count: $cnt \n Total: $total \n Average: $avg")
+
+      pairRDD.values.take(10).foreach(line => println("Loading in "+line+" seconds"))
+
+      val test = textFile.filter(line => line.contains("http")).map(line => line.split("	")).map(line => line(timeIndex))
+      test.take(10).foreach(line => println("Loading in "+line+" seconds"))
     }
 }
