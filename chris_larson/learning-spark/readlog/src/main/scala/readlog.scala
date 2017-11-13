@@ -15,15 +15,18 @@ object readlog {
 
       val labels = textFile.filter(line => line.contains("#Fields:")).flatMap(line => line.replace("#Fields: ", "").split(" ")).collect.toList
       val timeIndex = labels.indexOf("time-taken")
+      val urlIndex = labels.indexOf("cs-uri-stem")
       labels.foreach(line => println(line))
       println(s"Index of time-taken: $timeIndex")
 
-      val pairRDD = textFile.filter(line => line.contains("http")).map(x => ("time-taken",x.split("	")(timeIndex).toDouble))
+      // Requests grouped by URL
+      val pairRDD = textFile.filter(line => line.contains("http")).map(x => (x.split("	")(urlIndex),x.split("	")(timeIndex).toDouble))
       val cnt = pairRDD.count()
+      val cntKey = pairRDD.countByKey()
       val total = pairRDD.values.reduce((x,y) => x+y)
       val avg = total / cnt
       println(s"Count: $cnt \n Total: $total \n Average: $avg")
-
+      cntKey.take(10).foreach(line => println("Pair by key "+line+" "))
       pairRDD.values.take(10).foreach(line => println("Loading in "+line+" seconds"))
 
       val test = textFile.filter(line => line.contains("http")).map(line => line.split("	")).map(line => line(timeIndex))
