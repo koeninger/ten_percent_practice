@@ -6,8 +6,10 @@ object readlog {
     def main(args: Array[String]) {
       val conf = new SparkConf().setMaster("local").setAppName("Log Reader")
       val sc = new SparkContext(conf)
+      val date = "2017-10-19"
+      val hour = "12"
 
-      val textFile = sc.textFile("../E1IN64R500NXTW.2017-10-19-12.9c2ba7f3.txt")
+      val textFile = sc.textFile("s3n://log-chrislarson-me/crl/E1IN64R500NXTW."+date+"-"+hour+".*.gz")
       val phpHackers = textFile.filter(line => line.contains(".php"))
       val num = phpHackers.count()
       println(s"Number of PHP hack attempts found: $num")
