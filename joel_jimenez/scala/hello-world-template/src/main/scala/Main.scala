@@ -1,9 +1,25 @@
-// Chapter 1
+// Chapter 3
 object Main extends App {
-  println("Hello, test!".toUpperCase)
 
-  println(123.4.ceil)
+  println( circles(5) )
+  pyramid(5)
 
-  import java.util.Date
-  println(new Date())
+  def circles(n: Int): String = {
+    println("Circle(" + n * 50 + ")")
+    if(n == 1){
+      return "DONE"
+    } else{
+      circles(n-1)
+    }
+  }
+
+  def pyramid(n: Int): String = {
+    println("*" * n)
+    if(n == 1){
+      return "DONE"
+    } else{
+      pyramid(n-1)
+    }
+  }
+
 }
