@@ -1,6 +1,7 @@
 module WordNumber where
 
 import Data.List (intersperse)
+import Flow
 
 digitToWord :: Int -> String
 digitToWord n =
@@ -24,5 +25,7 @@ digits n = reverse $ recur n
                 (q, r) -> r : recur q
 
 wordNumber :: Int -> String
-wordNumber = concat . intersperse "-" . (map digitToWord) . digits
+wordNumber = concat . intersperse "-" . map digitToWord . digits
 
+wordNumberFlow :: Int -> String
+wordNumberFlow n = n |> digits |> map digitToWord |> intersperse "-" |> concat
