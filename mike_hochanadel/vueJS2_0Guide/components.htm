@@ -1,0 +1,51 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="ex1">
+      <my-component></my-component>
+      <table>
+        <my-row></my-row>
+      </table>
+    </div>
+    <div id ="ex2">
+      <loading-data-example></loading-data-example>
+      <loading-data-example></loading-data-example>
+      <loading-data-example></loading-data-example>
+      <loading-data-example></loading-data-example>
+    </div>
+  </body>
+  <script>
+  /**
+    Vue.component('my-component', {
+      template: '<div>A Custom Component!</div>'
+    });
+  */
+    var data = { counter: 0 };
+    Vue.component('loading-data-example', {
+      template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+      data: function () {
+        return {
+          counter: 0
+        };
+      }
+    });
+    var childComponent1 = {
+      template: '<div>A child custom component</div>'
+    };
+    var childComponent2 = {
+      template: '<tr><td>A child custom cell</td></tr>'
+    };
+    var vm1 = new Vue({
+      el: '#ex1',
+      components: {
+        'my-component': childComponent1,
+        'my-row': childComponent2
+      }
+    });
+    var vm2 = new Vue({
+      el: '#ex2'
+    });
+  </script>
+</html>
