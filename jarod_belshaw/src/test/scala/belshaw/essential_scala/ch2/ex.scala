@@ -1,20 +1,37 @@
 package belshaw.essential_scala.ch2
 
-import org.scalatest._
+import minitest._
 
-class Ch2Spec extends FlatSpec with Matchers {
+object Ch2Suite extends SimpleTestSuite {
+   test("should be") {
+     assertEquals(2, 1 + 1)
+   }
+   
+   test("should be") {
+     assertEquals(2, 1 * 1)
+   }
 
-"calc" should "square and cube correctly" in {
-  Calc.square(2.0) should be (4.0)
-  Calc.cube(2.0) should be (8.0)
+   test("should not be") {
+     assert(1 + 1 != 3)
+   }
+
+   test("Should throw") {
+     class DummyException extends RuntimeException("DUMMY")
+     def test(): String = throw new DummyException
+
+     intercept[DummyException] {
+       test()
+     }
+   }
+
+   test("test result of") {
+     assertResult("hello world") {
+       "hello" + " " + "world"
+     }
+   }
+
+   test("calc should square correctly") {
+     assert(Calc.square(2.0) == 4.0)
+   }
 }
-"calc2 " should "square and cube correctly" in {
-  Calc2.square(2.0) should be (4.0)
-  Calc2.cube(2.0) should be (8.0)
-  
-  Calc2.square(2) should be (4.0)
-  Calc2.cube(2) should be (8.0)
-}
 
-
-}
