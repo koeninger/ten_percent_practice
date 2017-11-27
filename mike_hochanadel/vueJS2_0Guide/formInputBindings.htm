@@ -1,0 +1,78 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="ex1">
+      <input v-model.trim="message" placeholder="edit me"/>
+      <p> message is: {{ message }}</p>
+      <span>Multiline message is:</span>
+      <p style="white-space: pre-line;">{{ messageArea }}</p>
+      <textarea v-model="messageArea" placeholder="add lotsa lines"></textarea>
+      <input type="checkbox" id="jack" value="Jack" v-model="checked">
+      <label for="jack">Jack</label>
+      <input type="checkbox" id="daniels" value="Daniels" v-model="checked">
+      <label for="daniels">Daniels</label>
+      <input type="checkbox" id="johnnie" value="Johnnie" v-model="checked">
+      <label for="johnnie">Johnnie</label>
+      <input type="checkbox" id="walker" value="Walker" v-model="checked">
+      <label for="walker">Walker</label>
+      <br/>
+      <span>Names: {{ checked }}</span>
+      <input type="radio" id="one" value="One" v-model="picked">
+      <label for="one">One</label>
+      <input type="radio" id="two" value="Two" v-model="picked">
+      <label for="two">Two</label>
+      <input type="radio" id="three" value="Three" v-model="picked">
+      <label for="three">Three</label>
+      <br/>
+      <span>Picked: {{ picked }}</span>
+      <select v-model.lazy="selectedModel" multiple>
+          <option disabled value="">Please Select</option>
+          <option>A</option>
+          <option>B</option>
+          <option>C</option>
+          <option v-for="option in options" v-bind:value="option.value">
+            {{ option.text }}
+          </option>
+      </select>
+      <br/>
+      <span>selected: {{ selectedModel }}</span>
+      <input
+        type="checkbox"
+        v-model="testCheck"
+        v-bind:true-value="a"
+        v-bind:false-value="b"
+      >
+      <br/>
+      <input type="radio" v-model="pick" v-bind:value="a">
+      <select v-model="selectedDyn">
+        <option v-bind:value="{ number: 123 }">123</option>
+      </select>
+      <input v-model.number="age" type="number"/>
+    </div>
+  </body>
+  <script>
+    var vm = new Vue({
+      el: '#ex1',
+      data: {
+        message: '',
+        messageArea: '',
+        checked: [],
+        picked: '',
+        selectedModel: [],
+        options: [
+          { text: 'Four', value: 'D' },
+          { text: 'Five', value: 'E' },
+          { text: 'Six', value: 'F' },
+        ],
+        a: 'duh',
+        b: 'doi',
+        testCheck: null,
+        pick: null,
+        selectedDyn: '',
+        age: 0
+      }
+    })
+  </script>
+</html>

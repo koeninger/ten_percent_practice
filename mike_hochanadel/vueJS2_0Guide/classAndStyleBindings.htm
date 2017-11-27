@@ -1,0 +1,54 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id='app'>
+      <div v-bind:class="divClassObject">Bob</div>
+      <div v-bind:class="classObject">Jane</div>
+      <div v-bind:class="[ { active: isActive }, errorClass]">Doug</div>
+      <my-component v-bind:class="{ active: isActive }"></my-component>
+      <div v-bind:style="styleObject">Mary</div>
+      <div v-bind:style="[baseStyles, overridingStyles]">Michael</div>
+      <div v-bind:style="[ { display: ['-webkit-box', '-ms-flexbox', 'flex' ] },baseStyles, overridingStyles]">Kelly</div>
+  </div>
+  </body>
+  <script>
+    Vue.component('my-component', {
+      template: '<p class="foo bar">Hi</p>'
+    });
+    var vm = new Vue({
+      el: '#app',
+      data: {
+        isActive: true,
+        error: null,
+        classObject: {
+          active: true,
+          'text-danger': false
+        },
+        activeClass: 'active',
+        errorClass: 'text-danger',
+        styleObject: {
+          color: 'red',
+          fontSize: '50px'
+        },
+        baseStyles: {
+          color: 'purple',
+          fontSize: '24px'
+        },
+        overridingStyles: {
+          background: 'grey',
+          fontSize: '14px'
+        }
+      },
+      computed: {
+        divClassObject: function() {
+          return {
+            active: this.isActive && !this.error,
+            'text-danger': this.error && this.error.type === 'fatal'
+          }
+        }
+      }
+    });
+  </script>
+</html>
