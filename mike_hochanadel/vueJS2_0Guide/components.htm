@@ -14,6 +14,15 @@
       <loading-data-example></loading-data-example>
       <loading-data-example></loading-data-example>
       <loading-data-example></loading-data-example>
+      <child my-message='hello'></child>
+      <input v-model="parentMsg">
+      <br>
+      <child v-bind:my-message="parentMsg"></child>
+      <child v-bind="messagetext"></child>
+      <comp some-prop="1"></comp>
+      <comp v-bind:some-prop="1"></comp>
+      <some-counter initial-counter="5"></some-counter>
+      <swize size="  Some other Size FACTOR herE "></swize>
     </div>
   </body>
   <script>
@@ -37,6 +46,35 @@
     var childComponent2 = {
       template: '<tr><td>A child custom cell</td></tr>'
     };
+
+    Vue.component('child', {
+      props:['myMessage'],
+      template: '<span>{{ myMessage }}</span>'
+    });
+
+    Vue.component('comp', {
+      props:['someProp'],
+      template:'<span>{{ someProp }}</span>'
+    });
+
+    Vue.component('someCounter', {
+      props:['initialCounter'],
+      template: '<div>{{ counter }}</div>',
+      data: function() {
+        return {counter: this.initialCounter}
+      }
+    });
+
+    Vue.component('swize', {
+      props:['size'],
+      template: '<div>{{ normalizedSize }}</div>',
+      computed: {
+        normalizedSize: function() {
+          return this.size.trim().toLowerCase()
+        }
+      }
+    });
+
     var vm1 = new Vue({
       el: '#ex1',
       components: {
@@ -44,8 +82,15 @@
         'my-row': childComponent2
       }
     });
+
     var vm2 = new Vue({
-      el: '#ex2'
+      el: '#ex2',
+      data: {
+        parentMsg: '',
+        messagetext: {
+          myMessage: 'here we go object'
+        }
+      }
     });
   </script>
 </html>
