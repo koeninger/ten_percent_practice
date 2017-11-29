@@ -23,6 +23,8 @@
       <comp v-bind:some-prop="1"></comp>
       <some-counter initial-counter="5"></some-counter>
       <swize size="  Some other Size FACTOR herE "></swize>
+      <validation-example prop-c="bobby"></validation-example>
+      <comp some-other-non-prop-attribute="true" class="another-class-set"></true>
     </div>
   </body>
   <script>
@@ -54,7 +56,7 @@
 
     Vue.component('comp', {
       props:['someProp'],
-      template:'<span>{{ someProp }}</span>'
+      template:'<span class="some-class-set">{{ someProp }}</span>'
     });
 
     Vue.component('someCounter', {
@@ -73,6 +75,33 @@
           return this.size.trim().toLowerCase()
         }
       }
+    });
+
+    Vue.component('validationExample', {
+      props: {
+        propA: Number,
+        propB: [String, Number],
+        propC: {
+          type: String,
+          required: true
+        },
+        propD: {
+          type: Number,
+          default: 100
+        },
+        propE: {
+          type: Object,
+          default: function() {
+            return { message: 'hello' }
+          }
+        },
+        propF: {
+          validator: function(value) {
+            return value > 10
+          }
+        }
+      },
+      template:'<div>{{ propA }}</div>'
     });
 
     var vm1 = new Vue({
