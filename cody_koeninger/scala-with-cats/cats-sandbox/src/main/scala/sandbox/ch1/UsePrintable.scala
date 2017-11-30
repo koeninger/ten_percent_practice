@@ -1,4 +1,6 @@
-package sandbox
+package sandbox.ch1
+
+import PrintableSyntax._
 
 object UsePrintable {
   final case class Cat(name: String, age: Int, color: String)
@@ -11,5 +13,6 @@ object UsePrintable {
     val cat = Cat("garfield", 23, "orange")
 
     Printable.print(cat)
+    cat.print
   }
 }
