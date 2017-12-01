@@ -1,25 +1,18 @@
-// Chapter 3
+// Chapter 4
 object Main extends App {
 
-  println( circles(5) )
-  pyramid(5)
+  val closure = (x: Int) => x * 5;
+  println(closure(10));
 
-  def circles(n: Int): String = {
-    println("Circle(" + n * 50 + ")")
-    if(n == 1){
-      return "DONE"
-    } else{
-      circles(n-1)
-    }
-  }
+  val closure2 = List(1, 2, 3, 4, 5).map(i => i * 2);
+  println(closure2);
 
-  def pyramid(n: Int): String = {
-    println("*" * n)
-    if(n == 1){
-      return "DONE"
-    } else{
-      pyramid(n-1)
-    }
-  }
+  val radlist = List(10, 20, 30, 40, 50);
+  val circles = radlist.map(i => i * 10);
+  println(circles);
 
+  (1 to 50).
+    toList.map(x => x * 5).
+    filter(x => x % 5 == 0).
+    foreach(println);
 }

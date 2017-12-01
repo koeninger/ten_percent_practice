@@ -14,6 +14,9 @@ scalacOptions ++= Seq(
   "-Ypartial-unification" // allow the compiler to unify type constructors of different arities
 )
 
+scalacOptions in (Compile, console)  := (scalacOptions in (Compile, console)).value filterNot (x => x == "-Xfatal-warnings" || x == "-Xlint")
+
+
 libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")
