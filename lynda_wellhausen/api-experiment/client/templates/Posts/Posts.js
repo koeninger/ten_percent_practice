@@ -35,7 +35,7 @@ Template.body.events({
             console.log('show');
             image.slideUp();
         } else {
-            
+
             if (Meteor.call('checkSupportedTypes', post.url.substr(post.url.length - 3))) {
                 image.prop('src', post.url).slideDown();
             } else {
