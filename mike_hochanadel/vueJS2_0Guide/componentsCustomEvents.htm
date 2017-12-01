@@ -1,0 +1,49 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="counter-event-example">
+      <p>{{ total }}</p>
+      <button-counter v-on:increment="incrementTotal"></button-counter>
+      <button-counter v-on:increment="incrementTotal"></button-counter>
+      <button-counter v-on:click.native="doTheThing" v-on:increment="incrementTotal"></button-counter>
+      <comp></comp>
+    </div>
+  </body>
+  <script>
+    Vue.component('button-counter', {
+      template:'<button v-on:click="incrementCounter">{{ counter }}</button>',
+      data: function() {
+        return {
+          counter: 0
+        }
+      },
+      methods: {
+        incrementCounter: function() {
+          this.counter += 1;
+          this.$emit('increment');
+        }
+      }
+    });
+    Vue.component('comp', {
+      props:['someProp'],
+      template:'<div class="some-class-set">A component</div>'
+    });
+
+    var vm1 = new Vue({
+      el: '#counter-event-example',
+      data: {
+        total: 0
+      },
+      methods: {
+        incrementTotal: function() {
+          this.total += 1
+        },
+        doTheThing: function() {
+          console.log('the thing is done');
+        }
+      }
+    })
+  </script>
+</html>
