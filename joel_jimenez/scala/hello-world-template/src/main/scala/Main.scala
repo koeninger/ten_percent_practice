@@ -1,18 +1,20 @@
-// Chapter 4
+// Chapter 5
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.BasicStroke;
+import java.awt.geom.Path2D;
+import java.awt.Color;
+
 object Main extends App {
-
-  val closure = (x: Int) => x * 5;
-  println(closure(10));
-
-  val closure2 = List(1, 2, 3, 4, 5).map(i => i * 2);
-  println(closure2);
-
-  val radlist = List(10, 20, 30, 40, 50);
-  val circles = radlist.map(i => i * 10);
-  println(circles);
-
-  (1 to 50).
-    toList.map(x => x * 5).
-    filter(x => x % 5 == 0).
-    foreach(println);
+  def drawImage(g: Graphics2D): Unit = {
+    g.setStroke(new BasicStroke(1.0f))
+    g.setPaint(new Color(0, 0, 0))
+    val path = new Path2D.Double()
+    path.moveTo(25, 0)
+    path.lineTo(50, 50)
+    path.lineTo(0, 50)
+    path.lineTo(25, 0)
+    path.closePath()
+    g.draw(path)
+  }
 }
