@@ -10,6 +10,7 @@ object readlog {
       val hour = "12"
 
       val textFile = sc.textFile("s3n://log-chrislarson-me/crl/E1IN64R500NXTW."+date+"-"+hour+".*.gz")
+      val count = sc.accumulator(0)
       val phpHackers = textFile.filter(line => line.contains(".php"))
       val num = phpHackers.count()
       println(s"Number of PHP hack attempts found: $num")
@@ -22,11 +23,15 @@ object readlog {
       println(s"Index of time-taken: $timeIndex")
 
       // Requests grouped by URL
-      val pairRDD = textFile.filter(line => line.contains("http")).map(x => (x.split("	")(urlIndex),x.split("	")(timeIndex).toDouble))
+      val pairRDD = textFile.filter(line => line.contains("http")).map(x => {
+        count += 1
+        (x.split("	")(urlIndex),x.split("	")(timeIndex).toDouble)
+      })
       val cnt = pairRDD.count()
       val cntKey = pairRDD.countByKey()
       val total = pairRDD.values.reduce((x,y) => x+y)
       val avg = total / cnt
+      println(s"Accumulator Count: $count \n")
       println(s"Count: $cnt \n Total: $total \n Average: $avg")
       cntKey.take(10).foreach(line => println("Pair by key "+line+" "))
       pairRDD.values.take(10).foreach(line => println("Loading in "+line+" seconds"))
