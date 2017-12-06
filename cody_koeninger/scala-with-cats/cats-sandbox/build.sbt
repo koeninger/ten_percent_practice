@@ -17,6 +17,9 @@ scalacOptions ++= Seq(
 scalacOptions in (Compile, console)  := (scalacOptions in (Compile, console)).value filterNot (x => x == "-Xfatal-warnings" || x == "-Xlint")
 
 
-libraryDependencies += "org.typelevel" %% "cats-core" % "1.0.0-MF"
+libraryDependencies ++= Seq(
+  "org.typelevel" %% "cats-core" % "1.0.0-MF",
+  "org.scalatest" %% "scalatest" % "3.0.4" % "test"
+)
 
 addCompilerPlugin("org.spire-math" %% "kind-projector" % "0.9.3")

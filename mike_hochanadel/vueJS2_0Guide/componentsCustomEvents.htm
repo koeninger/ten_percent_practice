@@ -13,9 +13,12 @@
       {{ price }}
       <currency-input v-model="price"></currency-input>
       <my-checkbox v-model="foo" value="some value"></my-checkbox>
+      <my-checkbox v-model="foo" value="some other value"></my-checkbox>
     </div>
   </body>
   <script>
+    var bus = new Vue({});
+
     Vue.component('button-counter', {
       template:'<button v-on:click="incrementCounter">{{ counter }}</button>',
       data: function() {
@@ -27,6 +30,8 @@
         incrementCounter: function() {
           this.counter += 1;
           this.$emit('increment');
+          bus.$emit('increment-fired', 1);
+          console.log('all fired');
         }
       }
     });
@@ -60,7 +65,12 @@
         checked: Boolean,
         value: String
       },
-      template: '<input type="checkbox"></input>'
+      template: '<input type="checkbox"></input>',
+      created: function() {
+        bus.$on('increment-fired', function(id) {
+          console.log(id);
+        });
+      }
     });
 
     var vm1 = new Vue({

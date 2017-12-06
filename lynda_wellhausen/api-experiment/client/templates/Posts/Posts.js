@@ -1,8 +1,8 @@
 
 Posts = new Mongo.Collection('posts');
 
-Session.setDefault('subreddit', 'all');
-Session.setDefault('searching', false);
+//Session.setDefault('subreddit', 'all');
+//Session.setDefault('searching', false);
 
 SUPPORTED_MEDIA_TYPES = ['jpg', 'png', 'gif'];
 
