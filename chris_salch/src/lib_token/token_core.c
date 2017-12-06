@@ -7,8 +7,8 @@
 
 LexerType * createLexer(const char *buf, off_t size)
 {
-    printf("File:\n %s", buf);
     printf("Size: %" PRIu64 " Buffer: %p\n", size, (void *)buf);
+
 
     return 0;
 }

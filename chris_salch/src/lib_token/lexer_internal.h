@@ -1,6 +1,8 @@
 #ifndef _LEXER_INTERNAL_
 #define _LEXER_INTERNAL_
 
+#include <core.h>
+
 typedef struct LexerInternal LexerInternalType;
 
 struct LexerInternal {
