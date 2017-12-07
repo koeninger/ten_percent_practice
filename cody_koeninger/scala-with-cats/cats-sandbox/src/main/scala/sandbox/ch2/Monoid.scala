@@ -29,7 +29,7 @@ object Monoid {
     def combine(x: Double, y: Double): Double = x + y
   }
 
-  val dobuleMultiply = new Monoid[Double] {
+  val doubleMultiply = new Monoid[Double] {
     def empty: Double = 1
     def combine(x: Double, y: Double): Double = x * y
   }

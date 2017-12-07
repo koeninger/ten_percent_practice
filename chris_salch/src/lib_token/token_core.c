@@ -1,15 +1,24 @@
 #include <stdio.h>
+#include <inttypes.h>
 
 #include <token.h>
 
-LexerType * createLexer(char *buf)
+#include <lexer_internal.h>
+
+LexerType * createLexer(const char *buf, off_t size)
 {
-    printf("Testing 123\n");
+    printf("Size: %" PRIu64 " Buffer: %p\n", size, (void *)buf);
+
 
     return 0;
 }
 
-Token *lexerNext(LexerType *lexer)
+void destroyLexer(LexerType * lexer)
+{
+
+}
+
+Token *getTokenLexer(LexerType *lexer)
 {
     return 0;
 }

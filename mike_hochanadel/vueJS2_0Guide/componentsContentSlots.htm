@@ -1,0 +1,51 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="ex1">
+      <child-component></child-component>
+      <div>
+        <h1>I am the parent title</h1>
+        <my-component>
+          <p>This is some original content</p>
+          <p>This is some more original content</p>
+        </my-component>
+      </div>
+    </div>
+    <div id="ex2">
+      <app-layout>
+        <h1 slot="header">Here is some page title</h1>
+
+        <p>Some main paragraph stuff</p>
+        <p>Some more for this thing</p>
+
+        <p slot="footer">Here is my contact info</p>
+      </app-layout>
+    </div>
+  </body>
+  <script>
+    Vue.component('child-component', {
+      template: '<div v-show="someChildProperty">Child</div>',
+      data: function() {
+        return {
+          someChildProperty: true
+        };
+      }
+    });
+    Vue.component('my-component', {
+      template: '<div> <h2>I am a child title</h2> <slot> This will only be displayed if there is no content to be distributed. </slot> </div>'
+    });
+    Vue.component('app-layout', {
+      template: '<div class="container"><header><slot name="header"></slot></header><main><slot></slot></main><footer><slot name="footer"></slot> </footer></div>'
+    });
+
+    var vm1 = new Vue({
+      el: '#ex1'
+    });
+    var vm2 = new Vue({
+      el: '#ex2'
+    });
+
+  </script>
+</html>
