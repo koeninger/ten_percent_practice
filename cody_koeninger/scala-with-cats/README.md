@@ -1,0 +1,1 @@
+[Scala with Cats](https://underscore.io/books/scala-with-cats/)

@@ -1,0 +1,28 @@
+
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="application">
+      <span v-once>{{ name }}</span>
+      <div v-html="raw"></div>
+      <div :id="'list-'+dynamicId">{{ dynamicId }}</div>
+      <button v-bind:disabled='isButtonDisabled'>Button</button>
+      <div>Button {{ isButtonDisabled ? 'is' : 'is not' }} disabled</div>
+      <div>{{ dynamicId / 8 }}</div>
+      <div v-if="isButtonDisabled">The button is disabled</div>
+    </div>
+  </body>
+  <script>
+  var app = new Vue({
+    el: '#application',
+    data: {
+      name: "Vue application",
+      raw: '<ul><li>raw stuff</li></ul>',
+      dynamicId: 2343234234,
+      isButtonDisabled: false
+    }
+  });
+  </script>
+</html>

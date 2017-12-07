@@ -1,0 +1,5 @@
+.DS_Store
+**/spark
+**/target
+**/derby.log
+**/metastore_db

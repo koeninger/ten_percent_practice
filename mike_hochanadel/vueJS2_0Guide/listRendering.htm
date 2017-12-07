@@ -1,0 +1,129 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="example-1">
+      <ul>
+        <li v-for="(item, index) of items">
+          {{ topMessage }} - {{ index }} - {{ item.message }}
+        </li>
+      </ul>
+      <ul>
+        <li v-for="(value, key, index) in itemObjects">
+          {{ index }}. {{ key }}: {{ value }}
+        </li>
+      </ul>
+      <ul>
+        <li v-for="item in moreItems" :key="item.id">
+          {{ item.message }}
+        </li>
+      </ul>
+      <button v-on:click="setAnother">Add Stuff</button>
+      <ul>
+        <li v-for="n in evenNumbers">{{ n }}</li>
+      </ul>
+      <ul>
+        <li v-for="n in odd(numbers)">{{ n }}</li>
+      </ul>
+      <ul>
+        <li v-for="n in 10" v-if="n % 2 === 0">{{ n }}</li>
+      </ul>
+      <ul>
+        <template v-for="item in items">
+          <li>{{ item.message }}</li>
+          <li class="divider"></li>
+        </template>
+      </ul>
+    </div>
+    <div id="next-action-list">
+      <input
+        v-model="newNextActionText"
+        v-on:keyup.enter="addNextAction"
+        placeholder="Add a Next Action"
+      >
+      <ul>
+        <li
+          is="nextaction-item"
+          v-for="(nextaction, index) in nextactions"
+          v-bind:key="nextaction.id"
+          v-bind:title="nextaction.title"
+          v-on:remove="nextactions.splice(index,1)"
+        ></li>
+      </ul>
+    </div>
+  </body>
+  <script>
+    Vue.component('nextaction-item', {
+      template: '<li>{{ title }}<button v-on:click="$emit(\'remove\')">X</button></li>',
+      props: ['title']
+    });
+
+    var vm1 = new Vue({
+      el: '#example-1',
+      data: {
+        topMessage: 'Buddy',
+        items: [
+          { message: 'Foo' },
+          { message: 'Bar' }
+        ],
+        itemObjects: {
+          firstName: 'Mike',
+          lastName: 'Smith',
+          age: 38
+        },
+        moreItems: [
+          { id: 2, message: 'Foo' },
+          { id: 1, message: 'Bar' },
+          { id: 0, message: 'Baz' }
+        ],
+        numbers: [ 1, 2, 3, 4, 5, 6 ]
+      },
+      computed: {
+        evenNumbers: function() {
+          return this.numbers.filter(function(number) {
+            return number % 2 === 0
+          });
+        }
+      },
+      methods: {
+        setAnother: function() {
+          this.$set(this.items, 3, {'message': 'Jimmy'});
+          this.itemObjects = Object.assign({}, this.itemObjects, {
+            favoriteColor: 'purple',
+            state: 'Texas'
+          });
+        },
+        odd: function(numbers) {
+          return numbers.filter(function(number) {
+            return number % 2 === 1
+          })
+        }
+      }
+    });
+    Vue.set(vm1.items, 2, {'message': 'Mike'});
+
+    vm2 = new Vue({
+      el: '#next-action-list',
+      data: {
+        newNextActionText: '',
+        nextactions: [
+          {
+            id: 1,
+            title: 'Finish next action list'
+          }
+        ],
+        nextNextActionId: 2
+      },
+      methods: {
+        addNextAction: function() {
+          this.nextactions.push({
+            id: this.nextNextActionId++,
+            title: this.newNextActionText
+          })
+          this.newNextActionText = '';
+        }
+      }
+    })
+  </script>
+</html>

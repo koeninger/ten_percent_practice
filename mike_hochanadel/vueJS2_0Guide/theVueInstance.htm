@@ -1,0 +1,30 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="example">
+      {{ a }}
+    </div>
+  </body>
+  <script>
+    var data = {
+      a: 1,
+      todos: [],
+      newTodoText: '',
+      hideFinishedTodos: false,
+      visitorCount: 0,
+      error: null
+    };
+    var vm = new Vue({
+      el: '#example',
+      data: data,
+      created: function() {
+        console.log('setup complete, a is '+this.a);
+      }
+    });
+    vm.$watch('a', function(newValue, oldValue) {
+      console.log('a was '+oldValue+' and is now '+newValue);
+    });
+  </script>
+</html>

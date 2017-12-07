@@ -1,0 +1,77 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="ex1">
+      <button v-on:click="counter += 1">Add 1</button>
+      <p> Clicked: {{ counter }}</p>
+    </div>
+    <div id="ex2">
+      <button v-on:click="greet">Greet</button>
+    </div>
+    <div id="ex3">
+      <button v-on:click="say('hi')">Hi</button>
+      <button v-on:click="say('what')">What</button>
+      <button v-on:click="warn('form cannot be submitted yet.', $event)">Submit</button>
+      <button v-on:click.prevent="warnAgain('this other form cannot be submitted yet.')">Submit</button>
+      <input v-on:keyup.enter="say('key up')"/>
+      <br/>
+      <input v-on:keyup.f1="say('let us get help')"/>
+      <br/>
+      <input v-on:keyup.page-down="pagerDown"/>
+      <br/>
+      <input v-on:keyup.ctl.67="copy"/>
+      <br/>
+      <input v-on:keydown.ctl.alt.67.exact="majorCopy"/>
+    </div>
+  </body>
+  <script>
+    Vue.config.keyCodes.f1 = 112;
+    var ex1 = new Vue({
+      el: '#ex1',
+      data: {
+        counter: 0
+      }
+    })
+    var ex2 = new Vue({
+      el: '#ex2',
+      data: {
+        name: 'Bobby'
+      },
+      methods: {
+        'greet': function(event) {
+          alert('hello '+ this.name + '!');
+          if (event) {
+            alert(event.target.tagName);
+          }
+        }
+      }
+    });
+    ex2.greet();
+    var ex3 = new Vue({
+      el: '#ex3',
+      methods: {
+        say: function(message) {
+          alert(message);
+        },
+        warn: function(message, event) {
+          if (event) event.preventDefault();
+          alert(message);
+        },
+        warnAgain: function(message) {
+          alert(message);
+        },
+        pagerDown: function() {
+          console.log('page down');
+        },
+        copy: function() {
+          console.log('copy stuff');
+        },
+        majorCopy: function() {
+          console.log('mega copy stuff');
+        }
+      }
+    })
+  </script>
+</html>

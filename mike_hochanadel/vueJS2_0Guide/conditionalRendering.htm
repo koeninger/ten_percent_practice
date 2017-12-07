@@ -1,0 +1,59 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="example">
+      <h1 v-if="ok">Yes</h1>
+      <h1 v-else>No</h1>
+      <template v-if="ok">
+        <h1>Title</h1>
+        <p>Stuff</p>
+      </template>
+      <div v-if="Math.random() > 0.5">
+        Presto!
+      </div>
+      <div v-else>
+        Gone!
+      </div>
+      <div v-if="type === 'A'">A</div>
+      <div v-else-if="type === 'B'">B</div>
+      <div v-else-if="type === 'C'">C</div>
+      <div v-else>not A or B or C</div>
+      <template v-if="loginType === 'username'">
+          <label>User</label>
+          <input placeholder="Enter your username"/>
+      </template>
+      <template v-else>
+          <label>Email</label>
+          <input placeholder="Enter your email"/>
+      </template>
+      <template v-if="loginType === 'username'">
+          <label>User</label>
+          <input placeholder="Enter your username" key="username-input"/>
+      </template>
+      <template v-else>
+          <label>Email</label>
+          <input placeholder="Enter your email" key="email-input"/>
+      </template>
+      <button v-on:click="toggleLogin">Toggle Login</button>
+      <div v-show="showy">Hello!</div>
+    </div>
+  </body>
+  <script>
+    var vm = new Vue({
+      el: "#example",
+      data: {
+        'ok': true,
+        'showy': false,
+        'type': 'A',
+        'loginType': 'username'
+      },
+      methods: {
+        toggleLogin: function() {
+          this.loginType = this.loginType === 'username' ? '' : 'username'
+        }
+      }
+    });
+  </script>
+</html>

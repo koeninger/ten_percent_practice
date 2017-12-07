@@ -1,0 +1,125 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="ex1">
+      <my-component></my-component>
+      <table>
+        <my-row></my-row>
+      </table>
+    </div>
+    <div id ="ex2">
+      <loading-data-example></loading-data-example>
+      <loading-data-example></loading-data-example>
+      <loading-data-example></loading-data-example>
+      <loading-data-example></loading-data-example>
+      <child my-message='hello'></child>
+      <input v-model="parentMsg">
+      <br>
+      <child v-bind:my-message="parentMsg"></child>
+      <child v-bind="messagetext"></child>
+      <comp some-prop="1"></comp>
+      <comp v-bind:some-prop="1"></comp>
+      <some-counter initial-counter="5"></some-counter>
+      <swize size="  Some other Size FACTOR herE "></swize>
+      <validation-example prop-c="bobby"></validation-example>
+      <comp some-other-non-prop-attribute="true" class="another-class-set"></comp>
+    </div>
+  </body>
+  <script>
+  /**
+    Vue.component('my-component', {
+      template: '<div>A Custom Component!</div>'
+    });
+  */
+    var data = { counter: 0 };
+    Vue.component('loading-data-example', {
+      template: '<button v-on:click="counter += 1">{{ counter }}</button>',
+      data: function () {
+        return {
+          counter: 0
+        };
+      }
+    });
+    var childComponent1 = {
+      template: '<div>A child custom component</div>'
+    };
+    var childComponent2 = {
+      template: '<tr><td>A child custom cell</td></tr>'
+    };
+
+    Vue.component('child', {
+      props:['myMessage'],
+      template: '<span>{{ myMessage }}</span>'
+    });
+
+    Vue.component('comp', {
+      props:['someProp'],
+      template:'<span class="some-class-set">{{ someProp }}</span>'
+    });
+
+    Vue.component('someCounter', {
+      props:['initialCounter'],
+      template: '<div>{{ counter }}</div>',
+      data: function() {
+        return {counter: this.initialCounter}
+      }
+    });
+
+    Vue.component('swize', {
+      props:['size'],
+      template: '<div>{{ normalizedSize }}</div>',
+      computed: {
+        normalizedSize: function() {
+          return this.size.trim().toLowerCase()
+        }
+      }
+    });
+
+    Vue.component('validationExample', {
+      props: {
+        propA: Number,
+        propB: [String, Number],
+        propC: {
+          type: String,
+          required: true
+        },
+        propD: {
+          type: Number,
+          default: 100
+        },
+        propE: {
+          type: Object,
+          default: function() {
+            return { message: 'hello' }
+          }
+        },
+        propF: {
+          validator: function(value) {
+            return value > 10
+          }
+        }
+      },
+      template:'<div>{{ propA }}</div>'
+    });
+
+    var vm1 = new Vue({
+      el: '#ex1',
+      components: {
+        'my-component': childComponent1,
+        'my-row': childComponent2
+      }
+    });
+
+    var vm2 = new Vue({
+      el: '#ex2',
+      data: {
+        parentMsg: '',
+        messagetext: {
+          myMessage: 'here we go object'
+        }
+      }
+    });
+  </script>
+</html>

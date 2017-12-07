@@ -1,0 +1,102 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="application">
+      {{ name }}
+    </div>
+    <div id="application2">
+      <span v-bind:title="message">Delayed bound message</span>
+    </div>
+    <div id="application3">
+      <span v-if="seen">Visible</span>
+    </div>
+    <div id="application4">
+      <ul>
+        <li v-for="item in items">
+          {{ item.text }}
+        </li>
+      </ul>
+    </div>
+    <div id="application5">
+      <p>{{ message }}</p>
+      <button v-on:click="messUpMessage">Scramble</button>
+    </div>
+    <div id="application6">
+      <p>{{ message }}</p>
+      <input v-model="message">
+    </div>
+    <div id="application7">
+      <ol>
+        <todo-item
+          v-for="item in gList"
+          v-bind:todo="item"
+          v-bind:key="item.id">
+        </todo-item>
+      </ol>
+    </div>
+  </body>
+  <script>
+    var app = new Vue({
+      el: '#application',
+      data: {
+        name: "Vue application"
+      }
+    });
+    var app2 = new Vue({
+      el: '#application2',
+      data: {
+        message: "Generated time " + new Date().toLocaleString()
+      }
+    });
+    var app3 = new Vue({
+      el: '#application3',
+      data: {
+        seen: true
+      }
+    });
+    var app4 = new Vue({
+      el: '#application4',
+      data: {
+        items: [
+          { text: 'this is an item' },
+          { text: 'this is another item' },
+          { text: 'yeat another item' }
+        ]
+      }
+    });
+    var app5 = new Vue({
+      el: '#application5',
+      data: {
+        message: 'Mix it up, please'
+      },
+      methods: {
+        messUpMessage: function() {
+          this.message = this.message.split('').reverse().join('')
+        }
+      }
+    });
+    var app6 = new Vue({
+      el: '#application6',
+      data: {
+        message: 'This is the first item for text box, text is reserverd word'
+      }
+    });
+    Vue.component('todo-item', {
+      props: ['todo'],
+      template: '<li>{{ todo.text }}</li>'
+    });
+    var app7 = new Vue({
+      el: '#application7',
+      data: {
+        gList: [
+          { id: 0, text: 'Clippers' },
+          { id: 1, text: 'Shovel' },
+          { id: 2, text: 'Hose' },
+          { id: 3, text: 'Gloves' },
+        ]
+      }
+    });
+  </script>
+</html>
