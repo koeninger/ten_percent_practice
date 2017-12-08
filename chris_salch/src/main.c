@@ -18,7 +18,7 @@ void usage(char *name)
  * deallocating memory 
  *
  */
-off_t slurp(char * fileName, char **outBuffer)
+size_t slurp(char * fileName, char **outBuffer)
 {
     struct stat fileStat;
     int fd = open(fileName, O_RDONLY);
@@ -45,7 +45,7 @@ off_t slurp(char * fileName, char **outBuffer)
 int main(int argc, char**argv)
 {
     char *buf = 0;
-    off_t size = 0;
+    size_t size = 0;
 
     /* Make sure that we have a passed in file */
     if (argc < 2) {

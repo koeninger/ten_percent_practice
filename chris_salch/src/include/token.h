@@ -8,7 +8,7 @@ typedef void Token;
  * Create a lexer instance reading from the passed in character buffer. 
  *
  */
-LexerType *createLexer(const char *buf, off_t size);
+LexerType *createLexer(const char *buf, size_t size);
 
 /**
  * Destory a lexer instance and clean up any allocated memory

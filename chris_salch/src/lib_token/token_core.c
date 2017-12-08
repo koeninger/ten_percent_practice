@@ -5,9 +5,9 @@
 
 #include <lexer_internal.h>
 
-LexerType * createLexer(const char *buf, off_t size)
+LexerType * createLexer(const char *buf, size_t size)
 {
-    printf("Size: %" PRIu64 " Buffer: %p\n", size, (void *)buf);
+    printf("Size: %zu Buffer: %p\n", size, (void *)buf);
 
 
     return 0;
