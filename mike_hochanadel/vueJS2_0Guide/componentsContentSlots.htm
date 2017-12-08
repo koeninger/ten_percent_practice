@@ -23,6 +23,27 @@
         <p slot="footer">Here is my contact info</p>
       </app-layout>
     </div>
+    <div id="ex3">
+      <div class="parent">
+        <child>
+          <div slot-scope="props">
+            <span>hello from parent</span>
+            <span>{{ props.text }}</span>
+          </div>
+        </child>
+      </div>
+      <my-awesome-list :items="gList">
+        <li
+          slot="item-props"
+          slot-scope="props2"
+          class="my-cool-items">
+          {{ props2.text }}
+        </li>
+      </my-awesome-list>
+      <child>
+        <span slot-scope="{ text }">{{ text }}</span>
+      </child>
+    </div>
   </body>
   <script>
     Vue.component('child-component', {
@@ -39,12 +60,30 @@
     Vue.component('app-layout', {
       template: '<div class="container"><header><slot name="header"></slot></header><main><slot></slot></main><footer><slot name="footer"></slot> </footer></div>'
     });
+    Vue.component('child', {
+      template: '<div class="child"><slot text="hello from child"></slot></div>'
+    });
+    Vue.component('my-awesome-list', {
+      props: ['items'],
+      template: '<ul><slot name="item-props" v-for="item in items" :text="item.text"></slot></ul>'
+    });
 
     var vm1 = new Vue({
       el: '#ex1'
     });
     var vm2 = new Vue({
       el: '#ex2'
+    });
+    var vm3 = new Vue({
+      el: '#ex3',
+      data: {
+        gList: [
+          { id: 0, text: 'Clippers' },
+          { id: 1, text: 'Shovel' },
+          { id: 2, text: 'Hose' },
+          { id: 3, text: 'Gloves' }
+        ]
+      }
     });
 
   </script>
