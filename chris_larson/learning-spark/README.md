@@ -10,3 +10,10 @@ $ cd readlog
 $ sbt package
 $ .././spark/bin/spark-submit --class "readlog" --master local[4] target/scala-2.10/log-reader_2.10-0.0.1.jar
 ~~~~
+
+~~~~
+Spark SQL
+
+sbt package
+../spark/bin/spark-submit --class "sparksql" --master local[4] target/scala-2.11/spark-sql_2.11-0.0.1.jar
+~~~~
