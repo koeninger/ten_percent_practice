@@ -40,3 +40,50 @@ mean(y)
 var(y)
 sqrt( var(y) )
 sd(y)
+
+
+# Graphics
+x = rnorm(100)
+y = rnorm(100)
+plot(x,y)
+plot(x, y, xlab="x-axis", ylab="y-axis", main="Plot of X vs Y")
+pdf("first_plot.pdf")
+plot(x, y, col="green")
+dev.off()
+
+# sequence
+x = seq(1, 10)
+print(x)
+x = 1:10
+print(x)
+x = seq(-pi, pi, length=50)
+print(x)
+
+# Indexing
+A = matrix(1:16, 4, 4)
+print( A[2,3] )
+print( A[ c(1, 4), c(1, 4)] )
+print( A[ 1:3, 2:4] )
+print( A[ 1:2,] )
+print( A[-c(1, 3) ,] )
+print( dim(A) )
+
+# Loading
+Auto = read.table("Auto.data", header=T, na.strings="?")
+# fix(Auto)
+dim(Auto)
+
+Auto = read.csv("Auto.csv", header=TRUE, na.strings="?")
+dim(Auto)
+print( Auto[1:4] )
+Auto = na.omit(Auto)
+dim(Auto)
+names(Auto)
+
+summary(Auto)
+plot(Auto$cylinders, Auto$mpg)
+attach(Auto)
+plot(cylinders, mpg)
+plot(cylinders, mpg, col = "red", xlab = " cylinders", ylab = "MPG")
+hist(mpg, col = 2, breaks = 15)
+pairs(Auto)
