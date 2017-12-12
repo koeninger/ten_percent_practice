@@ -5,20 +5,67 @@
 
 #include <lexer_internal.h>
 
-LexerType * createLexer(const char *buf, off_t size)
+LexerType * createLexer(const char *buf, size_t size)
 {
-    printf("Size: %" PRIu64 " Buffer: %p\n", size, (void *)buf);
+    LexerInternalType *lexer = 0;
 
+    lexer = (LexerInternalType *)calloc(sizeof(LexerInternalType), 1);
 
-    return 0;
+    lexer->buf = buf;
+    lexer->length = size;
+
+    lexer->tokenHead = 0;
+    lexer->tokenTail = 0;
+
+    lexer->child = 0;
+
+    return (LexerType *)lexer;
 }
 
 void destroyLexer(LexerType * lexer)
 {
+    TokenType *token = ((LexerInternalType *)lexer)->tokenHead;
+    TokenType *next = 0;
 
+    // Free all the tokens
+    while (token) {
+        next = token->next;
+        free(token);
+        token = next;
+    }
+
+    free(lexer);
 }
 
-Token *getTokenLexer(LexerType *lexer)
+TokenType *getTokenLexer(LexerType *lexerRaw)
 {
-    return 0;
+    TokenType * token = 0;
+    LexerInternalType *lexer = (LexerInternalType *)lexerRaw;
+    size_t left = lexer->length - lexer->offset;
+    char *c = 0;
+
+    // We're done!
+    if (left <= 0) {
+        return 0;
+    }
+
+    token = (TokenType *)calloc(sizeof(TokenType), 1);
+
+    c = lexer->buf + lexer->offset;
+    token->length = mbtowc(&(token->content), c, left);
+
+    assert(token->length > 0);
+    
+
+    lexer->offset += token->length;
+
+    if (lexer->tokenHead == 0) {
+        lexer->tokenHead = token;
+        lexer->tokenTail = token;
+    } else {
+        lexer->tokenTail->next = token;
+        lexer->tokenTail = token;
+    }
+
+    return token;
 }
