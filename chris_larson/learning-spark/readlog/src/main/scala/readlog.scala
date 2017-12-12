@@ -9,7 +9,7 @@ object readlog {
       val date = "2017-10-19"
       val hour = "12"
 
-      val textFile = sc.textFile("s3n://log-chrislarson-me/crl/E1IN64R500NXTW."+date+"-"+hour+".*.gz")
+      val textFile = sc.textFile("s3n://log-location."+date+"-"+hour+".*.gz")
       val count = sc.accumulator(0)
       val sum = sc.accumulator(0.0)
       val phpHackers = textFile.filter(line => line.contains(".php"))
