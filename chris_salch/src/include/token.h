@@ -2,7 +2,16 @@
 #define _TOKEN_
 
 typedef void LexerType;
-typedef void Token;
+typedef struct Token TokenType;
+
+
+struct Token {
+    const wchar_t content; // actual content of the current token 
+    size_t length; // the length of the current token
+
+    TokenType *next; // the next token in a stream
+};
+
 
 /**
  * Create a lexer instance reading from the passed in character buffer. 
@@ -20,6 +29,6 @@ void destroyLexer(LexerType *lexer);
  * return the next token from the given lexer
  *
  */
-Token *getTokenLexer(LexerType *lexer);
+TokenType *getTokenLexer(LexerType *lexer);
 
 #endif
