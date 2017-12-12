@@ -1,0 +1,74 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="ex1">
+      <keep-alive>
+        <component v-bind:is="currentView"></component>
+      </keep-alive>
+    </div>
+    <div id="ex2">
+      <component v-bind:is="currentView"></component>
+      <my-component ref="myComponent"
+        :foo="baz"
+        :bar="qux"
+        @event-a="doThis"
+        @event-b="doThat"
+      >
+        <img slot="icon" src="../">
+        <p slot="main-text">Hello!</p>
+      </my-component>
+    </div>
+  </body>
+  <script>
+    var Home = {
+      template: '<p>Welcome to home</p>'
+    };
+
+    Vue.component('my-component', {
+      props: [
+        'foo',
+        'bar'
+      ],
+      template: '<div><div>hello there</div><slot name="main-text"></slot><div>And Stuff</div></div>'
+    });
+
+    var vm1 = new Vue({
+      el: '#ex1',
+      data: {
+        currentView: 'home'
+      },
+      components: {
+        home: {
+          template: '<p>home</p>'
+        },
+        posts: {
+          template: '<p>posts</p>'
+        },
+        archive: {
+          template: '<p>archive</p>'
+        }
+      }
+    });
+
+    var vm2 = new Vue({
+      el: '#ex2',
+      data: {
+        currentView: Home,
+        baz: 'bazzy',
+        qux: 'quxxy'
+      },
+      methods: {
+        doThis: function() {
+          console.log('this');
+        },
+        doThat: function() {
+          console.log('that');
+        }
+      }
+    });
+
+    var child = vm2.$refs.myComponent;
+  </script>
+</html>
