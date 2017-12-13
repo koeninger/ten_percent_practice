@@ -1,26 +1,28 @@
 import { Meteor } from 'meteor/meteor';
 import { Stocks } from '../collections/stocks';
+var stockData = {};
 
 Meteor.startup(() => {
   //if (Stocks.find().count() === 0) {
-    const stocks = [{
-      'name': 'Dubstep-Free Zone',
-      'high': 'Fast just got faster with Nexus S.',
-      'low': '10'
-    }, {
-      'name': 'All dubstep all the time',
-      'high': 'Fast just got faster with Nexus S.',
-      'low': '9'
+  Stocks.remove({});
 
-    }, {
-      'name': 'Savage lounging',
-      'high': 'Leisure suit required. And only fiercest manners.',
-      'low': '8'
+  HTTP.get('https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=AMAT&interval=60min&apikey=B7KCRRWX0P2ONSWL', {}, function (error, response) {
+    if ( error ) {
+        console.log( error );
+    } else {
+        var response = response.data['Time Series (60min)'];
 
-    }];
-
-    stocks.forEach((stock) => {
-        Stocks.insert(stock)
-    });
-  //}
+        _.forEach(response, function (dataPoint, timeStamp) {
+            stockData[timeStamp] = {
+                open: dataPoint['1. open'],
+                high: dataPoint['2. high'],
+                low: dataPoint['3. low'],
+                close: dataPoint['4. close'],
+                timeStamp: timeStamp
+            };
+            Stocks.insert(stockData[timeStamp]);
+        });
+        // console.log(stockData);
+        }
+  });
 });

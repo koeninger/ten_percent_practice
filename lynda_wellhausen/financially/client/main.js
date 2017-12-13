@@ -18,5 +18,5 @@ angular.module('financially', [
                 return Stocks.find({});
             }
         });
-    }    
+    }
 });

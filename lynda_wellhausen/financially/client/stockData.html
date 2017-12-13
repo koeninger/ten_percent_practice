@@ -1,7 +1,9 @@
-  <ul>
-    <li ng-repeat="stock in stockData.stocks">
-      {{stock.name}}
-      <p>{{stock.high}}</p>
-      <p>{{stock.low}}</p>
-    </li>
+  <ul>{{stock.name}}AMAT Stock Data
+    <div ng-repeat="stock in stockData.stocks">
+      <li>{{stock.timeStamp}}</li>
+      <li>{{stock.high}}</li>
+      <li>{{stock.low}}</li>
+      <li>{{stock.open}}</li>
+      <li>{{stock.close}}</li>
+    </div>
   </ul>
