@@ -4,9 +4,19 @@
 typedef void LexerType;
 typedef struct Token TokenType;
 
+typedef enum {
+    IDENTIFIER_TOKEN = 0, // must be first
+    WHITESPACE_TOKEN,
+
+    BAD_TOKEN,
+
+    // Must be last entry
+    END_TOKEN_LIST
+} SchemeToken;
 
 struct Token {
-    const wchar_t content; // actual content of the current token 
+    SchemeToken type;
+    const wchar_t *content; // actual content of the current token 
     size_t length; // the length of the current token
 
     TokenType *next; // the next token in a stream

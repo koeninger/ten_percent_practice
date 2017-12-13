@@ -8,6 +8,7 @@
 #include <locale.h>
 
 #include <inttypes.h>
+#include <stdbool.h>
 
 
 #endif
