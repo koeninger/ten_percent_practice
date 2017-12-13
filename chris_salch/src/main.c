@@ -63,7 +63,7 @@ int main(int argc, char**argv)
     LexerType * lexer = createLexer(buf, size);
 
     while ((token = getTokenLexer(lexer))) {
-        printf("Token: %C Size: %zu\n", token->content, token->length);
+        printf("Token: %i Content: %.*S Size: %zu\n", token->type, (int)token->length, token->content, token->length);
     }
 
     // clena up 
