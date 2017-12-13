@@ -18,7 +18,7 @@ scalacOptions in (Compile, console)  := (scalacOptions in (Compile, console)).va
 
 
 libraryDependencies ++= Seq(
-  "org.typelevel" %% "cats-core" % "1.0.0-MF",
+  "org.typelevel" %% "cats-core" % "1.0.0-RC1",
   "org.scalatest" %% "scalatest" % "3.0.4" % "test"
 )
 
