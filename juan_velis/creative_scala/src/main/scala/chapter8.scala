@@ -36,9 +36,29 @@ object Example {
     loop(samples)
   }
 
+  // 8.5.1 flower example
+  def rose(angle: Angle) =
+    Point.polar((angle * 7).cos * 200, angle)
+
+  def sample2(samples:Int): Image = {
+    val step = Angle.one / samples // Angle.one = 360 deg
+    val dot = circle(3)
+
+    def loop(count: Int): Image = {
+      val angle = step * count
+      count match {
+        case 0 => Image.empty
+        case n =>
+          dot.at(rose(angle).toVec) on loop(n - 1)
+      }
+    }
+    loop(samples)
+  }
+
   def main(args:Array[String]):Unit = {
     squareDots.draw
-    sample(72).draw
+    sample(72).draw // circle
+    sample2(200).draw // flower
   }
 
 }
