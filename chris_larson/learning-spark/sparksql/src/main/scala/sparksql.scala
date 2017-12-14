@@ -46,9 +46,17 @@ object sparksql {
       StructField("x-edge-response-result-type", StringType, nullable = true),
       StructField("cs-protocol-version", StringType, nullable = true)
     )
-
     val schema = StructType(fields)
-    def row(line: List[String]): Row = { Row(line(0), line(1), line(2), line(3).toInt, line(4), line(5), line(6), line(7), line(8), line(9), line(10), line(11), line(12), line(13), line(14), line(15), line(16), line(17), line(18), line(19), line(20), line(21), line(22), line(23)) }
+
+    def toInt(s: String):Option[Int] = {
+        try {
+            Some(s.toInt)
+        } catch {
+            case e: NumberFormatException => None
+        }
+    }
+
+    def row(line: List[String]): Row = { Row(line(0), line(1), line(2), toInt(line(3)).getOrElse(0), line(4), line(5), line(6), line(7), line(8), line(9), line(10), line(11), line(12), line(13), line(14), line(15), line(16), line(17), line(18), line(19), line(20), line(21), line(22), line(23)) }
 
     val logfile = sc.sparkContext.textFile("../E1IN64R500NXTW.2017-10-19-12.9c2ba7f3.txt")
 
