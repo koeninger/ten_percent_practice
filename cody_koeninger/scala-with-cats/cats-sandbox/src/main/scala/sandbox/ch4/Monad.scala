@@ -1,6 +1,6 @@
 package sandbox.ch4
 
-trait Monad[F[_]] {
+trait MyMonad[F[_]] {
   def pure[A](a: A): F[A]
 
   def flatMap[A, B](fa: F[A])(func: A => F[B]): F[B]

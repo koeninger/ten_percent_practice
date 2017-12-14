@@ -18,7 +18,7 @@ void usage(char *name)
  * deallocating memory 
  *
  */
-off_t slurp(char * fileName, char **outBuffer)
+size_t slurp(char * fileName, char **outBuffer)
 {
     struct stat fileStat;
     int fd = open(fileName, O_RDONLY);
@@ -45,18 +45,26 @@ off_t slurp(char * fileName, char **outBuffer)
 int main(int argc, char**argv)
 {
     char *buf = 0;
-    off_t size = 0;
+    size_t size = 0;
+    TokenType *token = 0;
 
     /* Make sure that we have a passed in file */
     if (argc < 2) {
         usage(argv[0]);
     }
+
+    // make sure that the locale is configured
+    setlocale(LC_ALL, "");
     
     // Slurp the file
     size = slurp(argv[1], &buf);
 
     // Create a lexer so we can get a token stream
     LexerType * lexer = createLexer(buf, size);
+
+    while ((token = getTokenLexer(lexer))) {
+        printf("Token: %i Content: %.*S Size: %zu\n", token->type, (int)token->length, token->content, token->length);
+    }
 
     // clena up 
     destroyLexer(lexer);
