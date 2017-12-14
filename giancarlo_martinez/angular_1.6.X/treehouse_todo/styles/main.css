@@ -28,7 +28,7 @@ a {
       margin-left: 5px;
       font-family: "Varela Round";
       border-radius: 2px;
-      border: 2px solid #a7b9c4;
+      /*border: 2px solid #a7b9c4;*/
       font-size: 16px;
       padding: 15px 0 15px 10px;
       width: 60%; }
@@ -55,7 +55,7 @@ a {
     padding: 25px 0 27px 25px; }
 
 input[type="checkbox"] {
-    display:none;
+    /*display:none;*/
 }
 input[type="checkbox"] + span {
     display:inline-block;
