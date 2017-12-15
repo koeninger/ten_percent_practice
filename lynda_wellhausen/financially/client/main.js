@@ -50,15 +50,7 @@ angular.module('financially', [
                 console.log('test helper');
             },
             todaysData() {
-                var hoursArray = [];
-                var i = 0;
-                todaysData = Stocks.find({ date: 15 }).fetch();
-                _.forEach(todaysData, function() {
-                    //console.log('todaysData: ', todaysData);
-                    hoursArray.push(todaysData[i].hour);
-                    i++;
-                });
-                hoursArray.reverse();
+                return Stocks.find({ date: 15 }).fetch();
             },
         });
     }
