@@ -1,19 +1,5 @@
 #include <lexer_internal.h>
 
-#include <wctype.h>
-#include <wchar.h>
-
-// List of specal initial characters
-const wchar_t specialInitial[] = L"!$%&*/:<=>?Q^_~";
-
-#define ANY(match, count) { for(;count + lexer->offset, lexer->length && match; count++) {} }
-
-#define IS_EXPLICIT_SIGN(c) (c == L'+' || c == L'-')
-#define IS_SPECIAL_SUBSEQUENT(c) (IS_EXPLICIT_SIGN(c) || c == L'.' || c == L'@')
-
-#define IS_INITIAL(c) (iswalpha(c) || wcschr(specialInitial, c))
-#define IS_SUBSEQUENT(c) (IS_INITIAL(c) || iswdigit(c) || IS_SPECIAL_SUBSEQUENT(c))
-
 int matchIdentifier(LexerInternalType *lexer, TokenType *token)
 {
     size_t length = 0;
@@ -28,9 +14,6 @@ int matchIdentifier(LexerInternalType *lexer, TokenType *token)
     
     // eat characters until we find one we can't match
     ANY(IS_SUBSEQUENT(content[length]), length);
-
-    //for (;length + lexer->offset < lexer->length && IS_SUBSEQUENT(content[length]); length++ ) {
-    //}
 
     token->type = IDENTIFIER_TOKEN; 
     token->length = length;
@@ -52,16 +35,39 @@ int matchWhitespace(LexerInternalType *lexer, TokenType *token)
     return length > 0;
 }
 
-int badToken(LexerInternalType *lexer, TokenType *token)
+
+int matchBoolean(LexerInternalType *lexer, TokenType *token)
 {
-    printf("There was a bad token!\n");
-    assert(0);
+    if (subStringCmpToken(L"#true", token)) {
+        token->type = TRUE_TOKEN;
+        token->length = 5;
+        return 1;
+    }
+
+    if (subStringCmpToken(L"#t", token)) {
+        token->type = TRUE_TOKEN;
+        token->length = 2;
+        return 1;
+    }
+
+    if (subStringCmpToken(L"#false", token)) {
+        token->type = FALSE_TOKEN;
+        token->length = 6;
+        return 1;
+    }
+
+    if (subStringCmpToken(L"#f", token)) {
+        token->type = FALSE_TOKEN;
+        token->length = 2;
+        return 1;
+    }
+
+    return 0;
 }
 
-void attachMatchers(LexerInternalType * lexer)
+int match(LexerInternalType *lexer, TokenType *token)
 {
-    lexer->matchers[IDENTIFIER_TOKEN] = &matchIdentifier;
-    lexer->matchers[WHITESPACE_TOKEN] = &matchWhitespace;
-
-    lexer->matchers[BAD_TOKEN] = &badToken;
+    return matchWhitespace(lexer, token) ||
+        matchIdentifier(lexer, token) || 
+        matchBoolean(lexer, token); 
 }
