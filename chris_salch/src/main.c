@@ -3,7 +3,6 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/mman.h>
-#include <strings.h>
 
 #include <token.h>
 
@@ -63,7 +62,7 @@ int main(int argc, char**argv)
     LexerType * lexer = createLexer(buf, size);
 
     while ((token = getTokenLexer(lexer))) {
-        printf("Token: %i Content: %.*S Size: %zu\n", token->type, (int)token->length, token->content, token->length);
+        outputTokenLexer(lexer, token);
     }
 
     // clena up 

@@ -5,8 +5,8 @@ typedef void LexerType;
 typedef struct Token TokenType;
 
 typedef enum {
-    IDENTIFIER_TOKEN = 0, // must be first
-    WHITESPACE_TOKEN,
+    WHITESPACE_TOKEN = 0,
+    IDENTIFIER_TOKEN, // must be first
 
     BAD_TOKEN,
 
@@ -36,9 +36,15 @@ LexerType *createLexer(const char *buf, size_t size);
 void destroyLexer(LexerType *lexer);
 
 /**
- * return the next token from the given lexer
+ * Return the next token from the given lexer
  *
  */
 TokenType *getTokenLexer(LexerType *lexer);
+
+/**
+ * Dump a token to stdout 
+ *
+ */
+void outputTokenLexer(LexerType *lexer, TokenType *token);
 
 #endif

@@ -1,19 +1,5 @@
 #include <lexer_internal.h>
 
-#include <wctype.h>
-#include <wchar.h>
-
-// List of specal initial characters
-const wchar_t specialInitial[] = L"!$%&*/:<=>?Q^_~";
-
-#define ANY(match, count) { for(;count + lexer->offset, lexer->length && match; count++) {} }
-
-#define IS_EXPLICIT_SIGN(c) (c == L'+' || c == L'-')
-#define IS_SPECIAL_SUBSEQUENT(c) (IS_EXPLICIT_SIGN(c) || c == L'.' || c == L'@')
-
-#define IS_INITIAL(c) (iswalpha(c) || wcschr(specialInitial, c))
-#define IS_SUBSEQUENT(c) (IS_INITIAL(c) || iswdigit(c) || IS_SPECIAL_SUBSEQUENT(c))
-
 int matchIdentifier(LexerInternalType *lexer, TokenType *token)
 {
     size_t length = 0;
@@ -52,16 +38,9 @@ int matchWhitespace(LexerInternalType *lexer, TokenType *token)
     return length > 0;
 }
 
-int badToken(LexerInternalType *lexer, TokenType *token)
-{
-    printf("There was a bad token!\n");
-    assert(0);
-}
 
-void attachMatchers(LexerInternalType * lexer)
+int match(LexerInternalType *lexer, TokenType *token)
 {
-    lexer->matchers[IDENTIFIER_TOKEN] = &matchIdentifier;
-    lexer->matchers[WHITESPACE_TOKEN] = &matchWhitespace;
-
-    lexer->matchers[BAD_TOKEN] = &badToken;
+    return matchWhitespace(lexer, token) ||
+        matchIdentifier(lexer, token); 
 }

@@ -13,8 +13,6 @@ LexerType * createLexer(const char *buf, size_t size)
 
     lexer->buf = wideBuf;
 
-    attachMatchers(lexer);
-
     return (LexerType *)lexer;
 }
 
@@ -49,13 +47,8 @@ TokenType *getTokenLexer(LexerType *lexerRaw)
     token = (TokenType *)calloc(sizeof(TokenType), 1);
     token->content = lexer->buf + lexer->offset;
 
-    // match this token
-    for (int i = 0; i < END_TOKEN_LIST; i++) {
-        if (lexer->matchers[i](lexer, token)) {
-            break;
-        }
-    }
-
+    // Make sure that the we can match a token 
+    assert(match(lexer, token));
 
     lexer->offset += token->length;
 
@@ -68,4 +61,16 @@ TokenType *getTokenLexer(LexerType *lexerRaw)
     }
 
     return token;
+}
+
+
+void outputTokenLexer(LexerType *lexerRaw, TokenType *token)
+{
+    wchar_t outputBuff[token->length + 1];
+    bzero(outputBuff, sizeof(outputBuff));
+   
+    wcsncpy(outputBuff, token->content, token->length);
+
+    printf("Token: %i Size: %4.zu Content: %S\n", token->type, token->length, outputBuff);
+
 }
