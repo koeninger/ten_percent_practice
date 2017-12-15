@@ -6,12 +6,13 @@ typedef struct Token TokenType;
 
 typedef enum {
     WHITESPACE_TOKEN = 0,
-    IDENTIFIER_TOKEN, // must be first
+    IDENTIFIER_TOKEN,
+    
+    TRUE_TOKEN,
+    FALSE_TOKEN,
 
-    BAD_TOKEN,
 
-    // Must be last entry
-    END_TOKEN_LIST
+    BAD_TOKEN
 } SchemeToken;
 
 struct Token {

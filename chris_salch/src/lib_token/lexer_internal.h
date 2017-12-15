@@ -30,8 +30,18 @@ struct LexerInternal {
  */
 int match(LexerInternalType *lexer, TokenType *token);
 
+/**
+ * return the character at the given offset or 0 if there is no character
+ */
+wchar_t peekCharToken(TokenType *token, size_t offset);
+
+/**
+ * Does a simple equality check on a substring.
+ */
+int subStringCmpToken(const wchar_t *expect, TokenType *token);
+
 // Some utilitiy macros
-#define ANY(match, count) { for(;count + lexer->offset, lexer->length && match; count++) {} }
+#define ANY(match, count) { for(;count < token->length && match; count++) {} }
 
 // Custom matching functions
 #define IS_EXPLICIT_SIGN(c) (c == L'+' || c == L'-')
