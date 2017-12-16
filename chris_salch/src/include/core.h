@@ -10,5 +10,7 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
+#include <strings.h>
+
 
 #endif

@@ -38,8 +38,8 @@ object sparksql {
       StructField("x-edge-request-id", StringType, nullable = true),
       StructField("x-host-header", StringType, nullable = true),
       StructField("cs-protocol", StringType, nullable = true),
-      StructField("cs-bytes", StringType, nullable = true),
-      StructField("time-taken", StringType, nullable = true),
+      StructField("cs-bytes", IntegerType, nullable = true),
+      StructField("time-taken", DoubleType, nullable = true),
       StructField("x-forwarded-for", StringType, nullable = true),
       StructField("ssl-protocol", StringType, nullable = true),
       StructField("ssl-cipher", StringType, nullable = true),
@@ -56,7 +56,40 @@ object sparksql {
         }
     }
 
-    def row(line: List[String]): Row = { Row(line(0), line(1), line(2), toInt(line(3)).getOrElse(0), line(4), line(5), line(6), line(7), line(8), line(9), line(10), line(11), line(12), line(13), line(14), line(15), line(16), line(17), line(18), line(19), line(20), line(21), line(22), line(23)) }
+    def toDbl(s: String):Option[Double] = {
+        try {
+            Some(s.toDouble)
+        } catch {
+            case _: Throwable => None
+        }
+    }
+
+    def row(line: List[String]): Row = { Row(
+        line(0), 
+        line(1), 
+        line(2), 
+        toInt(line(3)).getOrElse(0), 
+        line(4), 
+        line(5), 
+        line(6), 
+        line(7), 
+        line(8), 
+        line(9), 
+        line(10), 
+        line(11), 
+        line(12), 
+        line(13), 
+        line(14), 
+        line(15), 
+        line(16), 
+        toInt(line(17)).getOrElse(0), 
+        toDbl(line(18)).getOrElse(0.0), 
+        line(19), 
+        line(20), 
+        line(21), 
+        line(22), 
+        line(23)
+      )}
 
     val logfile = sc.sparkContext.textFile("../E1IN64R500NXTW.2017-10-19-12.9c2ba7f3.txt")
 

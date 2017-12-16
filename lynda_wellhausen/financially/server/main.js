@@ -23,7 +23,7 @@ Meteor.startup(() => {
             date = ts.getDate();
             month = ts.getMonth();
             year = ts.getFullYear();
-            stockData[timeStamp] = {
+            stockData = {
                 open: dataPoint['1. open'],
                 high: dataPoint['2. high'],
                 low: dataPoint['3. low'],
@@ -33,9 +33,8 @@ Meteor.startup(() => {
                 month: month,
                 year: year
             };
-            Stocks.insert(stockData[timeStamp]);
+            Stocks.insert(stockData);
         });
-        // console.log(stockData);
         }
   });
 });

@@ -13,8 +13,6 @@ LexerType * createLexer(const char *buf, size_t size)
 
     lexer->buf = wideBuf;
 
-    attachMatchers(lexer);
-
     return (LexerType *)lexer;
 }
 
@@ -48,14 +46,10 @@ TokenType *getTokenLexer(LexerType *lexerRaw)
 
     token = (TokenType *)calloc(sizeof(TokenType), 1);
     token->content = lexer->buf + lexer->offset;
+    token->length = left;
 
-    // match this token
-    for (int i = 0; i < END_TOKEN_LIST; i++) {
-        if (lexer->matchers[i](lexer, token)) {
-            break;
-        }
-    }
-
+    // Make sure that the we can match a token 
+    assert(match(lexer, token));
 
     lexer->offset += token->length;
 
@@ -68,4 +62,39 @@ TokenType *getTokenLexer(LexerType *lexerRaw)
     }
 
     return token;
+}
+
+
+void outputTokenLexer(LexerType *lexerRaw, TokenType *token)
+{
+    wchar_t outputBuff[token->length + 1];
+    bzero(outputBuff, sizeof(outputBuff));
+   
+    wcsncpy(outputBuff, token->content, token->length);
+
+    printf("Token: %i Size: %4.zu Content: %S\n", token->type, token->length, outputBuff);
+
+}
+
+wchar_t peekCharToken(TokenType *token, size_t offset)
+{
+    if (offset > token->length) {
+        return 0;
+    }
+
+    return token->content[offset];
+}
+
+int subStringCmpToken(const wchar_t *expect, TokenType *token)
+{
+    size_t length = wcslen(expect);
+    wchar_t c = 0;
+
+    for (size_t i = 0; i < length && (c = peekCharToken(token, i)); i++) {
+        if (c != expect[i]) {
+            return 0;
+        }
+    }
+
+    return 1;
 }
