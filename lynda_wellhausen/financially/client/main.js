@@ -2,6 +2,11 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import { Stocks } from '../collections/stocks';
 import * as d3 from 'd3';
+var td = {
+    hoursArray: [],
+    opensArray: [],
+    closeArray: []
+};
 
 angular.module('financially', [
     angularMeteor
@@ -17,23 +22,26 @@ angular.module('financially', [
 
         $scope.symbolName = 'AMAT';
         $scope.show = false;
-        $scope.hoursArray = function () {
-            var hoursArray = [];
+        $scope.todaysData = function () {
             var i = 0;
-            todaysData = Stocks.find({ date: 15 }).fetch();
-            _.forEach(todaysData, function() {
+            var hoursArray = [];
+            todaysData = Stocks.find({ date: 19 }).fetch();
+            console.log('todaysData', todaysData);
+
+            _.forEach(todaysData, function () {
                 //console.log('todaysData: ', todaysData);
-                hoursArray.push(todaysData[i].hour);
+                td.hoursArray.push(todaysData[i].hour);
+                td.opensArray.push(todaysData[i].open),
+                td.closeArray.push(todaysData[i].close)
                 i++;
             });
-            return hoursArray.reverse();
         },
 
         $scope.test = function () {
             d3.selectAll("li").style("background-color", "pink");
         },
 
-        $scope.todaysData = function () {
+        $scope.toggleTodaysData = function () {
             if (this.show == false) {
                 this.show = true;
             } else
@@ -51,6 +59,7 @@ angular.module('financially', [
             },
             todaysData() {
                 return Stocks.find({ date: 15 }).fetch();
+                console.log( Stocks.find({ date: 15 }).fetch());
             },
         });
     }
