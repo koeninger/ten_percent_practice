@@ -11,6 +11,13 @@ typedef enum {
     TRUE_TOKEN,
     FALSE_TOKEN,
 
+    S_START_TOKEN,
+    S_END_TOKEN,
+
+    VECTOR_START_TOKEN,
+    BYTE_VECTOR_START_TOKEN,
+
+    QUOTE_TOKEN,
 
     BAD_TOKEN
 } SchemeToken;
