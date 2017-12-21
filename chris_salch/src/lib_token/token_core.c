@@ -47,11 +47,24 @@ TokenType *getTokenLexer(LexerType *lexerRaw)
     token = (TokenType *)calloc(sizeof(TokenType), 1);
     token->content = lexer->buf + lexer->offset;
     token->length = left;
+    token->line = lexer->line;
+    token->column = lexer->column;
 
-    // Make sure that the we can match a token 
-    assert(match(lexer, token));
+    // Make sure that the we can match a token
+    if (!match(lexer, token)) {
+        fprintf(stderr, "Unmatched token\n");
+        outputTokenLexer(lexer, token);
+        assert(0);
+    }
 
     lexer->offset += token->length;
+
+    if (token->type == LINE_ENDING_TOKEN) {
+        lexer->column = 0;
+        lexer->line++;
+    } else {
+        lexer->column += token->length;
+    }
 
     if (lexer->tokenHead == 0) {
         lexer->tokenHead = token;
@@ -72,7 +85,8 @@ void outputTokenLexer(LexerType *lexerRaw, TokenType *token)
    
     wcsncpy(outputBuff, token->content, token->length);
 
-    printf("Token: %i Size: %4.zu Content: %S\n", token->type, token->length, outputBuff);
+    printf("Token: %3.i Size: %4.zu (%4.zu, %4.zu) Content: %S\n",
+        token->type, token->length, token->line + 1, token->column + 1, outputBuff);
 
 }
 

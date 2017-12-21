@@ -6,6 +6,8 @@ typedef struct Token TokenType;
 
 typedef enum {
     WHITESPACE_TOKEN = 0,
+    LINE_ENDING_TOKEN,
+
     IDENTIFIER_TOKEN,
     
     TRUE_TOKEN,
@@ -19,13 +21,22 @@ typedef enum {
 
     QUOTE_TOKEN,
 
+    QUASIQUOTE_TOKEN,
+    COMMA_TOKEN,
+    COMMA_AT_TOKEN,
+
+    DOT_TOKEN,
+
     BAD_TOKEN
 } SchemeToken;
 
 struct Token {
     SchemeToken type;
-    const wchar_t *content; // actual content of the current token 
+    const wchar_t *content; // actual content of the current token
+
     size_t length; // the length of the current token
+    size_t line;
+    size_t column;
 
     TokenType *next; // the next token in a stream
 };
