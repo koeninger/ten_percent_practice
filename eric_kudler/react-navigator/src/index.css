@@ -48,3 +48,15 @@ ol, ul {
 .game-info {
   margin-left: 20px;
 }
+
+nav.navbar {
+  margin-bottom: 0px;
+}
+div.container {
+  width: 100%;
+}
+div.control-panel {
+  padding-top: 10px;
+  background: url('images/background.jpg');
+  background-size: cover;
+}
