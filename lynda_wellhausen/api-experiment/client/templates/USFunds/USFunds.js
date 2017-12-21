@@ -6,7 +6,7 @@ Session.setDefault('symbol', 'AMAT');
 Tracker.autorun(function() {
     if (Session.get('symbol')) {
         var searchHandle = Meteor.subscribe('usFundsSearch', Session.get('symbol'));
-        //Session.set('searching', ! searchHandle.ready());
+        Session.set('searching', ! searchHandle.ready());
     }
 });
 
@@ -23,7 +23,7 @@ Template.body.events({
 });
 
 Template.body.helpers({
-    posts: function () {
+    stockData: function () {
         console.log(Funds);
         return Funds.find();
     },

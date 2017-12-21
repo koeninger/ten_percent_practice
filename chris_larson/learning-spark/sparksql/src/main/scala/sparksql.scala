@@ -18,10 +18,78 @@ object sparksql {
     val schemaString = "date time x-edge-location sc-bytes c-ip cs-method cs(Host) cs-uri-stem sc-status cs(Referer) cs(User-Agent) cs-uri-query cs(Cookie) x-edge-result-type x-edge-request-id x-host-header cs-protocol cs-bytes time-taken x-forwarded-for ssl-protocol ssl-cipher x-edge-response-result-type cs-protocol-version"
 
     // Generate the schema based on the string of schema
-    val fields = schemaString.split(" ")
-      .map(fieldName => StructField(fieldName, StringType, nullable = true))
+    // val fields = schemaString.split(" ")
+    //   .map(fieldName => StructField(fieldName, StringType, nullable = true))
+    val fields = Array(
+      StructField("date", StringType, nullable = true),
+      StructField("time", StringType, nullable = true),
+      StructField("x-edge-location", StringType, nullable = true),
+      StructField("sc-bytes", IntegerType, nullable = true),
+      StructField("c-ip", StringType, nullable = true),
+      StructField("cs-method", StringType, nullable = true),
+      StructField("cs(Host)", StringType, nullable = true),
+      StructField("cs-uri-stem", StringType, nullable = true),
+      StructField("sc-status", StringType, nullable = true),
+      StructField("cs(Referer)", StringType, nullable = true),
+      StructField("cs(User-Agent)", StringType, nullable = true),
+      StructField("cs-uri-query", StringType, nullable = true),
+      StructField("cs(Cookie)", StringType, nullable = true),
+      StructField("x-edge-result-type", StringType, nullable = true),
+      StructField("x-edge-request-id", StringType, nullable = true),
+      StructField("x-host-header", StringType, nullable = true),
+      StructField("cs-protocol", StringType, nullable = true),
+      StructField("cs-bytes", IntegerType, nullable = true),
+      StructField("time-taken", DoubleType, nullable = true),
+      StructField("x-forwarded-for", StringType, nullable = true),
+      StructField("ssl-protocol", StringType, nullable = true),
+      StructField("ssl-cipher", StringType, nullable = true),
+      StructField("x-edge-response-result-type", StringType, nullable = true),
+      StructField("cs-protocol-version", StringType, nullable = true)
+    )
     val schema = StructType(fields)
-    def row(line: List[String]): Row = { Row(line(0), line(1), line(2), line(3), line(4), line(5), line(6), line(7), line(8), line(9), line(10), line(11), line(12), line(13), line(14), line(15), line(16), line(17), line(18), line(19), line(20), line(21), line(22), line(23)) }
+
+    def toInt(s: String):Option[Int] = {
+        try {
+            Some(s.toInt)
+        } catch {
+            case e: NumberFormatException => None
+        }
+    }
+
+    def toDbl(s: String):Option[Double] = {
+        try {
+            Some(s.toDouble)
+        } catch {
+            case _: Throwable => None
+        }
+    }
+
+    def row(line: List[String]): Row = { Row(
+        line(0), 
+        line(1), 
+        line(2), 
+        toInt(line(3)).getOrElse(0), 
+        line(4), 
+        line(5), 
+        line(6), 
+        line(7), 
+        line(8), 
+        line(9), 
+        line(10), 
+        line(11), 
+        line(12), 
+        line(13), 
+        line(14), 
+        line(15), 
+        line(16), 
+        toInt(line(17)).getOrElse(0), 
+        toDbl(line(18)).getOrElse(0.0), 
+        line(19), 
+        line(20), 
+        line(21), 
+        line(22), 
+        line(23)
+      )}
 
     val logfile = sc.sparkContext.textFile("../E1IN64R500NXTW.2017-10-19-12.9c2ba7f3.txt")
 

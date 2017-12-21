@@ -9,3 +9,15 @@ Children controllers inherit from parent controller scope via prototypical inher
  Models can be keys of other models:
  "ng-model='todo.complete'"
  Variables are injected/evaluated using double curly brackets: {{ myVar }}
+ 
+ 
+ ###Directives
+ 
+ ng-click: triggers function on element click
+ ng-hide: evaluates variable or function and hides element if true
+ ng-repeat: iterates over an iterable, injecting html block with its own scope
+ ng-blur: Only fires when clicking outside of an input
+ ng-class: conditionally applies classes
+ 
+ classes can be applied by evaluating with a ternary operator, or comma separated key value pairs where the key is the class and the value is the expression. 
+ {"editing-item": editing,

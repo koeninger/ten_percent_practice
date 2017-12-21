@@ -1,0 +1,97 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+      <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <div id="demo">
+      <button v-on:click="show = !show">
+        Toggle
+      </button>
+      <transition name="fade">
+        <p v-if="show">hello</p>
+      </transition>
+    </div>
+    <div id="ex2">
+      <button @click="show = !show">Toggle Show</button>
+      <transition name="bounce">
+        <p v-if="show">This is another thing to do</p>
+      </transition>
+    </div>
+    <div id="ex3">
+      <button @click="show = !show">Toggle again</button>
+      <transition
+        name="custom-classes-transition"
+        enter-active-class="animated tada"
+        leave-active-class="animated bounceOutLeft"
+      >
+        <p v-if="show">hello there</p>
+      </transition>
+    </div>
+  </body>
+  <style>
+    .fade-enter-active, .fade-leave-active {
+      transition: opacity .7s
+    }
+    .fade-enter, .fade-leave-to {
+      opacity: 0
+    }
+  .bounce-enter-active {
+    -webkit-animation: bounce-in .5s;
+    animation: bounce-in .5s;
+  }
+  .bounce-leave-active {
+    -webkit-animation: bounce-in .5s reverse;
+    animation: bounce-in .5s reverse;
+  }
+  @keyframes bounce-in {
+    0% {
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    }
+    50% {
+      -webkit-transform: scale(1.5);
+      transform: scale(1.5);
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
+  @-webkit-keyframes bounce-in {
+    0% {
+      -webkit-transform: scale(0);
+      transform: scale(0);
+    }
+    50% {
+      -webkit-transform: scale(1.5);
+      transform: scale(1.5);
+    }
+    100% {
+      -webkit-transform: scale(1);
+      transform: scale(1);
+    }
+  }
+
+  </style>
+  <script>
+    var vm1 = new Vue({
+      el: '#demo',
+      data: {
+        show: true
+      }
+    });
+    var vm2 = new Vue({
+      el: '#ex2',
+      data: {
+        show: true
+      }
+    });
+    var vm3 = new Vue({
+      el: '#ex3',
+      data: {
+        show: true
+      }
+    });
+  </script>
+</html>

@@ -1,7 +1,24 @@
+
+  <button ng-click="allData()">All Available data</button><br>
+  <button ng-click="todaysData()">Toggle Today's Data</button>
+
   <ul>
-    <li ng-repeat="stock in stockData.stocks">
-      {{stock.name}}
-      <p>{{stock.high}}</p>
-      <p>{{stock.low}}</p>
-    </li>
+    <div class="todaysData" ng-show="show">
+      <div ng-bind="symbolName"></div>
+      <div class="data-points-block" ng-repeat="stock in stockData.todaysData">
+        <li class="time-stamp">{{stock.timeStamp}}</li>
+        <li class="high">{{stock.high}}</li>
+        <li class="low">{{stock.low}}</li>
+        <li class="open">{{stock.open}}</li>
+        <li class="close">{{stock.close}}</li>
+        <li class="hour">{{stock.hour}}</li>
+        <li class="date">{{stock.month}}/{{stock.date}}/{{stock.year}}</li>
+      </div>
+    </div>
   </ul>
+
+<svg width="500" height="500">
+    <rect x="0" y="0" width="300" height="200" fill="steelblue"></rect>
+</svg>
+
+
