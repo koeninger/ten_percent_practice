@@ -136,7 +136,7 @@ class NavigationBar extends React.Component {
 			<Navbar>
 				<Navbar.Header>
 					<Navbar.Brand>
-						<a href="#">React-Bootstrap</a>
+						<a href="#">Vacation Navigator</a>
 					</Navbar.Brand>
 				</Navbar.Header>
 				<Nav>
