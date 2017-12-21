@@ -2,11 +2,6 @@ import angular from 'angular';
 import angularMeteor from 'angular-meteor';
 import { Stocks } from '../collections/stocks';
 import * as d3 from 'd3';
-var td = {
-    hoursArray: [],
-    opensArray: [],
-    closeArray: []
-};
 
 angular.module('financially', [
     angularMeteor
@@ -21,32 +16,40 @@ angular.module('financially', [
         $reactive(this).attach($scope);
 
         $scope.symbolName = 'AMAT';
-        $scope.show = false;
+        $scope.show = true;
         $scope.todaysData = function () {
+            //d3.selectAll("li").style("background-color", "green");
             var i = 0;
             var hoursArray = [];
-            todaysData = Stocks.find({ date: 19 }).fetch();
-            console.log('todaysData', todaysData);
+            var todaysData = Stocks.find({ date: 19 }).fetch();
+            var td = {
+                hoursArray: [],
+                opensArray: [],
+                closeArray: []
+            };
+            //console.log('todaysData', todaysData);
 
             _.forEach(todaysData, function () {
                 //console.log('todaysData: ', todaysData);
                 td.hoursArray.push(todaysData[i].hour);
-                td.opensArray.push(todaysData[i].open),
-                td.closeArray.push(todaysData[i].close)
+                td.opensArray.push(todaysData[i].open);
+                td.closeArray.push(todaysData[i].close);
                 i++;
             });
+            console.log('td', td.opensArray);
+            return td;
         },
 
         $scope.test = function () {
             d3.selectAll("li").style("background-color", "pink");
         },
 
-        $scope.toggleTodaysData = function () {
-            if (this.show == false) {
-                this.show = true;
-            } else
-                this.show = false;
-        },
+        //$scope.toggleTodaysData = function () {
+          //  if (this.show == false) {
+           //     this.show = true;
+            // } else
+             //   this.show = false;
+        //},
 
         $scope.allData = function () {
             data = Stocks.find({});
