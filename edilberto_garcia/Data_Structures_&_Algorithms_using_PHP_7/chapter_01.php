@@ -104,16 +104,74 @@ $numbers = [86,38,94,116,28,142,97,100,41,30,103,61,76,119,6,110,147,23,32,84,35
 $last_number = null;
 for ($i = count($numbers) ; $i >= 0; $i--)
 {
-    if( ($last_number && $numbers[$i] > $last_number) && ($numbers[$i-1] && $numbers[$i] > $numbers[$i-1]) ){
-        print $numbers[$i] . PHP_EOL;
+    if( ($last_number && $i < count($numbers) && $numbers[$i] > $last_number) && ($i > 1 && $numbers[$i-1] && $numbers[$i] > $numbers[$i-1]) ){
+        //print $numbers[$i] . PHP_EOL;
     }
 
-    $last_number = $numbers[$i];
+    $last_number = $i < count($numbers) ? $numbers[$i] : null;
 }
 
 //7: Print alternate elements in an array
-
 foreach($numbers as $index => $number)
 {
-    print $index % 2 == 0 ? $number . PHP_EOL : '';
+    //print $index % 2 == 0 ? $number . PHP_EOL : '';
 }
+
+
+//8: Given an array with value 0 or 1, write a program to segregate 0 on the elft side and 1 on the
+// right side
+
+$numbers = [
+	1,0,0,0,1,1,0,1,0,1,1,1,1,1,0,0,0,
+	1,1,0,1,0,0,0,1,1,0,0,0,1,0,1,0,1,
+	0,0,1,0,1,0,0,0,0,0,1,1,1,1,0,1,0,
+	0,1,1,0,0,0,1,0,1,1,0,1,1,0,0,0,1,
+	0,1,0,1,0,0,1,1,1,1,0,1];
+
+$output = '';
+foreach ($numbers as $number)
+{
+	if ($number == 0){
+		$output = $number . $output;
+	} else if ($number == 1){
+		$output .= $number;
+	}
+}
+print $output;
+
+
+//9: Given a list of intervals, merge all overlapping intervals
+
+function bubble_sort_intervals($intervals)
+{
+	$swapped = true;
+	while ($swapped == true)
+	{
+		for ($i = 0 ; $i < count($intervals); $i++)
+		{
+			if (($intervals[$i][0] > $intervals[$i+1][0]) ||
+				($intervals[$i][1] > $intervals[$i+1][1])
+			) {
+				$swap_var = $intervals[$i];
+				$intervals[$i] = $intervals[$i+1];
+				$intervals[$i+1] = $swap_var;
+			} else {
+				$swapped = false;
+			}
+		}
+	}
+}
+
+print bubble_sort_intervals([[1,3], [2,5], [8,10], [4,5]]);
+
+// function merge_overlapping_intervals($intervals) {
+// 	for ($i=0 ; $i < count($intervals) ; $i++)
+// 	{ 
+// 		$intervals[$i][0]
+// 		$intervals[$i][0]
+// 		$intervals[$i][0]
+// 		$intervals[$i][0]
+// 	}	
+// }
+// print merge_overlapping_intervals([[1,4], [3,6], [8,10]]);
+
