@@ -58,4 +58,5 @@ div.container {
 div.control-panel {
   padding-top: 10px;
   background: url('images/background.jpg');
+  background-size: cover;
 }

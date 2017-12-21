@@ -164,17 +164,12 @@ class ControlPanel extends React.Component {
 							jeior reogjruiegj fgre
 						</Panel>
 	  				</Col>
-	  				<Col md={2}>
+	  				<Col md={3}>
 	  					<Panel>
 							jeior reogjruiegj fgre
 						</Panel>
 	  				</Col>
-	  				<Col md={2}>
-	  					<Panel>
-							jeior reogjruiegj fgre
-						</Panel>
-	  				</Col>
-	  				<Col md={2}>
+	  				<Col md={3}>
 	  					<Panel>
 							jeior reogjruiegj fgre
 						</Panel>
