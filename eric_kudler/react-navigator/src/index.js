@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Panel, Jumbotron, Button } from 'react-bootstrap';
+import { Row, Col } from 'react-bootstrap';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 
 import './index.css';
@@ -153,6 +154,36 @@ class NavigationBar extends React.Component {
 		);
 	}
 }
+class ControlPanel extends React.Component {
+	render() {
+		return (
+			<div className="container control-panel">
+				<Row>
+					<Col md={6}>
+						<Panel>
+							jeior reogjruiegj fgre
+						</Panel>
+	  				</Col>
+	  				<Col md={2}>
+	  					<Panel>
+							jeior reogjruiegj fgre
+						</Panel>
+	  				</Col>
+	  				<Col md={2}>
+	  					<Panel>
+							jeior reogjruiegj fgre
+						</Panel>
+	  				</Col>
+	  				<Col md={2}>
+	  					<Panel>
+							jeior reogjruiegj fgre
+						</Panel>
+	  				</Col>
+	  			</Row>
+			</div>
+		)
+	}
+}
 class Navigator extends React.Component {
 	constructor(props) {
 		super(props);
@@ -161,9 +192,7 @@ class Navigator extends React.Component {
   		return (
   			<div>
   				<NavigationBar />
-				<Panel>
-					jeior reogjruiegj fgre
-				</Panel>
+  				<ControlPanel />
 			</div>
   		);
   	}
