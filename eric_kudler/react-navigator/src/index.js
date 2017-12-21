@@ -163,18 +163,18 @@ class ControlPanel extends React.Component {
 						<Panel>
 							jeior reogjruiegj fgre
 						</Panel>
-	  				</Col>
-	  				<Col md={3}>
-	  					<Panel>
+					</Col>
+					<Col md={3}>
+						<Panel>
 							jeior reogjruiegj fgre
 						</Panel>
-	  				</Col>
-	  				<Col md={3}>
-	  					<Panel>
+					</Col>
+					<Col md={3}>
+						<Panel>
 							jeior reogjruiegj fgre
 						</Panel>
-	  				</Col>
-	  			</Row>
+					</Col>
+				</Row>
 			</div>
 		)
 	}
@@ -182,10 +182,10 @@ class ControlPanel extends React.Component {
 class Navigator extends React.Component {
 	constructor(props) {
 		super(props);
-  	}
-  	render() {
-  		return (
-  			<div>
+	}
+	render() {
+		return (
+			<div>
   				<NavigationBar />
   				<ControlPanel />
 			</div>
