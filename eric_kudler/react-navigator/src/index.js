@@ -3,10 +3,13 @@ import ReactDOM from 'react-dom';
 import { Panel, Jumbotron, Button } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class Square extends React.Component {
 	constructor(props) {
@@ -154,25 +157,103 @@ class NavigationBar extends React.Component {
 		);
 	}
 }
+class SettingsPanel extends React.Component {
+	constructor (props) {
+    	super(props)
+    	this.state = {
+			startDate: moment().add(7, 'days'),
+			endDate: moment().add(12, 'days')
+		};
+    	this.setStartDate = this.setStartDate.bind(this);
+    	this.setEndDate = this.setEndDate.bind(this);
+  	}
+	setStartDate(date) {
+    	this.setState({
+			startDate: date
+		});
+  	}
+  	setEndDate(date) {
+    	this.setState({
+			endDate: date
+		});
+  	}
+	render() {
+		return (
+			<Panel>
+				<h4>Your Vacation</h4>
+				<hr />
+				<div>
+					<DatePicker
+						selected={this.state.startDate}
+						onChange={this.setStartDate} />
+					<span>To</span>
+					<DatePicker
+						selected={this.state.endDate}
+						onChange={this.setEndDate} />
+				</div>
+			</Panel>
+		);
+	}
+}
+class AttractionsPanel extends React.Component {
+	render() {
+		return (
+			<Panel>
+				<h4>All Attractions</h4>
+				<hr />
+				<div>
+					jeior reogjruiegj fgre
+				</div>
+			</Panel>
+		);
+	}
+}
+class InterestsPanel extends React.Component {
+	render() {
+		return (
+			<Panel>
+				<h4>My Attractions</h4>
+				<hr />
+				<div>
+					jeior reogjruiegj fgre
+				</div>
+			</Panel>
+		);
+	}
+}
+class InfoPanel extends React.Component {
+	render() {
+		return (
+			<Panel>
+				<h4>More Info</h4>
+				<hr />
+				<div>
+					Click on an attraction for more information, times and location!
+				</div>
+			</Panel>
+		);
+	}
+}
 class ControlPanel extends React.Component {
 	render() {
 		return (
 			<div className="container control-panel">
 				<Row>
 					<Col md={6}>
-						<Panel>
-							jeior reogjruiegj fgre
-						</Panel>
+						<SettingsPanel />
 					</Col>
 					<Col md={3}>
-						<Panel>
+						<AttractionsPanel>
 							jeior reogjruiegj fgre
-						</Panel>
+						</AttractionsPanel>
 					</Col>
 					<Col md={3}>
-						<Panel>
-							jeior reogjruiegj fgre
-						</Panel>
+						<InterestsPanel />
+					</Col>
+				</Row>
+				<Row>
+					<Col md={6}>
+						<InfoPanel />
 					</Col>
 				</Row>
 			</div>
