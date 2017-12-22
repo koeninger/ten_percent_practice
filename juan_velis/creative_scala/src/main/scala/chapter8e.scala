@@ -26,13 +26,14 @@ object Example {
       Point.polar(pt.r * factor, pt.angle)
     }
 
-  def point(position: Angle => Point, scale: Point => Point, image: Normalized => Image): Angle => Image = {
+  def point(position: Angle => Point, scale: Point => Point, image: Normalized => Image, rota: Angle): Angle => Image = {
     (angle: Angle) => {
       val pt = position(angle)
       val scaledPt = scale(pt)
       val r = pt.r.normalized
       val img = image(r)
-      (img at scaledPt.toVec)
+
+      (img at scaledPt.toVec.rotate(rota))
     }
   }
 
@@ -54,10 +55,32 @@ object Example {
         point(
           position(5),
           scale(200.0),
-          particle(2, 20, 0.2.normalized)
+          particle(2, 20, 0.2.normalized),
+          0.degrees
         )
       }.fillColor(Color.fuchsia).lineColor(Color.fuchsia)
-    shape.draw
+
+    val shapeTwo =
+      iterate(1.degrees){
+        point(
+          position(5),
+          scale(150.0),
+          particle(2, 10, 0.3.normalized),
+          20.degrees
+        )
+      }.fillColor(Color.green).lineColor(Color.green)
+
+    val shapeThree =
+      iterate(1.degrees){
+        point(
+          position(5),
+          scale(200.0),
+          particle(2, 10, 0.3.normalized),
+          40.degrees
+        )
+      }.fillColor(Color.red).lineColor(Color.red)
+
+    (shape on shapeTwo on shapeThree).draw
   }
 
 }
