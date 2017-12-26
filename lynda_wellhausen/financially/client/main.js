@@ -16,29 +16,40 @@ angular.module('financially', [
         $reactive(this).attach($scope);
 
         $scope.symbolName = 'AMAT';
-        $scope.show = false;
-        $scope.hoursArray = function () {
-            var hoursArray = [];
+        $scope.show = true;
+        $scope.todaysData = function () {
+            //d3.selectAll("li").style("background-color", "green");
             var i = 0;
-            todaysData = Stocks.find({ date: 15 }).fetch();
-            _.forEach(todaysData, function() {
+            var hoursArray = [];
+            var todaysData = Stocks.find({ date: 19 }).fetch();
+            var td = {
+                hoursArray: [],
+                opensArray: [],
+                closeArray: []
+            };
+            //console.log('todaysData', todaysData);
+
+            _.forEach(todaysData, function () {
                 //console.log('todaysData: ', todaysData);
-                hoursArray.push(todaysData[i].hour);
+                td.hoursArray.push(todaysData[i].hour);
+                td.opensArray.push(todaysData[i].open);
+                td.closeArray.push(todaysData[i].close);
                 i++;
             });
-            return hoursArray.reverse();
+            console.log('td', td.opensArray);
+            return td;
         },
 
         $scope.test = function () {
             d3.selectAll("li").style("background-color", "pink");
         },
 
-        $scope.todaysData = function () {
-            if (this.show == false) {
-                this.show = true;
-            } else
-                this.show = false;
-        },
+        //$scope.toggleTodaysData = function () {
+          //  if (this.show == false) {
+           //     this.show = true;
+            // } else
+             //   this.show = false;
+        //},
 
         $scope.allData = function () {
             data = Stocks.find({});
@@ -51,6 +62,7 @@ angular.module('financially', [
             },
             todaysData() {
                 return Stocks.find({ date: 15 }).fetch();
+                console.log( Stocks.find({ date: 15 }).fetch());
             },
         });
     }

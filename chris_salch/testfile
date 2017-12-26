@@ -1,2 +1,13 @@
 ƛ This is a test of the multi-byte char mess
 #t #f #true #false
+
+(this is an s-expression)
+
+#( )
+#u8( )
+
+`
+'
+, ,@
+.
+

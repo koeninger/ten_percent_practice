@@ -93,10 +93,85 @@ foreach ($numbers as $arr)
 		$second_max = $number > $second_max && $number < $max ? $number : $second_max;
 	}
 }
-print $second_max;
+//print $second_max;
 // --------------------------------------------------------------------------
 
 
+//6: Print all the maximas in an array
+
+$numbers = [86,38,94,116,28,142,97,100,41,30,103,61,76,119,6,110,147,23,32,84,35,64,112,68,101,129,9,90,106,148,39,121,127,122,105,140,16,74,19,36,128,52,89,13,5,114,70,15,66,11,118,8,56,46,1,117,12,29,77,96,21,115,47,149,79,67,17,20,42,88,135,146,22,2,73,48,145,98,144,57,99,33,136,87,71,82,92,63,93,72,18,45,27,75,43,51,131,7,104,44,59,14,24,126,65,139,50,91,95,55,78,58,81,80,49,113,120,150,108,132,138,62,31,60,69,130,143,4,10,3,37,125,134,141,107,53,123,26,25,111,34,54,137,124,102,83,109,133,85,40];
+
+$last_number = null;
+for ($i = count($numbers) ; $i >= 0; $i--)
+{
+    if( ($last_number && $i < count($numbers) && $numbers[$i] > $last_number) && ($i > 1 && $numbers[$i-1] && $numbers[$i] > $numbers[$i-1]) ){
+        //print $numbers[$i] . PHP_EOL;
+    }
+
+    $last_number = $i < count($numbers) ? $numbers[$i] : null;
+}
+
+//7: Print alternate elements in an array
+foreach($numbers as $index => $number)
+{
+    //print $index % 2 == 0 ? $number . PHP_EOL : '';
+}
 
 
+//8: Given an array with value 0 or 1, write a program to segregate 0 on the elft side and 1 on the
+// right side
+
+$numbers = [
+	1,0,0,0,1,1,0,1,0,1,1,1,1,1,0,0,0,
+	1,1,0,1,0,0,0,1,1,0,0,0,1,0,1,0,1,
+	0,0,1,0,1,0,0,0,0,0,1,1,1,1,0,1,0,
+	0,1,1,0,0,0,1,0,1,1,0,1,1,0,0,0,1,
+	0,1,0,1,0,0,1,1,1,1,0,1];
+
+$output = '';
+foreach ($numbers as $number)
+{
+	if ($number == 0){
+		$output = $number . $output;
+	} else if ($number == 1){
+		$output .= $number;
+	}
+}
+print $output;
+
+
+//9: Given a list of intervals, merge all overlapping intervals
+
+function bubble_sort_intervals($intervals)
+{
+	$swapped = true;
+	while ($swapped == true)
+	{
+		for ($i = 0 ; $i < count($intervals); $i++)
+		{
+			if (($intervals[$i][0] > $intervals[$i+1][0]) ||
+				($intervals[$i][1] > $intervals[$i+1][1])
+			) {
+				$swap_var = $intervals[$i];
+				$intervals[$i] = $intervals[$i+1];
+				$intervals[$i+1] = $swap_var;
+			} else {
+				$swapped = false;
+			}
+		}
+	}
+}
+
+print bubble_sort_intervals([[1,3], [2,5], [8,10], [4,5]]);
+
+// function merge_overlapping_intervals($intervals) {
+// 	for ($i=0 ; $i < count($intervals) ; $i++)
+// 	{ 
+// 		$intervals[$i][0]
+// 		$intervals[$i][0]
+// 		$intervals[$i][0]
+// 		$intervals[$i][0]
+// 	}	
+// }
+// print merge_overlapping_intervals([[1,4], [3,6], [8,10]]);
 

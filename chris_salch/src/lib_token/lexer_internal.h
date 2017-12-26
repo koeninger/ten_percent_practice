@@ -51,5 +51,30 @@ int subStringCmpToken(const wchar_t *expect, TokenType *token);
 #define IS_INITIAL(c) (iswalpha(c) || IS_SPECIAL_INITIAL(c))
 #define IS_SUBSEQUENT(c) (IS_INITIAL(c) || iswdigit(c) || IS_SPECIAL_SUBSEQUENT(c))
 
+// Shortcut to building single character matchers
+#define MATCH_SINGLE(name, what, enum_value)                  \
+int match ## name(LexerInternalType *lexer, TokenType *token) \
+{                                                             \
+    if (token->content[0] == what) {                          \
+        token->type = enum_value;                             \
+        token->length = 1;                                    \
+        return 1;                                             \
+    }                                                         \
+                                                              \
+    return 0;                                                 \
+}                                                             \
+
+// Shortcut to building single character matchers
+#define MATCH_STRING(name, what, len, enum_value)             \
+int match ## name(LexerInternalType *lexer, TokenType *token) \
+{                                                             \
+    if (subStringCmpToken(what, token)) {                     \
+        token->type = enum_value;                             \
+        token->length = len;                                  \
+        return 1;                                             \
+    }                                                         \
+                                                              \
+    return 0;                                                 \
+}                                                             \
 
 #endif
