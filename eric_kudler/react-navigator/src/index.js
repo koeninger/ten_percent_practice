@@ -3,6 +3,10 @@ import ReactDOM from 'react-dom';
 import { Panel, Jumbotron, Button } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import InterestsPanel from './common/panels/InterestsPanel';
+import SettingsPanel from './common/panels/SettingsPanel';
+import AttractionsPanel  from './common/panels/AttractionsPanel';
+import InfoPanel from './common/panels/InfoPanel';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
@@ -160,134 +164,7 @@ class NavigationBar extends React.Component {
 		);
 	}
 }
-class SettingsPanel extends React.Component {
-	constructor (props) {
-    	super(props)
-    	this.state = {
-			startDate: moment().add(7, 'days'),
-			endDate: moment().add(12, 'days')
-		};
-    	this.setStartDate = this.setStartDate.bind(this);
-    	this.setEndDate = this.setEndDate.bind(this);
-  	}
-	setStartDate(date) {
-    	this.setState({
-			startDate: date
-		});
-  	}
-  	setEndDate(date) {
-    	this.setState({
-			endDate: date
-		});
-  	}
-	render() {
-		return (
-			<Panel>
-				<h4>Your Vacation</h4>
-				<hr />
-				<div>
-					<DatePicker
-						selected={this.state.startDate}
-						onChange={this.setStartDate} />
-					<span>To</span>
-					<DatePicker
-						selected={this.state.endDate}
-						onChange={this.setEndDate} />
-				</div>
-			</Panel>
-		);
-	}
-}
-class AttractionsPanel extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			items: ['Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry']
-		};
-		this.onSortChange = this.onSortChange.bind(this)
-	}
-	onSortChange(order, sortable, evt) {
-		this.setState({ items: order });
-	}
-	render() {
-		const items = this.state.items.map(function(val) {
-			return (<div key={uniqueId()} data-id={val}>{val}</div>)
-		});
-		return (
-			<Panel>
-				<h4>All Attractions</h4>
-				<hr />
-				<div>
-					<Sortable
-	
-						onChange={this.onSortChange}
-						options={{
-                                    animation: 150,
-                                    group: {
-                                        name: 'shared',
-                                        pull: true,
-                                        put: true
-                                    }
-                                }}>
-						{items}
-					</Sortable>
-				</div>
-			</Panel>
-		);
-	}
-}
-class InterestsPanel extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			items: ['Lotion', 'Basket']
-		};
-		this.onSortChange = this.onSortChange.bind(this)
-	}
-	onSortChange(order, sortable, evt) {
-		this.setState({ items: order });
-	}
-	render() {
-		const items = this.state.items.map(function(val) {
-			return (<div key={uniqueId()} data-id={val}>{val}</div>)
-		});
-		return (
-			<Panel>
-				<h4>My Attractions</h4>
-				<hr />
-				<div>
-					<Sortable
 
-						onChange={this.onSortChange}
-						options={{
-                                    animation: 150,
-                                    group: {
-                                        name: 'shared',
-                                        pull: true,
-                                        put: true
-                                    }
-                                }}
-						>
-						{items}
-					</Sortable>
-				</div>
-			</Panel>
-		);
-	}
-}
-class InfoPanel extends React.Component {
-	render() {
-		return (
-			<Panel>
-				<h4>More Info</h4>
-				<hr />
-				<div>
-					Click on an attraction for more information, times and location!
-				</div>
-			</Panel>
-		);
-	}
-}
 class ControlPanel extends React.Component {
 	render() {
 		return (
