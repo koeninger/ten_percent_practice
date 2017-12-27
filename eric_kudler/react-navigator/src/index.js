@@ -6,6 +6,9 @@ import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 
+import uniqueId from 'lodash/uniqueId';
+import Sortable from 'react-sortablejs';
+
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
@@ -196,13 +199,28 @@ class SettingsPanel extends React.Component {
 	}
 }
 class AttractionsPanel extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			items: ['Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry']
+		};
+		this.onSortChange = this.onSortChange.bind(this)
+  	}
+  	onSortChange(order, sortable, evt) {
+  		this.setState({ items: order });
+  	}
 	render() {
+		const items = this.state.items.map(val => (<li key={uniqueId()} data-id={val}>{val}</li>));
 		return (
 			<Panel>
 				<h4>All Attractions</h4>
 				<hr />
 				<div>
-					jeior reogjruiegj fgre
+					<Sortable
+						tag="ul"
+						onChange={this.onSortChange}>
+						{items}
+					</Sortable>
 				</div>
 			</Panel>
 		);
