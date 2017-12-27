@@ -205,20 +205,30 @@ class AttractionsPanel extends React.Component {
 			items: ['Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry']
 		};
 		this.onSortChange = this.onSortChange.bind(this)
-  	}
-  	onSortChange(order, sortable, evt) {
-  		this.setState({ items: order });
-  	}
+	}
+	onSortChange(order, sortable, evt) {
+		this.setState({ items: order });
+	}
 	render() {
-		const items = this.state.items.map(val => (<li key={uniqueId()} data-id={val}>{val}</li>));
+		const items = this.state.items.map(function(val) {
+			return (<div key={uniqueId()} data-id={val}>{val}</div>)
+		});
 		return (
 			<Panel>
 				<h4>All Attractions</h4>
 				<hr />
 				<div>
 					<Sortable
-						tag="ul"
-						onChange={this.onSortChange}>
+	
+						onChange={this.onSortChange}
+						options={{
+                                    animation: 150,
+                                    group: {
+                                        name: 'shared',
+                                        pull: true,
+                                        put: true
+                                    }
+                                }}>
 						{items}
 					</Sortable>
 				</div>
@@ -227,13 +237,39 @@ class AttractionsPanel extends React.Component {
 	}
 }
 class InterestsPanel extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			items: ['Lotion', 'Basket']
+		};
+		this.onSortChange = this.onSortChange.bind(this)
+	}
+	onSortChange(order, sortable, evt) {
+		this.setState({ items: order });
+	}
 	render() {
+		const items = this.state.items.map(function(val) {
+			return (<div key={uniqueId()} data-id={val}>{val}</div>)
+		});
 		return (
 			<Panel>
 				<h4>My Attractions</h4>
 				<hr />
 				<div>
-					jeior reogjruiegj fgre
+					<Sortable
+
+						onChange={this.onSortChange}
+						options={{
+                                    animation: 150,
+                                    group: {
+                                        name: 'shared',
+                                        pull: true,
+                                        put: true
+                                    }
+                                }}
+						>
+						{items}
+					</Sortable>
 				</div>
 			</Panel>
 		);
