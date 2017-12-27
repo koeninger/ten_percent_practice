@@ -5,8 +5,6 @@ import { Row, Col } from 'react-bootstrap';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
-import uniqueId from 'lodash/uniqueId';
-import Sortable from 'react-sortablejs';
 
 export default class SettingsPanel extends React.Component {
 	constructor (props) {
