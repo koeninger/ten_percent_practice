@@ -60,3 +60,10 @@ div.control-panel {
   background: url('images/background.jpg');
   background-size: cover;
 }
+
+div.panel-body h4 {
+  margin: 0;
+}
+div.panel-body hr {
+  margin: 7px 0;
+}

@@ -3,10 +3,20 @@ import ReactDOM from 'react-dom';
 import { Panel, Jumbotron, Button } from 'react-bootstrap';
 import { Row, Col } from 'react-bootstrap';
 import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import InterestsPanel from './common/panels/InterestsPanel';
+import SettingsPanel from './common/panels/SettingsPanel';
+import AttractionsPanel  from './common/panels/AttractionsPanel';
+import InfoPanel from './common/panels/InfoPanel';
+import DatePicker from 'react-datepicker';
+import moment from 'moment';
+
+import uniqueId from 'lodash/uniqueId';
+import Sortable from 'react-sortablejs';
 
 import './index.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap/dist/css/bootstrap-theme.css';
+import 'react-datepicker/dist/react-datepicker.css';
 
 class Square extends React.Component {
 	constructor(props) {
@@ -154,25 +164,27 @@ class NavigationBar extends React.Component {
 		);
 	}
 }
+
 class ControlPanel extends React.Component {
 	render() {
 		return (
 			<div className="container control-panel">
 				<Row>
 					<Col md={6}>
-						<Panel>
-							jeior reogjruiegj fgre
-						</Panel>
+						<SettingsPanel />
 					</Col>
 					<Col md={3}>
-						<Panel>
+						<AttractionsPanel>
 							jeior reogjruiegj fgre
-						</Panel>
+						</AttractionsPanel>
 					</Col>
 					<Col md={3}>
-						<Panel>
-							jeior reogjruiegj fgre
-						</Panel>
+						<InterestsPanel />
+					</Col>
+				</Row>
+				<Row>
+					<Col md={6}>
+						<InfoPanel />
 					</Col>
 				</Row>
 			</div>
