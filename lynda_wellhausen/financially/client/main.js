@@ -17,39 +17,30 @@ angular.module('financially', [
 
         $scope.symbolName = 'AMAT';
         $scope.show = true;
-        $scope.todaysData = function () {
-            //d3.selectAll("li").style("background-color", "green");
+        $scope.arrayData = function () {
             var i = 0;
             var hoursArray = [];
-            var todaysData = Stocks.find({ date: 19 }).fetch();
-            var td = {
+            var todaysData = Stocks.find({ date: 26 }).fetch();
+            $scope.td = {
                 hoursArray: [],
                 opensArray: [],
                 closeArray: []
             };
-            //console.log('todaysData', todaysData);
 
             _.forEach(todaysData, function () {
-                //console.log('todaysData: ', todaysData);
-                td.hoursArray.push(todaysData[i].hour);
-                td.opensArray.push(todaysData[i].open);
-                td.closeArray.push(todaysData[i].close);
+                $scope.td.hoursArray.push(todaysData[i].hour);
+                $scope.td.opensArray.push(todaysData[i].open);
+                $scope.td.closeArray.push(todaysData[i].close);
                 i++;
             });
-            console.log('td', td.opensArray);
-            return td;
         },
 
-        $scope.test = function () {
-            d3.selectAll("li").style("background-color", "pink");
-        },
-
-        //$scope.toggleTodaysData = function () {
-          //  if (this.show == false) {
-           //     this.show = true;
-            // } else
-             //   this.show = false;
-        //},
+        $scope.toggleTodaysData = function () {
+            if (this.show == false) {
+                this.show = true;
+             } else
+                this.show = false;
+            },
 
         $scope.allData = function () {
             data = Stocks.find({});
@@ -57,13 +48,10 @@ angular.module('financially', [
         },
 
         this.helpers({
-            test() {
-                console.log('test helper');
-            },
             todaysData() {
+                // console.log('testing', Stocks.find({ date: 15 }).fetch());
                 return Stocks.find({ date: 15 }).fetch();
-                console.log( Stocks.find({ date: 15 }).fetch());
-            },
+            }
         });
     }
 });
