@@ -21,11 +21,18 @@ for iter = 1:num_iters
 
 
 
+    h_y = (X * theta - y);
+    step = alpha * (1/m);
 
+    temp_theta = []
 
+    num_features = size(theta, 1)
+    for i = 1:num_features,
+        temp = theta(i, 1) - step * sum(h_y .* X(:,i));
+        temp_theta = [temp_theta ; temp]
+    end
 
-
-
+    theta = temp_theta
 
     % ============================================================
 
