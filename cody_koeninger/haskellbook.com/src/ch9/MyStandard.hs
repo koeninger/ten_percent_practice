@@ -1,11 +1,12 @@
 module MyStandard where
+    import Data.List
 
     myAnd :: [Bool] -> Bool
     myAnd [] = True
     myAnd (x:xs) = x && myAnd xs
 
     myOr :: [Bool] -> Bool
-    myOr = foldl (||) False
+    myOr = foldr (||) False
 
     myAny :: (a -> Bool) -> [a] -> Bool
     myAny _ [] = False
@@ -15,7 +16,7 @@ module MyStandard where
     myElem x = myAny (== x)
 
     myReverse :: [a] -> [a]
-    myReverse = foldl (flip (:)) []
+    myReverse = foldl' (flip (:)) []
 
     squish :: [[a]] -> [a]
     squish = foldl (++) []
