@@ -15,12 +15,12 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src,
-                       src/ch9
+                       src/ch10
   exposed-modules:     Lib,
-                       Cipher,
-                       MyStandard
+                       Database
   build-depends:       base >= 4.7 && < 5
                      , flow
+                     , time
   default-language:    Haskell2010
 
 executable haskellbook-exe
