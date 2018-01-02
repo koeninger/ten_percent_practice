@@ -197,5 +197,15 @@ for ($i = 0, $length = (count($numbers) - 1) ; $i < $length ; $i++)
 
 
 //12: Given an array of 0s and 1s. We need to sort it so that all the 0s are before all the 1s
-
-
+$numbers = [0,1,1,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,1,1,1,0,1,1,10,1,1];
+for ($i = 0, $length = (count($numbers) - 1) ; $i < $length ; $i++)
+{
+	if ( ($i == $length - $i) || ($i > ($length - $i)) ){
+		break;
+	}
+	if ()
+	$swap_var = $numbers[$i];
+	$numbers[$i] = $numbers[$length - $i];
+	$numbers[$length - $i] = $swap_var;
+}
+print $numbers;
