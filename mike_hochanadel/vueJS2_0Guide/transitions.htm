@@ -8,7 +8,12 @@
       <button v-on:click="show = !show">
         Toggle
       </button>
-      <transition name="fade">
+      <transition
+        :duration = "{ enter: 1000, leave: 1000 }"
+        v-on:after-enter ="afterEnter"
+        v-on:leave="leave"
+        name="fade"
+        appear>
         <p v-if="show">hello</p>
       </transition>
     </div>
@@ -79,6 +84,14 @@
       el: '#demo',
       data: {
         show: true
+      },
+      methods: {
+        afterEnter: function() {
+          console.log('after enter');
+        },
+        leave: function() {
+          console.log('leave');
+        }
       }
     });
     var vm2 = new Vue({
