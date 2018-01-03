@@ -18,7 +18,7 @@ object Example {
     def descending(n: Int): List[Int] =
       n match {
         case 0 => Nil
-        case n => n::ones(n-1)
+        case n => n::descending(n-1)
       }
 
     def ascending(n: Int, c: Int): List[Int] =
