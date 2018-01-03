@@ -8,7 +8,12 @@
       <button v-on:click="show = !show">
         Toggle
       </button>
-      <transition name="fade">
+      <transition
+        :duration = "{ enter: 1000, leave: 1000 }"
+        v-on:after-enter ="afterEnter"
+        v-on:leave="leave"
+        name="fade"
+        appear>
         <p v-if="show">hello</p>
       </transition>
     </div>
@@ -26,6 +31,24 @@
         leave-active-class="animated bounceOutLeft"
       >
         <p v-if="show">hello there</p>
+      </transition>
+      <transition name="fade" mode="in-out">
+        <p v-if="items" key="hi">Hello</p>
+        <p v-else key="bye">Goodbye</p>
+      </transition>
+      <transition name="bounce" mode="out-in">
+        <p v-bind:keys="docState">
+          {{ message }}
+        </p>
+      </transition>
+    </div>
+    <div id="transition-components-demo">
+      <input type="radio" value="v-a" id="a" v-model="view">
+      <label for="a">Aye</label>
+      <input type="radio" value="v-b" id="b" v-model="view">
+      <label for="b">Bee</label>
+      <transition name="component-fade" mode="out-in">
+        <component v-bind:is="view"></component>
       </transition>
     </div>
   </body>
@@ -73,12 +96,26 @@
     }
   }
 
+  .component-fade-enter-active, .component-fade-leave-active {
+    transition: opacity .3s ease;
+  }
+  .component-fade-enter-enter, .component-fade-leave-to {
+    opactiy: 0;
+  }
   </style>
   <script>
     var vm1 = new Vue({
       el: '#demo',
       data: {
         show: true
+      },
+      methods: {
+        afterEnter: function() {
+          console.log('after enter');
+        },
+        leave: function() {
+          console.log('leave');
+        }
       }
     });
     var vm2 = new Vue({
@@ -90,7 +127,32 @@
     var vm3 = new Vue({
       el: '#ex3',
       data: {
-        show: true
+        show: true,
+        items: false,
+        docState: 'saved'
+      },
+      computed: {
+        message: function() {
+          switch (this.docState) {
+            case 'saved': return 'Edit'
+            case 'edited': return 'Save'
+            case 'editing': return 'Cancel'
+          }
+        }
+      }
+    });
+    var vm4 = new Vue({
+      el: '#transition-components-demo',
+      data: {
+        view: 'v-a'
+      },
+      components: {
+        'v-a': {
+          template: '<div>Component A</div>'
+        },
+        'v-b': {
+          template: '<div>Component B</div>'
+        }
       }
     });
   </script>
