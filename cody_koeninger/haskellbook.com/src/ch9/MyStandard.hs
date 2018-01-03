@@ -19,7 +19,7 @@ module MyStandard where
     myReverse = foldl' (flip (:)) []
 
     squish :: [[a]] -> [a]
-    squish = foldl (++) []
+    squish = foldr (++) []
 
     squishMap :: (a -> [b]) -> [a] -> [b]
     squishMap f = squish . map f
@@ -30,6 +30,7 @@ module MyStandard where
     myMaximumBy :: (a -> a -> Ordering) -> [a] -> a
     myMaximumBy f = foldr1 (\x y -> if (f x y == GT) then x else y)
 
+-- this is wrong, e.g. f that constantly returns GT                    
     myMinimumBy :: (a -> a -> Ordering) -> [a] -> a
     myMinimumBy f = myMaximumBy (flip f)
 
