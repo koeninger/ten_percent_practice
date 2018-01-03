@@ -32,7 +32,7 @@ sigma = std(X);
 
 for i = 1:size(X, 2),
 	t = X(:, i) - mu(i);
-	normalized = t / sigma(i);
+	X_norm(:, i) = t / sigma(i);
 end
 
 
