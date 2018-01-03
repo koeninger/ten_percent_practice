@@ -1,9 +1,13 @@
   <button ng-click="allData()">All Available data</button><br>
-  <button ng-click="arrayData()">Show Today's Data</button>
+  <button ng-click="styleChart()">Show Today's Data</button>
 
   <div ng-bind="symbolName"></div>
-  <div ng-model="arrayData">
-    <p> Opens: {{td.opensArray}} </p>
-    <p> Closes: {{td.closeArray}} </p>
-    <p> Hours: {{td.hoursArray}} </p>
-  </div>
+
+
+    <div ng-model="arrayData" class="chart">
+    
+      <div> Opens: {{td.opensArray}} </div>
+      <div> Closes: {{td.closeArray}} </div>
+      <div> Hours: {{td.hoursArray}} </div>
+
+    </div>
