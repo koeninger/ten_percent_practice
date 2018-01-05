@@ -47,18 +47,31 @@ angular.module('financially', [
             },
 
             $scope.styleChart = function () {
-                d3.select(".chart")
-                    .selectAll("div")
-                    .data(data)
+            var opensData = $scope.td.opensArray;
+            var hoursData = $scope.td.hoursArray;
+            var x = d3.scaleLinear()
+                .domain([0, d3.max(opensData)])
+                .range([0, 50]);
+            
+            var y_scale = d3.scaleLinear()
+                  .domain([d3.min(hoursData), d3.max(hoursData)])
+                .range([20 / 2, 0]);
+            
+            var y_axis = d3.axisLeft()
+                  .scale(y_scale);
+
+                d3.select(".opens-data")
+                .selectAll("div")
+                .data(opensData)
                     .enter().append("div")
-                    .style("width", function (d) { return d * 10 + "px"; })
-                    .text(function (d) { return d; });
-            },
+                    .style("width", function(d) { return x(d) * 10 + "px"; })
+                    .text(function (d) { return d; })
+                },
 
         this.helpers({
             todaysData() {
                 // console.log('testing', Stocks.find({ date: 15 }).fetch());
-                return Stocks.find({ date: 15 }).fetch();
+                return Stocks.find({ date: 5 }).fetch();
             },
 
             arrayData() {
