@@ -50,15 +50,22 @@ angular.module('financially', [
             var opensData = $scope.td.opensArray;
             var hoursData = $scope.td.hoursArray;
             var x = d3.scaleLinear()
-                .domain([0, d3.max(opensData)])
-                .range([0, 50]);
-            
+                .domain([d3.max(opensData), 50])
+                .range([50, 0]);
+
+            var svgContainer = d3.select(".opens-container")
+                                .append("svg")
+                                .attr("width", 400)
+                                .attr("height", 100);
+
             var y_scale = d3.scaleLinear()
-                  .domain([d3.min(hoursData), d3.max(hoursData)])
-                .range([20 / 2, 0]);
-            
+                            .domain([d3.min(0), d3.max(24)])
+                            .range([20 / 2, 0]);
+
             var y_axis = d3.axisLeft()
-                  .scale(y_scale);
+                            .scale(y_scale);
+
+    
 
                 d3.select(".opens-data")
                 .selectAll("div")
