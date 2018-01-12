@@ -26,7 +26,7 @@ export default class SettingsPanel extends React.Component {
   	}
 	render() {
 		return (
-			<Panel>
+			<Panel className="settings-panel">
 				<h4>Your Vacation</h4>
 				<hr />
 				<form>

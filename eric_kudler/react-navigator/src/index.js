@@ -90,22 +90,14 @@ class ControlPanel extends React.Component {
 	render() {
 		return (
 			<div className="container control-panel">
-				<Row>
-					<Col md={6}>
-						<SettingsPanel />
-					</Col>
-					<Col md={3}>
-						<AttractionsPanel attractions={this.state.attractions} setCurrentAttraction={this.setCurrentAttraction} />
-					</Col>
-					<Col md={3}>
-						<InterestsPanel attractions={this.state.attractions} setCurrentAttraction={this.setCurrentAttraction} />
-					</Col>
-				</Row>
-				<Row>
-					<Col md={6}>
-						<InfoPanel attractions={this.state.attractions} current={this.state.current}/>
-					</Col>
-				</Row>
+				<div className="data-panels">
+					<SettingsPanel />
+					<InfoPanel attractions={this.state.attractions} current={this.state.current}/>
+				</div>
+				<div className="drag-panels">
+					<AttractionsPanel attractions={this.state.attractions} setCurrentAttraction={this.setCurrentAttraction} />
+					<InterestsPanel attractions={this.state.attractions} setCurrentAttraction={this.setCurrentAttraction} />
+				</div>
 			</div>
 		)
 	}

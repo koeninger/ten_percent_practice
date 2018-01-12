@@ -33,7 +33,7 @@ export default class InterestsPanel extends React.Component {
 			);
 		});
 		return (
-			<Panel>
+			<Panel className="interests-panel">
 				<h4>My Attractions</h4>
 				<hr />
 				<Sortable

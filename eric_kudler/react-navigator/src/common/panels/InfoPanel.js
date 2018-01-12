@@ -14,7 +14,7 @@ export default class InfoPanel extends React.Component {
 			)
 		}
 		return (
-			<Panel>
+			<Panel className="info-panel">
 				<h4>More Info</h4>
 				<hr />
 				{body}

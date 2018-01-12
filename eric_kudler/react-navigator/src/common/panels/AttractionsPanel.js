@@ -32,7 +32,7 @@ export default class AttractionsPanel extends React.Component {
 			);
 		});
 		return (
-			<Panel>
+			<Panel className="attractions-panel">
 				<h4>All Attractions</h4>
 				<hr />
 				<Sortable
