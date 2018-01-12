@@ -10,14 +10,27 @@ export default class AttractionsPanel extends React.Component {
 		this.state = {
 			items: props.attractions
 		};
-		this.onSortChange = this.onSortChange.bind(this)
+		this.onSortChange = this.onSortChange.bind(this);
 	}
 	onSortChange(order, sortable, evt) {
-		this.setState({ items: order });
+		let self = this;
+		let items = [];
+		order.forEach(function(val) {
+			items.push(self.props.attractions[val]);
+		})
+		this.setState({ items: items });
+	}
+	setCurrentAttraction(attraction_id) {
+		this.props.setCurrentAttraction(attraction_id);
 	}
 	render() {
+		const self = this;
 		const items = this.state.items.map(function(val) {
-			return (<div className="attraction" key={uniqueId()} data-id={val}>{val}</div>)
+			return (
+				<div className="attraction" key={uniqueId()} data-id={val.id} data-name={val.name} onClick={(e) => self.setCurrentAttraction(val.id)}>
+					{val.name}
+				</div>
+			);
 		});
 		return (
 			<Panel>
