@@ -169,8 +169,44 @@ class ControlPanel extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			attractions:['Stich\'s Great Escape', 'Mickey\'s PhillharMagic', 'Seven Dwarfs Mine Train', 'Pirates of the Carribean', 'Haunted Mansion', 'Jungle Cruise', 'Space Mountain']
-		}
+			current_attraction: null,
+			attractions: [
+				{
+					id: 0,
+					name: 'Stich\'s Great Escape'
+				},
+				{
+					id: 1,
+					name: 'Mickey\'s PhillharMagic'
+				},
+				{
+					id: 2,
+					name: 'Seven Dwarfs Mine Train'
+				}, 
+				{
+					id: 3,
+					name: 'Pirates of the Carribean'
+				},
+				{
+					id: 4,
+					name: 'Haunted Mansion'
+				}, 
+				{
+					id: 5,
+					name: 'Jungle Cruise'
+				}, 
+				{
+					id: 6,
+					name: 'Space Mountain'
+				}
+			]
+		};
+		this.setCurrentAttraction = this.setCurrentAttraction.bind(this);
+	}
+	setCurrentAttraction(attraction_id) {
+		this.setState({
+			current: attraction_id
+		})
 	}
 	render() {
 		return (
@@ -180,10 +216,10 @@ class ControlPanel extends React.Component {
 						<SettingsPanel />
 					</Col>
 					<Col md={3}>
-						<AttractionsPanel attractions={this.state.attractions} />
+						<AttractionsPanel attractions={this.state.attractions} setCurrentAttraction={this.setCurrentAttraction} />
 					</Col>
 					<Col md={3}>
-						<InterestsPanel />
+						<InterestsPanel attractions={this.state.attractions} setCurrentAttraction={this.setCurrentAttraction} />
 					</Col>
 				</Row>
 				<Row>
