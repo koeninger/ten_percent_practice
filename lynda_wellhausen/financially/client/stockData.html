@@ -1,21 +1,17 @@
-
   <button ng-click="allData()">All Available data</button><br>
-  <button ng-click="todaysData()">Toggle Today's Data</button>
-  <div>{{td.opensArray[1]}}</div>
-  <div>{{td.opensArray}}</div>
-  <div>{{td.opensArray}}</div>
-  <div>{{td.opensArray}}</div>
-  <ul>
-    <div class="todaysData" ng-show="show">
-      <div ng-bind="symbolName"></div>
-      <div class="data-points-block">
-        <li class="time-stamp">{{stock.timeStamp}}</li>
-        <li class="high">{{stock.high}}</li>
-        <li class="low">{{stock.low}}</li>
-        <li class="open" ng-repeat="open in td.opensArray.length()">Open: {{td.opensArray}}</li>
-        <li class="close">{{stock.close}}</li>
-        <li class="hour">{{stock.hour}}</li>
-        <li class="date">{{stock.month}}/{{stock.date}}/{{stock.year}}</li>
-      </div>
+  <button ng-click="styleChart()">Show Today's Data</button>
+
+  <div ng-bind="symbolName"></div>
+
+    <!--div ng-model="arrayData" class="chart">
+    
+      <div> Opens: {{td.opensArray}} </div>
+      <div> Closes: {{td.closeArray}} </div>
+      <div> Hours: {{td.hoursArray}} </div>
+
+    </div-->
+<div class="opens-container">
+    <div class="opens-data">
+
     </div>
-  </ul>
+</div>

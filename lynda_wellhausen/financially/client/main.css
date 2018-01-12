@@ -12,3 +12,25 @@ ul {
 ul .data-points-block {
     margin: 10px 0;
 }
+
+.chart {
+    font: 10px sans-serif;
+    background-color: none;
+    text-align: left;
+    padding: 3px;
+    margin: 1px;
+    color: none;
+}
+
+.opens-data {
+  font: 10px sans-serif;
+  text-align: left;
+  padding: 3px;
+  margin: 1px;
+  color: black;
+}
+
+.opens-data div{
+    border: 1px solid black;
+    background-color: steelblue;
+}
