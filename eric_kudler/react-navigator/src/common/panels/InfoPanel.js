@@ -7,16 +7,17 @@ export default class InfoPanel extends React.Component {
 		if (this.props.current) {
 			let attraction = this.props.attractions[this.props.current];
 			body = (
-				<h3>{attraction.name}</h3>
+				<div>
+					<h4>{attraction.name}</h4>
+					<p>{attraction.description}</p>
+				</div>
 			)
 		}
 		return (
 			<Panel>
 				<h4>More Info</h4>
 				<hr />
-				<div>
-					{body}
-				</div>
+				{body}
 			</Panel>
 		);
 	}
