@@ -13,8 +13,8 @@ export default class SettingsPanel extends React.Component {
 			startDate: moment().add(7, 'days'),
 			endDate: moment().add(12, 'days')
 		};
-    	this.setStartDate = this.setStartDate.bind(this);
-    	this.setEndDate = this.setEndDate.bind(this);
+		this.setStartDate = this.setStartDate.bind(this);
+		this.setEndDate = this.setEndDate.bind(this);
   	}
 	setStartDate(date) {
     	this.setState({
@@ -31,15 +31,19 @@ export default class SettingsPanel extends React.Component {
 			<Panel>
 				<h4>Your Vacation</h4>
 				<hr />
-				<div>
-					<DatePicker
-						selected={this.state.startDate}
-						onChange={this.setStartDate} />
-					<span>To</span>
-					<DatePicker
-						selected={this.state.endDate}
-						onChange={this.setEndDate} />
-				</div>
+				<form className="form-inline">
+					<div className="form-group">
+						<DatePicker
+							className="form-control"
+							selected={this.state.startDate}
+							onChange={this.setStartDate} />
+						<span>To</span>
+						<DatePicker
+						className="form-control" 
+							selected={this.state.endDate}
+							onChange={this.setEndDate} />
+					</div>
+				</form>
 			</Panel>
 		);
 	}
