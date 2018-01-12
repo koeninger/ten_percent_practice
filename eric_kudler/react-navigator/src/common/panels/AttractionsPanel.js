@@ -1,6 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Panel, Jumbotron, Button } from 'react-bootstrap';
+import {Panel} from 'react-bootstrap';
 import uniqueId from 'lodash/uniqueId';
 import Sortable from 'react-sortablejs';
 

@@ -1,8 +1,6 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Panel, Jumbotron, Button } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap';
-import { Navbar, Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap';
+import {Panel, Button, ControlLabel} from 'react-bootstrap';
+import {Row, Col} from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
 import moment from 'moment';
 

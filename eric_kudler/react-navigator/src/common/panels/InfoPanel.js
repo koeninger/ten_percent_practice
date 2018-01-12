@@ -1,12 +1,7 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { Panel, Jumbotron, Button } from 'react-bootstrap';
-import { Row, Col } from 'react-bootstrap';
+import {Panel} from 'react-bootstrap';
 
 export default class InfoPanel extends React.Component {
-	constructor(props) {
-		super(props);
-	}
 	render() {
 		let body = 'Click on an attraction for more information, times and location!';
 		if (this.props.current) {
