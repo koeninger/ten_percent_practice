@@ -8,7 +8,7 @@ export default class InterestsPanel extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			items: ['Lotion', 'Basket']
+			items: ['Space Mountain']
 		};
 		this.onSortChange = this.onSortChange.bind(this)
 	}
@@ -17,7 +17,7 @@ export default class InterestsPanel extends React.Component {
 	}
 	render() {
 		const items = this.state.items.map(function(val) {
-			return (<div key={uniqueId()} data-id={val}>{val}</div>)
+			return (<div className="attraction" key={uniqueId()} data-id={val}>{val}</div>)
 		});
 		return (
 			<Panel>
@@ -25,12 +25,11 @@ export default class InterestsPanel extends React.Component {
 				<hr />
 				<div>
 					<Sortable
-
 						onChange={this.onSortChange}
 						options={{
                                     animation: 150,
                                     group: {
-                                        name: 'shared',
+                                        name: 'attractions',
                                         pull: true,
                                         put: true
                                     }

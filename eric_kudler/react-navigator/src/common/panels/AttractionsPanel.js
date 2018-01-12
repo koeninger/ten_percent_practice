@@ -8,7 +8,7 @@ export default class AttractionsPanel extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			items: ['Apple', 'Banana', 'Cherry', 'Guava', 'Peach', 'Strawberry']
+			items: ['Stich\'s Great Escape', 'Mickey\'s PhillharMagic', 'Seven Dwarfs Mine Train', 'Pirates of the Carribean', 'Haunted Mansion', 'Jungle Cruise']
 		};
 		this.onSortChange = this.onSortChange.bind(this)
 	}
@@ -17,7 +17,7 @@ export default class AttractionsPanel extends React.Component {
 	}
 	render() {
 		const items = this.state.items.map(function(val) {
-			return (<div key={uniqueId()} data-id={val}>{val}</div>)
+			return (<div className="attraction" key={uniqueId()} data-id={val}>{val}</div>)
 		});
 		return (
 			<Panel>
@@ -30,7 +30,7 @@ export default class AttractionsPanel extends React.Component {
 						options={{
                                     animation: 150,
                                     group: {
-                                        name: 'shared',
+                                        name: 'attractions',
                                         pull: true,
                                         put: true
                                     }

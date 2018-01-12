@@ -67,3 +67,8 @@ div.panel-body h4 {
 div.panel-body hr {
   margin: 7px 0;
 }
+div.attraction {
+  border: 1px solid black;
+  padding: 4px;
+  margin-bottom: 4px;
+}
