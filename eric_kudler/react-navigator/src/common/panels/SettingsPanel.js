@@ -29,17 +29,29 @@ export default class SettingsPanel extends React.Component {
 			<Panel>
 				<h4>Your Vacation</h4>
 				<hr />
-				<form className="form-inline">
+				<form>
 					<div className="form-group">
-						<DatePicker
-							className="form-control"
-							selected={this.state.startDate}
-							onChange={this.setStartDate} />
-						<span>To</span>
-						<DatePicker
-						className="form-control" 
-							selected={this.state.endDate}
-							onChange={this.setEndDate} />
+						<Row>
+							<Col md={3}>
+							<ControlLabel>From</ControlLabel>
+								<DatePicker
+									className="form-control"
+									selected={this.state.startDate}
+									onChange={this.setStartDate} />
+							</Col>
+							<Col md={3}>
+								<ControlLabel>To</ControlLabel>
+								<DatePicker
+									className="form-control" 
+									selected={this.state.endDate}
+									onChange={this.setEndDate} />
+							</Col>
+						</Row>
+						<Row>
+							<Col md={12}>
+								<Button className="pull-right" bsStyle="success">Success</Button>
+							</Col>
+						</Row>
 					</div>
 				</form>
 			</Panel>
