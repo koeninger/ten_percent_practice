@@ -23,21 +23,19 @@ export default class InterestsPanel extends React.Component {
 			<Panel>
 				<h4>My Attractions</h4>
 				<hr />
-				<div>
-					<Sortable
-						onChange={this.onSortChange}
-						options={{
-                                    animation: 150,
-                                    group: {
-                                        name: 'attractions',
-                                        pull: true,
-                                        put: true
-                                    }
-                                }}
-						>
+				<Sortable
+					onChange={this.onSortChange}
+					className="attractions-list"
+					options={{
+								animation: 150,
+								group: {
+									name: 'attractions',
+									pull: true,
+									put: true
+								}
+							}}>
 						{items}
-					</Sortable>
-				</div>
+				</Sortable>
 			</Panel>
 		);
 	}

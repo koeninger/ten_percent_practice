@@ -72,3 +72,7 @@ div.attraction {
   padding: 4px;
   margin-bottom: 4px;
 }
+div.attractions-list {
+  height: calc(100vh - 150px);
+  overflow-y: auto;
+}
