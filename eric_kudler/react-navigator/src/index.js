@@ -224,7 +224,7 @@ class ControlPanel extends React.Component {
 				</Row>
 				<Row>
 					<Col md={6}>
-						<InfoPanel />
+						<InfoPanel attractions={this.state.attractions} current={this.state.current}/>
 					</Col>
 				</Row>
 			</div>
