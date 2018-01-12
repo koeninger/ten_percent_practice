@@ -8,7 +8,7 @@ export default class AttractionsPanel extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			items: ['Stich\'s Great Escape', 'Mickey\'s PhillharMagic', 'Seven Dwarfs Mine Train', 'Pirates of the Carribean', 'Haunted Mansion', 'Jungle Cruise']
+			items: props.attractions
 		};
 		this.onSortChange = this.onSortChange.bind(this)
 	}
@@ -32,7 +32,7 @@ export default class AttractionsPanel extends React.Component {
 									name: 'attractions',
 									pull: true,
 									put: true
-                                    }
+								}
 							}}>
 						{items}
 				</Sortable>

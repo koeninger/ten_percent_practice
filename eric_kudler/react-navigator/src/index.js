@@ -166,6 +166,12 @@ class NavigationBar extends React.Component {
 }
 
 class ControlPanel extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			attractions:['Stich\'s Great Escape', 'Mickey\'s PhillharMagic', 'Seven Dwarfs Mine Train', 'Pirates of the Carribean', 'Haunted Mansion', 'Jungle Cruise', 'Space Mountain']
+		}
+	}
 	render() {
 		return (
 			<div className="container control-panel">
@@ -174,9 +180,7 @@ class ControlPanel extends React.Component {
 						<SettingsPanel />
 					</Col>
 					<Col md={3}>
-						<AttractionsPanel>
-							jeior reogjruiegj fgre
-						</AttractionsPanel>
+						<AttractionsPanel attractions={this.state.attractions} />
 					</Col>
 					<Col md={3}>
 						<InterestsPanel />

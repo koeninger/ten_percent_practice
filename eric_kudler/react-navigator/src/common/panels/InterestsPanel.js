@@ -8,7 +8,7 @@ export default class InterestsPanel extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			items: ['Space Mountain']
+			items: []
 		};
 		this.onSortChange = this.onSortChange.bind(this)
 	}
