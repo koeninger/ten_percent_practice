@@ -4,7 +4,7 @@ import {Panel} from 'react-bootstrap';
 export default class InfoPanel extends React.Component {
 	render() {
 		let body = 'Click on an attraction for more information, times and location!';
-		if (this.props.current) {
+		if (this.props.current != null) {
 			let attraction = this.props.attractions[this.props.current];
 			body = (
 				<div>
