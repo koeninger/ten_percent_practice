@@ -39,7 +39,6 @@ export default class AttractionsPanel extends React.Component {
 					</Panel.Title>
 				</Panel.Heading>
 				<Panel.Body>
-					<hr />
 					<Sortable
 						className="attractions-list"
 						onChange={this.onSortChange}
