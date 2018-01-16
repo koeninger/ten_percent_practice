@@ -47,7 +47,7 @@ def sum_squares(n):
 # R-1.5 Give a single command that computes the sum from Exercise R-1.4, relying
 # on Python's comprehension syntax and the built-in sum function.
 
-sum([n * n for n in range(1, 12)])
+# sum([n * n for n in range(1, 12)])
 
 # *************************************************** #
 
@@ -67,7 +67,7 @@ def sum_squares_odd(n):
 # R-1.7 Give a single command that computes the sum from Exercise R-1.6, relying
 # on Python's comprehension syntax and the built-in sum function.
 
-sum([n * n for n in range(1, 12) if n % 2 == 1])
+# sum([n * n for n in range(1, 12) if n % 2 == 1])
 
 # R-1.8 Python allows negative integers to be used as indices into a sequence,
 # such as a string. If string s has length n, and expression s[k] is used for index
@@ -97,4 +97,18 @@ sum([n * n for n in range(1, 12) if n % 2 == 1])
 
 # R-1.11 Demonstrate how to use Python's list comprehension syntax to produce
 # the list [1, 2, 4, 8, 16, 32, 64, 128, 256].
+
+# print [2**k for k in range(0, 9)]
+
+# *************************************************** #
+
+# R-1.12 Python's random module includes a function choice(data) that returns a
+# random element from a non-empty sequence. The random module includes
+# a more basic function randrange, with parameterization similar to
+# the built-in range function, that return a random choice from the given
+# range. Using only the randrange function, implement your own version
+# of the choice function.
+
+import random
+print random.random()
 

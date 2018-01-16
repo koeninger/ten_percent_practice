@@ -15,9 +15,9 @@ cabal-version:       >=1.10
 
 library
   hs-source-dirs:      src,
-                       src/ch10
+                       src/ch11
   exposed-modules:     Lib,
-                       Database
+                       Vehicles
   build-depends:       base >= 4.7 && < 5
                      , flow
                      , time
