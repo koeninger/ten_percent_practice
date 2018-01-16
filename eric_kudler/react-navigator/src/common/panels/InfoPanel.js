@@ -9,15 +9,21 @@ export default class InfoPanel extends React.Component {
 			body = (
 				<div>
 					<h4>{attraction.name}</h4>
+					<hr />
 					<p>{attraction.description}</p>
 				</div>
 			)
 		}
 		return (
 			<Panel className="info-panel">
-				<h4>More Info</h4>
-				<hr />
-				{body}
+				<Panel.Heading>
+					<Panel.Title>
+					More Info
+					</Panel.Title>
+				</Panel.Heading>
+				<Panel.Body>
+					{body}
+				</Panel.Body>
 			</Panel>
 		);
 	}

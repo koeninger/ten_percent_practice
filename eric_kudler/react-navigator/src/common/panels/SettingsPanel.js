@@ -27,33 +27,38 @@ export default class SettingsPanel extends React.Component {
 	render() {
 		return (
 			<Panel className="settings-panel">
-				<h4>Your Vacation</h4>
-				<hr />
-				<form>
-					<div className="form-group">
-						<Row>
-							<Col md={3}>
-							<ControlLabel>From</ControlLabel>
-								<DatePicker
-									className="form-control"
-									selected={this.state.startDate}
-									onChange={this.setStartDate} />
-							</Col>
-							<Col md={3}>
-								<ControlLabel>To</ControlLabel>
-								<DatePicker
-									className="form-control" 
-									selected={this.state.endDate}
-									onChange={this.setEndDate} />
-							</Col>
-						</Row>
-						<Row>
-							<Col md={12}>
-								<Button className="pull-right" bsStyle="success">Success</Button>
-							</Col>
-						</Row>
-					</div>
-				</form>
+				<Panel.Heading>
+					<Panel.Title>
+						Your Vacation
+					</Panel.Title>
+				</Panel.Heading>
+				<Panel.Body>
+					<form>
+						<div className="form-group">
+							<Row>
+								<Col md={3}>
+								<ControlLabel>From</ControlLabel>
+									<DatePicker
+										className="form-control"
+										selected={this.state.startDate}
+										onChange={this.setStartDate} />
+								</Col>
+								<Col md={3}>
+									<ControlLabel>To</ControlLabel>
+									<DatePicker
+										className="form-control" 
+										selected={this.state.endDate}
+										onChange={this.setEndDate} />
+								</Col>
+							</Row>
+							<Row>
+								<Col md={12}>
+									<Button className="pull-right" bsStyle="success">Make My Itinerary!</Button>
+								</Col>
+							</Row>
+						</div>
+					</form>
+				</Panel.Body>
 			</Panel>
 		);
 	}
