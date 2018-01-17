@@ -126,7 +126,7 @@ def custom_choice(sequence):
 		if number in sequence:
 			return number
 
-print custom_choice([1,2,3,4,5,-6,7,8,9, 100, 2, -2, -4, 5, 1000])
+# print custom_choice([1,2,3,4,5,-6,7,8,9, 100, 2, -2, -4, 5, 1000])
 
 
 
