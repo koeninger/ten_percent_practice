@@ -109,6 +109,24 @@ def sum_squares_odd(n):
 # range. Using only the randrange function, implement your own version
 # of the choice function.
 
-import random
-print random.random()
+
+def custom_choice(sequence):
+	import random
+	print 'sequence'
+	print sequence
+	curr_min = None
+	curr_max = 0
+	for num in sequence:
+		curr_min = num if curr_min == None else curr_min
+		curr_max = num if num > curr_max else curr_max
+		curr_min = num if num < curr_min else curr_min
+
+	while True:
+		number = random.randrange(curr_min, curr_max + 1)
+		if number in sequence:
+			return number
+
+# print custom_choice([1,2,3,4,5,-6,7,8,9, 100, 2, -2, -4, 5, 1000])
+
+
 
