@@ -48,14 +48,44 @@ def is_sequence_unique(sequence):
 # How is it still possible, then, that our implementation of scale changes the
 # actual parameter sent by the caller?
 
+	# def scale(data, factor):
+	# 	for j in range(len(data)):
+	# 		data[j] *= factor
+
+	# Lists are mutable in Python, if this were an immutable type passed in,
+	# you would get an altered copy of the original
+
+# *************************************************** #
+
+# C-1.17 Had we implemented the scale function (page 25) as follows, does it work
+# properly?
+# 	def scale(data, factor):
+# 		for val in data:
+# 			val *= factor
+# Explain why or why not.
+	
+	# This would not work as you are now altering an int and not the list itself
+	
+# *************************************************** #
+
+# C-1.18 Demonstrate how to use Python's list comprehension syntax to produce
+# the list [0, 2, 6, 12, 20, 30, 42, 56, 72, 90].
+
+	# index * (index + 1)
+	# [ n * (n+1) for n in range(0, 10)]
+
+# *************************************************** #
+
+# C-1.19 Demonstrate how to use Python's list comprehension syntax to produce
+# the list [ a , b , c , ..., z ], but without having to type all 26 such
+# characters literally.
+
+	# print [chr(n) for n in range(97,123)]
+
+# *************************************************** #
 
 
 
-
-# *************************************************** #
-# *************************************************** #
-# *************************************************** #
-# *************************************************** #
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
