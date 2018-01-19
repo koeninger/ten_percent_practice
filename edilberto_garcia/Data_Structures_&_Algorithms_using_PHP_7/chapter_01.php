@@ -197,15 +197,33 @@ for ($i = 0, $length = (count($numbers) - 1) ; $i < $length ; $i++)
 
 
 //12: Given an array of 0s and 1s. We need to sort it so that all the 0s are before all the 1s
-$numbers = [0,1,1,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,1,1,1,0,1,1,10,1,1];
+$numbers = [0,1,1,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,1,1,1,0,1,1,1,0,1,1];
+print implode(', ', $numbers) . PHP_EOL;
 for ($i = 0, $length = (count($numbers) - 1) ; $i < $length ; $i++)
 {
 	if ( ($i == $length - $i) || ($i > ($length - $i)) ){
 		break;
 	}
-	if ()
-	$swap_var = $numbers[$i];
-	$numbers[$i] = $numbers[$length - $i];
-	$numbers[$length - $i] = $swap_var;
+	print "{$i}: Comparing {$numbers[$i]} with {$numbers[$length - $i]}: ";
+	if ($numbers[$i] == 1 && $numbers[$length - $i] == 0){
+		$swap_var = $numbers[$i];
+		$numbers[$i] = $numbers[$length - $i];
+		$numbers[$length - $i] = $swap_var;
+		print ": swapped";
+	}
+	else if ($numbers[$i] == 1 && $numbers[$length - $i] == 1){
+		$swap_var = $numbers[$i];
+		$numbers[$i] = $numbers[$length - $i - 1];
+		$numbers[$length - $i - 1] = $swap_var;
+		print ": moved 1 to i-1";
+	}
+	else if ($numbers[$i] == 0 && $numbers[$length - $i] == 0){
+		$swap_var = $numbers[$i + 1];
+		$numbers[$i + 1] = $numbers[$length - $i];
+		$numbers[$length - $i] = $swap_var;
+		print ": moved 0 i+1";
+	}
+	print PHP_EOL;
 }
-print $numbers;
+print implode(', ', $numbers) . PHP_EOL;
+
