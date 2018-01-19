@@ -52,3 +52,7 @@ If you do not have experience with a reasonably modern statically typed language
 
 - [Creative Scala](https://gum.co/creative-scala)
 - [Essential Scala](https://gum.co/essential-scala)
+
+If you want to learn more about data science:
+
+- [Introduction to Statistical Learning with Applications in R](http://www-bcf.usc.edu/~gareth/ISL/)
