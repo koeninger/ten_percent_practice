@@ -61,6 +61,14 @@ object Example {
       }
     }
 
+    def reverse[A](list: List[A], revlist: List[A]): List[A] = {
+      // println(list, revlist)
+      list match {
+        case Nil => revlist
+        case a::z => reverse(z, a :: revlist)
+      }
+    }
+
     println(ones(5))
     println(descending(5))
     println(ascending(5, 1))
@@ -71,6 +79,7 @@ object Example {
     println(contains(List(2,3,6),9))
     println(contains(List(2,3,6),6))
     println(first(List(2,3,6),6))
+    println(reverse(List(2,3,6,8,11,1000), Nil))
 
   }
 }
