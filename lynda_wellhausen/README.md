@@ -8,3 +8,5 @@ financially contains an application based on this tutorial for Meteor and Angula
 https://angular-meteor.com/tutorials/socially/angular1/bootstrap. I ended up using it as a 
 basis to pull in data from from the alphavantage api. 
 
+creative-scala contains the excercises from V2 of creative-scala
+
