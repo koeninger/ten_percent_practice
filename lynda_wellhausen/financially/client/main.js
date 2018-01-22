@@ -53,26 +53,35 @@ angular.module('financially', [
                 .domain([d3.max(opensData), 50])
                 .range([50, 0]);
 
-            var svgContainer = d3.select(".opens-container")
-                                .append("svg")
-                                .attr("width", 400)
-                                .attr("height", 100);
+            d3.select(".opens-container")
+                .append("svg")
+                .attr("width", 200)
+                .attr("height", 50);
+            
+            var svg = d3.select("opens-container")
+                .append("svg")
+                .attr("width", 200)
+                .attr("height", 50)
+                .append("g");
 
             var y_scale = d3.scaleLinear()
-                            .domain([d3.min(0), d3.max(24)])
-                            .range([20 / 2, 0]);
+            .domain([d3.min(0), d3.max(24)])
+            .range([20 / 2, 0]);
 
-            var y_axis = d3.axisLeft()
-                            .scale(y_scale);
+            //var y_axis = d3.axisLeft()
+              //  .scale(y_scale);
+            
+   //         var yAxis = d3.svg.axisLeft()
+     //           .scale(y_scale)
+       //         .orient('left');
 
-    
-
-                d3.select(".opens-data")
+            d3.select(".opens-data")
                 .selectAll("div")
                 .data(opensData)
-                    .enter().append("div")
-                    .style("width", function(d) { return x(d) * 10 + "px"; })
-                    .text(function (d) { return d; })
+                .enter().append("div")
+                .style("width", function (d) { return x(d) * 10 + "px"; })
+                .text(function (d) { return d; })
+//                .call(yAxis);
                 },
 
         this.helpers({

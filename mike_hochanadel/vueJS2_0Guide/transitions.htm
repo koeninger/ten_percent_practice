@@ -2,6 +2,7 @@
   <head>
       <script src="node_modules/vue/dist/vue.js"></script>
       <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.14.1/lodash.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/velocity/1.2.3/velocity.min.js"></script>
       <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
   </head>
   <body>
@@ -69,6 +70,32 @@
           {{ item }}
         </li>
       </transition-group>
+    </div>
+    <div id="staggered-list-demo">
+      <input v-model="query">
+      <transition-group
+        name="staggered-fade"
+        tag="ul"
+        v-bind:css="false"
+        v-on:before-enter="beforeEnter"
+        v-on:enter="enter"
+        v-on:leave="leave"
+      >
+        <li
+          v-for="(item, index) in computedList"
+          v-bind:key="item.msg"
+          v-bind:data-index="index"
+        >{{ item.msg }}</li>
+      </transition-group>
+    </div>
+    <div id="dynamic" class="demo">
+      In: <input type="range" v-model="fadeInDuration" min="0" v-bind:max="maxFadeDuration">
+      Out: <input type="range" v-model="fadeOutDuration" min="0" v-bind:max="maxFadeDuration">
+      <transition v-bind:css="false" v-on:before-enter="beforeEnter" v-on:enter="enter" v-on:leave="leave">
+        <p v-if="show">howdy</p>
+      </transition>
+      <button v-if="stop" v-on:click="stop = false; show = false">Start</button>
+      <button v-else v-on:click="stop = true">Stop</button>
     </div>
   </body>
   <style>
@@ -222,6 +249,101 @@
       methods: {
         shuffle: function() {
           this.items = _.shuffle(this.items);
+        }
+      }
+    });
+
+    var staggeredListDemo = new Vue({
+      el: '#staggered-list-demo',
+      data: {
+        query: '',
+        list: [
+          { msg: 'Bruce Lee' },
+          { msg: 'Jackie Chan' },
+          { msg: 'Chuck Norris' },
+          { msg: 'Jet Li' },
+          { msg: 'Kung Fury' }
+        ]
+      },
+      computed: {
+        computedList: function () {
+          var vm = this
+          return this.list.filter(function (item) {
+            return item.msg.toLowerCase().indexOf(vm.query.toLowerCase()) !== -1
+          })
+        }
+      },
+      methods: {
+        beforeEnter: function (el) {
+          el.style.opacity = 0
+          el.style.height = 0
+        },
+        enter: function (el, done) {
+          var delay = el.dataset.index * 150
+          setTimeout(function () {
+            Velocity(
+              el,
+              { opacity: 1, height: '1.6em' },
+              { complete: done }
+            )
+          }, delay)
+        },
+        leave: function (el, done) {
+          var delay = el.dataset.index * 150
+          setTimeout(function () {
+            Velocity(
+              el,
+              { opacity: 0, height: 0 },
+              { complete: done }
+            )
+          }, delay)
+        }
+      }
+    });
+
+    var dynamic = new Vue({
+      el: "#dynamic",
+      data: {
+        show: true,
+        fadeInDuration: 500,
+        fadeOutDuration: 500,
+        maxFadeDuration: 4000,
+        stop: true
+      },
+      mounted: function () {
+        this.show = false
+      },
+      methods: {
+        beforeEnter: function(el) {
+          el.style.opacity = 0
+        },
+        enter: function(el, done) {
+          var vm = this;
+          Velocity(el,
+            { opacity: 1 },
+            {
+              duration: this.fadeInDuration,
+              complete: function() {
+                done();
+                if (!vm.stop) {
+                  vm.show = false;
+                }
+              }
+            }
+          );
+        },
+        leave: function(el, done) {
+          var vm = this;
+          Velocity(el,
+            { opacity: 0 },
+            {
+              duration: this.fadeOutDuration,
+              complete: function() {
+                done();
+                vm.show = true;
+              }
+            }
+          );
         }
       }
     });
