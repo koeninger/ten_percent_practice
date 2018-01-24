@@ -10,3 +10,4 @@ basis to pull in data from from the alphavantage api.
 
 creative-scala contains the excercises from V2 of creative-scala
 
+hello contains code from a tutorial I followed about how to set up debugging for Python with Visual Studio code
