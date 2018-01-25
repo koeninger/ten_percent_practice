@@ -84,9 +84,77 @@ def is_sequence_unique(sequence):
 
 # *************************************************** #
 
+# C-1.20 Python's random module includes a function shuffle(data) that accepts a
+# list of elements and randomly reorders the elements so that each possible
+# order occurs with equal probability. The random module includes a
+# more basic function randint(a, b) that returns a uniformly random integer
+# from a to b (including both endpoints). Using only the randint function,
+# implement your own version of the shuffle function.
 
+	# loop over list
+	# find min and max
+	# use min,max as randint(a,b) arguments
+	# loop over randInt until it produces the shuffle
+
+
+def custom_shuffle(sequence):
+	
+	sequence_dict = {}
+	ret_val = []	
+	for num in sequence:
+		if num not in sequence_dict:
+			sequence_dict[num] = {}
+			sequence_dict[num]['randomized'] = 0 
+			sequence_dict[num]['occurences'] = 1
+		else:
+			sequence_dict[num]['occurences'] += 1
+
+	curr_min = None
+	curr_max = 0
+	for num in sequence:
+		curr_min = num if curr_min == None else curr_min
+		curr_max = num if num > curr_max else curr_max
+		curr_min = num if num < curr_min else curr_min
+
+	all_done = False
+
+	import random
+	while not all_done:
+		curr_num = random.randint(curr_min,curr_max)
+		if (curr_num not in sequence_dict) or sequence_dict[curr_num]['randomized'] < sequence_dict[curr_num]['occurences']:
+			ret_val.append(curr_num)
+			sequence_dict[curr_num]['randomized'] += 1
+
+		sub_done = True
+		for num in sequence_dict:
+			if sequence_dict[num]['occurences'] > sequence_dict[num]['randomized']:
+				sub_done = False
+				break
+
+		all_done = sub_done
+
+	return ret_val
+
+# print custom_shuffle([1,2,3,4,5,6,7,8,8])
 
 # *************************************************** #
+
+# C-1.21 Write a Python program that repeatedly reads lines from standard input
+# until an EOFError is raised, and then outputs those lines in reverse order
+# (a user can indicate end of input by typing ctrl-D).
+
+
+def read_lines():
+	input_store = []
+	while True:
+	    try:
+	    	data = raw_input("Tell me something: ")
+	    	input_store.append(data)
+	    except EOFError:
+	        break
+	input_store.reverse()
+	print input_store
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
