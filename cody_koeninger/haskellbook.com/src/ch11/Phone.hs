@@ -2,8 +2,6 @@ module Phone where
     import Data.Maybe (isJust)
     import Data.Char (isUpper, toLower)
     import Data.List (elemIndex, find, sort)
-    import Debug.Trace (trace)
-    import Text.Printf (printf)
         
     data DaPhone = DaPhone [(Char, [Char])] deriving Show
                  

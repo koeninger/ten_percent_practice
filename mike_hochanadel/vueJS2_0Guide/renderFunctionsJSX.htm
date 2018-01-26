@@ -1,0 +1,34 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="render-basic">
+      <anchored-heading :level="1">howdy</anchored-heading>
+      <anchored-heading :level="2">howdy</anchored-heading>
+      <anchored-heading :level="3">howdy</anchored-heading>
+      <anchored-heading :level="1">howdy</anchored-heading>
+      <anchored-heading :level="2">howdy</anchored-heading>
+    </div>
+  </body>
+  <script>
+    Vue.component('anchored-heading', {
+      render: function(createElement) {
+        return createElement(
+          'h' + this.level,
+          this.$slots.default
+        )
+      },
+      props: {
+        level: {
+          type: Number,
+          required: true
+        }
+      }
+    })
+
+    var renderedBasic = new Vue({
+      el: '#render-basic'
+    })
+  </script>
+</html>
