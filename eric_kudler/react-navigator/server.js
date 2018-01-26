@@ -25,6 +25,14 @@ router.get('/attractions', function(req, res) {
   
 });
 
+router.get('/generate', function(req, res) {
+  res.json({
+    ok: true
+
+  });  
+  
+});
+
 
 app.use('/api', router);
 
