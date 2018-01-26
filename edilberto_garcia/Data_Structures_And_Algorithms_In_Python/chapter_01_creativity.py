@@ -153,13 +153,70 @@ def read_lines():
 	    except EOFError:
 	        break
 	input_store.reverse()
-	print input_store
+	# print input_store
 
 # *************************************************** #
+
+# C-1.22 
+# Write a short Python program that takes two arrays a and b of length n
+# storing int values, 
+# and returns the dot product of a and b.
+#  That is, it returns
+# an array c of length n such that c[i] = a[i] * b[i], for i = 0,.....,n-1.
+
+def dot_product(a,b):
+	ret_val = []
+	for index, number in enumerate(a):
+		ret_val.append(number * b[index])
+	return ret_val
+
+# print dot_product([1,2,3,4,5,6,7,8,9], [9,8,7,6,5,4,3,2,1])
+
 # *************************************************** #
+
+# C-1.24 Write a short Python function that counts the number of vowels in a given
+# character string.
+
+def vowel_count(sentence):
+	ret_val = 0
+	for char in sentence:
+		if char in ['a','e','i','o','u']:
+			ret_val +=1
+	return ret_val
+
+# print vowel_count('This is my very original sentence to test this function')
+
+
 # *************************************************** #
+
+# C-1.25 Write a short Python function that takes a string s, representing a sentence,
+# and returns a copy of the string with all punctuation removed. For example,
+# if given the string "Let s try, Mike.", this function would return
+# "Lets try Mike".
+
+def remove_punctuation(string):
+	return string.translate(None, "',.;")
+
+# print remove_punctuation("This is user's sentence, with some punctuation.")
+
 # *************************************************** #
+
+# C-1.26 Write a short program that takes as input three integers, a, b, and c, from
+# the console and determines if they can be used in a correct arithmetic
+# formula (in the given order), like "a+b = c," "a = b-c," or "a * b = c."
+
+def determine_arithmetic(a,b,c):
+	return {
+		str(a) + '+' + str(b) + '=' + str(c) : (a + b) == c,
+		str(a) + '=' + str(b) + '-' + str(c) : a == (b - c),
+		str(a) + '*' + str(b) + '=' + str(c) : (a * b) == c
+	}
+
+# print determine_arithmetic(1,3,4)
+
 # *************************************************** #
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
