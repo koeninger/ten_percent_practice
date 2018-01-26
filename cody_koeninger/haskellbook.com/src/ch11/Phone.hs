@@ -1,7 +1,7 @@
 module Phone where
     import Data.Maybe (isJust)
     import Data.Char (isUpper, toLower)
-    import Data.List (elemIndex, find)
+    import Data.List (elemIndex, find, sort)
         
     data DaPhone = DaPhone [(Char, [Char])] deriving Show
                  
@@ -49,3 +49,35 @@ module Phone where
                   Just (k, Just i) -> [(k, i + 1)]
                   _ -> []
                        
+    cellPhonesDead :: DaPhone -> String -> [(Digit, Presses)]
+    cellPhonesDead d s = concat $ map (reverseTaps d) s
+
+    fingerTaps :: [(Digit, Presses)] -> Presses
+    fingerTaps = sum . map snd
+
+    -- not total, fails on empty string
+    mostPopularLetter :: String -> Char
+    mostPopularLetter = mostPopular
+
+    mostPopular :: (Eq a, Ord a) => [a] -> a
+    mostPopular xs =
+        let sorted = sort xs
+            h = head sorted
+            t = tail sorted
+            recur win winCount cur curCount [] =
+                if (curCount > winCount)
+                then cur
+                else win
+            recur win winCount cur curCount (y:ys) =
+                if (cur == y)
+                then recur win winCount cur (curCount + 1) ys
+                else if (curCount > winCount)
+                     then recur cur curCount y 1 ys
+                     else recur win winCount y 1 ys
+        in recur h 1 h 1 t
+
+    coolestLtr :: [String] -> Char
+    coolestLtr = mostPopular . mostPopular
+
+    coolestWord :: [String] -> String
+    coolestWord = mostPopular
