@@ -1,3 +1,4 @@
+1-26-2018
 
 This is a record of testing out Python's interactive mode. 
 
@@ -72,3 +73,151 @@ round(...)
 >>> exit
 Use exit() or Ctrl-D (i.e. EOF) to exit
 >>> exit()
+
+1-29-2018
+
+Python 2.7.10 (default, Jul 15 2017, 17:16:57)
+[GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.31)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> round(2.34565465,2)
+2.35
+>>> x = "testing 1 2 3"
+>>> x.split()
+['testing', '1', '2', '3']
+>>> help(round)
+Help on built-in function round in module __builtin__:
+
+round(...)
+    round(number[, ndigits]) -> floating point number
+
+    Round a number to a given precision in decimal digits (default 0 digits).
+    This always returns a floating point number.  Precision may be negative.
+
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__', 'x']
+>>> dir[__builtins__]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: 'builtin_function_or_method' object has no attribute '__getitem__'
+>>> dir(__builtins)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name '__builtins' is not defined
+>>> dir(__builtins__)
+['ArithmeticError', 'AssertionError', 'AttributeError', 'BaseException', 'BufferError', 'BytesWarning', 'DeprecationWarning', 'EOFError', 'Ellipsis', 'EnvironmentError', 'Exception', 'False', 'FloatingPointError', 'FutureWarning', 'GeneratorExit', 'IOError', 'ImportError', 'ImportWarning', 'IndentationError', 'IndexError', 'KeyError', 'KeyboardInterrupt', 'LookupError', 'MemoryError', 'NameError', 'None', 'NotImplemented', 'NotImplementedError', 'OSError', 'OverflowError', 'PendingDeprecationWarning', 'ReferenceError', 'RuntimeError', 'RuntimeWarning', 'StandardError', 'StopIteration', 'SyntaxError', 'SyntaxWarning', 'SystemError', 'SystemExit', 'TabError', 'True', 'TypeError', 'UnboundLocalError', 'UnicodeDecodeError', 'UnicodeEncodeError', 'UnicodeError', 'UnicodeTranslateError', 'UnicodeWarning', 'UserWarning', 'ValueError', 'Warning', 'ZeroDivisionError', '_', '__debug__', '__doc__', '__import__', '__name__', '__package__', 'abs', 'all', 'any', 'apply', 'basestring', 'bin', 'bool', 'buffer', 'bytearray', 'bytes', 'callable', 'chr', 'classmethod', 'cmp', 'coerce', 'compile', 'complex', 'copyright', 'credits', 'delattr', 'dict', 'dir', 'divmod', 'enumerate', 'eval', 'execfile', 'exit', 'file', 'filter', 'float', 'format', 'frozenset', 'getattr', 'globals', 'hasattr', 'hash', 'help', 'hex', 'id', 'input', 'int', 'intern', 'isinstance', 'issubclass', 'iter', 'len', 'license', 'list', 'locals', 'long', 'map', 'max', 'memoryview', 'min', 'next', 'object', 'oct', 'open', 'ord', 'pow', 'print', 'property', 'quit', 'range', 'raw_input', 'reduce', 'reload', 'repr', 'reversed', 'round', 'set', 'setattr', 'slice', 'sorted', 'staticmethod', 'str', 'sum', 'super', 'tuple', 'type', 'unichr', 'unicode', 'vars', 'xrange', 'zip']
+>>> credits
+    Thanks to CWI, CNRI, BeOpen.com, Zope Corporation and a cast of thousands
+    for supporting Python development.  See www.python.org for more information.
+>>> round
+<built-in function round>
+>>> str
+<type 'str'>
+>>> for miles in range(10,70,10):
+...     km = miles * 1.609
+...     print "%d miles --> %3.2f kilometers" % (miles, km)
+...
+10 miles --> 16.09 kilometers
+20 miles --> 32.18 kilometers
+30 miles --> 48.27 kilometers
+40 miles --> 64.36 kilometers
+50 miles --> 80.45 kilometers
+60 miles --> 96.54 kilometers
+>>> help()
+
+Welcome to Python 2.7!  This is the online help utility.
+
+If this is your first time using Python, you should definitely check out
+the tutorial on the Internet at http://docs.python.org/2.7/tutorial/.
+
+Enter the name of any module, keyword, or topic to get help on writing
+Python programs and using Python modules.  To quit this help utility and
+return to the interpreter, just type "quit".
+
+To get a list of available modules, keywords, or topics, type "modules",
+"keywords", or "topics".  Each module also comes with a one-line summary
+of what it does; to list the modules whose summaries contain a given word
+such as "spam", type "modules spam".
+
+help> modules
+
+Please wait a moment while I gather a list of all available modules...
+
+(Lots of modules...)
+
+Enter any module name to get more help.  Or, type "modules spam" to search
+for modules whose descriptions contain the word "spam".
+
+help> list
+Help on class list in module __builtin__:
+
+class list(object)
+ |  list() -> new empty list
+ |  list(iterable) -> new list initialized from iterable's items
+ |
+ |  Methods defined here:
+ |
+ |  __add__(...)
+ |      x.__add__(y) <==> x+y
+ |
+ |  __contains__(...)
+ |      x.__contains__(y) <==> y in x
+ |
+ |  __delitem__(...)
+ |      x.__delitem__(y) <==> del x[y]
+ |
+ |  __delslice__(...)
+ |      x.__delslice__(i, j) <==> del x[i:j]
+ |
+ |      Use of negative indices is not supported.
+ |
+ |  __eq__(...)
+ |      x.__eq__(y) <==> x==y
+ |
+ |  __ge__(...)
+ |      x.__ge__(y) <==> x>=y
+ |
+ |  __getattribute__(...)
+ |      x.__getattribute__('name') <==> x.name
+ |
+ |  __getitem__(...)
+ |      x.__getitem__(y) <==> x[y]
+ |
+... 
+
+help> quit
+
+You are now leaving help and returning to the Python interpreter.
+If you want to ask for help on a particular object directly from the
+interpreter, you can type "help(object)".  Executing "help('string')"
+has the same effect as typing a particular string at the help> prompt.
+>>> help(list)
+Help on class list in module __builtin__:
+
+class list(object)
+ |  list() -> new empty list
+ |  list(iterable) -> new list initialized from iterable's items
+ |
+ |  Methods defined here:
+ |
+ |  __add__(...)
+ |      x.__add__(y) <==> x+y
+ |
+ |  __contains__(...)
+ |      x.__contains__(y) <==> y in x
+ |
+ |  __delitem__(...)
+ |      x.__delitem__(y) <==> del x[y]
+ |
+ |  __delslice__(...)
+ |      x.__delslice__(i, j) <==> del x[i:j]
+ |
+ |      Use of negative indices is not supported.
+ |
+ |  __eq__(...)
+ |      x.__eq__(y) <==> x==y
+ |
+ |  __ge__(...)
+ |      x.__ge__(y) <==> x>=y
+
+
+
