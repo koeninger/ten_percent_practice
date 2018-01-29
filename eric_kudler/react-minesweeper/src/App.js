@@ -18,95 +18,37 @@ class Box extends Component {
 class Board extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      grid: this.generateGrid(10, 15)
+    }
+  }
+  generateGrid(width, height) {
+    let grid = [];
+    for (let y = 0; y < width; y++) {
+      grid.push([]);
+      for (let x = 0; x < height; x++) {
+        grid[y].push([<Box key={y * width + x} />])
+      }
+    }
+    return grid;
   }
   render() {
+    console.log(this.state.grid)
+    var rows = this.state.grid.map(function (item, i){
+      var entry = item.map(function (element, j) {
+        return ( 
+          <td key={j}>{element}</td>
+        );
+      });
+      return (
+        <tr key={i}>{entry}</tr>
+      );
+    });
     return (
       <table className="board">
-        <tr>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-          <td>
-            <Box />
-          </td>
-        </tr>
+        <tbody>
+          {rows}
+        </tbody>
       </table>
     );
   }
