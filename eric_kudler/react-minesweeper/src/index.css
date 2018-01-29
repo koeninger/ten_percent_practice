@@ -12,3 +12,11 @@ button.box {
 	outline: none;
 	float:left;
 }
+
+table.board {
+	border-collapse: separate;
+	border-spacing: 0px;
+}
+table.board tr td {
+	padding: 0px;
+}

@@ -21,12 +21,93 @@ class Board extends Component {
   }
   render() {
     return (
-      <div>
-        <Box />
-        <Box />
-        <Box />
-        <Box />
-      </div>
+      <table className="board">
+        <tr>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+          <td>
+            <Box />
+          </td>
+        </tr>
+      </table>
     );
   }
 }
