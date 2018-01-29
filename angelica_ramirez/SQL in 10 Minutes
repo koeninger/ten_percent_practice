@@ -28,3 +28,41 @@ INSERT INTO customers(
 VALUES( 
   'John Doe',
   '123@email.com'
+  
+--Views: 
+
+CREATE VIEW 
+    Customers_Who_Ordered 
+AS
+SELECT 
+    customers.customerid, customername, orders.orderid, quantity
+FROM 
+    customers, orders, orderdetails
+WHERE 
+    customers.customerid = orders.customerid
+AND 
+    orders.orderid = orderdetails.orderid
+    
+--Concatenate: view customer contact for all customers with campaigns 
+
+SELECT 
+    campaigns.id, customer_id, CONCAT(contact, ' (', email, ')') as contact
+FROM 
+    campaigns, customers
+WHERE 
+    campaigns.customer_id = customers.id
+
+--all campaigns that are not cancelled from specific sales rep
+
+SELECT 
+    campaign_id, user_id
+FROM 
+users, sales_reps, campaigns
+WHERE 
+users.id = sales_reps.user_id
+AND 
+first_name = '***' AND last_name = "***"
+AND 
+campaigns.id = sales_reps.campaign_id
+AND 
+cancelled_on IS NULL 

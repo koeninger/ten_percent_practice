@@ -1,0 +1,74 @@
+
+This is a record of testing out Python's interactive mode. 
+
+Python 2.7.10 (default, Jul 15 2017, 17:16:57)
+[GCC 4.2.1 Compatible Apple LLVM 9.0.0 (clang-900.0.31)] on darwin
+Type "help", "copyright", "credits" or "license" for more information.
+>>> print "hello world"
+hello world
+>>> x = [3,2]
+>>> x
+[3, 2]
+>>> print x
+[3, 2]
+>>> class Message:
+... pass
+  File "<stdin>", line 2
+    pass
+       ^
+IndentationError: expected an indented block
+>>> class Message: pass
+... 1+2
+  File "<stdin>", line 2
+    1+2
+    ^
+SyntaxError: invalid syntax
+>>> class Message
+  File "<stdin>", line 1
+    class Message
+                ^
+SyntaxError: invalid syntax
+>>> class Message:
+...     pass
+...
+>>> Message
+<class __main__.Message at 0x1069a7b48>
+>>> print Message
+__main__.Message
+>>> "1"
+'1'
+>>> _
+'1'
+>>> "2"
+'2'
+>>> _
+'2'
+>>> x=3
+>>> _
+'2'
+>>> x="jhgkhjgfkhsdgfksdhjfgksdgf"
+>>> len(x)
+26
+>>> x="Testing 1 2 3"
+>>> x.split()
+['Testing', '1', '2', '3']
+>>> help(round)
+Help on built-in function round in module __builtin__:
+
+round(...)
+    round(number[, ndigits]) -> floating point number
+
+    Round a number to a given precision in decimal digits (default 0 digits).
+    This always returns a floating point number.  Precision may be negative.
+
+>>> round(4.2)
+4.0
+>>> round(4.6)
+5.0
+>>> round(3.22, 1)
+3.2
+>>> dir()
+['Message', '__builtins__', '__doc__', '__name__', '__package__', 'x']
+>>> exit
+Use exit() or Ctrl-D (i.e. EOF) to exit
+>>> exit()

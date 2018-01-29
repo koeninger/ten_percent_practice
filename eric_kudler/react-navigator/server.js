@@ -1,70 +1,41 @@
-const express = require('express');
-const fs = require('fs');
-const sqlite = require('sql.js');
+// set up ========================
+var express = require('express');
+var app = express();
+var mongoose = require('mongoose');
+var bodyParser = require('body-parser');
 
-const filebuffer = fs.readFileSync('db/usda-nnd.sqlite3');
+var Attraction = require('./models/Attraction');
 
-const db = new sqlite.Database(filebuffer);
-
-const app = express();
-
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 app.set('port', (process.env.PORT || 3001));
+
+mongoose.connect('mongodb://localhost/wdw-navigator');
 
 // Express only serves static assets in production
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static('client/build'));
 }
 
-const COLUMNS = [
-  'carbohydrate_g',
-  'protein_g',
-  'fa_sat_g',
-  'fa_mono_g',
-  'fa_poly_g',
-  'kcal',
-  'description',
-];
-app.get('/api/food', (req, res) => {
-  const param = req.query.q;
-
-  if (!param) {
-    res.json({
-      error: 'Missing required parameter `q`',
-    });
-    return;
-  }
-
-  // WARNING: Not for production use! The following statement
-  // is not protected against SQL injections.
-  const r = db.exec(`
-    select ${COLUMNS.join(', ')} from entries
-    where description like '%${param}%'
-    limit 100
-  `);
-
-  if (r[0]) {
-    res.json(
-      r[0].values.map((entry) => {
-        const e = {};
-        COLUMNS.forEach((c, idx) => {
-          // combine fat columns
-          if (c.match(/^fa_/)) {
-            e.fat_g = e.fat_g || 0.0;
-            e.fat_g = (
-              parseFloat(e.fat_g, 10) + parseFloat(entry[idx], 10)
-            ).toFixed(2);
-          } else {
-            e[c] = entry[idx];
-          }
-        });
-        return e;
-      })
-    );
-  } else {
-    res.json([]);
-  }
+var router = express.Router();
+router.get('/attractions', function(req, res) {
+  Attraction.find(function(err, attractions) {
+    res.json(attractions);  
+  });
+  
 });
 
-app.listen(app.get('port'), () => {
-  console.log(`Find the server at: http://localhost:${app.get('port')}/`); // eslint-disable-line no-console
+router.get('/generate', function(req, res) {
+  res.json({
+    ok: true
+
+  });  
+  
+});
+
+
+app.use('/api', router);
+
+app.listen(app.get('port'), function() {
+  console.log("Find the server at: http://localhost:${app.get('port')}/"); // eslint-disable-line no-console
 });

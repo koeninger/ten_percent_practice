@@ -1,0 +1,100 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+  </body>
+  <script>
+    var myMixin = {
+      created: function() {
+        this.hello();
+      },
+      methods: {
+        hello: function() {
+          console.log('howdy');
+        }
+      }
+    }
+
+    var Component = Vue.extend({
+      mixins: [myMixin]
+    });
+
+    var component = new Component();
+
+    var mergeMixin = {
+      data: function() {
+        return {
+          message: 'hello',
+          foo: 'abc'
+        }
+      }
+    };
+
+    var mergedMixin = new Vue({
+      mixins: [mergeMixin],
+      data: function() {
+        return {
+          message: 'later',
+          bar: 'def'
+        }
+      },
+      created: function() {
+        console.log(this.$data);
+      }
+    });
+
+    var hookMixin = {
+      created: function() {
+        console.log('mixin hook called');
+      }
+    };
+
+    var hookedMixin = new Vue({
+      mixins: [hookMixin],
+      created: function() {
+        console.log('component hook called');
+      }
+    });
+
+    var optionMixin = {
+      methods: {
+        foo: function() {
+          console.log('foo');
+        },
+        conflicting: function() {
+          console.log('from mixin');
+        }
+      }
+    };
+
+    var optionsMixin = new Vue({
+      mixins: [optionMixin],
+      methods: {
+        bar: function() {
+          console.log('bar');
+        },
+        conflicting: function() {
+          console.log('from self');
+        }
+      }
+    });
+
+    optionsMixin.foo();
+    optionsMixin.bar();
+    optionsMixin.conflicting();
+
+    Vue.mixin({
+      created: function() {
+        var myOption = this.$options.myOption;
+        if (myOption) {
+          console.log(myOption);
+        }
+      }
+    });
+
+    var mixinVue = new Vue({
+      myOption: 'hello!'
+    });
+  </script>
+</html>
