@@ -19,7 +19,7 @@ class Board extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      grid: this.generateGrid(10, 15)
+      grid: this.generateGrid(props.width, props.height)
     }
   }
   generateGrid(width, height) {
@@ -70,7 +70,7 @@ class Game extends Component {
     return (
       <div className="game">
         <Header />
-        <Board />
+        <Board width="10" height="10" />
       </div>
     );
   }
