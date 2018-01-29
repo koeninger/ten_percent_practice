@@ -47,5 +47,12 @@ class Minesweeper extends Component {
     );
   }
 }
+class App extends Component {
+  render() {
+    return (
+      <Minesweeper />
+    );
+  }
+}
 
-export default Minesweeper;
+export default App;
