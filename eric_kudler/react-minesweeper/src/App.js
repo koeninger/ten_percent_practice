@@ -3,6 +3,18 @@ import logo from './logo.svg';
 import './App.css';
 
 
+class Box extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <div>
+        <button className="box"></button>
+      </div>
+    );
+  }
+}
 class Board extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +22,10 @@ class Board extends Component {
   render() {
     return (
       <div>
-      Board
+        <Box />
+        <Box />
+        <Box />
+        <Box />
       </div>
     );
   }
@@ -30,7 +45,7 @@ class Header extends Component {
 class Game extends Component {
   render() {
     return (
-      <div>
+      <div className="game">
         <Header />
         <Board />
       </div>
