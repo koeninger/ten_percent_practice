@@ -207,16 +207,60 @@ def remove_punctuation(string):
 
 def determine_arithmetic(a,b,c):
 	return {
-		str(a) + '+' + str(b) + '=' + str(c) : (a + b) == c,
-		str(a) + '=' + str(b) + '-' + str(c) : a == (b - c),
-		str(a) + '*' + str(b) + '=' + str(c) : (a * b) == c
+		str(a) + ' + ' + str(b) + ' = ' + str(c) : (a + b) == c,
+		str(a) + ' = ' + str(b) + ' - ' + str(c) : a == (b - c),
+		str(a) + ' * ' + str(b) + ' = ' + str(c) : (a * b) == c
 	}
 
 # print determine_arithmetic(1,3,4)
 
 # *************************************************** #
 
+# C-1.27 In Section 1.8, we provided three different implementations of a generator
+# that computes factors of a given integer. The third of those implementations,
+# from page 41, was the most efficient, but we noted that it did not
+# yield the factors in increasing order. Modify the generator so that it reports
+# factors in increasing order, while maintaining its general performance advantages.
 
+# Original
+def factors(n):
+	k = 1
+	while k * k < n:
+		print "-------- " + str(k)
+		if n % k == 0:
+			print "Yielding k : " + str(k)
+			yield k
+			print "Yielding n//k : " + str(n // k)
+			yield n // k
+		k += 1
+	if k * k == n:
+		print "Yielding k : " + str(k)
+		yield k
+
+
+# Original
+def factors_altered(n):
+	k = 1
+	while k * k < n:
+		print "-------- " + str(k)
+		if n % k == 0:
+			print "Yielding k : " + str(k)
+			yield k
+
+
+			print "Yielding n//k : " + str(n // k)
+			yield n // k
+		k += 1
+	if k * k == n:
+		print "Yielding k : " + str(k)
+		yield k
+
+
+for n in factors_altered(100):
+	print ''
+print 10//2
+# *************************************************** #
+# *************************************************** #
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
