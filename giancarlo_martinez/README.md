@@ -1,5 +1,7 @@
-# D3.js Practice
+# Angular 1.X
 
-Learning D3 beginning with a 3hr Treehouse course: 
-https://teamtreehouse.com/library/d3js
-dir: /d3_treehouse
+Refreshing my understanding of Angular 1 (1.6.6) fundamental concepts via courses and documentations and advancing my skills through new challenges and projects.
+
+
+1 - Angular Basics Treehouse course (treehouse_todo) - Completed
+2 - Communicating Between Directives

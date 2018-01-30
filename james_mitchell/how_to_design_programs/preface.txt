@@ -1,0 +1,28 @@
+“systematic program design” refers to a mix of two concepts: design recipes
+and iterative refinement.
+
+# Basic steps of a function design recipe
+1. From Problem Analysis to Data Definitions
+    * Identify the information that must be represented and how it is represented in the chosen programming language. Formulated definitions and illustrate with examples.
+2. Signature, Purpose Statement, Header
+    * State what kind of data the desired function consumes and produces. Formulate a concise answer to the question what the function computes. Define a stub that lives up to that signature.
+3. Functional examples
+    * Work through examples that illustrate the functions purpose.
+4. Function Template
+    * Translate the data definitions into an outline of the function.
+5. Function Definition
+    * Fill in the gaps in the function template. Exploit the purpose statement and examples.
+6. Testing
+    * Articulate the examples as tests and ensure that the function passes all.
+
+Design Recipes apply to both complete programs and individual functions.
+
+learning to design programs is primarily about the study of principles and the acquisition of transferable skills.
+
+>To illustrate this point, take a second look at the process description in figure
+>1. It says that a designer must analyze a problem statement, typically stated as a word problem;
+>2. extract and express its essence, abstractly;
+>3. illustrate the essence with examples;
+>4. make outlines and plans based on this analysis;
+>5. evaluate results with respect to expected outcomes; and
+>6. revise the product in light of failed checks and tests.
