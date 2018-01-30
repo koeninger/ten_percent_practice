@@ -1,5 +1,9 @@
 {-# LANGUAGE FlexibleInstances #-}
 
+import Data.Char (toUpper)
+import Data.List (intercalate)
+import Data.List.Split (splitOn)
+    
 class TooMany a where
     tooMany :: a -> Bool
 
@@ -100,3 +104,23 @@ convert8 Yes = False
 convert8 No = True
 convert8 Both = False
                 
+isSubseqOf :: (Eq a) => [a] -> [a] -> Bool
+isSubseqOf [] _ = True
+isSubseqOf _ [] = False
+isSubseqOf xs@(x:xt) ys@(y:yt) =
+    (x == y && isSubseqOf xt yt) ||
+    isSubseqOf xs yt
+
+capitalizeWords :: String -> [(String, String)]
+capitalizeWords = map capitalizeToPair . words
+                   
+capitalizeToPair :: String -> (String, String)
+capitalizeToPair "" = ("", "")
+capitalizeToPair xs@(x:xt) = (xs, toUpper x : xt)                  
+
+capitalizeWord :: String -> String
+capitalizeWord "" = ""
+capitalizeWord (x:xs) = toUpper x : xs
+
+capitalizeParagraph :: String -> String
+capitalizeParagraph p = intercalate ". " $ map capitalizeWord $ splitOn ". " p

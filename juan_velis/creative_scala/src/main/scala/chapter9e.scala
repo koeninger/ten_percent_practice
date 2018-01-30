@@ -33,10 +33,53 @@ object Example {
         case n => a::fill(n - 1, a)
       }
 
+    def double(list:List[Int]):List[Int] = {
+      list match {
+        case Nil => Nil
+        case a::z => (a*2)::double(z)
+      }
+    }
+
+    def product(list:List[Int]):Int = {
+      list match {
+        case Nil => 1
+        case a::z => a*product(z)
+      }
+    }
+
+    def contains[A](list:List[A], findthis:A):Boolean = {
+      list match {
+        case Nil => false
+        case a::z => (if (a == findthis) true else false) || contains(z, findthis)
+      }
+    }
+
+    def first[A](list:List[A], default:A):A = {
+      list match {
+        case Nil => default
+        case a::z => a
+      }
+    }
+
+    def reverse[A](list: List[A], revlist: List[A]): List[A] = {
+      // println(list, revlist)
+      list match {
+        case Nil => revlist
+        case a::z => reverse(z, a :: revlist)
+      }
+    }
+
     println(ones(5))
     println(descending(5))
     println(ascending(5, 1))
     println(fill(5, "yes"))
+
+    println(double(List(11,22,33,44,55)))
+    println(product(List(2,3,6)))
+    println(contains(List(2,3,6),9))
+    println(contains(List(2,3,6),6))
+    println(first(List(2,3,6),6))
+    println(reverse(List(2,3,6,8,11,1000), Nil))
 
   }
 }
