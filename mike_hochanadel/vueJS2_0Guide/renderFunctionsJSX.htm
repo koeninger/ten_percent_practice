@@ -10,6 +10,16 @@
       <anchored-heading :level="1">howdy</anchored-heading>
       <anchored-heading :level="2">howdy</anchored-heading>
     </div>
+    <div id="render-complete">
+      <anchored-heading-again :level="1">mike</anchored-heading-again>
+      <anchored-heading-again :level="2">jim</anchored-heading-again>
+      <anchored-heading-again :level="3">bobby</anchored-heading-again>
+      <anchored-heading-again :level="1">jan</anchored-heading-again>
+      <anchored-heading-again :level="2">jill</anchored-heading-again>
+    </div>
+    <div id="render-repeat">
+      <repeat-component></repeat-component>
+    </div>
   </body>
   <script>
     Vue.component('anchored-heading', {
@@ -25,10 +35,58 @@
           required: true
         }
       }
-    })
+    });
 
     var renderedBasic = new Vue({
       el: '#render-basic'
-    })
+    });
+
+    var getChildrenTextContext = function(children) {
+      return children.map(function(node) {
+        return node.children ? getChildrenTextContext(node.children) : node.text;
+      }).join('');
+    }
+
+    Vue.component('anchored-heading-again', {
+      render: function(createElement) {
+        var headingId = getChildrenTextContext(this.$slots.default)
+          .toLowerCase()
+          .replace(/\W+/g, '-')
+          .replace(/(^\-|\-$)/g, '');
+
+        return createElement('h' + this.level, [
+          createElement('a', {
+            attrs: {
+              name: headingId,
+              href: '#' + headingId
+            }
+          }, this.$slots.default)
+        ]);
+      },
+      props: {
+        level: {
+          type: Number,
+          required: true
+        }
+      }
+    });
+
+    var renderedComplete = new Vue({
+      el: '#render-complete'
+    });
+
+    Vue.component('repeat-component', {
+      render: function(createElement) {
+        return createElement('div',
+          Array.apply(null, {length:20}).map(function() {
+            return createElement('p', 'howdy');
+          })
+        );
+      }
+    });
+
+    var renderRepeat = new Vue({
+      el: '#render-repeat'
+    });
   </script>
 </html>
