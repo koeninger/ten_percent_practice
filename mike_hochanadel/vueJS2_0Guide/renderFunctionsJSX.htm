@@ -19,6 +19,8 @@
     </div>
     <div id="render-repeat">
       <repeat-component></repeat-component>
+      <render-if-for v-bind:items='items'></render-if-for>
+      <custom-model></custom-model>
     </div>
   </body>
   <script>
@@ -85,8 +87,48 @@
       }
     });
 
+    Vue.component('render-if-for', {
+      props: [
+          'items'
+      ],
+      render: function(createElement) {
+        if (this.items.length) {
+          return createElement('ul', this.items.map(function(item) {
+            return createElement('li', item.name);
+          }))
+        } else {
+          return createElement('p', 'No item found.');
+        }
+      }
+    })
+
+    Vue.component('custom-model', {
+      render: function(createElement) {
+        var self = this;
+        return createElement('input', {
+          domPros: {
+            value: self.value
+          },
+          on: {
+            input: function(event) {
+              self.value = event.target.value;
+              self.$emit('input', event.target.value);
+              console.log(self.value);
+            }
+          }
+        })
+      }
+    })
+
     var renderRepeat = new Vue({
-      el: '#render-repeat'
+      el: '#render-repeat',
+      data: {
+        items: [
+          {name: 'bob'},
+          {name: 'mike'},
+          {name: 'jan'}
+        ]
+      }
     });
   </script>
 </html>
