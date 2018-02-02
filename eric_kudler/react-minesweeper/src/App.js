@@ -33,7 +33,6 @@ class Board extends Component {
     return grid;
   }
   render() {
-    console.log(this.state.grid)
     var rows = this.state.grid.map(function (item, i){
       var entry = item.map(function (element, j) {
         return ( 
@@ -53,6 +52,37 @@ class Board extends Component {
     );
   }
 }
+class Timer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      seconds: 0
+    }
+  }
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+  tick() {
+    this.setState(function(prevState, props) {
+      return {
+        seconds: prevState.seconds + 1
+      }
+    });
+  }
+  render() {
+    return (
+      <div>
+        <input className="digital" type="text" name="timer" value={this.state.seconds.toString().padStart(3, '0')} />
+      </div>
+    );
+  }
+}
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -60,7 +90,9 @@ class Header extends Component {
   render() {
     return (
       <div>
-      Header
+        <Timer />
+        <button>(:</button>
+        <input className="digital" type="text" name="bomb_counter" value="000" />
       </div>
     );
   }
@@ -69,8 +101,8 @@ class Game extends Component {
   render() {
     return (
       <div className="game">
-        <Header />
-        <Board width="10" height="10" />
+        <Header bombs={this.props.bombs} />
+        <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} />
       </div>
     );
   }
@@ -81,7 +113,7 @@ class Minesweeper extends Component {
   }
   render() {
     return (
-      <Game />
+      <Game width="10" height="10" bombs="10" />
     );
   }
 }
