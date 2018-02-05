@@ -1,0 +1,28 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+button.box {
+	width: 20px;
+	height: 20px;
+	background: #BDBDBD;
+	border-color: #FFFFFF #7B7B7B #7B7B7B #FFFFFF;
+	border-width: 2px;
+	outline: none;
+	float:left;
+}
+
+table.board {
+	border-collapse: separate;
+	border-spacing: 0px;
+}
+table.board tr td {
+	padding: 0px;
+}
+
+input.digital {
+	background: #1B0000;
+	color: #FF0000;
+	font-size: 1em;
+}

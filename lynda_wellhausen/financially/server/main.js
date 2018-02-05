@@ -24,7 +24,7 @@ Meteor.startup(() => {
             month = ts.getMonth();
             year = ts.getFullYear();
             stockData = {
-                open: dataPoint['1. open'],
+                open: roundToTwo(dataPoint['1. open']),
                 high: dataPoint['2. high'],
                 low: dataPoint['3. low'],
                 close: dataPoint['4. close'],
@@ -33,8 +33,14 @@ Meteor.startup(() => {
                 month: month,
                 year: year
             };
+            console.log(stockData);
             Stocks.insert(stockData);
         });
-        }
+        }   
   });
+
+  function roundToTwo(num) {
+    return +(Math.round(num + "e+2")  + "e-2");
+  };
+
 });

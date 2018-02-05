@@ -137,11 +137,12 @@ foreach ($numbers as $number)
 		$output .= $number;
 	}
 }
-print $output;
+//print $output;
 
 
 //9: Given a list of intervals, merge all overlapping intervals
-
+//10: Write a function that will take invevals as input and takes care fo overlapping invervals
+//incomplete
 function bubble_sort_intervals($intervals)
 {
 	$swapped = true;
@@ -162,7 +163,7 @@ function bubble_sort_intervals($intervals)
 	}
 }
 
-print bubble_sort_intervals([[1,3], [2,5], [8,10], [4,5]]);
+//print bubble_sort_intervals([[1,3], [2,5], [8,10], [4,5]]);
 
 // function merge_overlapping_intervals($intervals) {
 // 	for ($i=0 ; $i < count($intervals) ; $i++)
@@ -174,4 +175,55 @@ print bubble_sort_intervals([[1,3], [2,5], [8,10], [4,5]]);
 // 	}	
 // }
 // print merge_overlapping_intervals([[1,4], [3,6], [8,10]]);
+
+
+
+//11: Reverse an array in-place 
+// (you cannot use any additional array in other words, space complexity should be O(1))
+
+$numbers = range(1, 100);
+shuffle($numbers);
+//print implode(', ', $numbers) . PHP_EOL . '-------------------' . PHP_EOL;
+for ($i = 0, $length = (count($numbers) - 1) ; $i < $length ; $i++)
+{
+	if ( ($i == $length - $i) || ($i > ($length - $i)) ){
+		break;
+	}
+	$swap_var = $numbers[$i];
+	$numbers[$i] = $numbers[$length - $i];
+	$numbers[$length - $i] = $swap_var;
+}
+//print implode(', ', $numbers);
+
+
+//12: Given an array of 0s and 1s. We need to sort it so that all the 0s are before all the 1s
+$numbers = [0,1,1,0,1,0,0,0,0,1,1,0,0,1,0,1,0,1,1,0,1,1,0,0,0,1,1,0,1,1,0,0,0,1,1,0,1,1,1,1,0,0,1,0,0,0,0,0,0,1,1,1,0,1,1,1,0,1,1];
+print implode(', ', $numbers) . PHP_EOL;
+for ($i = 0, $length = (count($numbers) - 1) ; $i < $length ; $i++)
+{
+	if ( ($i == $length - $i) || ($i > ($length - $i)) ){
+		break;
+	}
+	print "{$i}: Comparing {$numbers[$i]} with {$numbers[$length - $i]}: ";
+	if ($numbers[$i] == 1 && $numbers[$length - $i] == 0){
+		$swap_var = $numbers[$i];
+		$numbers[$i] = $numbers[$length - $i];
+		$numbers[$length - $i] = $swap_var;
+		print ": swapped";
+	}
+	else if ($numbers[$i] == 1 && $numbers[$length - $i] == 1){
+		$swap_var = $numbers[$i];
+		$numbers[$i] = $numbers[$length - $i - 1];
+		$numbers[$length - $i - 1] = $swap_var;
+		print ": moved 1 to i-1";
+	}
+	else if ($numbers[$i] == 0 && $numbers[$length - $i] == 0){
+		$swap_var = $numbers[$i + 1];
+		$numbers[$i + 1] = $numbers[$length - $i];
+		$numbers[$length - $i] = $swap_var;
+		print ": moved 0 i+1";
+	}
+	print PHP_EOL;
+}
+print implode(', ', $numbers) . PHP_EOL;
 
