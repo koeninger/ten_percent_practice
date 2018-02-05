@@ -22,6 +22,9 @@
       <render-if-for v-bind:items='items'></render-if-for>
       <custom-model></custom-model>
     </div>
+    <div id="functional-example">
+      <functional-component></functional-component>
+    </div>
   </body>
   <script>
     Vue.component('anchored-heading', {
@@ -129,6 +132,18 @@
           {name: 'jan'}
         ]
       }
+    });
+
+    Vue.component('functional-component', {
+      functional: true,
+      render: function(createElement, context) {
+          console.log(context);
+          return createElement('p', 'bob smith');
+      }
+    });
+
+    var functionalComponent = new Vue({
+      el: '#functional-example'
     });
   </script>
 </html>

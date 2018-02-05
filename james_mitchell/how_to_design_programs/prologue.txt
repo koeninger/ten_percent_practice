@@ -1,0 +1,13 @@
+To program is to write down an arithmetic expression, but you’re no longer
+restricted to boring numbers. In BSL, arithmetic is the arithmetic of numbers,
+strings, Booleans, and even images. To compute, though, still means to determine
+the value of an expression—except that this value can be a string, a number,
+a Boolean, or an image.
+
+
+First, (define (FunctionName InputName) BodyExpression)is a function definition.
+You recognize it as such because it starts with the “define” keyword.
+
+Second, (FunctionName ArgumentExpression) is a function application.
+The first part tells DrRacket which function you wish to use. The second part
+is the input to which you want to apply the function.

@@ -66,3 +66,6 @@ AND
 campaigns.id = sales_reps.campaign_id
 AND 
 cancelled_on IS NULL 
+
+
+-- Update: all campaigns from one sales rep to another 
