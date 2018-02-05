@@ -1,0 +1,24 @@
+;Exercise 5. Use the 2htdp/image library to create the image of a simple boat or tree. Make sure you can easily change the scale of the entire image. 
+
+(require 2htdp/image)
+(define iscale 10)
+
+(define leaves (circle iscale "solid" "green"))
+(define trunk (rectangle iscale (* iscale 4) "solid" "brown"))
+
+(overlay/align/offset "middle" "top"
+                      leaves
+                      0
+                      (/ (image-width leaves) 2)
+                      trunk
+)
+
+; ---
+
+; Create an expression that counts the number of pixels in the image.
+; (<image> used to represent cat image here)
+
+(require 2htdp/image)
+(define cat <image>)
+
+(* (image-width cat) (image-height cat)) 

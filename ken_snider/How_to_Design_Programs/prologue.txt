@@ -1,13 +1,13 @@
-# One Program, Many Definitions
+; One Program, Many Definitions
 
-# Before you read on, ponder the following changes to your program:
-# How would you change the program to create a 200-by-400 scene?
-# How would you change the program so that it depicts the landing of a green UFO (unidentified flying object)? Drawing the UFO is easy:
-#  (overlay (circle 10 "solid" "green")
-#         (rectangle 40 4 "solid" "green"))
-# How would you change the program so that the background is always blue?
-#
-# How would you change the program so that the rocket lands on a flat rock bed that is 10 pixels higher than the bottom of the scene? Don’t forget to change the scenery, too.
+; Before you read on, ponder the following changes to your program:
+; How would you change the program to create a 200-by-400 scene?
+; How would you change the program so that it depicts the landing of a green UFO (unidentified flying object)? Drawing the UFO is easy:
+;  (overlay (circle 10 "solid" "green")
+;         (rectangle 40 4 "solid" "green"))
+; How would you change the program so that the background is always blue?
+;
+; How would you change the program so that the rocket lands on a flat rock bed that is 10 pixels higher than the bottom of the scene? Don’t forget to change the scenery, too.
 
 (require 2htdp/image)
 (require 2htdp/universe)
