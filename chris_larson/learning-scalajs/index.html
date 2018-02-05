@@ -1,14 +1,18 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <link href="./tutorial-app.css" media="all" rel="stylesheet">
     <meta charset="UTF-8">
     <title>The Scala.js Tutorial</title>
   </head>
   <body>
     <!-- Include Scala.js compiled code -->
+    <script type="text/javascript" src="./target/scala-2.12/scala-js-tutorial-jsdeps.js"></script>
     <script type="text/javascript" src="./target/scala-2.12/scala-js-tutorial-fastopt.js"></script>
+    <script type="text/javascript" src="./target/scala-2.12/scala-js-tutorial-launcher.js"></script>
     <button id="click-me-button" type="button" onclick="addClickedMessage()">
       Click me!
     </button>
+    <div id="d3graph"></div>
   </body>
 </html>
