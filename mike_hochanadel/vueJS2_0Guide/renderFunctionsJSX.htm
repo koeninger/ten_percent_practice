@@ -1,0 +1,149 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="render-basic">
+      <anchored-heading :level="1">howdy</anchored-heading>
+      <anchored-heading :level="2">howdy</anchored-heading>
+      <anchored-heading :level="3">howdy</anchored-heading>
+      <anchored-heading :level="1">howdy</anchored-heading>
+      <anchored-heading :level="2">howdy</anchored-heading>
+    </div>
+    <div id="render-complete">
+      <anchored-heading-again :level="1">mike</anchored-heading-again>
+      <anchored-heading-again :level="2">jim</anchored-heading-again>
+      <anchored-heading-again :level="3">bobby</anchored-heading-again>
+      <anchored-heading-again :level="1">jan</anchored-heading-again>
+      <anchored-heading-again :level="2">jill</anchored-heading-again>
+    </div>
+    <div id="render-repeat">
+      <repeat-component></repeat-component>
+      <render-if-for v-bind:items='items'></render-if-for>
+      <custom-model></custom-model>
+    </div>
+    <div id="functional-example">
+      <functional-component></functional-component>
+    </div>
+  </body>
+  <script>
+    Vue.component('anchored-heading', {
+      render: function(createElement) {
+        return createElement(
+          'h' + this.level,
+          this.$slots.default
+        )
+      },
+      props: {
+        level: {
+          type: Number,
+          required: true
+        }
+      }
+    });
+
+    var renderedBasic = new Vue({
+      el: '#render-basic'
+    });
+
+    var getChildrenTextContext = function(children) {
+      return children.map(function(node) {
+        return node.children ? getChildrenTextContext(node.children) : node.text;
+      }).join('');
+    }
+
+    Vue.component('anchored-heading-again', {
+      render: function(createElement) {
+        var headingId = getChildrenTextContext(this.$slots.default)
+          .toLowerCase()
+          .replace(/\W+/g, '-')
+          .replace(/(^\-|\-$)/g, '');
+
+        return createElement('h' + this.level, [
+          createElement('a', {
+            attrs: {
+              name: headingId,
+              href: '#' + headingId
+            }
+          }, this.$slots.default)
+        ]);
+      },
+      props: {
+        level: {
+          type: Number,
+          required: true
+        }
+      }
+    });
+
+    var renderedComplete = new Vue({
+      el: '#render-complete'
+    });
+
+    Vue.component('repeat-component', {
+      render: function(createElement) {
+        return createElement('div',
+          Array.apply(null, {length:20}).map(function() {
+            return createElement('p', 'howdy');
+          })
+        );
+      }
+    });
+
+    Vue.component('render-if-for', {
+      props: [
+          'items'
+      ],
+      render: function(createElement) {
+        if (this.items.length) {
+          return createElement('ul', this.items.map(function(item) {
+            return createElement('li', item.name);
+          }))
+        } else {
+          return createElement('p', 'No item found.');
+        }
+      }
+    })
+
+    Vue.component('custom-model', {
+      render: function(createElement) {
+        var self = this;
+        return createElement('input', {
+          domPros: {
+            value: self.value
+          },
+          on: {
+            input: function(event) {
+              self.value = event.target.value;
+              self.$emit('input', event.target.value);
+              console.log(self.value);
+            }
+          }
+        })
+      }
+    })
+
+    var renderRepeat = new Vue({
+      el: '#render-repeat',
+      data: {
+        items: [
+          {name: 'bob'},
+          {name: 'mike'},
+          {name: 'jan'}
+        ]
+      }
+    });
+
+    Vue.component('functional-component', {
+      functional: true,
+      render: function(createElement, context) {
+          console.log(context);
+          return createElement('p', 'bob smith');
+      }
+    });
+
+    var functionalComponent = new Vue({
+      el: '#functional-example'
+    });
+  </script>
+</html>
