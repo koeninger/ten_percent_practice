@@ -1,0 +1,4 @@
+Based on lessons about modules from chapter two and some trouble shooting, I ran a python script from our VM. 
+
+[root@8101a49ffe67 ttd]# python post-process.py
+2018-01-30 23:32:30,854 INFO     Processing ETL volume
