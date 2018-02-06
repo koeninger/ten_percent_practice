@@ -1,0 +1,68 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id='directive-example'>
+      <input v-focus></input>
+      <input v-model.trim="enter" v-focus></input>
+    </div>
+    <div id='hook-data' v-demo:foo.a.b="message">
+    </div>
+  </body>
+  <script>
+    Vue.directive('focus', {
+      inserted: function(el) {
+        console.log('inserted by global');
+        el.focus();
+      }
+    });
+
+    Vue.directive('demo', {
+      bind: function(el, binding, vnode) {
+        var s = JSON.stringify;
+        el.innerHTML =
+          'name: '        + s(binding.name) + '<br>' +
+          'value: '       + s(binding.value) + '<br>' +
+          'expression: '  + s(binding.expression) + '<br>' +
+          'argument: '    + s(binding.arg) + '<br>' +
+          'modifiers: '   + s(binding.modifiers) + '<br>' +
+          'vnode keys: '  + Object.keys(vnode).join(', ');
+      }
+    });
+
+    var directiveExample = new Vue({
+      el: '#directive-example',
+      data: {
+        enter: 'enter data'
+      },
+      directives: {
+        focus: {
+          bind: function(el) {
+            console.log('bound');
+          },
+          inserted: function(el) {
+            console.log('inserted');
+            el.focus();
+          },
+          update: function(el) {
+            console.log('updated');
+          },
+          componentUpdated: function(el) {
+            console.log('component updated');
+          },
+          unbind: function(el) {
+            console.log('unbound');
+          }
+        }
+      }
+    });
+
+    var hookData = new Vue({
+      el: '#hook-data',
+      data: {
+        message: 'howdy'
+      }
+    })
+  </script>
+</html>
