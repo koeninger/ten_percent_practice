@@ -52,9 +52,26 @@ export class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: false
+      active: false,
+      seconds: 0
     }
     this.startGame = this.startGame.bind(this);
+  }
+  componentDidMount() {
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
+  }
+  componentWillUnmount() {
+    clearInterval(this.timerID);
+  }
+  tick() {
+    this.setState(function(prevState, props) {
+      return {
+        seconds: prevState.seconds + 1
+      }
+    });
   }
   startGame() {
     this.setState({
@@ -65,7 +82,7 @@ export class Game extends Component {
   render() {
     return (
       <div className="game">
-        <Header bombs={this.props.bombs} startGame={this.startGame} />
+        <Header bombs={this.props.bombs} startGame={this.startGame} seconds={this.state.seconds} />
         <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} />
       </div>
     );
