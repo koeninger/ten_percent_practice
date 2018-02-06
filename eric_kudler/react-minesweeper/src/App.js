@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+
+import { Header } from './components/Header.js';
 import logo from './logo.svg';
 import './App.css';
 
 
 class Box extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div>
@@ -52,73 +51,7 @@ class Board extends Component {
     );
   }
 }
-class GameButton extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <button className="game-button" onClick={this.props.startGame}>(:</button>
-    );
-  }
-}
-class Timer extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      seconds: 0
-    }
-  }
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
-  }
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-  tick() {
-    this.setState(function(prevState, props) {
-      return {
-        seconds: prevState.seconds + 1
-      }
-    });
-  }
-  render() {
-    return (
-      <input className="digital timer" type="text" name="timer" value={this.state.seconds.toString().padStart(3, '0')} />
-    );
-  }
-}
-class Counter extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      bombs: 10
-    }
-  }
-  render() {
-    return (
-      <input className="digital counter" type="text" name="counter" value={this.state.bombs.toString().padStart(3, '0')} />
-    );
-  }
-}
-class Header extends Component {
-  constructor(props) {
-    super(props);
 
-  }
-  render() {
-    return (
-      <div>
-        <Timer />
-        <GameButton startGame={this.props.startGame} />
-        <Counter />
-      </div>
-    );
-  }
-}
 class Game extends Component {
   constructor(props) {
     super(props);
@@ -143,9 +76,6 @@ class Game extends Component {
   }
 }
 class Minesweeper extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <Game width="10" height="10" bombs="10" />
