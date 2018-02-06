@@ -1,0 +1,20 @@
+Basic elements and syntax
+Console examples: 
+
+>>> x = 5
+>>> y = 1.5
+>>> x*y
+7.5
+>>> x=("1","a","2")
+>>> x
+('1', 'a', '2')
+>>> x=("this", "is", "a", "tuple")
+>>> x
+('this', 'is', 'a', 'tuple')
+>>> y=["this", "is", "a", "list"]
+>>> y
+['this', 'is', 'a', 'list']
+>>> type(x)
+<type 'tuple'>
+>>> type(y)
+<type 'list'>
