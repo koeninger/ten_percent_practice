@@ -52,6 +52,16 @@ class Board extends Component {
     );
   }
 }
+class GameButton extends Component {
+  constructor(props) {
+    super(props);
+  }
+  render() {
+    return (
+      <button className="game-button" onClick={this.props.startGame}>(:</button>
+    );
+  }
+}
 class Timer extends Component {
   constructor(props) {
     super(props);
@@ -97,22 +107,36 @@ class Counter extends Component {
 class Header extends Component {
   constructor(props) {
     super(props);
+
   }
   render() {
     return (
       <div>
         <Timer />
-        <button className="game-button">(:</button>
+        <GameButton startGame={this.props.startGame} />
         <Counter />
       </div>
     );
   }
 }
 class Game extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      active: false
+    }
+    this.startGame = this.startGame.bind(this);
+  }
+  startGame() {
+    this.setState({
+      active: true
+    });
+    alert('game started');
+  }
   render() {
     return (
       <div className="game">
-        <Header bombs={this.props.bombs} />
+        <Header bombs={this.props.bombs} startGame={this.startGame} />
         <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} />
       </div>
     );
