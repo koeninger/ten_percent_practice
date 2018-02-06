@@ -207,16 +207,72 @@ def remove_punctuation(string):
 
 def determine_arithmetic(a,b,c):
 	return {
-		str(a) + '+' + str(b) + '=' + str(c) : (a + b) == c,
-		str(a) + '=' + str(b) + '-' + str(c) : a == (b - c),
-		str(a) + '*' + str(b) + '=' + str(c) : (a * b) == c
+		str(a) + ' + ' + str(b) + ' = ' + str(c) : (a + b) == c,
+		str(a) + ' = ' + str(b) + ' - ' + str(c) : a == (b - c),
+		str(a) + ' * ' + str(b) + ' = ' + str(c) : (a * b) == c
 	}
 
 # print determine_arithmetic(1,3,4)
 
 # *************************************************** #
 
+# C-1.27 In Section 1.8, we provided three different implementations of a generator
+# that computes factors of a given integer. The third of those implementations,
+# from page 41, was the most efficient, but we noted that it did not
+# yield the factors in increasing order. Modify the generator so that it reports
+# factors in increasing order, while maintaining its general performance advantages.
 
+# Original
+def factors(n):
+	k = 1
+	while k * k < n:
+		print "-------- " + str(k)
+		if n % k == 0:
+			print "Yielding k : " + str(k)
+			yield k
+			print "Yielding n//k : " + str(n // k)
+			yield n // k
+		k += 1
+	if k * k == n:
+		print "Yielding k : " + str(k)
+		yield k
+
+
+# Original
+def factors_altered(n):
+	k = 1
+	while k * k < n:
+		print "-------- " + str(k)
+		if n % k == 0:
+			print "Yielding k : " + str(k)
+			yield k
+
+
+			print "Yielding n//k : " + str(n // k)
+			yield n // k
+		k += 1
+	if k * k == n:
+		print "Yielding k : " + str(k)
+		yield k
+
+
+for n in factors_altered(100):
+	print ''
+print 10//2
+# *************************************************** #
+
+# C-1.28 The p-norm of a vector v = (v1,v2,...,vn) in n-dimensional space is defined
+# as ||v|| = p√(v(1..p) +v(2..p) + ··· + v(n..p))
+# For the special case of p = 2, this results in the traditional Euclidean
+# norm, which represents the length of the vector. For example, the Euclidean
+# norm of a two-dimensional vector with coordinates (4,3) has a
+# Euclidean norm of √(42 + 32) = √(16+9) = √(25) = 5. Give an implementation
+# of a function named norm such that norm(v, p) returns the p-norm
+# value of v and norm(v) returns the Euclidean norm of v. You may assume
+# that v is a list of numbers.
+
+
+# *************************************************** #
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #

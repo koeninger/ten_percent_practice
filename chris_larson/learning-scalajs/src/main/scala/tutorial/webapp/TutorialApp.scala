@@ -1,10 +1,13 @@
 package tutorial.webapp
 
+import scala.scalajs.js
 import org.scalajs.dom
 import dom.document
 import scala.scalajs.js.annotation.JSExportTopLevel
+import org.singlespaced.d3js.d3
+import org.singlespaced.d3js.Ops._
 
-object TutorialApp {
+object TutorialApp extends js.JSApp {
   @JSExportTopLevel("addClickedMessage")
   def addClickedMessage(): Unit = {
     appendPar(document.body, "You clicked the button!")
@@ -17,7 +20,9 @@ object TutorialApp {
     targetNode.appendChild(parNode)
   }
 
-  def main(args: Array[String]): Unit = {
+  def main(): Unit = {
     appendPar(document.body, "Hello World!")
+    val sel = d3.select("body").append("div")
+    sel.style("background-color", "red");
   }
 }

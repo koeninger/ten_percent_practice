@@ -221,3 +221,70 @@ class list(object)
 
 
 
+
+
+3-5-18
+
+Record of Chapter 2 console prompts
+python -i chap_2_ex_2.py
+testing how scripts an interactive mode communicate
+the value of x is: 500
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__', 'x']
+>>> x + 3
+503
+>>> import tinymodule
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__', 'tinymodule', 'x']
+>>> x = tinymodule.tinyfunction(2)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'module' object has no attribute 'tinyfunction'
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__', 'tinymodule', 'x']
+>>> x = tinymodule.tinyfunction(2)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+AttributeError: 'module' object has no attribute 'tinyfunction'
+
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__']
+>>> import tinymodule
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__', 'tinymodule']
+>>> from tinymodule import tinyfunction
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__', 'tinyfunction', 'tinymodule']
+>>> x = tinymodule.tinyfunction(2)
+testing how modules and interactive mode communicate
+you passed me the parameter 2
+2 squared is 4
+
+import pip
+>>> dir()
+['__builtins__', '__doc__', '__name__', '__package__', 'pip']
+>>> help(pip)
+Help on package pip:
+
+NAME
+    pip
+
+FILE
+    /Library/Python/2.7/site-packages/pip-9.0.1-py2.7.egg/pip/__init__.py
+
+PACKAGE CONTENTS
+    __main__
+    _vendor (package)
+    basecommand
+    baseparser
+    cmdoptions
+    commands (package)
+    compat (package)
+    download
+    exceptions
+    index
+    locations
+    models (package)
+    operations (package)
+    pep425tags
+    req (package)
