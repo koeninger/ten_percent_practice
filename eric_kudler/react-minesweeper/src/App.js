@@ -102,7 +102,7 @@ class Header extends Component {
     return (
       <div>
         <Timer />
-        <button>(:</button>
+        <button className="game-button">(:</button>
         <Counter />
       </div>
     );
