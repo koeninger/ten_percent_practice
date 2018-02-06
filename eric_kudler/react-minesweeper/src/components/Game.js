@@ -58,10 +58,7 @@ export class Game extends Component {
     this.startGame = this.startGame.bind(this);
   }
   componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
+    
   }
   componentWillUnmount() {
     clearInterval(this.timerID);
@@ -77,7 +74,10 @@ export class Game extends Component {
     this.setState({
       active: true
     });
-    alert('game started');
+    this.timerID = setInterval(
+      () => this.tick(),
+      1000
+    );
   }
   render() {
     return (
