@@ -21,3 +21,11 @@ Children controllers inherit from parent controller scope via prototypical inher
  
  classes can be applied by evaluating with a ternary operator, or comma separated key value pairs where the key is the class and the value is the expression. 
  {"editing-item": editing,
+ 
+ ##Communicating Directives
+ 
+ You can require another directive and interact with it by passing in its controller to the directive's link function.
+ The parameters for a link function in a directive are: (scope, element, attrs, ctrl)
+ 
+ 
+ 
