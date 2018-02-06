@@ -21,8 +21,20 @@ table.board tr td {
 	padding: 0px;
 }
 
+div.game {
+	display: inline-block;
+}
 input.digital {
 	background: #1B0000;
 	color: #FF0000;
-	font-size: 1em;
+	font-size: 1.4em;
+	width: 42px;
+	text-align: right;
+}
+
+input.digital .timer {
+	float: left;
+}
+input.digital.counter {
+	float: right;
 }

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
+
+import { Header } from './components/Header.js';
 import logo from './logo.svg';
 import './App.css';
 
 
 class Box extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <div>
@@ -52,65 +51,31 @@ class Board extends Component {
     );
   }
 }
-class Timer extends Component {
+
+class Game extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      seconds: 0
+      active: false
     }
+    this.startGame = this.startGame.bind(this);
   }
-  componentDidMount() {
-    this.timerID = setInterval(
-      () => this.tick(),
-      1000
-    );
-  }
-  componentWillUnmount() {
-    clearInterval(this.timerID);
-  }
-  tick() {
-    this.setState(function(prevState, props) {
-      return {
-        seconds: prevState.seconds + 1
-      }
+  startGame() {
+    this.setState({
+      active: true
     });
+    alert('game started');
   }
-  render() {
-    return (
-      <div>
-        <input className="digital" type="text" name="timer" value={this.state.seconds.toString().padStart(3, '0')} />
-      </div>
-    );
-  }
-}
-class Header extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <div>
-        <Timer />
-        <button>(:</button>
-        <input className="digital" type="text" name="bomb_counter" value="000" />
-      </div>
-    );
-  }
-}
-class Game extends Component {
   render() {
     return (
       <div className="game">
-        <Header bombs={this.props.bombs} />
+        <Header bombs={this.props.bombs} startGame={this.startGame} />
         <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} />
       </div>
     );
   }
 }
 class Minesweeper extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <Game width="10" height="10" bombs="10" />
