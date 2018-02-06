@@ -1,0 +1,25 @@
+How to Design Programs - 1st ed., 2001
+
+Preface:
+Programming is a required skill, requires skills - problem solving, critical reading, analytical thinking
+  active approach to learning - immediate feedback, sense of accomplishment
+Book focuses on design - problem > intermediate products > computational solution
+Design recipes - not starting with a blank sheet of paper/screen
+    1. description of class of problem data
+    2. informal specification of program's behavior
+    3. illustration of 2. with examples
+    4. development of template/layout
+    5. template > complete definition
+    6. error discovery through testing
+all programs - 1. relate one quantity to another; 2. evaluate relationships, subbing values for names
+basic skills have to be developed like anything else
+types of recipes in book - data-driven; generative recursion; accumulation; history sensitivity; abstracting
+must be able to:
+  1. analyze problem statement, usually as a word problem;
+  2. express problem abstractly and with examples;
+  3. formulate statements and comments in precise language
+  4. evaluate/revise after checks/testing
+  5. pay attention to details
+Scheme - language for the book - used for simplicity
+  relational; scaffolded language; scaffolded evaluation
+Iterative refinement - design core program, continually add functions

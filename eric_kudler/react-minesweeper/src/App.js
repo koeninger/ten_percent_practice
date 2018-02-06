@@ -77,9 +77,20 @@ class Timer extends Component {
   }
   render() {
     return (
-      <div>
-        <input className="digital" type="text" name="timer" value={this.state.seconds.toString().padStart(3, '0')} />
-      </div>
+      <input className="digital timer" type="text" name="timer" value={this.state.seconds.toString().padStart(3, '0')} />
+    );
+  }
+}
+class Counter extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      bombs: 10
+    }
+  }
+  render() {
+    return (
+      <input className="digital counter" type="text" name="counter" value={this.state.bombs.toString().padStart(3, '0')} />
     );
   }
 }
@@ -92,7 +103,7 @@ class Header extends Component {
       <div>
         <Timer />
         <button>(:</button>
-        <input className="digital" type="text" name="bomb_counter" value="000" />
+        <Counter />
       </div>
     );
   }
