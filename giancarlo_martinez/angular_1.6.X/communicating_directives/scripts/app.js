@@ -1,4 +1,4 @@
-angular.module('greetings', [])
+angular.module('app', [])
     .directive("welcome", function() {
         return {
             restrict: "E",

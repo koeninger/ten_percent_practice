@@ -1,4 +1,4 @@
-angular.module('functionalities', [])
+angular.module('app', [])
     .directive("entering", function(){
         return function(scope, element, attrs) {
             element.bind("mouseenter", function(){
