@@ -1,7 +1,9 @@
-angular.module('greetings', [])
+angular.module('app', [])
     .directive("welcome", function() {
         return {
             restrict: "E",
+            // isolate scope. allows the directive to be used repeatedly with its own scope.
+            scope: {},
             controller: function($scope) {
                 $scope.words = [];
 
