@@ -35,10 +35,19 @@ object Example {
         case n if(n<=2) =>
           Image.empty
         case n =>
-          multiple(n-1) on star(11, n, 100)
+          multiple(n-1) beside style(star(11, n, 30))
       }
     }
 
-    multiple(6).draw
+    def multiple2(c:Int):Image = {
+      c match {
+        case c if(c<1) =>
+          Image.empty
+        case c =>
+          multiple2(c-1) above multiple(c)
+      }
+    }
+
+    multiple2(11).draw
   }
 }
