@@ -1,0 +1,65 @@
+<html>
+  <head>
+      <script src="node_modules/vue/dist/vue.js"></script>
+  </head>
+  <body>
+    <div id="plugin-example">
+      <p v-my-directive></p>
+      <p>{{ message | capitalize }}</p>
+      <p v-bind:message="message | capitalize | filterA | filterB('Mike', punctuation)"></p>
+    </div>
+  </body>
+  <script>
+    var MyPlugin = {
+      install: function(Vue, options) {
+        Vue.myGlobalMethod = function() {
+          console.log('global method call');
+        };
+        Vue.directive('my-directive', {
+          bind(el,binding,vnode,oldVnode) {
+            console.log(binding);
+          }
+        });
+        Vue.mixin({
+          created: function() {
+            console.log('created');
+          }
+        });
+        Vue.prototype.$myMethod = function(methodOptions) {
+          console.log('my method');
+          if (typeof methodOptions != 'undefined') {
+            console.log(methodOptions);
+          }
+        }
+      }
+    };
+    Vue.use(MyPlugin);
+
+    Vue.filter('capitalize', function(value) {
+      if (!value) {
+        return;
+      }
+      value = value.toString();
+      return value.charAt(0).toUpperCase() + value.slice(1);
+    });
+
+    Vue.filter('filterA', function(value) {
+      console.log(value);
+      return value;
+    });
+
+    Vue.filter('filterB', function(message, name, punctuation) {
+      value = message+' '+name+punctuation;
+      console.log(value);
+      return value;
+    })
+
+    var pluginExample = new Vue({
+      el: '#plugin-example',
+      data: {
+        message: 'howdy',
+        punctuation: '!'
+      },
+    });
+  </script>
+</html>

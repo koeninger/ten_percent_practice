@@ -1,0 +1,29 @@
+Chapter 1: Processing Simple Forms of Data
+1: Languages needed to communicate information and instructions to computers
+Data - information expressed in a programming Languages
+Atomic data - letters, numbers
+Compound data - made up of smaller pieces of Data
+instructions = operations
+primitive operations - add, subtract, multiply, etc.  - words of the language
+programs - combined primitive operations - forming sentences with the words
+
+Intermission - downloaded/installed DR Racket - using how to design programs language option
+
+2: Scheme - (+ 5 5) function, then order of numbers (/8 12)
+  Scheme allows nesting of expressions (* (+ 2 2) (/ (* (+ 3 5) (/ 30 10)) 2)) = 48
+   (sqrt A) (expt A B) (remainder A B) (log A) (sin A)
+  circle area calculation: (define (area-of-disk r)
+  (* 3.14 (+ r r)))
+  (define (area-of-disk r)
+  (* 3.14 (* r r)));
+(area-of-disk 5) = 78.5
+
+//area of ring calculation
+(define (area-of-disk r)
+  (* 3.14 (* r r)))
+(area-of-disk 5)
+(define (area-of-ring outer inner)
+  (- (area-of-disk outer)
+  (area-of-disk inner)))
+(area-of-ring 5 3)
+//stopped on pg. 10

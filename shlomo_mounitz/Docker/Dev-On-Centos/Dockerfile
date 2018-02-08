@@ -19,7 +19,9 @@ EXPOSE 80
 COPY files/test.test.conf /etc/httpd/sites-enabled/test.test.conf
 
 # Simple startup script to avoid some issues observed with container restart
+RUN usermod --non-unique --uid 502 apache
 ADD files/run-httpd.sh /run-httpd.sh
+
 RUN chmod -v +x /run-httpd.sh
 
 CMD ["/run-httpd.sh"]
