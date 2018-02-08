@@ -1,1 +1,29 @@
+Learning to Design Programs is primarily about the study of principles and the acquisition of transferable skills
+
+Systematic Program Design - mix of 2 concepts (design recipes and iterative refinement)
+
+Basic Steps of a Function Design Recipe: 
+  1. From Problem Analysis to Data Definitions: 
+    identify the information that must be represented and how it is represented in the chosen programming language. Formulate data definitions and illustrate them with examples.
+    analyze a problem statement, typically stated as a word problem
+  2. Signature, Purpose Statement, Header:
+    state what kind of data the desired function consumes and produces. Formulate a concise answer to the question what the function computes. Define a stub that lives up to the signature
+    extract and express its essence, abstractly
+  3. Functional Examples: 
+    work through examples that illustrate the function's purpose
+    illustrate the essence with examples
+  4. Function Template:
+    translate the data definitions into an outline of the function
+    make outlines and plans based on this analysis
+  5. Function Definition: 
+    fill in the gaps in the function template. Exploit the purpose statement and the examples
+    evaluate results with respect to expected outcomes
+  6. Testing:
+    articulate the examples as tests and ensure that the function passes all. doing so discovers mistakes. tests also supplement examples in that they help others read and understand the definition when the need arises- and it will arise for any serious program
+    revise the product in light of failed checks and tests 
+
+Iterative refinement: problems are complex and multifaceted 
+  recommends strippng away all inessential details at first and finding a solution for the remaining one problem
+  refinement step adds in one of these omitted details and re-solves the expanded problem, using the existing soluton as much as possible
+  a repitition (iteration) of the refinement steps eventually leads to a complete solution 
 
