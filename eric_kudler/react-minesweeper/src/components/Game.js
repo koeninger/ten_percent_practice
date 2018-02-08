@@ -72,8 +72,12 @@ export class Game extends Component {
   }
   startGame() {
     this.setState({
-      active: true
+      active: true,
+      seconds: 0
     });
+    if (this.timerID) {
+      clearInterval(this.timerID);
+    }
     this.timerID = setInterval(
       () => this.tick(),
       1000
