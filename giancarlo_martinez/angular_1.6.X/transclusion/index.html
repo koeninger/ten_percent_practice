@@ -2,10 +2,12 @@
 <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Communicating Between Directives</title>
+        <title>Simple Transclusion</title>
     </head>
     <body ng-app="app">
-        <welcome hello howdy hi>Say something!</welcome>
+        <welcome>
+            <button>Click this button</button>
+        </welcome>
         <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
         <script src="scripts/app.js" type="text/javascript"></script>
     </body>

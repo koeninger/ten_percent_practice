@@ -69,3 +69,7 @@ cancelled_on IS NULL
 
 
 -- Update: all campaigns from one sales rep to another 
+
+UPDATE sales_reps
+SET user_id = '***'
+WHERE user_id = '***' 
