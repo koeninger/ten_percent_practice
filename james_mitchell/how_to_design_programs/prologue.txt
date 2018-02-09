@@ -11,3 +11,78 @@ You recognize it as such because it starts with the “define” keyword.
 Second, (FunctionName ArgumentExpression) is a function application.
 The first part tells DrRacket which function you wish to use. The second part
 is the input to which you want to apply the function.
+
+While the order of constant definitions matters, it does not matter where you
+place constant definitions relative to function definitions. Indeed, if your
+program consists of many function definitions, their order doesn’t matter
+either, though it is good to introduce all constant definitions first, followed
+by the definitions of functions in decreasing order of importance.
+
+
+; constants
+(define WIDTH  200)
+(define HEIGHT  400)
+(define MTSCN  (empty-scene WIDTH HEIGHT))
+(define ROCKET . )
+(define ROCKET-CENTER-TO-TOP
+  (- HEIGHT (/ (image-height ROCKET) 2)))
+(define ROCKET-CENTER
+  (/ WIDTH 2))
+
+
+; functions
+(define (picture-of-rocket.v5 h)
+  (cond
+    [(<= h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET ROCKET-CENTER h MTSCN)]
+    [(> h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET ROCKET-CENTER ROCKET-CENTER-TO-TOP MTSCN)]))
+
+
+; constants
+(define WIDTH  200)
+(define HEIGHT  400)
+(define BACKGROUND "blue")
+(define MTSCN  (empty-scene WIDTH HEIGHT BACKGROUND))
+(define ROCKET
+    (overlay (circle 10 "solid" "green")
+    (rectangle 40 4 "solid" "green")))
+(define ROCKET-CENTER-TO-TOP
+    (- HEIGHT (/ (image-height ROCKET) 2)))
+(define CENTER-WIDTH
+    (/ WIDTH 2))
+
+; functions
+(define (picture-of-rocket.v5 t)
+  (cond
+ [(<= t ROCKET-CENTER-TO-TOP)
+  (place-image ROCKET CENTER-WIDTH t MTSCN)]
+ [(> t ROCKET-CENTER-TO-TOP)
+  (place-image ROCKET CENTER-WIDTH ROCKET-CENTER-TO-TOP MTSCN
+
+
+; constants
+(define WIDTH  200)
+(define HEIGHT  400)
+(define BACKGROUND "blue")
+(define MTSCN  (empty-scene WIDTH HEIGHT BACKGROUND))
+(define ROCKET
+    (overlay (circle 10 "solid" "green")
+    (rectangle 40 4 "solid" "green")))
+(define ROCKET-CENTER-TO-TOP
+    (- HEIGHT (/ (image-height ROCKET) 2)))
+(define CENTER-WIDTH
+    (/ WIDTH 2))
+(define V 3)
+
+
+; functions
+(define (picture-of-rocket.v6 t)
+    (cond
+        [(<= t ROCKET-CENTER-TO-TOP)
+            (place-image ROCKET CENTER-WIDTH t MTSCN)]
+        [(> t ROCKET-CENTER-TO-TOP)
+            (place-image ROCKET CENTER-WIDTH ROCKET-CENTER-TO-TOP MTSCN)]))
+
+(define (distance t)
+    (* V t))
