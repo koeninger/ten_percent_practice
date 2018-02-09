@@ -13,22 +13,10 @@ export class Box extends Component {
 export class Board extends Component {
   constructor(props) {
     super(props);
-    this.state = {
-      grid: this.generateGrid(props.width, props.height)
-    }
   }
-  generateGrid(width, height) {
-    let grid = [];
-    for (let y = 0; y < width; y++) {
-      grid.push([]);
-      for (let x = 0; x < height; x++) {
-        grid[y].push([<Box key={y * width + x} />])
-      }
-    }
-    return grid;
-  }
+  
   render() {
-    var rows = this.state.grid.map(function (item, i){
+    var rows = this.props.grid.map(function (item, i){
       var entry = item.map(function (element, j) {
         return ( 
           <td key={j}>{element}</td>
@@ -53,12 +41,10 @@ export class Game extends Component {
     super(props);
     this.state = {
       active: false,
+      grid: this.generateGrid(props.width, props.height),
       seconds: 0
     }
     this.startGame = this.startGame.bind(this);
-  }
-  componentDidMount() {
-    
   }
   componentWillUnmount() {
     clearInterval(this.timerID);
@@ -83,11 +69,21 @@ export class Game extends Component {
       1000
     );
   }
+  generateGrid(width, height) {
+    let grid = [];
+    for (let y = 0; y < width; y++) {
+      grid.push([]);
+      for (let x = 0; x < height; x++) {
+        grid[y].push([<Box key={y * width + x} />])
+      }
+    }
+    return grid;
+  }
   render() {
     return (
       <div className="game">
         <Header bombs={this.props.bombs} startGame={this.startGame} seconds={this.state.seconds} />
-        <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} />
+        <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} grid={this.state.grid}/>
       </div>
     );
   }

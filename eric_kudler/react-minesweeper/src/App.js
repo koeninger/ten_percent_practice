@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 
 import { Game } from './components/Game.js';
-import { Header } from './components/Header.js';
 import logo from './logo.svg';
 import './App.css';
 
