@@ -18,7 +18,20 @@ object Example {
         forward(50), turn(90.degrees),
         forward(50))
 
-    Turtle.draw(instructions).draw
+  def polygon(sides:Int, sideLength:Int): Image = {
+
+    val rotation = Angle.one / sides
+    def loop(n:Int): List[Instruction] =
+      n match {
+        case 0 => Nil
+        case n => turn(rotation) :: forward(sideLength) :: loop(n-1)
+      }
+
+    Turtle.draw(loop(sides))
+  }
+
+  polygon.draw
+    //Turtle.draw(instructions).draw
 
   }
 }
