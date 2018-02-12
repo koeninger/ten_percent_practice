@@ -36,8 +36,9 @@ export class Board extends Component {
               x={element.x}
               y={element.y}
               open={element.open}
-              openBox={self.openBox}
-              value={element.value} />
+              is_bomb={element.is_bomb}
+              bomb_neighbors={element.bomb_neighbors}
+              openBox={self.openBox} />
           </td>
         );
       });
@@ -110,7 +111,8 @@ export class Game extends Component {
           y: y,
           key: y * width + x,
           open: false,
-          value: 'E'
+          bomb_neighbors: 0,
+          is_bomb: false
         }
         grid[y].push(box)
       }
