@@ -12,7 +12,7 @@ export class Box extends Component {
   render() {
     return (
       <div>
-        <button className="box" onClick={this.openBox}></button>
+        <button className={"box " + (this.props.open ? 'open' : '')} onClick={this.openBox}></button>
       </div>
     );
   }
@@ -20,6 +20,7 @@ export class Box extends Component {
 export class Board extends Component {
   constructor(props) {
     super(props);
+    this.openBox = this.openBox.bind(this);
   }
   openBox(x, y) {
     this.props.openBox(x, y);
@@ -28,13 +29,13 @@ export class Board extends Component {
     var self = this;
     var rows = this.props.grid.map(function (item, i){
       var entry = item.map(function (element, j) {
-        console.log(element);
         return ( 
           <td key={j}>
             <Box 
               key={element.key}
               x={element.x}
               y={element.y}
+              open={element.open}
               openBox={self.openBox}
               value={element.value} />
           </td>
@@ -63,6 +64,8 @@ export class Game extends Component {
       seconds: 0
     }
     this.startGame = this.startGame.bind(this);
+    this.tick = this.tick.bind(this);
+    this.openBox = this.openBox.bind(this);
   }
   componentWillUnmount() {
     clearInterval(this.timerID);
@@ -87,6 +90,16 @@ export class Game extends Component {
       1000
     );
   }
+  openBox(x, y) {
+    this.setState(function(prevState, props) {
+      let grid = prevState.grid;
+      grid[y][x].open = true;
+      return {
+        grid: grid
+      }
+    });
+
+  }
   generateGrid(width, height) {
     let grid = [];
     for (let y = 0; y < width; y++) {
@@ -108,7 +121,7 @@ export class Game extends Component {
     return (
       <div className="game">
         <Header bombs={this.props.bombs} startGame={this.startGame} seconds={this.state.seconds} />
-        <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} grid={this.state.grid}/>
+        <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} grid={this.state.grid} openBox={this.openBox}/>
       </div>
     );
   }

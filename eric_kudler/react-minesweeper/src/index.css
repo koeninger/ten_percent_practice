@@ -38,3 +38,7 @@ input.digital .timer {
 input.digital.counter {
 	float: right;
 }
+button.open {
+	background: #C0C0C0;
+	border: 1px solid #808080;
+}
