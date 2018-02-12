@@ -1,0 +1,46 @@
+Programs consist of expressions.
+
+string-append
+  > (string append "hello" " " "world")
+  "hello world"
+  
+string-length
+  > (+ (string-length "hello world") 20)
+  31
+
+Boolean: neither a number nor a string, comes in only two varieties: #true #false
+
+>(and #true #true)
+#true
+>(and #true #false)
+#fasle
+>(or #true #false)
+#true
+>(or #false #false)
+#false
+>(not #false)
+#true 
+
+(* (image-width .) (image-height .))
+1176 
+
+- green solid circle
+(circle 10 "solid" "green")
+
+-blue outlined rectangle
+(rectangle 30 20 "outline" "blue")
+
+-rectangle over circle 
+(overlay (circle 5 "solid" "red")
+         (rectangle 20 20 "solid" "blue"))
+         
+-circle over rectangle 
+(overlay (rectangle 20 20 "solid" "blue")
+         (circle 5 "solid" "red"))
+         
+         
+ INPUTS AND OUTPUTS 
+
+
+(image-width (overlay (rectangle 20 20 "solid" "blue")
+                      (circle 5 "solid" "red")))
