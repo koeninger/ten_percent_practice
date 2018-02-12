@@ -22,7 +22,7 @@ export class Board extends Component {
     super(props);
   }
   openBox(x, y) {
-    console.log(x,y)
+    this.props.openBox(x, y);
   }
   render() {
     var self = this;
@@ -92,7 +92,7 @@ export class Game extends Component {
     for (let y = 0; y < width; y++) {
       grid.push([]);
       for (let x = 0; x < height; x++) {
-        var box = {
+        let box = {
           x: x,
           y: y,
           key: y * width + x,
