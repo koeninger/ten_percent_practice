@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import { Header } from './Header.js';
 
 export class Box extends Component {
+  constructor(props) {
+    super(props);
+    this.openBox = this.openBox.bind(this);
+  }
+  openBox() {
+    this.props.openBox(this.props.x, this.props.y);
+  }
   render() {
     return (
       <div>
-        <button className="box"></button>
+        <button className="box" onClick={this.openBox}></button>
       </div>
     );
   }
@@ -14,12 +21,23 @@ export class Board extends Component {
   constructor(props) {
     super(props);
   }
-  
+  openBox(x, y) {
+    console.log(x,y)
+  }
   render() {
+    var self = this;
     var rows = this.props.grid.map(function (item, i){
       var entry = item.map(function (element, j) {
+        console.log(element);
         return ( 
-          <td key={j}>{element}</td>
+          <td key={j}>
+            <Box 
+              key={element.key}
+              x={element.x}
+              y={element.y}
+              openBox={self.openBox}
+              value={element.value} />
+          </td>
         );
       });
       return (
@@ -74,7 +92,14 @@ export class Game extends Component {
     for (let y = 0; y < width; y++) {
       grid.push([]);
       for (let x = 0; x < height; x++) {
-        grid[y].push([<Box key={y * width + x} />])
+        var box = {
+          x: x,
+          y: y,
+          key: y * width + x,
+          open: false,
+          value: 'E'
+        }
+        grid[y].push(box)
       }
     }
     return grid;
