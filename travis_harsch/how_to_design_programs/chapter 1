@@ -26,4 +26,3 @@ Intermission - downloaded/installed DR Racket - using how to design programs lan
   (- (area-of-disk outer)
   (area-of-disk inner)))
 (area-of-ring 5 3)
-//stopped on pg. 10
