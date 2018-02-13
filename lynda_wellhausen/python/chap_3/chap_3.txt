@@ -18,3 +18,31 @@ Console examples:
 <type 'tuple'>
 >>> type(y)
 <type 'list'>
+
+>>> list = ['1', '2', '3', '4', '1', '1','3','5']
+>>> set(list)
+set(['1', '3', '2', '5', '4'])
+>>> zed = "lowercase string"
+>>> zed.upper()
+'LOWERCASE STRING'
+>>> shopping_list = ["eggs","milk","bread"]
+>>> shopping_list.append("butter");
+>>> shopping_list
+['eggs', 'milk', 'bread', 'butter']
+>>> a = 1
+>>> b = 2
+>>> a > b
+False
+>>> b > a
+True
+>>> [1,2,3] > [1,2]
+True
+>>> [1,2] > [1,2,3]
+False
+>>> bool('foo')
+True
+>>> print 'foo' if False else 'bar'
+bar
+>>>
+
+

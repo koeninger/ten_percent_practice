@@ -1,0 +1,3 @@
+2-12-18
+Chapter 4 is a "grand tour" of the features of Python. Analyzed a web crawler program today. Spider.py contains the beginning of an example program from the book.
+*Please note that spider is not an actual practice problem for me. I'm studying it's different components so it helps me to write it out and run it. 

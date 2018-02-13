@@ -1,0 +1,84 @@
+Programs consist of expressions.
+
+string-append
+  > (string append "hello" " " "world")
+  "hello world"
+  
+string-length
+  > (+ (string-length "hello world") 20)
+  31
+
+Boolean: neither a number nor a string, comes in only two varieties: #true #false
+
+>(and #true #true)
+#true
+>(and #true #false)
+#fasle
+>(or #true #false)
+#true
+>(or #false #false)
+#false
+>(not #false)
+#true 
+
+(* (image-width .) (image-height .))
+1176 
+
+- green solid circle
+(circle 10 "solid" "green")
+
+-blue outlined rectangle
+(rectangle 30 20 "outline" "blue")
+
+-rectangle over circle 
+(overlay (circle 5 "solid" "red")
+         (rectangle 20 20 "solid" "blue"))
+         
+-circle over rectangle 
+(overlay (rectangle 20 20 "solid" "blue")
+         (circle 5 "solid" "red"))
+
+- place-image (places an image into a scene) empty-scene (creates a scene)
+(place-image (circle 5 "solid" "green")
+              50 80
+              (empty-scene 100 100)) 
+
+- Functions
+(define (FunctionName InputName) BodyExpression) 
+function definition: define
+parameter (represents the input of the function): (functionName InputName)
+body (computes the output of the function for a specific input): BodyExpression 
+
+(FunctionName ArgumentExpression)
+function application
+functionname: which functions to use
+argumentexpression: the input to which to apply to the function 
+
+
+
+- places the image on the scene
+(place-image . 50 20 (empty-scene 100 60))
+(place-image . 50 30 (empty-scene 100 60))
+(place-image . 50 40 (empty-scene 100 60))
+
+- function for a scene with an image, height is the parameter and function tells where to place the image 
+(define (pictureofrocket height)
+  (place-image . 50 height (empty-scene 100 60)))
+
+(pictureofrocket 0)
+(pictureofrocket 10)
+(pictureofrocket 20)
+(pictureofrocket 30)
+
+- animate expression 
+(require 2htdp/universe) 
+(animate pictureofrocket) 
+animate starts a clock and counts the number of ticks (28 times per second) and applies the function to the clock tick and displays on a canvas 
+image appears at height 0, 1, 2, and so on displaying them rapidly 
+
+- conditional expression: 
+(cond
+  [conditionexpression1 resultexpress1]
+  [conditionexpression2 resultexpression2]
+  ...
+  [conditionexpressionN resultexpressionN]) 
