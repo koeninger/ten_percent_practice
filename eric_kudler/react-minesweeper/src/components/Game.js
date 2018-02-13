@@ -83,6 +83,8 @@ export class Game extends Component {
       active: true,
       seconds: 0
     });
+
+    //set/reset timer
     if (this.timerID) {
       clearInterval(this.timerID);
     }
@@ -90,6 +92,23 @@ export class Game extends Component {
       () => this.tick(),
       1000
     );
+
+    //set bombs
+    let grid = this.state.grid;
+    let bombs = this.props.bombs;
+    while (bombs > 0) {
+      let x = Math.floor(Math.random() * this.props.width);
+      let y = Math.floor(Math.random() * this.props.height);
+      if (grid[y][x].is_bomb) {
+        continue;
+      }
+
+      grid[y][x].is_bomb = true;
+      this.setState({
+        grid: grid
+      });
+      bombs--;
+    }
   }
   openBox(x, y) {
     this.setState(function(prevState, props) {
@@ -110,9 +129,9 @@ export class Game extends Component {
           x: x,
           y: y,
           key: y * width + x,
+          is_bomb: false,
           open: false,
-          bomb_neighbors: 0,
-          is_bomb: false
+          bomb_neighbors: 0
         }
         grid[y].push(box)
       }
