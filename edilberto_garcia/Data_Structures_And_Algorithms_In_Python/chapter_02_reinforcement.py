@@ -55,6 +55,25 @@ class Flower:
 
 # *************************************************** #
 
+# R-2.5 Use the techniques of Section 1.7 to revise the 'charge' and 'make_payment'
+# methods of the CreditCard class to ensure that the caller sends a number
+# as a parameter.
+
+
+
+ def charge(self, price):
+ """Charge given price to the card, assuming sufficient credit limit.
+
+ Return True if charge was processed.
+ Return False and assess 5 fee if charge is denied.
+ """
+ success = super().charge(price) # call inherited method
+ if not success:
+ self. balance += 5 # assess penalty
+ return success # caller expects return value
+
+
+
 
 # *************************************************** #
 # *************************************************** #
