@@ -15,7 +15,9 @@ RUN yum -y --setopt=tsflags=nodocs update && \
 
 EXPOSE 80
 
+
 RUN useradd -ms /bin/bash fmpub
+RUN chmod +x -R /home/fmpub/
 COPY files/userdir.conf /etc/httpd/conf.d/userdir.conf
 COPY files/test.test.conf /etc/httpd/conf.d/test.test.conf
 COPY files/test.test.conf /etc/httpd/sites-enabled/test.test.conf
