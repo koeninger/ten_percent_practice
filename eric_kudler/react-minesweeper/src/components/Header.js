@@ -9,9 +9,6 @@ export class GameButton extends Component {
 }
 
 export class Timer extends Component {
-  constructor(props) {
-    super(props);
-  }
   render() {
     return (
       <input className="digital timer" type="text" name="timer" value={this.props.seconds.toString().padStart(3, '0')} />

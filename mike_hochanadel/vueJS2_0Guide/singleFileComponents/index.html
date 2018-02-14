@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mike's Single File Component Example</title>
+  <script src="https://unpkg.com/vue"></script>
+</head>
+<body>
+  <div id="app">
+    <single-file-component></single-file-component>
+  </div>
+  <script type="module" src="SingleFileComponent.js"></script>
+  <script type="module" src="app.js"></script>
+  <script nomodule>
+    document.getElementById("app").innerHTML = "Your browser does not like Javascript";
+  </script>
+</body>
+</html>

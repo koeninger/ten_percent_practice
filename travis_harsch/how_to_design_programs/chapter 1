@@ -26,4 +26,48 @@ Intermission - downloaded/installed DR Racket - using how to design programs lan
   (- (area-of-disk outer)
   (area-of-disk inner)))
 (area-of-ring 5 3)
-//stopped on pg. 10
+
+
+2.2.1
+(define (fahrenheit->celsius t)
+  (* 5/9 (- t 32)))
+(fahrenheit->celsius 32)
+
+2.2.2
+(define (dollar->euro d)
+  (* 0.81 d))
+(dollar->euro 100)
+
+2.2.3
+(define (triangle height width)
+(* 0.5 width height))
+(triangle 10 10)
+(triangle 100 30)
+
+
+2.2.4
+(define (convert3 o t h)
+(+ o
+  (* 10 t)
+  (* 100 h)))
+(convert3 5 5 7)
+
+2.2.5
+(define f n)
+(+ (/ n 3) 2))
+
+1. 
+(define (f n)
+(+ 10 (* n n)))
+(f 10)
+
+2. 
+(define (f n)
+(+ 20 (* n n .5)))
+(f 10)
+
+3.
+(define (f n)
+(- 2 (/ 1 n)))
+(f 10)
+Through pg 11 excercises
