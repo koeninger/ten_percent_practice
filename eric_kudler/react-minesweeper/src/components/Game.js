@@ -2,10 +2,17 @@ import React, { Component } from 'react';
 import { Header } from './Header.js';
 
 export class Box extends Component {
+  constructor(props) {
+    super(props);
+    this.openBox = this.openBox.bind(this);
+  }
+  openBox() {
+    this.props.openBox(this.props.x, this.props.y);
+  }
   render() {
     return (
       <div>
-        <button className="box"></button>
+        <button className={"box " + (this.props.open ? 'open' : '')} onClick={this.openBox}></button>
       </div>
     );
   }
@@ -13,13 +20,26 @@ export class Box extends Component {
 export class Board extends Component {
   constructor(props) {
     super(props);
+    this.openBox = this.openBox.bind(this);
   }
-  
+  openBox(x, y) {
+    this.props.openBox(x, y);
+  }
   render() {
+    var self = this;
     var rows = this.props.grid.map(function (item, i){
       var entry = item.map(function (element, j) {
         return ( 
-          <td key={j}>{element}</td>
+          <td key={j}>
+            <Box 
+              key={element.key}
+              x={element.x}
+              y={element.y}
+              open={element.open}
+              is_bomb={element.is_bomb}
+              bomb_neighbors={element.bomb_neighbors}
+              openBox={self.openBox} />
+          </td>
         );
       });
       return (
@@ -45,6 +65,8 @@ export class Game extends Component {
       seconds: 0
     }
     this.startGame = this.startGame.bind(this);
+    this.tick = this.tick.bind(this);
+    this.openBox = this.openBox.bind(this);
   }
   componentWillUnmount() {
     clearInterval(this.timerID);
@@ -61,6 +83,8 @@ export class Game extends Component {
       active: true,
       seconds: 0
     });
+
+    //set/reset timer
     if (this.timerID) {
       clearInterval(this.timerID);
     }
@@ -68,13 +92,48 @@ export class Game extends Component {
       () => this.tick(),
       1000
     );
+
+    //set bombs
+    let grid = this.state.grid;
+    let bombs = this.props.bombs;
+    while (bombs > 0) {
+      let x = Math.floor(Math.random() * this.props.width);
+      let y = Math.floor(Math.random() * this.props.height);
+      if (grid[y][x].is_bomb) {
+        continue;
+      }
+
+      grid[y][x].is_bomb = true;
+      this.setState({
+        grid: grid
+      });
+      bombs--;
+    }
+  }
+  openBox(x, y) {
+    this.setState(function(prevState, props) {
+      let grid = prevState.grid;
+      grid[y][x].open = true;
+      return {
+        grid: grid
+      }
+    });
+
   }
   generateGrid(width, height) {
     let grid = [];
     for (let y = 0; y < width; y++) {
       grid.push([]);
       for (let x = 0; x < height; x++) {
-        grid[y].push([<Box key={y * width + x} />])
+        let box = {
+          x: x,
+          y: y,
+          key: y * width + x,
+          is_bomb: false,
+          open: false,
+          bomb_neighbors: 0
+        }
+        grid[y].push(box)
       }
     }
     return grid;
@@ -83,7 +142,7 @@ export class Game extends Component {
     return (
       <div className="game">
         <Header bombs={this.props.bombs} startGame={this.startGame} seconds={this.state.seconds} />
-        <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} grid={this.state.grid}/>
+        <Board width={this.props.width} height={this.props.height} bombs={this.props.bombs} grid={this.state.grid} openBox={this.openBox}/>
       </div>
     );
   }
