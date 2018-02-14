@@ -1,0 +1,47 @@
+Note on Numbers The word “Number” refers to a wide variety of numbers, including
+counting numbers, integers, rational numbers, real numbers, and even complex
+numbers. For most uses, you can safely equate Number with the number line from
+elementary school, though on occasion this translation is too imprecise. If we
+wish to be precise, we use appropriate words: Integer, Rational, and so on. We
+may even refine these notions using such standard terms as PositiveInteger,
+NonnegativeNumber, NegativeNumber, and so on. End
+
+
+Exercise 1:
+(define x 3)
+(define y 4)
+
+Now imagine that x and y are the coordinates of a Cartesian point. Write down
+an expression that computes the distance of this point to the origin, that is,
+a point with the coordinates (0,0).
+
+(sqrt (+ (sqr x) (sqr y)))
+
+
+Exercise 2:
+(define prefix "hello")
+(define suffix "world")
+
+Then use string primitives to create an expression that concatenates prefix and
+suffix and adds "_" between them. When you run this program, you will see
+"hello_world" in the interactions area.
+
+>  (string-append prefix "_" suffix)
+"hello_world"
+
+Exercise 3:
+(define str "helloworld")
+(define i 5)
+
+Then create an expression using string primitives that adds "_" at position i.
+In general this means the resulting string is longer than the original one;
+here the expected result is "hello_world".
+
+(string-append (substring str 0 i) "_" (substring str i (string-length str)))
+
+Exercise 4:
+Use the same setup as in exercise 3 to create an expression that deletes the
+ith position from str. Clearly this expression creates a shorter string than
+the given one.
+
+(string-append (substring str 0 (- i 1)) (substring str (+ i 1) (string-length str)))
