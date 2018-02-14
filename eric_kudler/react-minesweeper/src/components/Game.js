@@ -12,7 +12,7 @@ export class Box extends Component {
   render() {
     return (
       <div>
-        <button className={"box " + (this.props.open ? 'open' : '')} onClick={this.openBox}></button>
+        <button className={"box " + (this.props.open ? 'open ' : '') + (this.props.open && this.props.is_bomb ? 'bomb' : '')} onClick={this.openBox}>{this.props.bomb_neighbors > 0 ? this.props.bomb_neighbors : ''}</button>
       </div>
     );
   }
