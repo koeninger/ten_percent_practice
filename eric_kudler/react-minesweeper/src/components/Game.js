@@ -93,8 +93,18 @@ export class Game extends Component {
       1000
     );
 
-    //set bombs
+    //reset grid
     let grid = this.state.grid;
+    for (let y = 0; y < this.props.width; y++) {
+      grid.push([]);
+      for (let x = 0; x < this.props.height; x++) {
+        grid[y][x].is_bomb = false;
+        grid[y][x].open = false;
+        grid[y][x].bomb_neighbors = 0;
+      }
+    }
+
+    //set bombs
     let bombs = this.props.bombs;
     while (bombs > 0) {
       let x = Math.floor(Math.random() * this.props.width);
