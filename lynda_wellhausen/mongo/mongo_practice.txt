@@ -1,0 +1,66 @@
+Learning about the aggregate pipline. 
+
+Example 1: 
+
+                    "geolocation": {
+                        "collection": "geolocation",
+                        "pipeline": [
+                            {
+                                "$group": {
+                                    "_id": {
+                                        "day": "$day",
+                                        "creative_name": "$creative_name",
+                                        "campaign_name": "$campaign_name"
+                                    },
+
+                                    "clicks": {
+                                        "$sum": "$clicks"
+                                    },
+                                    "impressions": {
+                                        "$sum": "$impressions"
+                                    },
+                                    "metro": {
+                                        "$push": {
+                                            "metro":"$metro",
+                                            "clicks": "$clicks",
+                                            "impressions": "$impressions"
+                                        }
+                                    },
+                                    "country": {
+                                        "$last": "$country"
+                                    },
+                                    "city": {
+                                        "$push": {
+                                            "city": "$city",
+                                            "clicks": "$clicks",
+                                            "impressions": "$impressions"
+                                        }
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                }
+            },
+        
+Returns: 
+            {
+        "_id": {
+            "day": "2018-02-13",
+            "creative_name": "Advanced TV - Video Contextual - (678546)"
+        },
+        "clicks": 0,
+        "impressions": 51,
+        "metro": [
+            {
+                "metro": "Green Bay-Appleton WI",
+                "clicks": 0,
+                "impressions": 0
+            },
+            "country": "United States",
+            "city": [
+                {
+                    "city": "Abrams",
+                    "clicks": 0,
+                    "impressions": 0
+                }
