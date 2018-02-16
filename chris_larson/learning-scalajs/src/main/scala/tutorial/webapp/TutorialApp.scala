@@ -49,7 +49,7 @@ object TutorialApp extends js.JSApp {
     val tr = d3.select("body").append("table").selectAll("tr")
       .data(matrix)
       .enter().append("tr")
-    println("hihi")
+
     val td = tr.selectAll("td")
       .data( (d:js.Array[Int]) => { println(d); d; } )
       .enter().append("td")
