@@ -76,9 +76,20 @@ argumentexpression: the input to which to apply to the function
 animate starts a clock and counts the number of ticks (28 times per second) and applies the function to the clock tick and displays on a canvas 
 image appears at height 0, 1, 2, and so on displaying them rapidly 
 
-- conditional expression: 
+- conditional expression: consists of as many conditional lines as needed
 (cond
   [conditionexpression1 resultexpress1]
   [conditionexpression2 resultexpression2]
   ...
   [conditionexpressionN resultexpressionN]) 
+  
+- cond that places the image at 60 if height greater than 60 or height if lower than 60
+(define (picture-of-rocket.v2 height)
+  (cond
+    [(<= height 60)
+     (place-image  50 height
+                  (empty-scene 100 60))]
+    [(> height 60)
+     (place-image  50 60
+                  (empty-scene 100 60))]))
+
