@@ -70,4 +70,10 @@ Intermission - downloaded/installed DR Racket - using how to design programs lan
 (define (f n)
 (- 2 (/ 1 n)))
 (f 10)
-Through pg 11 excercises
+
+2.3 Word Problems
+Rarely get straightforward requests - prebuilt formulas
+
+(define (wage h)
+  (* 12 h))
+(wage 40)
