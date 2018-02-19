@@ -45,3 +45,57 @@ ith position from str. Clearly this expression creates a shorter string than
 the given one.
 
 (string-append (substring str 0 (- i 1)) (substring str (+ i 1) (string-length str)))
+
+
+Exercise 5. Use the 2htdp/image library to create the image of a simple boat
+or tree. Make sure you can easily change the scale of the entire image.
+
+(overlay/xy (circle 10 "solid" "green") 6 15
+            (rectangle 8 40 "solid" "brown"))
+
+
+
+Exercise 6: Create an expression that counts the number of pixels in the image
+(define cat *image*)
+
+(* (image-width cat) (image-height cat))
+
+
+Exercise 7. Boolean expressions can express some everyday problems. Suppose you
+want to decide whether today is an appropriate day to go to the mall. You go to
+the mall either if it is not sunny or ifNadeem Hamid suggested this formulation
+of the exercise. today is Friday (because that is when stores post new sales
+items).
+
+(define sunny #true)
+(define friday #false)
+
+Now create an expression that computes whether sunny is false or friday is true.
+So in this particular case, the answer is #false. (Why?)
+
+(or (and sunny #false) (and friday #true))
+
+
+(if (= x 0) 0 (/ 1 x))
+
+This if expression contains (= x 0), 0, and (/ 1 x), three so-called
+sub-expressions. The evaluation of this expression proceeds in two steps:
+The first expression is always evaluated. Its result must be a Boolean.
+
+If the result of the first expression is #true, then the second expression
+is evaluated; otherwise the third one is. Whatever their results are, they are
+also the result of the entire if expression.
+
+Exercise 8. Add the following line to the definitions area:
+(define cat *image*)
+
+Create a conditional expression that computes whether the image is tall or wide.
+An image should be labeled "tall" if its height is larger than or equal to its
+width; otherwise it is "wide".
+
+(if (> (image-height cat ) (image-width cat)) "tall" "wide")
+
+Now try the following modification. Create an expression that computes whether
+a picture is "tall", "wide", or "square".
+
+(if (= (image-height cat ) (image-width cat)) "square" (if (> (image-height cat ) (image-width cat)) "tall" "wide"))

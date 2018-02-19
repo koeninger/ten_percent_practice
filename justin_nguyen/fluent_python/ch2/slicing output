@@ -1,0 +1,42 @@
+>>> l = [1,2,3,4,5,6]
+>>> l[:2]
+[1, 2]
+>>> l[2:]
+[3, 4, 5, 6]
+>>> l[:3]
+[1, 2, 3]
+>>> s = 'bicycle'
+>>> s[::3]
+'bye'
+>>> s[::-1]
+'elcycib'
+>>> s[::-2]
+'eccb'
+
+
+
+>>> invoice = """
+... 1909  Piro  $17
+... 1489  Swic  $4
+... 1510  Pana  $28
+... """
+>>> SKU = slice(0,6)
+>>> DESCRIPTION = slice(6,11)
+>>> PRICE = slice(11, None)
+>>> line_items = invoice.split('\n')[1:4]
+>>> line_items
+['1909  Piro  $17', '1489  Swic  $4', '1510  Pana  $28']
+>>> for x in line_items:
+... 	print(x[SKU], x[DESCRIPTION], x[PRICE])
+...
+1909   Piro   $17
+1489   Swic   $4
+1510   Pana   $28
+
+
+>>> l = [1,2,3]
+>>> l * 5
+[1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3, 1, 2, 3]
+>>>
+>>> 5 * 'abcd'
+'abcdabcdabcdabcdabcd'
