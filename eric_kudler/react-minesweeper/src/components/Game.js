@@ -114,6 +114,7 @@ export class Game extends Component {
       }
 
       grid[y][x].is_bomb = true;
+      this.incrementNeighbors(grid, x, y, this.props.width, this.props.height)
       this.setState({
         grid: grid
       });
@@ -145,6 +146,34 @@ export class Game extends Component {
         }
         grid[y].push(box)
       }
+    }
+    return grid;
+  }
+  incrementNeighbors(grid, x, y, width, height) {
+    if (y > 0) {
+      grid[y - 1][x].bomb_neighbors++;
+    }
+    if (x > 0) {
+      grid[y][x - 1].bomb_neighbors++;
+    }
+    if (y < height - 1) {
+      grid[y + 1][x].bomb_neighbors++;
+    }
+    if (x < width - 1) {
+      grid[y][x + 1].bomb_neighbors++;
+    }
+
+    if (y > 0 && x < width - 1) {
+      grid[y - 1][x + 1].bomb_neighbors++;
+    }
+    if (x > 0 && y < height - 1) {
+      grid[y + 1][x - 1].bomb_neighbors++;
+    }
+    if (y > 0 && x > 0) {
+      grid[y - 1][x - 1].bomb_neighbors++;
+    }
+    if (x < width - 1 && y < height - 1) {
+      grid[y + 1][x + 1].bomb_neighbors++;
     }
     return grid;
   }
