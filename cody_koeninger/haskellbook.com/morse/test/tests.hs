@@ -3,6 +3,7 @@ module Main where
 import qualified Data.Map as M
 import Morse
 import Test.QuickCheck
+import Test.QuickChek.Gen (oneof)
 
 allowedChars :: [Char]
 allowedChars = M.keys letterToMorse
@@ -61,5 +62,15 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Pair a b) where
 pairGenIntString :: Gen (Pair Int String)
 pairGenIntString = pairGen
 
+data Sum a b = First a
+             | Second b
+             deriving (Eq, Show)
 
-           
+sumGenEqual :: (Arbitrary a, Arbitrary b) => Gen (Sum a b)
+sumGenEqual = do
+  a <- arbitrary
+  b <- arbitrary
+  oneof [retrun $ First a, return $ Second b]
+
+sumGenCharInt :: Gen (Sum Char Int)
+sumGenCharInt = sumGenEqual

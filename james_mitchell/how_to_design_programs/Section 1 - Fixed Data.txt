@@ -74,3 +74,28 @@ Now create an expression that computes whether sunny is false or friday is true.
 So in this particular case, the answer is #false. (Why?)
 
 (or (and sunny #false) (and friday #true))
+
+
+(if (= x 0) 0 (/ 1 x))
+
+This if expression contains (= x 0), 0, and (/ 1 x), three so-called
+sub-expressions. The evaluation of this expression proceeds in two steps:
+The first expression is always evaluated. Its result must be a Boolean.
+
+If the result of the first expression is #true, then the second expression
+is evaluated; otherwise the third one is. Whatever their results are, they are
+also the result of the entire if expression.
+
+Exercise 8. Add the following line to the definitions area:
+(define cat *image*)
+
+Create a conditional expression that computes whether the image is tall or wide.
+An image should be labeled "tall" if its height is larger than or equal to its
+width; otherwise it is "wide".
+
+(if (> (image-height cat ) (image-width cat)) "tall" "wide")
+
+Now try the following modification. Create an expression that computes whether
+a picture is "tall", "wide", or "square".
+
+(if (= (image-height cat ) (image-width cat)) "square" (if (> (image-height cat ) (image-width cat)) "tall" "wide"))

@@ -93,3 +93,98 @@ image appears at height 0, 1, 2, and so on displaying them rapidly
      (place-image  50 60
                   (empty-scene 100 60))]))
 
+- Order of Definitions: for constant defnitions order matters; for function definitions they don't 
+  good to introduce all constant definitions first, followed by definitions of functions in decreasing order of importance
+  
+- comments use ; .
+
+- Example problems: 
+; constants 
+(define WIDTH  100)
+(define HEIGHT  60)
+(define MTSCN  (empty-scene WIDTH HEIGHT))
+(define ROCKET )
+(define ROCKET-CENTER-TO-TOP
+  (- HEIGHT (/ (image-height ROCKET) 2)))
+ 
+; functions
+(define (picture-of-rocket.v5 h)
+  (cond
+    [(<= h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET 50 h MTSCN)]
+    [(> h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET 50 ROCKET-CENTER-TO-TOP MTSCN)]))
+
+How would you change the program to create a 200-by-400 scene? 
+  Change: change width and height
+   
+(require 2htdp/universe)
+; constants 
+(define WIDTH  200)
+(define HEIGHT  400)
+(define MTSCN  (empty-scene WIDTH HEIGHT))
+(define ROCKET .)
+(define ROCKET-CENTER-TO-TOP
+  (- HEIGHT (/ (image-height ROCKET) 2)))
+(define CENTER (/ WIDTH 2))
+
+; functions
+(define (picture-of-rocket.v5 h)
+  (cond
+    [(<= h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET CENTER h MTSCN)]
+    [(> h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET CENTER ROCKET-CENTER-TO-TOP MTSCN)]))
+     
+How would you change the program so that it depicts the landing of a green UFO? 
+ Change:define UFO and define Rocket as UFO
+  (define UFO (overlay (circle 10 "solid" "green") 
+                (rectangle 40 4 "solid" "green"))) 
+  (define ROCEKT UFO)
+  
+How would you change the program so that the background is always blue? 
+  ; constants 
+(define WIDTH  200)
+(define HEIGHT  400)
+(define MTSCN
+  (overlay
+   (rectangle WIDTH HEIGHT "solid" "blue")
+   (empty-scene WIDTH HEIGHT)))
+(define ROCKET .)
+(define ROCKET-CENTER-TO-TOP
+  (- HEIGHT (/ (image-height ROCKET) 2)))
+(define CENTER (/ WIDTH 2))
+
+; functions
+(define (picture-of-rocket.v5 h)
+  (cond
+    [(<= h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET CENTER h MTSCN)]
+    [(> h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET CENTER ROCKET-CENTER-TO-TOP MTSCN)]))
+     
+How would you change the program so that the rocket lands on a flat rock bed that is 10 pixels higher than the bottom of the scene?
+?
+
+; properties of the "world" and the descending rocket
+(define WIDTH  100)
+(define HEIGHT  60)
+(define V 3)
+(define X 50)
+ 
+; graphical constants 
+(define MTSCN  (empty-scene WIDTH HEIGHT))
+(define ROCKET )
+(define ROCKET-CENTER-TO-TOP
+  (- HEIGHT (/ (image-height ROCKET) 2)))
+ 
+; functions
+(define (picture-of-rocket.v6 t)
+  (cond
+    [(<= (distance t) ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET X (distance t) MTSCN)]
+    [(> (distance t) ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET X ROCKET-CENTER-TO-TOP MTSCN)]))
+ 
+(define (distance t)
+  (* V t))
