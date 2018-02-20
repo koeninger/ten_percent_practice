@@ -72,8 +72,11 @@ Intermission - downloaded/installed DR Racket - using how to design programs lan
 (f 10)
 
 2.3 Word Problems
-Rarely get straightforward requests - prebuilt formulas
+Rarely get straightforward requests with prebuilt formulas; usually have to figure these out
 
+Example - wage problem not clear until last sentence what needs to be done
 (define (wage h)
   (* 12 h))
 (wage 40)
+
+
