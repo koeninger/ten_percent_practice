@@ -47,4 +47,12 @@ True
 >>> x="TESTING"
 >>> x.lower()
 'testing'
+>>> stirng = "truly, madly, deeply"
+>>> string[2]
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+NameError: name 'string' is not defined
+>>> stirng[2]
+'u'
+>>>
 
