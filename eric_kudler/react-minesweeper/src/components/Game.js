@@ -12,7 +12,7 @@ export class Box extends Component {
   render() {
     return (
       <div>
-        <button className={"box " + (this.props.open ? 'open' : '')} onClick={this.openBox}></button>
+        <button className={"box " + (this.props.open ? 'open ' : '') + (this.props.open && this.props.is_bomb ? 'bomb' : '')} onClick={this.openBox}>{this.props.bomb_neighbors > 0 ? this.props.bomb_neighbors : ''}</button>
       </div>
     );
   }
@@ -93,8 +93,18 @@ export class Game extends Component {
       1000
     );
 
-    //set bombs
+    //reset grid
     let grid = this.state.grid;
+    for (let y = 0; y < this.props.width; y++) {
+      grid.push([]);
+      for (let x = 0; x < this.props.height; x++) {
+        grid[y][x].is_bomb = false;
+        grid[y][x].open = false;
+        grid[y][x].bomb_neighbors = 0;
+      }
+    }
+
+    //set bombs
     let bombs = this.props.bombs;
     while (bombs > 0) {
       let x = Math.floor(Math.random() * this.props.width);
@@ -104,6 +114,7 @@ export class Game extends Component {
       }
 
       grid[y][x].is_bomb = true;
+      this.incrementNeighbors(grid, x, y, this.props.width, this.props.height)
       this.setState({
         grid: grid
       });
@@ -135,6 +146,34 @@ export class Game extends Component {
         }
         grid[y].push(box)
       }
+    }
+    return grid;
+  }
+  incrementNeighbors(grid, x, y, width, height) {
+    if (y > 0) {
+      grid[y - 1][x].bomb_neighbors++;
+    }
+    if (x > 0) {
+      grid[y][x - 1].bomb_neighbors++;
+    }
+    if (y < height - 1) {
+      grid[y + 1][x].bomb_neighbors++;
+    }
+    if (x < width - 1) {
+      grid[y][x + 1].bomb_neighbors++;
+    }
+
+    if (y > 0 && x < width - 1) {
+      grid[y - 1][x + 1].bomb_neighbors++;
+    }
+    if (x > 0 && y < height - 1) {
+      grid[y + 1][x - 1].bomb_neighbors++;
+    }
+    if (y > 0 && x > 0) {
+      grid[y - 1][x - 1].bomb_neighbors++;
+    }
+    if (x < width - 1 && y < height - 1) {
+      grid[y + 1][x + 1].bomb_neighbors++;
     }
     return grid;
   }

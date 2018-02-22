@@ -2,7 +2,10 @@ __pycache__
 .cache
 .pyc
 imgs/
-session-1/
+session-0/img_align_celeba/
+session-0/.ipynb_checkpoints/
+session-1/img_align_celeba/
+session-1/.ipynb_checkpoints/
 session-2/
 session-3/
 session-4/
