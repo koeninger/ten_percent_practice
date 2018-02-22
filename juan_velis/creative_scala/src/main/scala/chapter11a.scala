@@ -26,7 +26,18 @@ object Example {
     def randomColor(s: Normalized, l: Normalized): Random[Color] = randomAngle2 map (hue => Color.hsl(hue, s, l))
     def randomCircle(r: Double, color: Random[Color]): Random[Image] = color map (fill => Image.circle(r) fillColor fill)
 
+    def randomConcentricCircles(count: Int, size: Int): Random[Image] = {
+        count match {
+          case 0 => Random.always(Image.empty)
+          case n =>
+            randomCircle(size, randomColor(0.5.normalized, 0.5.normalized)) flatMap { circle =>
+            randomConcentricCircles(n-1, size+5) map { circles => circle on circles }
+        }
+      }
+    }
+
     concentricCircles(10, Color.red).draw
+    randomConcentricCircles(10, 50).run.draw
 
     println(randomAngle2.run)
     println(randomColor(0.5.normalized, 0.5.normalized).run)

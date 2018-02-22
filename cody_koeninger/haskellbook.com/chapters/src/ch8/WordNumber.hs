@@ -1,4 +1,4 @@
-module WordNumber where
+module Ch8.WordNumber where
 
 import Data.List (intersperse)
 import Flow

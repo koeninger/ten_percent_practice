@@ -70,4 +70,63 @@ Intermission - downloaded/installed DR Racket - using how to design programs lan
 (define (f n)
 (- 2 (/ 1 n)))
 (f 10)
-Through pg 11 excercises
+
+2.3 Word Problems
+Rarely get straightforward requests with prebuilt formulas; usually have to figure these out
+
+Example - wage problem not clear until last sentence what needs to be done
+(define (wage h)
+  (* 12 h))
+(wage 40)
+
+2.3.1
+(define (netpay h)
+ (* .85 (* 12 h)))
+(netpay 40)
+
+2.3.2
+(define (sumcoins p n d q)
+(+ (* .01 p) (* .05 n) (* .1 d) (* .25 q)))
+(sumcoins 17 0 0 4)
+
+2.3.3
+(define (total-profit c)
+(- (* 5 c) (+ 20 (* .5 c))))
+(total-profit 5)
+
+2.4 Errors
+Scheme expressions - ATOMIC - numbers and variables OR
+COMPOUND - open parens, operations, more expressions, close parens
+in Scheme, all numbers are not in parens, and operators are always first (+ 1 2)
+
+so, (define f x ... y)
+    (an-expression)
+
+2.4.1
+(+ (10) 20)
+-operator doesn't need to be in parens
+(10 + 20)
+-function is out of place (+ 10 20)...same fix for first issue
+(+ +)
+cannot have two functions next to each other with no operators
+
+logical errors - mistake that doesn't trigger an error from the environment, but calculates incorrect results
+reason for systematic design of Programs
+
+2.5 designing Programs
+design recipe - steps to get something done in logical order
+Requires these four things:
+1. understand purpose of program - contract
+CONTRACT
+;; used to comment out a line - not read
+so...
+;;area-of-ring : number number -> numbers
+;; PROGRAM NAME : data consumed/input (x2) -> output
+
+HEADER - restates program name, gives input distinctive names
+(define (area-of-ring outer inner))
+(define PROGRAM NAME INPUT1 INPUT 2)
+
+use contract and header to form purpose statements
+PURPOSE STATEMENT
+(pg. 15)

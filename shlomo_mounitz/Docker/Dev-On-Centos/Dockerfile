@@ -9,8 +9,10 @@ RUN rpm -Uvh https://mirror.webtatic.com/yum/el7/webtatic-release.rpm
 RUN yum -y --setopt=tsflags=nodocs update && \
     yum -y --setopt=tsflags=nodocs install httpd && \
     yum -y --setopt=tsflags=nodocs install nano && \
-    yum -y --setopt=tsflags=nodocs install php56w && \
-    yum -y --setopt=tsflags=nodocs install php56w-common && \ 
+    #yum -y --setopt=tsflags=nodocs install php56w && \
+    #yum -y --setopt=tsflags=nodocs install php56w-common && \ 
+    yum -y install centos-release-scl.noarch && \
+    yum -y install rh-php70 rh-php70-php rh-php70-php-fpm mod_php && \
     yum clean all
 
 EXPOSE 80
@@ -19,8 +21,8 @@ EXPOSE 80
 RUN useradd -ms /bin/bash fmpub
 RUN chmod +x -R /home/fmpub/
 COPY files/userdir.conf /etc/httpd/conf.d/userdir.conf
-COPY files/test.test.conf /etc/httpd/conf.d/test.test.conf
-COPY files/test.test.conf /etc/httpd/sites-enabled/test.test.conf
+#COPY files/test.test.conf /etc/httpd/conf.d/test.test.conf
+COPY files/platform.oms.test.conf /etc/httpd/conf.d/platform.oms.test.conf
 
 # Simple startup script to avoid some issues observed with container restart
 RUN usermod --non-unique --uid 502 apache
