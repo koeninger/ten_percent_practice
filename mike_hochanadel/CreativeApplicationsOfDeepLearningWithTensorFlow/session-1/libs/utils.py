@@ -99,6 +99,7 @@ def get_celeb_files():
     if not os.path.exists('img_align_celeba'):
         os.mkdir('img_align_celeba')
 
+    files = []
     # Now perform the following 100 times:
     for img_i in range(1, 101):
 
@@ -106,6 +107,8 @@ def get_celeb_files():
         f = '000%03d.jpg' % img_i
 
         if os.path.exists('img_align_celeba/'+f):
+            files.append(os.path.join('img_align_celeba',f))
+            print(os.path.join('img_align_celeba',f)+' path exists')
             continue
 
         # and get the url with that string appended the end
@@ -117,9 +120,8 @@ def get_celeb_files():
         # And now download the url to a location inside our new directory
         urllib.request.urlretrieve(url, os.path.join('img_align_celeba', f))
 
-    files = [os.path.join('img_align_celeba', file_i)
-             for file_i in os.listdir('img_align_celeba')
-             if '.jpg' in file_i]
+        files.append(os.path.join('img_align_celeba',f))
+
     return files
 
 
@@ -132,7 +134,6 @@ def get_celeb_imgs():
         List of the first 100 images from the celeb dataset
     """
     return [plt.imread(f_i) for f_i in get_celeb_files()]
-
 
 def gauss(mean, stddev, ksize):
     """Uses Tensorflow to compute a Gaussian Kernel.
