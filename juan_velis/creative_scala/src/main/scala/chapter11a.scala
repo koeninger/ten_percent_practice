@@ -36,6 +36,22 @@ object Example {
       }
     }
 
+    val circles = randomConcentricCircles(10, 50)
+
+    val programOne =
+      circles flatMap { c1 =>
+        circles flatMap { c2 =>
+          circles map { c3 =>
+            c1 beside c2 beside c3
+          }
+        }
+      }
+
+    val programTwo = circles map { c => c beside c beside c }
+
+    programTwo.run.draw
+    programOne.run.draw
+
     concentricCircles(10, Color.red).draw
     randomConcentricCircles(10, 50).run.draw
 
