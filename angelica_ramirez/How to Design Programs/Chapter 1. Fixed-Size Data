@@ -1,6 +1,51 @@
 == instead of = 
--- Cartesian point 
+
+Exercise 1
+-- Distance formula
 (define x 3)
 (define y 4)
 (sqrt (+ (* x x) (* y y)))
 > 5 
+
+1string: "r", "e", "d"
+
+-- string-append
+  >(string-append "what a " "lovely " "day" " 4 BSL")
+  "what a lovely day 4 BSL"
+  
+ Exercise 2
+ (define prefix "hello")
+ (define suffix "world")
+ > (string-append prefix "_" suffix)
+"hello_world"
+
+-- string-length: consumes a string and produces a number 
+ >(string-length "hello world")
+  11
+-- string-ith: consumes a string s together with a number i and extracts 1String located at the ith position (counting from 0)
+  >(string-ith s i) -> 1string 
+  s: string
+  i: natural-number
+  >(string-ith "hello world" 1)
+   "e"
+-- number->string consumes a number and produces a string
+  >(number->string x) -> string
+  x: number
+  >(number->string 42) 
+  "42" 
+-- substring: extracts the substring starting at x up to y (or the end if y isn't provided)
+  >(substring "hello world" 1 5) 
+  "ello" 
+  
+Exercise 3
+(define str "helloworld")
+(define i 5) 
+> (string-append (substring str 0 i) "_" (substring str i))
+"hello_world"
+
+Exercise 4
+(define str "helloworld") 
+(define i 5) 
+> (string-append (substring str 0 (- i 1)) (substring str (+ i 1)))
+"helloorld"
+
