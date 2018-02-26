@@ -1,4 +1,4 @@
-name:                hangman
+name:                codyhangman
 version:             0.1.0.0
 -- synopsis:
 -- description:
@@ -26,14 +26,14 @@ library
   default-language: Haskell2010
 
               
-executable hangman
+executable codyhangman
   hs-source-dirs:      src
   main-is:             Main.hs
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5
                      , random
                      , split
-                     , CodyHangman
+                     , codyhangman
   default-language: Haskell2010
   other-modules: CodyHangman
                                           
@@ -45,5 +45,5 @@ test-suite tests
   build-depends:
                 base >=4.7 && <5
               , QuickCheck
-              , CodyHangman
+              , codyhangman
   default-language: Haskell2010

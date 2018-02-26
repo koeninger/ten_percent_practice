@@ -1,6 +1,7 @@
 module Main where
 
-import Hangman
+import CodyHangman
+import Data.Char (toLower)
 
 main :: IO ()
 main = do

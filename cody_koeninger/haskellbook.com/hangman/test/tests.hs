@@ -1,6 +1,6 @@
 module Main where
 
-import Hangman
+import CodyHangman
 import Test.QuickCheck
 
 bad :: Int -> Bool
