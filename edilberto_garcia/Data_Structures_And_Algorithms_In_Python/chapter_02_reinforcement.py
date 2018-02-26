@@ -156,14 +156,26 @@ def __init__(self, customer, bank, acnt, limit, balance = 0):
 # that the expression u-v returns a new vector instance representing the
 # difference between two vectors.
 
-
-
-
-# 
-# 
-# 
-# 
+def __sub__(self, other):
+    """Return sum of two vectors."""
+    if len(self) != len(other):          # relies on __len__ method
+      raise ValueError('dimensions must agree')
+    result = Vector(len(self))           # start with vector of zeros
+    for j in range(len(self)):
+      result[j] = self[j] + - other[j]
+    return result
+ 
 # *************************************************** #
+
+# R-2.10 Implement the neg method for the Vector class of Section 2.3.3, so
+# that the expression −v returns a new vector instance whose coordinates
+# are all the negated values of the respective coordinates of v.
+
+
+
+
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
