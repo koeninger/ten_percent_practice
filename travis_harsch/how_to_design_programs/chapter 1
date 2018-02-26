@@ -128,5 +128,22 @@ HEADER - restates program name, gives input distinctive names
 (define PROGRAM NAME INPUT1 INPUT 2)
 
 use contract and header to form purpose statements
-PURPOSE STATEMENT
-(pg. 15)
+PURPOSE STATEMENT - a brief description of what the progrgam does (non-narrative)
+so
+;;area-of-ring : number number -> number
+;; to compute the area of a ring whose radius is
+;; outer and whose hole has a radius of inner
+(define (area-of-ring))
+
+notes - constants show up as numbers, inputs = variables input later, or by user
+question in the problem statement = good name for programs
+
+EXAMPLES - come up with the examples before designing the program so you don't trust the program more than the prediction;
+also requires programmer to think through the process; 
+embed the examples in the purpose statement
+
+;;area-of-ring : number number -> number
+;; to compute the area of a ring whose radius is
+;; outer and whose hole has a radius of inner
+;; example (area-of-ring 5 3) should produce 50.24
+(define (area-of-ring))
