@@ -1,5 +1,8 @@
 import Test.QuickCheck
+import Test.QuickCheck.Gen (oneof)
 import Data.List (sort)
+import Data.Char (toUpper)
+
 
 half :: Double -> Double
 half x = x / 2
@@ -45,7 +48,51 @@ powComm x y = x ^ y == y ^ x
 revRev :: [Int] -> Bool
 revRev xs = (reverse . reverse) xs == xs
 
--- f $ a = fa
+-- f $ a = fa ???
+
+consPlusPlus :: [Int] -> [Int] -> Bool
+consPlusPlus xs ys = foldr (:) xs ys == (++) xs ys
+
+plusPlusConcat :: [[Int]] -> Bool
+plusPlusConcat xs = foldr (++) [] xs == concat xs
+
+lengthTake :: Int -> [Int] -> Bool
+lengthTake n xs = length (take n xs) == n
+
+readShow :: String -> Bool
+readShow x = (read (show x)) == x
+
+square :: Double -> Double
+square x = x * x
+
+squareIdentity x = (square . sqrt) x == x
+
+twice f = f . f
+fourTimes = twice . twice
+
+capitalizeWord :: String -> String
+capitalizeWord "" = ""
+capitalizeWord (x:xs) = toUpper x : xs
+
+idem x =
+  (capitalizeWord x == twice capitalizeWord x) &&
+  (capitalizeWord x == fourTimes capitalizeWord x)
+
+idem' :: [Double] -> Bool
+idem' x =
+  (sort x == twice sort x) &&
+  (sort x == fourTimes sort x)
+
+data Fool
+  = Fulse
+  | Frue
+  deriving (Eq, Show)
+
+foolGenEqual :: Gen Fool
+foolGenEqual = do oneof [return Fulse, return Frue]
+
+foolGenWeighted :: Gen Fool
+foolGenWeighted = do frequency [(2, return Fulse), (1, return Frue)]
 
 main :: IO ()
 main = do
@@ -60,3 +107,10 @@ main = do
   quickCheck powAssoc
   quickCheck powComm
   quickCheck revRev
+  quickCheck consPlusPlus
+  quickCheck plusPlusConcat
+  quickCheck lengthTake
+  quickCheck readShow
+  quickCheck squareIdentity
+  quickCheck idem
+  quickCheck idem'
