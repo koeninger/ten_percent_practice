@@ -10,9 +10,14 @@ export class Box extends Component {
     this.props.openBox(this.props.x, this.props.y);
   }
   render() {
+    let openClass = '';
+    if (this.props.is_bomb) {
+      openClass = 'bomb';
+    }
+
     return (
       <div>
-        <button className={"box " + (this.props.open ? 'open ' : '') + (this.props.open && this.props.is_bomb ? 'bomb' : '')} onClick={this.openBox}>{this.props.bomb_neighbors > 0 ? this.props.bomb_neighbors : ''}</button>
+        <button className={"box " + (this.props.open ? 'open ' : 'unopened') + ' ' + openClass} onClick={this.openBox}>{this.props.bomb_neighbors > 0 ? this.props.bomb_neighbors : ''}</button>
       </div>
     );
   }
