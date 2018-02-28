@@ -128,5 +128,71 @@ HEADER - restates program name, gives input distinctive names
 (define PROGRAM NAME INPUT1 INPUT 2)
 
 use contract and header to form purpose statements
-PURPOSE STATEMENT
-(pg. 15)
+PURPOSE STATEMENT - a brief description of what the progrgam does (non-narrative)
+so
+;;area-of-ring : number number -> number
+;; to compute the area of a ring whose radius is
+;; outer and whose hole has a radius of inner
+(define (area-of-ring))
+
+notes - constants show up as numbers, inputs = variables input later, or by user
+question in the problem statement = good name for programs
+
+EXAMPLES - come up with the examples before designing the program so you don't trust the program more than the prediction;
+also requires programmer to think through the process; 
+embed the examples in the purpose statement
+
+;;area-of-ring : number number -> number
+;; to compute the area of a ring whose radius is
+;; outer and whose hole has a radius of inner
+;; example (area-of-ring 5 3) should produce 50.24
+(define (area-of-ring outer inner) ...)
+
+replace ... with the actual expression, using operations and defined parameters
+so 
+(define area-of-ring outer inner)
+  (- (area-of disk outer)
+     (area-of-disk inner))  
+TESTING - at minimum, does it compute correctly the examples from the problem statement?
+ -can't usually show it works for all inputs, since there's often an infinite number, but will catch syntax, run-time and logical Errors
+ -if something's wrong with outputs: are examples wrong? is there a logical mistake in program? or both? - may have to start discovery
+
+ ALL TOGETHER:
+ ;; Contract: ;;area-of-ring : number number -> number
+ ;; Purpose: ;; to compute the area of a ring whose radius is
+ ;; outer and whose hole has a radius of inner
+ ;; Example: (area-of-ring 5 3) should produce 50.24
+ ;; Definition: (define area-of-ring outer inner)
+   (- (area-of disk outer)
+      (area-of-disk inner))  
+ ;; Tests: (area of ring 5 3)
+ ;; expected value 50.24
+
+ most difficult step is the design of body - requires understanding of written request and math relationships, as well as basic facts
+
+ DOMAIN KNOWLEDGE
+ - knowledge about the area, or domain that the problem comes from
+ -programmers have to understand language of lots of applications - need understanding of possibilities of computer languages
+
+ Part 3 - Programs are Function Plus Variable Definitions
+ -program is usually multiple definitions - area-of-ring AND area-of-disk
+ -programs are compused of several functions - main function - what you really need, auxillary functions - other functions needed
+ -divide the problem into smaller, workable steps - vital for large Programs
+ -break it up and compose parts back together 
+
+ 3.1
+ movie theater scenario
+
+make a list of the dependencies:
+
+;;profit is difference between revenue and costs 
+;;revenue = ticket sales = ticket price * no. of attendees
+;;costs - two parts - fixed price of $180 per performance, variable depending on number of tickets
+;;how does the number of attendees affect the ticket price?
+
+develop a function for each
+;;profit : number -> number
+;;to compute profit as difference between revenue and costs at a given ticket-price
+(define (profit ticket-price))
+;;revenue and cost both depend on the ticket price
+(p. 23)
