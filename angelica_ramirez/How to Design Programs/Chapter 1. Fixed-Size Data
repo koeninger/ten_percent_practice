@@ -49,3 +49,19 @@ Exercise 4
 > (string-append (substring str 0 i) (substring str (+ i 1)))
 "helloorld"
 
+Exercise 5 (create boat or tree) 
+(define leaf1 (triangle 40 "solid" "darkgreen"))
+(define leaf2 (triangle 40 "solid" "green"))
+(define trunk (rectangle 25 50 "solid" "brown"))
+(define leaves (underlay/offset leaf1 0 10 leaf2))
+(define leaves1 (underlay/offset leaf2 0 10 leaf1))
+(define treetop (underlay/offset
+                 (underlay/offset
+                  leaves 0 10 leaves1)
+                 0 10
+                 (underlay/offset leaves1 0 10 leaves)))
+(define tree (overlay/offset treetop 0 45 trunk))
+
+
+Exercise 6 (count pixels) 
+
