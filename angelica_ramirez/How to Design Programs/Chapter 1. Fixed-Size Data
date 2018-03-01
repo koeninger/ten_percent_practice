@@ -62,6 +62,13 @@ Exercise 5 (create boat or tree)
                  (underlay/offset leaves1 0 10 leaves)))
 (define tree (overlay/offset treetop 0 45 trunk))
 
-
 Exercise 6 (count pixels) 
+(define cat .)
+(* (image-width cat) (image-height cat))
 
+Exercise 7 Boolean
+(define sunny #true)
+(define friday #false)
+Now create an expression that computes whether sunny is false or friday is true. So in this particular case, the answer is #false. 
+> (or (and sunny #false) (and friday #true)) 
+#false 
