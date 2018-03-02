@@ -36,3 +36,9 @@ s"Fish n chips n vinegar, ${"pepper "*3}salt"
 f"I wrote a new $item%.3s today"
 f"Enjoying this $item ${355/113.0}%.5f times today"
 
+val input = "Enjoying this apple 3.14159 times today"
+val pattern = """.* apple ([\d.]+) times .*""".r
+
+val pattern(amountText) = input
+val amount = amountText.toDouble
+
