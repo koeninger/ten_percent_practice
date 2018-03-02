@@ -168,15 +168,26 @@ def __sub__(self, other):
 # *************************************************** #
 
 # R-2.10 Implement the neg method for the Vector class of Section 2.3.3, so
-# that the expression −v returns a new vector instance whose coordinates
+# that the expression -v returns a new vector instance whose coordinates
 # are all the negated values of the respective coordinates of v.
 
-
-
-
-
+def __neg__(self):
+    vector_obj = Vector(len(self))
+    for i in range(len(self)):
+        vector_obj[i] = -self[i]
+    return vector_obj
 
 # *************************************************** #
+
+
+# R-2.11 In Section 2.3.3, we note that our Vector class supports a syntax such as
+# v = u + [5, 3, 10, -2, 1], in which the sum of a vector and list returns
+# a new vector. However, the syntax v = [5, 3, 10, -2, 1] + u is illegal.
+# Explain how the Vector class definition can be revised so that this syntax
+# generates a new vector.
+
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
