@@ -1,0 +1,47 @@
+>>> import collections.abc as abc
+>>> d = {}
+>>> isinstance(d, abc.Mapping)
+True
+
+
+>>> tt = (1,2,(3,4))
+>>> hash(tt)
+-2725224101759650258
+>>> tl = (1,2,[3,4])
+>>> hash(tl)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unhashable type: 'list'
+>>> tf = (1,2,frozenset([3,4]))
+>>> hash(tf)
+-4138728974339688815
+
+
+>>> a = dict(one=1, two=2, three=3)
+>>> b = {'one':1, 'two':2, 'three':3}
+>>> c = dict(zip(['one', 'two', 'three'], [1, 2, 3]))
+>>> d = dict([('two', 2), ('one', 1), ('three', 3)])
+>>> e = dict({'three':3, 'one':1, 'two':2})
+>>> a == b == c == d == e
+True
+
+
+>>> DIAL_CODES = [
+...     (86, 'China'),
+...     (91, 'India'),
+...     (1, 'United States'),
+...     (62, 'Indonesia'),
+...     (55, 'Brazil'),
+...     (92, 'Pakistan'),
+...     (880, 'Bangladesh'),
+...     (234, 'Nigeria'),
+...     (7, 'Russia'),
+...     (81, 'Japan'),
+... ]
+>>>
+>>> country_code = {country: code for code, country in DIAL_CODES}
+>>> country_code
+{'China': 86, 'Brazil': 55, 'Russia': 7, 'Bangladesh': 880, 'Japan': 81, 'Nigeria': 234, 'India': 91, 'Indonesia': 62, 'United States': 1, 'Pakistan': 92}
+>>> {code: country.upper() for country, code in country_code.items()
+...     if code < 66}
+{1: 'UNITED STATES', 7: 'RUSSIA', 62: 'INDONESIA', 55: 'BRAZIL'}
