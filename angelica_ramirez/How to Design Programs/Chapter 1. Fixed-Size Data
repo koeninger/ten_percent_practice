@@ -72,3 +72,25 @@ Exercise 7 Boolean
 Now create an expression that computes whether sunny is false or friday is true. So in this particular case, the answer is #false. 
 > (or (and sunny #false) (and friday #true)) 
 #false 
+
+Exercise 8 Create a conditional expression that computes whether the image is tall or wide.
+(define cat .)
+(define height (image-height cat))
+(define width (image-width cat))
+> (if (> height width) "tall" "wide")
+"tall"
+
+Create an expression that computes whether a picture is "tall", "wide", or "square". 
+> (if (= width height) "square" (if (> height width) "tall" "wide"))
+"tall"
+
+--Predicates: function that consumes a value and determines whether or not it belongs to some class of date (number?, string?, image?, boolean?, rational?, integer?, real?, complex?, exact?, inexact?)
+
+Example 9
+(define in ...)
+
+(if (string? in) (string-length in)
+    (if (image? in) (* (image-height in) (image-width in))
+        (if (number? in) 
+          (if (> in 0) (- in 1) 
+            (if (= in 0) 10 20)) in)))
