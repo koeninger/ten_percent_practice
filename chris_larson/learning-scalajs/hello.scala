@@ -42,3 +42,19 @@ val pattern = """.* apple ([\d.]+) times .*""".r
 val pattern(amountText) = input
 val amount = amountText.toDouble
 
+val c = 'A'
+val i: Int = c
+val t: Char = 116
+
+val isFalse = !true
+val isTrue = !isFalse
+val unequal = (5 != 6)
+val isLess = (5 < 6)
+
+val unequalAndLess = unequal & isLess
+val definitelyFalse = false && unequal
+
+val zero = 0
+val isValid = zero > 0
+
+val nada = ()
