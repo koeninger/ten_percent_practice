@@ -46,7 +46,7 @@ We will help you get access to the resources you need, whether that's buying phy
 
 If you do not have a formal computer science background:
 
-- [How to Design Programs 2e](http://www.ccs.neu.edu/home/matthias/HtDP2e/) or the [First Edition](http://www.htdp.org/).  Yes, it's pitched at a highschool level, but is very well written and tested with students.
+- [How to Design Programs 2e](http://www.ccs.neu.edu/home/matthias/HtDP2e/) or the [First Edition](http://www.htdp.org/).  Yes, it's pitched at a highschool level, but is very well written and tested with students. There's also a 2 part edX course based on the material, [How to Code: Simple Data](https://www.edx.org/course/how-code-simple-data-ubcx-htc1x) and [How to Code: Complex Data](https://www.edx.org/course/how-code-complex-data-ubcx-htc2x) 
 
 If you do not have experience with a reasonably modern statically typed language:
 
