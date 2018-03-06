@@ -187,10 +187,38 @@ def __neg__(self):
 # generates a new vector.
 
 
+    # We can use the __radd__ to support additon with the vector as
+    # the right operand
 
 # *************************************************** #
+
+# R-2.12 Implement the __mul__ method for the Vector class of Section 2.3.3, so
+# that the expression v 3 returns a new vector with coordinates that are 3
+# times the respective coordinates of v.
+
+def __mul__(self, multiplier):
+    vector_obj = Vector(len(self))
+    for i in range(len(self)):
+        vector_obj[i] = self[i] * multiplier
+    return vector_obj
+
+
 # *************************************************** #
+
+# R-2.13 Exercise R-2.12 asks for an implementation of __mul__ , for the Vector
+# class of Section 2.3.3, to provide support for the syntax v*3. Implement
+# the __rmul__ method, to provide additional support for syntax 3*v.
+
+def __rmul__(self, multiplier):
+    return self.__mul__(multiplier)
+
 # *************************************************** #
+
+# R-2.14 Implement the mul method for the Vector class of Section 2.3.3, so
+# that the expression u v returns a scalar that represents the dot product of
+# the vectors, that is, Σdi
+# =1 ui · vi.
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
