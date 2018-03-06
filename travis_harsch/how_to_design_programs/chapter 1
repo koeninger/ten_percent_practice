@@ -195,4 +195,23 @@ develop a function for each
 ;;to compute profit as difference between revenue and costs at a given ticket-price
 (define (profit ticket-price))
 ;;revenue and cost both depend on the ticket price
-(p. 23)
+;;so...
+''revenue : number -> number
+;;to compute revenue given ticket-price
+(define revenue ticket-price)...)
+
+;;cost : number -> number
+;;to compute the costs, given ticket-price
+(define cost ticket-price)...)
+
+;;attendees : number -> number
+;; to compute the number of attendees, given ticket-price
+(define (attendees ticket-price)...)
+
+3.1.1
+;; attendees : number -> number
+;;how many people attend at a given price
+;;Tests: at 5.00, 120 attend; at 4.50
+(define (attendance price)
+  (+ (* (/15 .10) - 5.00 price))
+  120))
