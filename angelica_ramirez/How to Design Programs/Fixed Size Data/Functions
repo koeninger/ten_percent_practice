@@ -1,1 +1,23 @@
+constant definitions (define Variable Expression) 
+function definitions (define FunctionName Variable ... Variable) Expression)
+  (define (
+  the name of the function
+  followed by several variables, separated by space and ending in )
+  and an expression followed by (
+function application puts defined functions to work and looks just like the applications of a pre-defined operation
+  write (
+  write down the name of a defined function f,
+  write down as many arguments as f consumes, separated by space, 
+  and add ) at the end
 
+Exercise 11 Define a function that consumers two numbers x and y, and that compuates the distance of point (x, y) to the origin
+(define x 3)
+(define y 4)
+(define (distance x y) (sqrt (+ (* x x) (* y y))))
+
+Exercise 12 Define the function cvolume which accepts the lenght of a side of an equilateral cube and compuetes its volume
+(define (cvolume x) (* x x x))
+if you have time consider defining csurface
+(define (csurface x) (* 6 (* x x)))
+
+Exercise 13 
