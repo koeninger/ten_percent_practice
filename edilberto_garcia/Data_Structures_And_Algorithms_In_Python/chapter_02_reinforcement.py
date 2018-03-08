@@ -214,10 +214,17 @@ def __rmul__(self, multiplier):
 
 # *************************************************** #
 
-# R-2.14 Implement the mul method for the Vector class of Section 2.3.3, so
+# R-2.14 Implement the __mul__ method for the Vector class of Section 2.3.3, so
 # that the expression u v returns a scalar that represents the dot product of
-# the vectors, that is, Σdi
-# =1 ui · vi.
+# the vectors, that is, Sigma(ui * vi) i = 1 -> d . (sum of i equals one to d, of u)
+
+def __mul__(self, other):
+    sum = 0
+    for i in range(len(self)):
+        sum += self[i] * other[i]
+    return sum
+    
+
 
 # *************************************************** #
 # *************************************************** #
