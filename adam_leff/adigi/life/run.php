@@ -3,4 +3,7 @@ include 'grid.php';
 
 $g = new Grid();
 $g->__init();
-$g->tick();
+for($i = 0; $i < 10; $i++){
+    $g->tick();
+    sleep(1);
+}
