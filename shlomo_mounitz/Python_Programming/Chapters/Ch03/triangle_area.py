@@ -1,7 +1,9 @@
+# This program calculates the area of a triangle using Heron's formula
+
 import math
 
 def main():
-    print("This program calculates the area of a triangle")
+    print("This program calculates the area of a triangle using Heron's formula")
     a = int(input("Length of side A? "))
     b = int(input("Length of side B? "))
     c = int(input("Length of side C? "))
