@@ -51,3 +51,4 @@ checkFirst = do
   quickCheck (monoidAssoc :: FirstMappend)
   quickCheck (monoidLeftId :: FirstId)
   quickCheck (monoidRightId :: FirstId)
+

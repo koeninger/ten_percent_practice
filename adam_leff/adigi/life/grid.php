@@ -12,7 +12,7 @@ class Grid
         for($i = 0; $i < self::SIZE; $i++){
             for($j = 0; $j < self::SIZE; $j++){
                 $this->_grid[$i][$j] = new Cell();
-                $this->_grid[$i][$j]->alive = mt_rand(0,1);
+                $this->_grid[$i][$j]->alive = mt_rand(0,1) ? mt_rand(0,16) : 0;
             }
         }
         $this->display();
@@ -67,7 +67,7 @@ class Grid
         $sum = 0;
         foreach($coordinates as $id => $c){
             if($c[0] >= 0 && $c[0] < self::SIZE && $c[1] >= 0 && $c[1] < self::SIZE){
-                $sum+= $this->_grid[$c[0]][$c[1]]->alive;
+                $sum+= $this->_grid[$c[0]][$c[1]]->alive > 0 ? 1 : 0;
             }
         }
         
