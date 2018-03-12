@@ -27,3 +27,129 @@ print "Joe Warren" + " is " + str(52) + " years old"
 
 #10 - distance between points (2,2) and (5.6)
 print ((2 - 5) ** 2 + (2 - 6) ** 2) ** 0.5
+
+
+#variable - placeholder, used to keep from recomputing
+
+#variable can have underscore, case sensitive, cannot contain numbers
+#give memorable names
+
+#assign to variable with =
+
+#examples
+
+my_name = "Travis Harsch"
+print my_name
+
+my_age = 39
+print my_age
+
+#birthday
+#my_age + 1
+
+#my_age = my_age + 1
+
+my_age += 1
+#adds value on the right to the left, then stores result in left-side variable
+print my_age
+
+#the story of the magic pill
+magic_pill = 30
+print my_age - magic_pill
+
+#temperature conversion
+# c = 5 / 9 * (f - 32)
+
+temp_Fahrenheit = 32
+temp_Celsius =5.0 / 9.0 * (temp_Fahrenheit - 32)
+print temp_Celsius
+
+temp_Celsius = 100
+temp_Fahrenheit = 9.0 / 5.0 * temp_Celsius + 32
+print temp_Fahrenheit
+
+#1  - miles to feet
+feet = miles * 5280
+print miles * 13
+
+#2 - hours minutes seconds total
+hours = 7
+minutes = 21
+seconds = 37
+total_seconds = hours * 3600 + minutes * 60 + seconds
+
+print str(hours) + " hours, " + str(minutes) + " minutes, and",
+print str(seconds) + " seconds totals to " + str(total_seconds) + " seconds."
+
+#3 = perimeter of rectangle
+width = 4
+height = 7
+perimeter = width * 2 + height * 2
+print "A rectangle " + str(width) + " inches wide and " + str(height),
+print "inches high has a perimeter of " + str(perimeter) + " inches."
+
+#4 - area of rectangle
+width = 10
+height = 10
+area = width * height
+print "A rectangle " + str(width) + " inches wide and " + str(height),
+print "inches high has an area of " + str(area) + " inches."
+
+#5 - circumference of circle
+PI = 3.14
+radius = 8
+circumference = 2 * PI * radius
+print "A circle with a radius of " + str(radius),
+print "inches has a circumference of " + str(circumference) + " inches."
+
+#6 area of circle
+PI = 3.14
+radius = 8
+area = PI * radius ** 2
+print "A circle with a radius of " + str(radius),
+print "inches has an area of " + str(area) + " inches."
+
+#7 - future value template
+present_value = 1000
+annual_rate = 7
+years = 10
+
+future_value = present_value * (1 + 0.01 * annual_rate) ** years
+ 
+print "The future value of $" + str(present_value) + " in " + str(years),
+print "years at an annual rate of " + str(annual_rate) + "% is $" + str(future_value) + "."
+
+#8 - name tag template
+first_name = "Joe"
+last_name = "Warren"
+name_tag = "My name is " + first_name + " " + last_name
+print name_tag
+
+#9 - name and age template
+name = "Joe Warren"
+age = 52
+statement = name + " is " + str(age)
+#10 - point distance template
+x0 = 2
+y0 = 2
+x1 = 5
+y1 = 6
+distance = ((x0 - x1) ** 2 + (y0 - y1) ** 2) ** 0.5
+
+print "The distance from (" + str(x0) + ", " + str(y0) + ") to", 
+print "(" + str(x1) + ", " + str(y1) + ") is " + str(distance) + "."
+
+#11 - Heron's formula
+x0, y0 = 0, 0
+x1, y1 = 3, 4
+x2, y2 = 1, 1
+
+a = ((x0 - x1) ** 2 + (y0 - y1) ** 2) ** 0.5
+b = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+c = ((x0 - x2) ** 2 + (y0 - y2) ** 2) ** 0.5
+s = (a + b + c) / 2
+area = (s * (s - a) * (s - b) * (s - c)) ** 0.5
+
+print "A triangle with vertices (" + str(x0) + "," + str(y0) + "),",
+print "(" + str(x1) + "," + str(y1) + "), and",
+print "(" + str(x2) + "," + str(y2) + ") has an area of " + str(area) + "."
