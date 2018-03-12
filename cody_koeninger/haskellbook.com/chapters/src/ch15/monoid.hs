@@ -1,18 +1,33 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
 
+import Prelude hiding (Monoid, mempty)
 import Test.QuickCheck
 
 class Semigroup a where
   (<>) :: a -> a -> a
 
+class (Semigroup a) => Monoid a where
+  mempty :: a
+  mappend :: a -> a -> a
+  mappend = (<>)
+
 semigroupAssoc :: (Eq m, Semigroup m) => m -> m -> m -> Bool
 semigroupAssoc a b c = (a <> (b <> c)) == ((a <> b) <> c)
+
+monoidLeftIdentity :: (Eq m, Monoid m) => m -> Bool
+monoidLeftIdentity x = x <> mempty == x
+
+monoidRightIdentity :: (Eq m, Monoid m) => m -> Bool
+monoidRightIdentity x = mempty <> x == x
 
 
 data Trivial = Trivial deriving (Eq, Show)
 
 instance Semigroup Trivial where
   _ <> _ = Trivial
+
+instance Monoid Trivial where
+  mempty = Trivial
 
 instance Arbitrary Trivial where
   arbitrary = return Trivial
@@ -97,8 +112,10 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
     frequency [ (1, return $ Fail a)
               , (3, return $ Succ b) ]
     
-checkSemi = do
+checkMonoid = do
   quickCheck (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
+  quickCheck (monoidLeftIdentity :: Trivial -> Bool)
+  quickCheck (monoidRightIdentity :: Trivial -> Bool)
   quickCheck (semigroupAssoc :: Identity String -> Identity String -> Identity String -> Bool)
   quickCheck (semigroupAssoc :: Two String String -> Two String String -> Two String String -> Bool)
   quickCheck (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
