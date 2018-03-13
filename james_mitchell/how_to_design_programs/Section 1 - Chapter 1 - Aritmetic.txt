@@ -99,3 +99,48 @@ Now try the following modification. Create an expression that computes whether
 a picture is "tall", "wide", or "square".
 
 (if (= (image-height cat ) (image-width cat)) "square" (if (> (image-height cat ) (image-width cat)) "tall" "wide"))
+
+
+
+One way to prevent such accidents is to use a predicate, which is a function
+that consumes a value and determines whether or not it belongs to some class of
+data. For example, the predicate number? determines whether the given value is
+a number or not:
+
+> (number? 4)
+#true
+
+> (number? pi)
+#true
+
+> (number? #true)
+#false
+
+> (number? "fortytwo")
+#false
+
+
+
+Exercise 9. Add the following line to the definitions area of DrRacket:
+(define in ...)
+
+Then create an expression that converts the value of in to a positive number.
+For a String, it determines how long the String is; for an Image, it uses the
+area; for a Number, it decrements the number by 1, unless it is already 0 or
+negative; for #true it uses 10 and for #false 20.
+
+(define in  ...)
+
+(if (string? in)
+    (string-length in)
+    (if (image? in )
+        (* (image-height in) (image-width in))
+            (if (number? in)
+                (if (> in 0)
+                (- in 1)
+                in)
+            (if (= in true)
+                10
+                20))))
+
+Exercise 10. Now relax, eat, sleep, and then tackle the next chapter
