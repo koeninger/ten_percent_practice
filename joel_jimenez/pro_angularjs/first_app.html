@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html data-ng-app="todoApp">
+<head>
+	<title>Hello AngularJS!</title>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.5/angular.min.js"></script>
+	<script>
+	  var todoApp = angular.module("todoApp", []);
+		todoApp.controller("ToDoCtrl", function ($scope) {
+			$scope.todo = "Hello, World!";
+		});
+	</script>
+</head>
+<body ng-controller="ToDoCtrl">
+	<h1>{{todo}}</h1>
+</body>
+</html>

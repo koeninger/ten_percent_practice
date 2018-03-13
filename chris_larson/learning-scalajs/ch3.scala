@@ -37,3 +37,46 @@ val resultEcho = thing match {
   case "something" => "here"
   case other => "not here " + other
 }
+
+val message = "Ok"
+val status = message match {
+  case "Ok" => 200
+  case other => {
+    println(s"Couldn't parse $other")
+    -1
+  }
+}
+
+val status = message match {
+  case "Authorized" => 200
+  case _ => {
+    println(s"Couldn't parse $message")
+    -1
+  }
+}
+
+val response: String = null
+response match {
+  case s if s != null => println(s"Received '$s'")
+  case s => println("Error! Received a null response")
+}
+
+val x: Int = 111
+val y: Any = x
+
+y match {
+  case x: String => s"'x'"
+  case x: Double => f"$x%.2f"
+  case x: Float => f"$x%.2f"
+  case x: Long => s"${x}l"
+  case x: Int => s"${x}i"
+}
+
+for (x <- 1 to 7) { println(s"Day $x:")}
+for (x <- 1 to 7) yield { s"Day $x:"}
+
+val thress = for (i <- 1 to 20 if i % 3==0) yield i
+for { x <- 1 to 2
+y <- 1 to 3 }
+{println(s"($x,$y)")}
+

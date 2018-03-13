@@ -57,8 +57,8 @@ Exercise 18 Define the function string-join which consumes two strings and appen
 (define (string-join str1 str2) 
   (string-append str1 "_" str2))
   
-;; Exercise 19 Define the funciton string-insert, which consumes a string str plus a number i and insterts "_" at the ith position of str. 
-;; Assume i is a number between 0 and the length of the given string (inclusive) Ponder how string-insert copes with " "
+Exercise 19 Define the funciton string-insert, which consumes a string str plus a number i and insterts "_" at the ith position of str. 
+Assume i is a number between 0 and the length of the given string (inclusive) Ponder how string-insert copes with " "
 (define (string-insert str i) 
   (string-append (substring str 0 i) "_" (substring str i)))
 > (string-insert " " 1)
@@ -75,8 +75,79 @@ substring: starting index is out of range
   starting index: 1
   valid range: [0, 0]
   string: ""
+  
+Exercise 21 Use DrRacket’s stepper to evaluate (ff (ff 1)) step by step.
+Also try (+ (ff 1) (ff 1)).
+Does DrRacket’s stepper reuse the results of computations?
 
+(ff (ff 1))
+(ff (* 10 1))
+(ff 10)
+(* 10 10)
+100
 
+(+ (ff 1) (ff 1))
+(+ (* 10 1) (ff 1))
+(+ 10 (* 10 1))
+(+ 10 10)
+20
 
+Exercise 22 run in stepper
+(define (distance-to-origin x y)
+  (sqrt (+ (sqr x) (sqr y))))
 
+(distance-to-origin 3 4)
+(sqrt (+ (sqr 3) (sqr 4)))
+(sqrt (+ 9 (sqr 4)))
+(sqrt (+ 9 16))
+(sqrt 25)
+5
 
+Exercise 23 run in stepper 
+(define (string-first s)
+  (substring s 0 1))
+
+(string-first "hello world")
+(substring "hello world" 0 1)
+"h"
+
+Exercise 24 run in stepper 
+(define (==> x y)
+  (or (not x) y))
+
+(==> #true #false)
+(or (not #true) #false)
+(or #false #false)
+#false
+
+Exercise 25 Does the stepping suggest how to fix this attempt? 
+(define (image-classify img)
+  (cond
+    [(>= (image-height img) (image-width img))
+     "tall"]
+    [(= (image-height img) (image-width img))
+     "square"]
+    [(<= (image-height img) (image-width img))
+     "wide"]))
+
+(image-classify (circle 3 "solid" "red"))
+
+;; Yes the "=" clause should come first.
+
+(define (image-classify-fixed img)
+  (cond
+    [(= (image-height img) (image-width img))
+     "square"]
+    [(>= (image-height img) (image-width img))
+     "tall"]
+    [(<= (image-height img) (image-width img))
+     "wide"]))
+ 
+Exercise 26 Confirm with stepper
+(define (string-insert s i)
+  (string-append (substring s 0 i)
+                 "_"
+                 (substring s i)))
+
+(string-insert "helloworld" 6)
+"hellow_orld"

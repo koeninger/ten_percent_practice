@@ -1,0 +1,14 @@
+Definitions While many programming languages obscure the relationship between
+programs and functions, BSL brings it to the fore. Every BSL program consists of
+ several definitions, usually followed by an expression that involves those
+ definitions. There are two kinds of definitions:
+
+constant definitions, of the shape (define Variable Expression), which we
+encountered in the preceding chapter; and
+
+function definitions, which come in many flavors, one of which we used in the
+Prologue.
+
+Like expressions, function definitions in BSL come in a uniform shape:
+(define (FunctionName Variable ... Variable)
+  Expression)
