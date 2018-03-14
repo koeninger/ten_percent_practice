@@ -32,18 +32,19 @@ instance Monoid Trivial where
 instance Arbitrary Trivial where
   arbitrary = return Trivial
 
-newtype Identity a = Identity a deriving (Eq, Show)
-
-instance (Arbitrary a) => Arbitrary (Identity a) where
-  arbitrary = do
-    a <- arbitrary
-    return $ Identity a
+newtype Identity a = Identity a deriving (Eq, Show, Arbitrary)
 
 instance (Semigroup a) => Semigroup (Identity a) where
   (Identity x) <> (Identity y) = Identity $ x <> y
 
+instance (Monoid a) => Monoid (Identity a) where
+  mempty = Identity mempty
+
 instance Semigroup [a] where
   (<>) = (++)
+
+instance Monoid [a] where
+  mempty = []
 
 data Two a b = Two a b deriving (Eq, Show)
 
@@ -56,11 +57,17 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
 instance (Semigroup a, Semigroup b) => Semigroup (Two a b) where
   (Two x y) <> (Two x' y') = Two (x <> x') (y <> y')
 
+instance (Monoid a, Monoid b) => Monoid (Two a b) where
+  mempty = Two mempty mempty
+
 newtype BoolConj = BoolConj Bool deriving (Eq, Show, Arbitrary)
 
 instance Semigroup BoolConj where
   (BoolConj True) <> (BoolConj True) = BoolConj True
   _ <> _ = BoolConj False
+
+instance Monoid BoolConj where
+  mempty = BoolConj True
 
 newtype BoolDisj = BoolDisj Bool deriving (Eq, Show, Arbitrary)
 
@@ -68,59 +75,65 @@ instance Semigroup BoolDisj where
   (BoolDisj False) <> (BoolDisj False) = BoolDisj False
   _ <> _ = BoolDisj True
 
-
-data Or a b
-  = Fst a
-  | Snd b
-  deriving (Eq, Show)
-
-instance Semigroup (Or a b) where
-  (Snd x) <> _ = Snd x
-  (Fst _) <> x = x
-
-instance (Arbitrary a, Arbitrary b) => Arbitrary (Or a b) where
-  arbitrary = do
-    a <- arbitrary
-    b <- arbitrary
-    frequency [ (2, return $ Fst a)
-              , (1, return $ Snd b) ]
+instance Monoid BoolDisj where
+  mempty = BoolDisj False
 
 newtype Combine a b = Combine { unCombine :: (a -> b) } deriving (Arbitrary)
 
 instance (Semigroup b) => Semigroup (Combine a b) where
   (Combine f) <> (Combine g) = Combine $ \x -> ((f x) <> (g x))
 
+instance (Monoid b) => Monoid (Combine a b) where
+  mempty = Combine $ \x -> mempty
+
 newtype Comp a = Comp { unComp :: (a -> a) }
 
 instance Semigroup (Comp a) where
   (Comp f) <> (Comp g) = Comp (f . g)
 
-data Validation a b
-  = Fail a
-  | Succ b
-  deriving (Eq, Show)
+instance Monoid (Comp a) where
+  mempty = Comp id
 
-instance Semigroup a => Semigroup (Validation a b) where
-  (Fail x) <> (Fail y) = Fail (x <> y)
-  _ <> (Succ y) = Succ y
-  (Succ x) <> (Fail _) = Succ x
+newtype Mem s a = Mem { runMem :: s -> (a, s) }
 
-instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
-  arbitrary = do
-    a <- arbitrary
-    b <- arbitrary
-    frequency [ (1, return $ Fail a)
-              , (3, return $ Succ b) ]
-    
+instance Semigroup a => Semigroup (Mem s a) where
+  (Mem f) <> (Mem g) = Mem $ \s ->
+    let (a, s') = f s
+        (a', s'') = g s'
+    in (a <> a', s'')
+
+instance Monoid a => Monoid (Mem s a) where
+  mempty = Mem $ \s -> (mempty, s)
+
+useMem = do
+  let f' = Mem $ \s -> ("hi", s + 1)
+      rmzero = runMem mempty 0
+      rmleft = runMem (f' <> mempty) 0
+      rmright = runMem (mempty <> f') 0
+  print $ rmleft
+  print $ rmright
+  print $ (rmzero :: (String, Int))
+  print $ rmleft == runMem f' 0
+  print $ rmright == runMem f' 0
+
 checkMonoid = do
   quickCheck (semigroupAssoc :: Trivial -> Trivial -> Trivial -> Bool)
   quickCheck (monoidLeftIdentity :: Trivial -> Bool)
   quickCheck (monoidRightIdentity :: Trivial -> Bool)
+
   quickCheck (semigroupAssoc :: Identity String -> Identity String -> Identity String -> Bool)
+  quickCheck (monoidLeftIdentity :: Identity String -> Bool)
+  quickCheck (monoidRightIdentity :: Identity String -> Bool)
+
   quickCheck (semigroupAssoc :: Two String String -> Two String String -> Two String String -> Bool)
+  quickCheck (monoidLeftIdentity :: Two String String -> Bool)
+  quickCheck (monoidRightIdentity :: Two String String -> Bool)
+
   quickCheck (semigroupAssoc :: BoolConj -> BoolConj -> BoolConj -> Bool)
+  quickCheck (monoidLeftIdentity :: BoolConj -> Bool)
+  quickCheck (monoidRightIdentity :: BoolConj -> Bool)
+
   quickCheck (semigroupAssoc :: BoolDisj -> BoolDisj -> BoolDisj -> Bool)
-  quickCheck (semigroupAssoc :: Or String Trivial -> Or String Trivial -> Or String Trivial -> Bool)
-  -- given there's no way to implement Eq for functions, not sure what the intent here was
-  -- quickCheck (semigroupAssoc :: Combine String String -> Combine String String -> Combine String String -> Bool)
-  quickCheck (semigroupAssoc :: Validation String String -> Validation String String -> Validation String String -> Bool)
+  quickCheck (monoidLeftIdentity :: BoolDisj -> Bool)
+  quickCheck (monoidRightIdentity :: BoolDisj -> Bool)
+  
