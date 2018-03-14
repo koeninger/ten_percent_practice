@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('7minWorkout')
-  .controller('WorkoutController', ['$scope', '$interval', function ($scope, $interval) {
+  .controller('WorkoutController', ['$scope', '$interval', '$location', function ($scope, $interval, $location) {
       function WorkoutPlan(args) {
           this.exercises = [];
           this.name = args.name;
@@ -51,6 +51,7 @@ angular.module('7minWorkout')
                   startExercise(next);
               }
               else {
+                  $location.path('/finish');
                   console.log("Workout complete!")
               }
           });
