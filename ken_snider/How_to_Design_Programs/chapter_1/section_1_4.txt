@@ -15,7 +15,7 @@
 
 ; ---
 
-; Exercise 6Create an expression that counts the number of pixels in the image.
+; Exercise 6. Create an expression that counts the number of pixels in the image.
 ; (<image> used to represent cat image here)
 
 (require 2htdp/image)
