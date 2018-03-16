@@ -7,4 +7,5 @@ const ether_path = path.resolve(__dirname, 'contracts', 'EtherList.sol');
 const source = fs.readFileSync(ether_path, 'utf8');
 
 // Compile solidity script
-module.exports = solc.compile(source, 1).constracts['EtherList'];
+const compiled_contracts = solc.compile(source, 1);
+module.exports = compiled_contracts.contracts[':EtherList'];
