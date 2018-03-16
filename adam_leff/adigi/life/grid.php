@@ -8,14 +8,15 @@ class Grid
     private $_grid;
     
     public function __init(){
+        $grid = [];
         mt_srand();
         for($i = 0; $i < self::SIZE; $i++){
             for($j = 0; $j < self::SIZE; $j++){
-                $this->_grid[$i][$j] = new Cell();
-                $this->_grid[$i][$j]->alive = mt_rand(0,1) ? mt_rand(0,16) : 0;
+                $grid[$i][$j] = new Cell();
+                $grid[$i][$j]->alive = mt_rand(0,1) ? mt_rand(0,7) : 0;
             }
         }
-        $this->display();
+        return $grid;
     }
     
     public function tick(){
@@ -37,7 +38,7 @@ class Grid
                 }
             }
         }
-        $this->_grid = $newgrid;
+        return $newgrid;
         $this->display();
     }
     
