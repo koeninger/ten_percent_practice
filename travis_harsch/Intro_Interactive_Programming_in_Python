@@ -153,3 +153,50 @@ area = (s * (s - a) * (s - b) * (s - c)) ** 0.5
 print "A triangle with vertices (" + str(x0) + "," + str(y0) + "),",
 print "(" + str(x1) + "," + str(y1) + "), and",
 print "(" + str(x2) + "," + str(y2) + ") has an area of " + str(area) + "."
+
+Week 2
+Functions in Python
+# computes the area of a triangle (comment out what it does)
+def triangle_area(base, height):     # header - ends in colon (define name of function, then inputs/parameters)
+    area = (1.0 / 2) * base * height # body - all of body is indented (same level of indention - indicates end of function)
+    return area                      # body - return outputs value (return = output)
+functions only executed when called
+function as a box - takes inputs, creates output - names exist only within functions
+   calling the function
+
+single-input function
+# converts fahrenheit to celsius
+def fahrenheit2celsius(fahrenheit):
+    celsius = (5.0 / 9) * (fahrenheit - 32)
+    return celsius
+
+# test
+   c1 = fahrenheit2celsius(32)
+   c2 = fahrenheit2celsius(212)
+   print c1, c2
+
+#function within a function
+# converts fahrenheit to kelvin
+def fahrenheit2kelvin(fahrenheit):
+    celsius = fahrenheit2celsius(fahrenheit)
+    kelvin = celsius + 273.15
+    return kelvin
+
+# test
+k1 = fahrenheit2kelvin(32)
+k2 = fahrenheit2kelvin(212)
+print k1, k2
+
+#better to use existing functions instead of recalculating - fix one error instead of several
+
+# prints hello, world!
+def hello():
+    print "Hello, world!"
+#function without a return value
+#python - value of none - shows up when there's no return statement
+
+# test
+hello()      # call to hello prints "Hello, world!"
+h = hello()  # call to hello prints "Hello, world!" a second time
+print h      # prints None since there was no return value
+
