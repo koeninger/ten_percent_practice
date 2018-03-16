@@ -6,6 +6,10 @@ config(function ($routeProvider) {
     $routeProvider.when('/workout', { templateUrl: 'partials/workout.html', controller: 'WorkoutController' });
     $routeProvider.when('/finish', { templateUrl: 'partials/finish.html' });
     $routeProvider.otherwise({ redirectTo: '/start' });
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+      'self',
+      'http://*.youtube.com/**']);    
 });
 
 angular.module('7minWorkout', []);

@@ -38,7 +38,6 @@ angular.module('7minWorkout')
           startExercise(workoutPlan.exercises.shift());
       };
 
-
       var startExercise = function (exercisePlan) {
           $scope.currentExercise = exercisePlan;
           $scope.currentExerciseDuration = 0;
@@ -52,10 +51,10 @@ angular.module('7minWorkout')
               }
               else {
                   $location.path('/finish');
-                  console.log("Workout complete!")
               }
           });
       };
+
       var getNextExercise = function (currentExercisePlan) {
           var nextExercise = null;
           if (currentExercisePlan === restExercise) {
