@@ -3,7 +3,7 @@
 /* Controllers */
 
 angular.module('7minWorkout')
-  .controller('WorkoutController', ['$scope', '$interval', function ($scope, $interval) {
+  .controller('WorkoutController', ['$scope', '$interval', '$location', function ($scope, $interval, $location) {
       function WorkoutPlan(args) {
           this.exercises = [];
           this.name = args.name;
@@ -38,7 +38,6 @@ angular.module('7minWorkout')
           startExercise(workoutPlan.exercises.shift());
       };
 
-
       var startExercise = function (exercisePlan) {
           $scope.currentExercise = exercisePlan;
           $scope.currentExerciseDuration = 0;
@@ -51,10 +50,11 @@ angular.module('7minWorkout')
                   startExercise(next);
               }
               else {
-                  console.log("Workout complete!")
+                  $location.path('/finish');
               }
           });
       };
+
       var getNextExercise = function (currentExercisePlan) {
           var nextExercise = null;
           if (currentExercisePlan === restExercise) {
