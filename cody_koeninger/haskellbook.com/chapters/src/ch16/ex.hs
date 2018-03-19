@@ -2,6 +2,7 @@
 
 import Test.QuickCheck
 import Test.QuickCheck.Function
+import Control.Compose
 
 a = fmap (+ 1) $ read "[1]" :: [Int]
 
@@ -59,7 +60,35 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Two a b) where
 instance Functor (Two a) where
   fmap f (Two a b) = Two a (f b)
 
+data Three a b c = Three a b c deriving (Eq, Show)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c) => Arbitrary (Three a b c) where
+  arbitrary = do
+    a <- arbitrary
+    b <- arbitrary
+    c <- arbitrary
+    return $ Three a b c
+
+instance Functor (Three a b) where
+  fmap f (Three a b c) = Three a b (f c)
+
+data Three' a b = Three' a b b deriving (Eq, Show)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
+  arbitrary = do
+    a <- arbitrary
+    b <- arbitrary
+    b' <- arbitrary
+    return $ Three' a b b'
+
+instance Functor (Three' b) where
+  fmap f (Three' a b b') = Three' (f a) b b'
+
 checkAll = do
+  quickCheck (fId :: FI (Three' Int))
+  quickCheck (fCompose :: FC (Three' Int))
+  quickCheck (fId :: FI (Three Int Int))
+  quickCheck (fCompose :: FC (Three Int Int))
   quickCheck (fId :: FI (Two Int))
   quickCheck (fCompose :: FC (Two Int))
   quickCheck (fId :: FI Pair)
