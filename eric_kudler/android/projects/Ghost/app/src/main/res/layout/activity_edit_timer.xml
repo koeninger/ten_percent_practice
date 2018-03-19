@@ -16,20 +16,27 @@
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
             app:popupTheme="@style/AppTheme.PopupOverlay" />
+
+            <!-- TODO(2) Change color of focused text from red to something else-->
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/text_input_layout"
+                android:layout_width="match_parent"
+                android:layout_height="110dp"
+                android:paddingTop="50dp"
+                android:layout_marginBottom="30dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:hint="Name">
+
+                <EditText
+                    android:id="@+id/edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:inputType="text" />
+
+            </android.support.design.widget.TextInputLayout>
     </android.support.design.widget.AppBarLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:id="@+id/text_input_layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Label">
 
-        <EditText
-            android:id="@+id/edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text" />
-
-    </android.support.design.widget.TextInputLayout>
 
 </android.support.constraint.ConstraintLayout>

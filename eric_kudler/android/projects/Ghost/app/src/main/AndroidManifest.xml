@@ -19,10 +19,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <!-- TODO Restore "<-" button that was lost when we created a custom toolbar -->
         <activity android:name=".EditTimerActivity"
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
     </application>
 
