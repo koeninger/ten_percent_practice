@@ -73,3 +73,13 @@ cancelled_on IS NULL
 UPDATE sales_reps
 SET user_id = '***'
 WHERE user_id = '***' 
+
+--Active Users with assigned Markets with Market/Call Sign
+SELECT u.id, u.first_name, u.last_name, u.email, m.region, m.call_sign
+FROM users u, user_accounts a, markets m
+WHERE u.id = a.user_id AND u.market_id IS NOT NULL AND u.market_id > 0 AND a.active = 1 AND u.market_id = m.id
+
+--Cancelled Campaigns for Certain Month
+Select id, name, cancelled_on, cancelled_reason
+From campaigns
+Where cancelled_on LIKE "2018-02-%"
