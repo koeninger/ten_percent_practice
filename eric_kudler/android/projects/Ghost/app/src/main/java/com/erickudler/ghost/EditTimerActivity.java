@@ -12,5 +12,7 @@ public class EditTimerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_edit_timer);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_edit_timer);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
     }
 }
