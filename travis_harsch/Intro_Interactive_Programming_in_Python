@@ -200,3 +200,281 @@ hello()      # call to hello prints "Hello, world!"
 h = hello()  # call to hello prints "Hello, world!" a second time
 print h      # prints None since there was no return value
 
+#problem - get the tens and ones digit of a numbers
+num = 49
+tens = num // 10
+ones = num % 10
+print tens, ones
+
+
+
+
+# Remainder - modular arithmetic
+
+# systematically restrict computation to a range
+# long division - divide by a number, we get a quotient plus a remainder
+# quotient is integer division //, the remainder is % (Docs)
+
+
+#problem - get the tens and ones digit of a numbers
+num = 49
+tens = num // 10
+ones = num % 10
+print tens, ones
+print 10 * tens + ones
+
+#application - 24 hour clock
+
+hour = 20
+shift = 8
+print (hour + shift) % 24
+
+#application - screen wraparound
+
+width = 800
+position = 797
+move = 5
+position = (position + move) % width
+print position
+
+width = 800
+position = 2
+move = -5
+position = (position + move) % width
+print position
+
+
+#data conversions
+#convert an integer into string
+#convert hour into 24-hour format "3:00" always print
+
+hour = 3
+ones = hour % 10
+tens = hour // 10
+print tens, ones
+print tens, ones, ":00"
+print str(tens), str(ones), ":00"
+#string format - converts something into a string
+print str(tens) + str(ones) + ":00"
+
+# convert a string into numbers with int and float
+
+
+#modules - import and module name
+
+import simplegui #drawing
+
+import math #math
+
+import random #functions for random numbers
+
+
+#1 - miles to feet
+def miles_to_feet(miles):
+    feet = miles * 5280
+    return feet
+
+# Tests
+def test(miles):
+    print str(miles) + " miles equals",
+    print str(miles_to_feet(miles)) + " feet."
+
+test(13)
+test(57)
+test(82.67)
+
+#2 - total seconds in X hours, Y minutes, Z total_seconds
+def total_seconds(hours, minutes, seconds):
+    return (hours * 3600) + (minutes * 60) + (seconds)
+    # Tests
+# Student should not change this code.
+
+def test(hours, minutes, seconds):
+    """Tests the total_seconds functions."""
+    
+    print str(hours) + " hours, " + str(minutes) + " minutes, and",
+    print str(seconds) + " seconds totals to",
+    print str(total_seconds(hours, minutes, seconds)) + " seconds."
+
+test(7, 21, 37)
+test(10, 1, 7)
+test(1, 0, 1)
+
+#3 rectangle perimeter
+def rectangle_perimeter(width, height):
+    return width * 2 + height * 2
+
+    def test(width, height):
+        print "A rectangle " + str(width) + " inches wide and " + str(height),
+        print "inches high has a perimeter of",
+        print str(rectangle_perimeter(width, height)) + " inches."
+
+    test(4, 7)
+    test(7, 4)
+    test(10, 10)
+
+#4 - rectangle_area
+def rectangle_area(width, height):
+    return width * height
+    def rectangle_area(width, height):
+        return width * height
+
+    ###################################################
+    # Tests
+    # Student should not change this code.
+
+    def test(width, height):
+        print "A rectangle " + str(width) + " inches wide and " + str(height),
+        print "inches high has an area of",
+        print str(rectangle_area(width, height)) + " square inches."
+
+    test(4, 7)
+    test(7, 4)
+    test(10, 10)
+
+#5 - circle circumference
+def circle_circumference (radius):
+    return radius * 2 * 3.14
+
+# Tests
+# Student should not change this code.
+
+def test(radius):
+	"""Tests the circle_circumference function."""
+	
+	print "A circle with a radius of " + str(radius),
+	print "inches has a circumference of",
+	print str(circle_circumference(radius)) + " inches."
+
+test(8)
+test(3)
+test(12.9)
+
+#6 - circle area 
+import math
+def circle_area (radius):
+    return radius ** 2 * math.pi
+
+###################################################
+# Tests
+# Student should not change this code.
+
+def test(radius):
+    print "A circle with a radius of " + str(radius),
+    print "inches has an area of",
+    print str(circle_area(radius)) + " square inches."
+
+test(8)
+test(3)
+test(12.9)
+
+#7 - future value
+def future_value(present_value, annual_rate, years):
+    return present_value * (1 + 0.01 * annual_rate) ** years
+
+###################################################
+# Tests
+# Student should not change this code.
+
+def test(present_value, annual_rate, years):
+    """Tests the future_value function."""
+    
+    print "The future value of $" + str(present_value) + " in " + str(years),
+    print "years at an annual rate of " + str(annual_rate) + "% is",
+    print "$" + str(future_value(present_value, annual_rate, years)) + "."
+
+
+###################################################
+# Tests
+# Student should uncomment ONLY ONE of the following at a time.
+
+test(1000, 7, 10)
+test(200, 4, 5)
+test(1000, 3, 20)
+
+#8 - name tag
+def name_tag(first_name, last_name):
+    return "My name is " + first_name + " " + last_name
+
+#9 - name and age 
+def name_and_age(name, age):
+    return name + " is " + str(age) + " years old."
+
+#10 - point distance
+def point_distance (x0, y0, x1, y1)
+    return point_distance = ((x0 - x1) ** 2 + (y0 - y1) ** 2) ** 0.5
+
+#11 - triangle area from three points 
+def triangle_area (x0, y0, x1, y1, x2, y2)
+    a = ((x0 - x1) ** 2 + (y0 - y1) ** 2) ** 0.5
+    b = ((x1 - x2) ** 2 + (y1 - y2) ** 2) ** 0.5
+    c = ((x0 - x2) ** 2 + (y0 - y2) ** 2) ** 0.5
+    s = (a + b + c) / 2
+    return = (s * (s - a) * (s - b) * (s - c)) ** 0.5
+
+#12 print digits
+def print_digits(number):
+    print "The tens digit is " + str(number // 10) + " and the ones digit is " + str(number % 10)
+
+#13 - powerball
+import random
+def powerball():
+    print "Today's numbers are " + str(random.randrange(1, 60)) " ," 
+    print str(random.randrange(1, 60)) " ," 
+    print str(random.randrange(1, 60)) " ," 
+    print str(random.randrange(1, 60)) " ," 
+    print str(random.randrange(1, 60)) " ," 
+    print str(random.randrange(1, 60)) " and" 
+    print str(random.randrange(1, 60)) ". The Powerball number is" 
+    + str(random.randrange(1, 36)) " ,"
+
+
+#Week 2B
+#Boolean logic - operators - NOT, AND, OR
+a = True 
+b = False
+c = True 
+d = False
+
+print a
+print b
+print not a
+print a and b
+print a or b
+
+print (a and b) or (c and (not d))
+
+#Comparison operators
+#>
+#<
+#>=
+#<=
+#==
+#!=
+
+a = 7 > 3
+print a
+
+x = 8
+y = 5
+b = x >= y
+print b
+
+c = "Hello" == 'Hello'
+print c
+single = is assignment
+double == is equal
+
+d = 20.6 <= 18.3
+print d
+
+print (a and b) or (c and (not d))
+
+##Conditionals
+if, else
+elif = else if - one if, one else, unlimited elifs
+
+start function with is_ when writing Conditionals
+
+
+###documentation string- three double quotes, inputs, outputs and relation
