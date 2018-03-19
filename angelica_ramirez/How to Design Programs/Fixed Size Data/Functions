@@ -250,3 +250,23 @@ Collect all definitions in DrRacket’s definitions area and change them so that
    
    (define (profit ticket-price)
       (- (revenue ticket-price) (cost ticket-price)))
+
+Exercise 28 Determine the potential profit for these ticket prices: $1, 2, 3, 4, 5. 
+> (profit 1)
+511.2
+> (profit 2)
+937.2
+> (profit 3)
+1063.2
+> (profit 4)
+889.2
+> (profit 5)
+415.2
+Which price maximizes the profit of the movie theater? 
+$3 
+Determine the best ticket price to a dime. 
+$2.90 
+
+Exercise 29 There is no longer a fixed cost, a variable cost of $1.50 per attendee remains. Modify both programs to reflect this change. 
+
+When programs are modified, test them again with ticket prices $3, 4, and 5. and compare results. 
