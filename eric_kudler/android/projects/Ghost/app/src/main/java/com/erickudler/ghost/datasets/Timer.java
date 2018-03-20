@@ -12,7 +12,7 @@ public class Timer {
         numOfSteps = (int)(Math.random() * 10);
         bestTime = new Duration();
         bestTime.addMinutes((int)(Math.random() * 30));
-        bestTime.addMinutes((int)(Math.random() * 60));
+        bestTime.addSeconds((int)(Math.random() * 60));
     }
 
     public String getName() {

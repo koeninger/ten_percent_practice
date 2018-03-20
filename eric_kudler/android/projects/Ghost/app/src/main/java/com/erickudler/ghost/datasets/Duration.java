@@ -24,6 +24,14 @@ public class Duration  {
         return milliseconds;
     }
 
+    public int getSeconds() {
+        return milliseconds / 1000;
+    }
+
+    public int getMinutes() {
+        return milliseconds / 1000 / 60;
+    }
+
     public void addMinutes(int minutes) {
         milliseconds += minutes * 60 * 1000;
     }
@@ -33,7 +41,12 @@ public class Duration  {
     }
 
     public String toString() {
-        int seconds = (milliseconds / 1000);
-        return (seconds / 60) + ":" + (seconds % 60);
+        int totalSeconds = milliseconds / 1000;
+        int minutes = totalSeconds / 60;
+
+        int seconds = (totalSeconds % 60);
+        String minutesString = String.format("%02d", minutes);
+        String secondsString = String.format("%02d", seconds);
+        return minutesString + ":" + secondsString;
     }
 }
