@@ -9,3 +9,5 @@ Use Ethereum, Solidity, and Smart Contracts to build production-ready apps based
 * blockchain
 * Smart Contracts
 * Solidity Programming
+* Web3 for deployment
+* Mocha and Ganache for testing
