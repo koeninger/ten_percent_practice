@@ -268,5 +268,85 @@ Determine the best ticket price to a dime.
 $2.90 
 
 Exercise 29 There is no longer a fixed cost, a variable cost of $1.50 per attendee remains. Modify both programs to reflect this change. 
+(define base-attendees 120)
+(define base-price 5.0)
+(define change-in-attendees 15)
+(define change-in-price 0.1) 
+(define variable-cost-per-attendee 1.5)
 
+
+(define (attendees ticket-price)
+      (- base-attendees (* (- ticket-price base-price) (/ change-in-attendees change-in-price))))
+ 
+  (define (revenue ticket-price)
+      (* ticket-price (attendees ticket-price))) 
+  
+   (define (cost ticket-price)
+     (* variable-cost-per-attendee (attendees ticket-price)))
+   
+   (define (profit ticket-price)
+      (- (revenue ticket-price) (cost ticket-price)))
+
+(define (profit price)
+  (- (* (+ 120
+           (* (/ 15 0.1)
+              (- 5.0 price)))
+        price)
+     (* 1.5
+           (+ 120
+              (* (/ 15 0.1)
+                 (- 5.0 price))))))
 When programs are modified, test them again with ticket prices $3, 4, and 5. and compare results. 
+> (profit 3)
+630
+> (profit 4)
+675
+> (profit 5)
+420
+
+2.4 Global Constants
+Definition has following shape:
+write "(define", 
+write down the name,
+followed by a space and an expression, and 
+write down ")"
+
+global variable: name of constant
+constant definition: the definition
+right-hand side of the definition: the expression in a constnat definition 
+
+constant definitions intodruce names for all forms of data: numbers, images, strings, and so on.
+; the current prie of a movie ticket:
+(define CURRENT-PRICE 5)
+; a blank line:
+(define NL "\n")
+by convention, we use uppercase letters for global constants because it ensures that no matter how large the program is, the readers of programs 
+can easily distinguish such variables from others
+
+the advantage of using variable names instead of constants is that a single edit of a constant definition affects all uses
+
+Literal constants (define WIDTH 200)
+computed constants (define MID-WIDTH (/ WIDTH 2))
+
+Exercise 30 Define constants for the price optimization program at the movie theater so that the price sensitivity of attendance 
+(15 people for every 10 cents) become a computed constant 
+(define base-attendees 120)
+(define base-price 5.0)
+(define change-in-attendees 15)
+(define change-in-price 0.1) 
+(define variable-cost-per-attendee 1.5)
+(define PRICE-SENSITIVITY (/ change-in-attendees change-in-price))
+
+(define (attendees ticket-price)
+      (- base-attendees (* (- ticket-price base-price) PRICE-SENSITIVITY)))
+ 
+  (define (revenue ticket-price)
+      (* ticket-price (attendees ticket-price))) 
+  
+   (define (cost ticket-price)
+     (* variable-cost-per-attendee (attendees ticket-price)))
+   
+   (define (profit ticket-price)
+      (- (revenue ticket-price) (cost ticket-price)))
+
+2.5 Programs
