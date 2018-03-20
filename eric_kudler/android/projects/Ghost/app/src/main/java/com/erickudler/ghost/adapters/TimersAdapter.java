@@ -6,9 +6,10 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.erickudler.ghost.R;
+import com.erickudler.ghost.datasets.Timer;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder> {
-    private String[] mDataset;
+    private Timer[] mDataset;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -24,7 +25,15 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public TimersAdapter() {
-        mDataset = new String[] {"Getting Up", "Driving to Work", "Picking up Lunch", "Going to Bed"};
+        mDataset = new Timer[3];
+
+        mDataset[0] = new Timer();
+        mDataset[0].setName("Getting Up");
+        mDataset[1] = new Timer();
+        mDataset[1].setName("Driving to Work");
+        mDataset[2] = new Timer();
+        mDataset[2].setName("Picking up Lunch");
+
     }
 
     // Create new views (invoked by the layout manager)
@@ -44,7 +53,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
     public void onBindViewHolder(ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
-        holder.mTextView.setText(mDataset[position]);
+        holder.mTextView.setText(mDataset[position].getName());
 
     }
 
