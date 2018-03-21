@@ -26,6 +26,7 @@ library
                      , split
                      , QuickCheck
                      , hspec
+                     , TypeCompose
   default-language:    Haskell2010
 
 executable haskellbook-exe
@@ -44,7 +45,6 @@ test-suite haskellbook-test
                      , haskellbook
                      , QuickCheck
                      , hspec
-                     , TypeCompose
   ghc-options:         -threaded -rtsopts -with-rtsopts=-N
   other-modules:
         Ch8.WordNumberSpec
