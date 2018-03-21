@@ -20,16 +20,18 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         // each data item is just a string in this case
         public TextView mTimerName;
         public TextView mBestTime;
+        public TextView mTimerStepCounter;
         public ViewHolder(View v) {
             super(v);
             mTimerName = itemView.findViewById(R.id.tv_timer_name);
             mBestTime = itemView.findViewById(R.id.tv_timer_best_time);
+            mTimerStepCounter = itemView.findViewById(R.id.tv_step_counter);
         }
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
     public TimersAdapter() {
-        mDataset = new Timer[3];
+        mDataset = new Timer[4];
 
         mDataset[0] = new Timer();
         mDataset[0].setName("Getting Up");
@@ -37,6 +39,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         mDataset[1].setName("Driving to Work");
         mDataset[2] = new Timer();
         mDataset[2].setName("Picking up Lunch");
+        mDataset[3] = new Timer();
+        mDataset[3].setName("Some Fourth Thing");
 
     }
 
@@ -47,7 +51,6 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         // create a new view
 
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_view, parent, false);
-
         ViewHolder vh = new ViewHolder(view);
         return vh;
     }
@@ -59,7 +62,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         // - replace the contents of the view with that element
         holder.mTimerName.setText(mDataset[position].getName());
         holder.mBestTime.setText(mDataset[position].getBestTime().toString());
-        Log.d("TimersAdapter", mDataset[position].getBestTime().getMinutes() + " " + mDataset[position].getBestTime().getSeconds());
+        holder.mTimerStepCounter.setText("No of steps: " + mDataset[position].getNumOfSteps());
     }
 
     // Return the size of your dataset (invoked by the layout manager)

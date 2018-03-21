@@ -15,19 +15,23 @@
         android:layout_gravity="center_vertical|start"
         android:textSize="22sp"
         tools:text="#42" />
+    <TextView
+        android:id="@+id/tv_step_counter"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/tv_timer_name"
+        android:layout_gravity="center_vertical|start"
+        android:textSize="15sp"
+        android:text="dsfds" />
 
-    <View
-        android:layout_width="1dp"
-        android:layout_height="match_parent"
-        android:background="#000000"
-        android:layout_toRightOf="@id/tv_timer_name"/>
 
     <TextView
         android:id="@+id/tv_timer_best_time"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="26:40"
-        android:textSize="25sp"
+        android:textSize="30sp"
         android:layout_alignParentRight="true"/>
 
 </RelativeLayout>
