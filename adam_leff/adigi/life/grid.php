@@ -3,20 +3,21 @@ include 'cell.php';
 
 class Grid
 {
-    const SIZE = 10;
+    const SIZE = 6;
     
     private $_grid;
+    private $_pc = 0;
     
     public function __init(){
-        $grid = [];
+        $this->_grid = [];
         mt_srand();
         for($i = 0; $i < self::SIZE; $i++){
             for($j = 0; $j < self::SIZE; $j++){
-                $grid[$i][$j] = new Cell();
-                $grid[$i][$j]->alive = mt_rand(0,1) ? mt_rand(0,7) : 0;
+                $this->_grid[$i][$j] = new Cell();
+                $this->_grid[$i][$j]->alive = mt_rand(0,1) ? mt_rand(0,7) : 0;
             }
         }
-        return $grid;
+        return $this->_grid;
     }
     
     public function tick(){
@@ -38,7 +39,7 @@ class Grid
                 }
             }
         }
-        return $newgrid;
+        $this->_grid = $newgrid;
         $this->display();
     }
     
@@ -73,5 +74,43 @@ class Grid
         }
         
         return $sum;
+    }
+    
+    public function getMemoryAt($addr){
+        $x = intval($addr/self::SIZE);
+        $y = $addr % self::SIZE;
+        return $this->_grid[$x][$y];
+    }
+    
+    public function setMemoryAt($addr, $val){
+        $x = intval($addr/self::SIZE);
+        $y = $addr % self::SIZE;
+        $this->_grid[$x][$y] = $val;
+    }
+    
+    public function subleq(){
+        $a_addr = $this->getMemoryAt($this->_pc);
+        $b_addr = $this->getMemoryAt($this->_pc + 1);
+        while($a_addr < 0){
+            $a_addr = $this->getMemoryAt($a_addr * -1);
+        }
+        while($b_addr < 0){
+            $b_addr = $this->getMemoryAt($b_addr * -1);
+        }
+        $a_val = $this->getMemoryAt($a_addr);
+        $b_val = $this->getMemoryAt($b_addr);
+        
+        $b_val = $b_val - $a_val;
+        $this->setMemoryAt($b_addr,$b_val);
+        
+        $c_val = $this->getMemoryAt($this->_pc + 2);
+        if($c_val < 0){
+            $this->getMemoryAt($c_val * -1);
+        }
+        if($b_val <= 0){
+            $this->_pc = $c_val;
+        } else {
+            $this->_pc += 3;
+        }
     }
 }
