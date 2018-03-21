@@ -15,11 +15,11 @@ contract Lottery {
 	}
 
 	function pickWinner() public {
-		uint randomIndex = random() % 3;
-		return players[randomIndex];
+		uint index = random() % 3;
+		return players[index].transfer(this.balance);
 	}
 
 	function random() private view returns (uint) {
-		return uint( keccak256(block.difficulty, now, players );
+		return uint( keccak256(block.difficulty, now, players) );
 	}
 }
