@@ -350,3 +350,30 @@ Exercise 30 Define constants for the price optimization program at the movie the
       (- (revenue ticket-price) (cost ticket-price)))
 
 2.5 Programs
+From a coding perspective, a program is just a bunch of function and constant definitions. Usually one function is singled out as the 
+"main" function and this main function tends to compose others. From this perspective there are 2 kinds.
+Batch program: consumes all of its inputs at once and computes its result. Main function is the composition of auxiliary functions 
+The operating system calls the main function on its inputs and waits for the program's output
+Interactive program: consumes some of its inputs, computes, prodcues some output, consumes more input, and so on
+  event: when an input shows up, interactive programs are created as event-driven programs. Main function uses an expression to 
+  describe which functions to call for which kind of events, event handlers: these functions 
+  
+This book focuses mostly on programs that interact via graphical user interfaces (GUI)
+
+read-file: reads the content of an entire file as a string
+write-file: which creates a file from a given string, if the file already exists it will replace its content with the given string
+
+(write-file "sample.dat" "212")
+"sample.dat"
+(read-file "sample.dat")
+"212"
+
+'stdout: standard output device
+'stdin: standard input device
+
+write-file also accepts 'stdout as the first argument and then displays the resulting file content
+(write-file 'stdout "212/n")
+212
+'stdout 
+
+read-file accepts 'stdin in lieu of file name and then reads input from the current interactions area 
