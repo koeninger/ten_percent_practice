@@ -12,3 +12,45 @@ Prologue.
 Like expressions, function definitions in BSL come in a uniform shape:
 (define (FunctionName Variable ... Variable)
   Expression)
+
+
+Exercise 11:
+Define a function that consumes two numbers, x and y, and that computes the
+distance of point (x,y) to the origin.
+
+(define (distance x y)
+    (sqrt (+ (sqr x) (sqr y))))
+
+
+Exercise 12. Define the function cvolume, which accepts the length of a side of
+an equilateral cube and computes its volume. If you have time, consider
+defining csurface, too.
+
+(define (cvolume side)
+    (* side (sqr side)))
+
+
+Exercise 13. Define the function string-first, which extracts the first 1String
+from a non-empty string.
+
+(define (string-first str)
+    (if (string? str)
+    (substring str 0 1) "not a string"))
+
+
+Exercise 14. Define the function string-last, which extracts the last 1String
+from a non-empty string.
+
+(define (string-last str)
+    (if (string? str)
+    (substring str (- (string-length str) 1) (string-length str)) "not a string"))
+
+
+Exercise 15. Define ==>. The function consumes two Boolean values, call them
+sunny and friday. Its answer is #true if sunny is false or friday is true.
+Note Logicians call this Boolean operation implication, and they use the
+notation sunny => friday for this purpose.
+
+(define (==> sunny friday)
+    (and (if (false? sunny)
+        (if (true? friday) true ))
