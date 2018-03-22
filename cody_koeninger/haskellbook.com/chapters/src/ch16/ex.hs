@@ -1,4 +1,5 @@
 {-# LANGUAGE GeneralizedNewtypeDeriving #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 import Test.QuickCheck
 import Test.QuickCheck.Function
@@ -74,19 +75,71 @@ instance Functor (Three a b) where
 
 data Three' a b = Three' a b b deriving (Eq, Show)
 
-instance (Arbitrary a, Arbitrary b) => Arbitrary (Three' a b) where
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Flip Three' a b) where
   arbitrary = do
     a <- arbitrary
     b <- arbitrary
     b' <- arbitrary
-    return $ Three' a b b'
+    return $ Flip (Three' a b b')
 
-instance Functor (Three' b) where
-  fmap f (Three' a b b') = Three' (f a) b b'
+instance Functor (Flip Three' b) where
+  fmap f (Flip (Three' a b b')) = Flip (Three' (f a) b b')
+
+instance (Eq a, Eq b) => Eq (Flip Three' a b) where
+  (==) (Flip x) (Flip y) = x == y
+
+instance (Show a, Show b) => Show (Flip Three' a b) where
+  show (Flip x) = "Flip " ++ show x
+
+data Four a b c d = Four a b c d deriving (Eq, Show)
+
+instance Functor (Four a b c) where
+  fmap f (Four a b c d) = Four a b c (f d)
+
+instance (Arbitrary a, Arbitrary b, Arbitrary c, Arbitrary d) => Arbitrary (Four a b c d) where
+  arbitrary = do
+    a <- arbitrary
+    b <- arbitrary
+    c <- arbitrary
+    d <- arbitrary
+    return $ Four a b c d
+
+data Four' a b = Four' a a a b deriving (Eq, Show)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Four' a b) where
+  arbitrary = do
+    a <- arbitrary
+    a2 <- arbitrary
+    a3 <- arbitrary
+    b <- arbitrary
+    return $ Four' a a2 a3 b
+
+instance Functor (Four' a) where
+  fmap f (Four' a a2 a3 b) = Four' a a2 a3 (f b)
+
+data Trivial = Trivial deriving (Eq, Show)
+
+-- Trivial has wrong kind
+-- instance Functor Trivial where
+--  fmap f Trivial = Trivial
+
+data Sum a b
+  = First a
+  | Second b
+  deriving (Eq, Show)
+
+instance Functor (Sum a) where
+  fmap f (First x) = First x
+  fmap f (Second b) = Second (f b)
+
 
 checkAll = do
-  quickCheck (fId :: FI (Three' Int))
-  quickCheck (fCompose :: FC (Three' Int))
+  quickCheck (fId :: FI (Four' Int))
+  quickCheck (fCompose :: FC (Four' Int))
+  quickCheck (fId :: FI (Four Int Int Int))
+  quickCheck (fCompose :: FC (Four Int Int Int))
+  quickCheck (fId :: FI (Flip Three' Int))
+  quickCheck (fCompose :: FC (Flip Three' Int))
   quickCheck (fId :: FI (Three Int Int))
   quickCheck (fCompose :: FC (Three Int Int))
   quickCheck (fId :: FI (Two Int))
