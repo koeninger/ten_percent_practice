@@ -2,5 +2,5 @@
 
 class Cell
 {
-    public $alive = 0;
+    public $value = 0;
 }
