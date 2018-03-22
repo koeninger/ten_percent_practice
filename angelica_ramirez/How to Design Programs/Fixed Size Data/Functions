@@ -377,3 +377,25 @@ write-file also accepts 'stdout as the first argument and then displays the resu
 'stdout 
 
 read-file accepts 'stdin in lieu of file name and then reads input from the current interactions area 
+
+(define (C f)
+  (* 5/9 (- f 32)))
+(define (convert in out)
+  (write-file out
+              (string-append
+               (number->string
+                (C
+                 (string->number
+                  (read-file in))))
+               "\n")))
+ (write-file "sample.dat" "212")
+ "sample.dat"
+ (convert "sample.dat" 'stdout)
+ 100 
+ 'stdout
+(convert "sample.dat" "out.dat")
+"out.dat"
+(read-file "out.dat")
+"100"
+
+Exercise 31  
