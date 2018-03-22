@@ -17,11 +17,18 @@ def minmax(sequence, min_or_max):
     if (len(sequence) == 1):
         return sequence[0];
     
-    if min_or_max == 'min':
-    	return min(sequence[len(sequence)-1], minmax(sequence, sequence[len(sequence)-1]));
-    elif min_or_max == 'max':
-    	return max(sequence[len(sequence)-1], minmax(sequence, sequence[len(sequence)-1]));
+    num = minmax(sequence[1:], min_or_max)
 
+    if min_or_max == 'min':
+        if num < sequence[0]:
+            return num
+        else:
+            return sequence[0]
+    elif min_or_max == 'max':
+        if num > sequence[0]:
+            return num
+        else:
+            return sequence[0]
 
 print minmax([1,2,3,4,5,6,7,8,9,10,2000,4343,-2,23,607607,30], 'max')
 

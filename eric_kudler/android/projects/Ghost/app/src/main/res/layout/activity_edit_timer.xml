@@ -22,12 +22,11 @@
                 android:id="@+id/text_input_layout"
                 android:layout_width="match_parent"
                 android:layout_height="110dp"
-                android:paddingTop="50dp"
-                android:layout_marginBottom="30dp"
+                android:paddingTop="30dp"
+                android:layout_marginBottom="20dp"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:hint="Name">
-
                 <EditText
                     android:id="@+id/edit_text"
                     android:layout_width="match_parent"
@@ -41,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
