@@ -1,0 +1,10 @@
+>>> s = 'café'
+>>> len(s)
+5
+>>> b = s.encode('utf8')
+>>> b
+b'cafe\xcc\x81'
+>>> len(b)
+6
+>>> b.decode('utf8')
+'café'
