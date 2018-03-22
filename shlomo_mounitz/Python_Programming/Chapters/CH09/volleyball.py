@@ -4,7 +4,7 @@ def simOneGame(probA, probB):
     serving = "A"
     scoreA = 0
     scoreB = 0
-    while scoreA < 15 and scoreB < 15:
+    while not gameIsOver(scoreA, scoreB):
         if serving == "A":
             if random() < probA:
                 scoreA = scoreA + 1
@@ -16,6 +16,9 @@ def simOneGame(probA, probB):
             else:
                 serving = "A"
     return scoreA, scoreB
+
+def gameIsOver(scoreA, scoreB):
+    return (scoreA >= 15 or scoreB >= 15) and abs(scoreA - scoreB) >= 2
 
 def main():
     scoreA, scoreB = simOneGame(.7, .6)
