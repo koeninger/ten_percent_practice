@@ -478,3 +478,19 @@ start function with is_ when writing Conditionals
 
 
 ###documentation string- three double quotes, inputs, outputs and relation
+
+##Logic and Conditionals Practice
+#1 - even numbers
+def is_even(number):
+    '''returns even/odd for a given number'''
+    return (number % 2) == 0
+
+#2 cool name bro
+def is_cool(name):
+    '''returns cool for three given names'''
+    return (name == 'Stephen') or (name == 'John') or (name == 'Joe')
+
+#3 - is it lunchtime - returns lunch at 11 am or noon, no lunch otherwise
+def is_lunchtime(hour, is_am):
+    '''returns lunchtime for 11 am or noon'''
+    return (hour == 11 and is_am) or (hour == 12 and not is_am)
