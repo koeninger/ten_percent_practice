@@ -30,11 +30,15 @@ def minmax(sequence, min_or_max):
         else:
             return sequence[0]
 
-print minmax([1,2,3,4,5,6,7,8,9,10,2000,4343,-2,23,607607,30], 'max')
-
-
+# print minmax([1,2,3,4,5,6,7,8,9,10,2000,4343,-2,23,607607,30], 'max')
 
 # *************************************************** #
+
+# C-4.10 Describe a recursive algorithm to compute the integer part of the base-two
+# logarithm of n using only addition and integer division.
+
+    
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
