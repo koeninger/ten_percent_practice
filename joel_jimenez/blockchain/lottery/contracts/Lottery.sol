@@ -16,12 +16,14 @@ contract Lottery {
 	}
 
 	function pickWinner() public restricted {
-		uint index = random() % 3;
-		// "randomly" chose a player in the array and give them all the ether
-		players[index].transfer(this.balance);
+		if (players.length > 0){
+			uint index = random() % players.length;
+			// "randomly" chose a player in the array and give them all the ether
+			players[index].transfer(this.balance);
 
-		// Empty players array to reset game
-		players = new address[](0);
+			// Empty players array to reset game
+			players = new address[](0);
+		}
 	}
 
 	function getPlayers() public view returns (address[]) {
