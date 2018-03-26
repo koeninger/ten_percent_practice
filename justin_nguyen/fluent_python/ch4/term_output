@@ -8,3 +8,141 @@ b'cafe\xcc\x81'
 6
 >>> b.decode('utf8')
 'café'
+
+
+
+>>> cafe = bytes('café', encoding='utf_8')
+>>> cafe
+b'cafe\xcc\x81'
+>>> cafe[0]
+99
+>>> cafe[:1]
+b'c'
+>>> cafe_arr = bytearray(cafe)
+>>> cafe_arr
+bytearray(b'cafe\xcc\x81')
+>>> cafe_arr[-1:]
+bytearray(b'\x81')
+
+
+
+>>> import array
+>>> numbers = array.array('h', [-2, -1, 0, 1, 2, 3])
+>>> octets = bytes(numbers)
+>>> octets
+b'\xfe\xff\xff\xff\x00\x00\x01\x00\x02\x00\x03\x00'
+
+
+>>> for codec in ['utf_8', 'utf_16']:
+...     print(codec, 'El Niño'.encode(codec), sep='\t')
+utf_8   b'El Nin\xcc\x83o'
+utf_16  b'\xff\xfeE\x00l\x00 \x00N\x00i\x00n\x00\x03\x03o\x00'
+
+
+>>> city = 'São Paulo'
+>>> city.encode('utf_8')
+b'Sa\xcc\x83o Paulo'
+>>> city.encode('utf_16')
+b'\xff\xfeS\x00a\x00\x03\x03o\x00 \x00P\x00a\x00u\x00l\x00o\x00'
+>>> city.encode('cp437')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "/usr/local/Cellar/python/3.6.4_3/Frameworks/Python.framework/Versions/3.6/lib/python3.6/encodings/cp437.py", line 12, in encode
+    return codecs.charmap_encode(input,errors,encoding_map)
+UnicodeEncodeError: 'charmap' codec can't encode character '\u0303' in position 2: character maps to <undefined>
+'charmap' codec can't encode character '\u0303' in position 2: character maps to <undefined>
+>>> city.encode('cp437', errors='ignore')
+b'Sao Paulo'
+>>> city.encode('cp437', errors='replace')
+b'Sa?o Paulo'
+>>> city.encode('cp437', errors='xmlcharrefreplace')
+b'Sa&#771;o Paulo'
+
+
+>>> octets = b'Montr\xe9al'
+>>> octets.decode('cp1252')
+'Montréal'
+>>> octets.decode('iso8859_7')
+'Montrιal'
+>>> octets.decode('koi8_r')
+'MontrИal'
+>>> octets.decode('utf_8')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+UnicodeDecodeError: 'utf-8' codec can't decode byte 0xe9 in position 5: invalid continuation byte
+'utf-8' codec can't decode byte 0xe9 in position 5: invalid continuation byte
+>>> octets.decode('utf_8', errors='replace')
+'Montr�al'
+
+
+>>> u16 = 'El Niño'.encode('utf_16')
+>>> u16
+b'\xff\xfeE\x00l\x00 \x00N\x00i\x00n\x00\x03\x03o\x00'
+>>> list(u16)
+[255, 254, 69, 0, 108, 0, 32, 0, 78, 0, 105, 0, 110, 0, 3, 3, 111, 0]
+>>> u16le = 'El Niño'.encode('utf_16le')
+>>> list(u16le)
+[69, 0, 108, 0, 32, 0, 78, 0, 105, 0, 110, 0, 3, 3, 111, 0]
+>>> u16be = 'El Niño'.encode('utf_16be')
+>>> list(u16be)
+[0, 69, 0, 108, 0, 32, 0, 78, 0, 105, 0, 110, 3, 3, 0, 111]
+
+
+>>> exp = """
+...     locale.getpreferredencoding()
+...     type(my_file)
+...     my_file.encoding
+...     sys.stdout.isatty()
+...     sys.stdout.encoding
+...     sys.stdin.isatty()
+...     sys.stdin.encoding
+...     sys.stderr.isatty()
+...     sys.stderr.encoding
+...     sys.getdefaultencoding()
+...     sys.getfilesystemencoding()
+... """
+>>> my_file = open('dummy', 'w')
+>>> for e in exp.split():
+...     val = eval(e)
+...     print(e.rjust(30), '->', repr(val))
+ locale.getpreferredencoding() -> 'UTF-8'
+                 type(my_file) -> <class '_io.TextIOWrapper'>
+              my_file.encoding -> 'UTF-8'
+           sys.stdout.isatty() -> True
+           sys.stdout.encoding -> 'UTF-8'
+            sys.stdin.isatty() -> True
+            sys.stdin.encoding -> 'UTF-8'
+           sys.stderr.isatty() -> True
+           sys.stderr.encoding -> 'UTF-8'
+      sys.getdefaultencoding() -> 'utf-8'
+   sys.getfilesystemencoding() -> 'utf-8'
+
+
+>>> from unicodedata import normalize, name
+>>> ohm = '\u2126'
+>>> name(ohm)
+'OHM SIGN'
+>>> ohm_c = normalize('NFC', ohm)
+>>> name(ohm_c)
+'GREEK CAPITAL LETTER OMEGA'
+>>> ohm == ohm_c
+False
+>>> normalize('NFC', ohm) == normalize('NFC', ohm_c)
+True
+
+
+>>> from unicodedata import normalize, name
+>>> half = '½'
+>>> normalize('NFKC', half)
+'1⁄2'
+>>> four_squared = '4²'
+>>> normalize('NFKC', four_squared)
+'42'
+>>> micro = 'µ'
+>>> micro_kc = normalize('NFKC', micro)
+>>> micro, micro_kc
+('µ', 'μ')
+>>> ord(micro), ord(micro_kc)
+(181, 956)
+>>> name(micro), name(micro_kc)
+('MICRO SIGN', 'GREEK SMALL LETTER MU')
