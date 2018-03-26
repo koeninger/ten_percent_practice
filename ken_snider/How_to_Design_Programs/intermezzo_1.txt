@@ -1,0 +1,76 @@
+;Exercise 116. Take a look at the following sentences:
+;x
+;(= y z)
+;(= (= y z) 0)
+;Explain why they are syntactically legal expressions
+
+programs are made of definitions or expressions.
+x is a variable, which is an expression, and therefore legal.
+(= y z) is a valid primitive with at least two expressions, in parenthesis, which is legal.
+(= (= y z) 0) is a valid primitive with at least two expressions, one of the expressions is itself an expression with primitives and at least two expressions, all nested with parenthesis, which is legal.
+
+;Exercise 117. Consider the following sentences:
+;(3 + 4)
+;number?
+;(x)
+;Explain why they are syntactically illegal.
+
+(3 + 4) is invalid because syntax requires primitives to be at the beginning of an expression
+number? is invalid because it is a keyword, and needs to be in parenthesis, as part of a function
+(x) is invalid because it is a value, which should not be in parenthesis, or should be part of an expression, not the whole expression
+
+;Exercise 118. Take a look at the following sentences:
+;(define (f x) x)
+;(define (f x) y)
+;(define (f x y) 3)
+;Explain why they are syntactically legal definitions 
+
+(define (f x) x) defines a function named f, using variable x, with an expression of x. Since x is a value, and a value is a valid expression, this is legal.
+(define (f x) y) defines a function named f, using variable y, with an expression of x. Since x is a value, and a value is a valid expression, this is legal (functions can use external variables)
+;(define (f x y) 3) defines a function named f, using variables x and y, with an expression of 3. Since 3 is a value, and a value is a valid expression, this is legal (functions can use external variables)
+
+;Exercise 119. Consider the following sentences:
+;(define (f "x") x)
+;(define (f x y z) (x))
+;Explain why they are syntactically illegal.
+
+(define (f "x") x) tries to define a function with a variable name that is a string. A string is a value, not a variable, and is therefore illegal.
+(define (f x y z) (x)) tries to define a function with an expression that is an attempt to call function (x), however, (x) is not a valid function definition, and moreso, x has already been defined as a variable in the function definition "(f x y z)"
+
+;Exercise 120. Discriminate the legal from the illegal sentences:
+;(x)
+;(+ 1 (not x))
+;(+ 1 2 3)
+;Explain why the sentences are legal or illegal. Determine whether the legal ones belong to the category expr or def.
+
+(x) is invalid because it is a value, which should not be in parenthesis, or should be part of an expression, not the whole expression
+(+ 1 (not x)) is invalid because the + primitive requires numbers, and the result of (not x) is a boolean, not a number
+(+ 1 2 3) is valid because the + primitive requires numbers, which 1 2 3 are. It is an expression, because it does not define a variable.
+
+;Exercise 121. Evaluate the following expressions step-by-step:
+;(+ (* (/ 12 8) 2/3)	   (- 20 (sqrt 4))) 
+;(cond	  [(= 0 0) #false]	  [(> 0 1) (string=? "a" "a")]	  [else (= (/  1 0) 9)]) 
+;(cond	  [(= 2 0) #false]	  [(> 2 1) (string=? "a" "a")]	  [else (= (/  1 2) 9)]) 
+;Use DrRacket’s stepper to confirm your computations.
+
+Start: (+ (* (/ 12 8) 2/3)  (- 20 (sqrt 4)))
+(+ (* (1.5) 2/3) (- 20 (sqrt 4))) 
+(+ (* 1.5 2/3) (- 20 (sqrt 4))) 
+(+ (* 3/2 2/3) (- 20 (sqrt 4)))
+(+ 1 (- 20 (sqrt 4)))
+(+ 1 (- 20 2))
+(+ 1 18)
+19
+
+Start: (cond    [(= 0 0) #false]        [(> 0 1) (string=? "a" "a")]    [else (= (/  1 0) 9)])
+(cond [(= 0 0) #false] [(> 0 1) (string=? "a" "a")] [else (= (/  1 0) 9)])
+(cond [#true #false] [(> 0 1) (string=? "a" "a")] [else (= (/  1 0) 9)])
+#false
+
+Start: (cond	  [(= 2 0) #false]	  [(> 2 1) (string=? "a" "a")]	  [else (= (/  1 2) 9)])
+(cond [#false #false] [(> 2 1) (string=? "a" "a")] [else (= (/  1 2) 9)])
+(cond [(> 2 1) (string=? "a" "a")] [else (= (/  1 2) 9)])
+(cond [#true (string=? "a" "a")] [else (= (/  1 2) 9)])
+(cond [#true #true] [else (= (/  1 2) 9)])
+#true
+ 
