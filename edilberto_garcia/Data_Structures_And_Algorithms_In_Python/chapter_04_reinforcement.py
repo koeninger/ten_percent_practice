@@ -34,10 +34,19 @@ def minmax(sequence, min_or_max):
 
 # *************************************************** #
 
-# C-4.10 Describe a recursive algorithm to compute the integer part of the base-two
-# logarithm of n using only addition and integer division.
+# C-4.12 Give a recursive algorithm to compute the product of two positive integers,
+# m and n, using only addition and subtraction.
 
-    
+def product(a,b):
+    print 'a: ', a, 'b', b
+    if (b > 1):
+        a += product(a, b - 1)
+    return a
+
+# print product(13,5)
+
+
+
 
 # *************************************************** #
 # *************************************************** #
