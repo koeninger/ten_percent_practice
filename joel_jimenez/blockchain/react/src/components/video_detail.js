@@ -15,16 +15,12 @@ const VideoDetail = ({video}) => {
 	return (
 		<div className="section">
 			<div className="card">
-				<div className="card-header">
-					<p className="card-header-title">{videoTitle}</p>
+				<div className="embed-responsive embed-responsive-16by9">
+					<iframe className="embed-responsive-item" src={videoUrl}></iframe>
 				</div>
-				<div className="card-content">
-					<div className="section has-text-centered">
-						<iframe src={videoUrl} width="100%" height="100%"></iframe>
-					</div>
-				</div>
-				<div className="card-footer">
-					<p className="card-footer-item">{videoDescription}</p>
+				<div className="card-body">
+					<h4 className="card-title">{videoTitle}</h4>
+					<p className="card-text">{videoDescription}</p>
 				</div>
 			</div>
 		</div>

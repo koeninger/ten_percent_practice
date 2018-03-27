@@ -14,7 +14,7 @@ class App extends Component {
 
 		YoutubeSearch({
 			key: APP_KEY,
-			term: 'mean cats'
+			term: 'vsauce'
 		}, (videos) => {
 			this.setState({ videos });
 		});
@@ -22,12 +22,12 @@ class App extends Component {
 
 	render() { 
 		return (
-			<div className="columns">
-				<div className="column">
+			<div className="row">
+				<div className="col-lg mt-3">
 					<SearchBar />
 					<VideoDetail video={this.state.videos[0]} />
 				</div>
-				<div className="column is-one-third">
+				<div className="col-lg-3 mt-3">
 					<VideoList videos={this.state.videos} />
 				</div>
 			</div>

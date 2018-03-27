@@ -9,8 +9,8 @@ class SearchBar extends Component {
 
 	render() {
 		return (
-			<div className="section">
-				<input onChange={ event => this.setState( {search_term: event.target.value} ) } className="input is-medium" type="text" />
+			<div className="form-group">
+				<input onChange={ event => this.setState( {search_term: event.target.value} ) } className="form-control" type="text" />
 			</div>
 		);
 	}
