@@ -1,7 +1,7 @@
 from graphics import *
 
 def main():
-    win = GraphWin('Target');
+    win = GraphWin('Target')
     win.setCoords(-10,-10, 10, 10)
     center = Point(0,0)
     colors = ['yellow','red','blue','black','white']
