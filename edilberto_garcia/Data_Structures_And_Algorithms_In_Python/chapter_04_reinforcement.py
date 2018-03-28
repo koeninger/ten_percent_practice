@@ -30,11 +30,24 @@ def minmax(sequence, min_or_max):
         else:
             return sequence[0]
 
-print minmax([1,2,3,4,5,6,7,8,9,10,2000,4343,-2,23,607607,30], 'max')
-
-
+# print minmax([1,2,3,4,5,6,7,8,9,10,2000,4343,-2,23,607607,30], 'max')
 
 # *************************************************** #
+
+# C-4.12 Give a recursive algorithm to compute the product of two positive integers,
+# m and n, using only addition and subtraction.
+
+def product(a,b):
+    print 'a: ', a, 'b', b
+    if (b > 1):
+        a += product(a, b - 1)
+    return a
+
+# print product(13,5)
+
+
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #

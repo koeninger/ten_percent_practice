@@ -9,6 +9,14 @@ angular.module('7minWorkout')
           this.name = args.name;
           this.title = args.title;
           this.restBetweenExercise = args.restBetweenExercise;
+          this.totalWorkoutDuration = function () {
+              if (this.exercises.length == 0) return 0;
+              var total = 0;
+              angular.forEach(this.exercises, function (exercise) {
+                  total = total + exercise.duration;
+              });
+              return this.restBetweenExercise * (this.exercises.length - 1) + total;
+          }
       };
 
       function Exercise(args) {
@@ -23,9 +31,9 @@ angular.module('7minWorkout')
       }
 
       var restExercise;
-      var workoutPlan;
       var startWorkout = function () {
-          workoutPlan = createWorkout();
+          $scope.workoutPlan = createWorkout();
+          $scope.workoutTimeRemaining = $scope.workoutPlan.totalWorkoutDuration();
           restExercise = {
               details: new Exercise({
                   name: "rest",
@@ -33,9 +41,13 @@ angular.module('7minWorkout')
                   description: "Relax a bit!",
                   image: "img/rest.png",
               }),
-              duration: workoutPlan.restBetweenExercise
+              duration: $scope.workoutPlan.restBetweenExercise
           };
-          startExercise(workoutPlan.exercises.shift());
+          $interval(function () {
+              $scope.workoutTimeRemaining = $scope.workoutTimeRemaining - 1;
+          }, 1000, $scope.workoutTimeRemaining);
+
+          startExercise($scope.workoutPlan.exercises.shift());
       };
 
       var startExercise = function (exercisePlan) {
@@ -54,14 +66,13 @@ angular.module('7minWorkout')
               }
           });
       };
-
       var getNextExercise = function (currentExercisePlan) {
           var nextExercise = null;
           if (currentExercisePlan === restExercise) {
-              nextExercise = workoutPlan.exercises.shift();
+              nextExercise = $scope.workoutPlan.exercises.shift();
           }
           else {
-              if (workoutPlan.exercises.length != 0) {
+              if ($scope.workoutPlan.exercises.length != 0) {
                   nextExercise = restExercise;
               }
           }
@@ -87,6 +98,7 @@ angular.module('7minWorkout')
           });
 
           workout.exercises.push({
+          workout.exercises.push({
               details: new Exercise({
                   name: "pushUp",
                   title: "Push Up",
@@ -96,6 +108,37 @@ angular.module('7minWorkout')
                   procedure: "Lie prone on the ground with hands placed as wide or slightly wider than shoulder width. \
                               Keeping the body straight, lower body to the ground by bending arms at the elbows. \
                               Raise body up off the ground by extending the arms."
+              }),
+              duration: 30
+          });
+          workout.exercises.push({
+              details: new Exercise({
+                  name: "crunches",
+                  title: "Abdominal Crunches",
+                  description: "The basic crunch is a abdominal exercise in a strength-training program.",
+                  image: "img/crunches.png",
+                  videos: ["//www.youtube.com/embed/Xyd_fa5zoEU", "//www.youtube.com/embed/MKmrqcoCZ-M"],
+                  procedure: "Lie on your back with your knees bent and feet flat on the floor, hip-width apart.\
+                              Place your hands behind your head so your thumbs are behind your ears.\
+                              Hold your elbows out to the sides but rounded slightly in.\
+                              Gently pull your abdominals inward.\
+                              Curl up and forward so that your head, neck, and shoulder blades lift off the floor.\
+                              Hold for a moment at the top of the movement and then lower slowly back down."
+              }),
+              duration: 30
+          });
+          workout.exercises.push({
+              details: new Exercise({
+                  name: "squat",
+                  title: "Squat",
+                  description: "The squat is a compound, full body exercise that trains primarily the muscles of the thighs, hips, buttocks and quads.",
+                  image: "img/squat.png",
+                  videos: ["//www.youtube.com/embed/QKKZ9AGYTi4", "//www.youtube.com/embed/UXJrBgI2RxA"],
+                  procedure: "Stand with your head facing forward and your chest held up and out.\
+                              Place your feet shoulder-width apart or little wider. Extend your hands straight out in front of you.\
+                              Sit back and down like you're sitting into a chair. Keep your head facing straight as your upper body bends forward a bit. Rather than allowing your back to round, let your lower back arch slightly as you go down.\
+                              Lower down so your thighs are parallel to the floor, with your knees over your ankles. Press your weight back into your heels.\
+                              Keep your body tight, and push through your heels to bring yourself back to the starting position."
               }),
               duration: 30
           });
