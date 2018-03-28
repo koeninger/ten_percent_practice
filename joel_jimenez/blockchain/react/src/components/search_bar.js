@@ -4,20 +4,27 @@ class SearchBar extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { search_term: '' };
+		this.state = { searchTerm: '' };
 	}
 
 	render() {
 		return (
-			<div className="form-group">
-				<input onChange={ event => this.setState( {search_term: event.target.value} ) } className="form-control" type="text" />
+			<div className="input-group input-group-lg mb-3">
+				<input type="text" className="form-control" placeholder="Search YouTube"
+					onChange={ event => this.onInputChange(event.target.value) }
+					onKeyPress={ (target) => this.onKeyPress(target.charCode) } />
 			</div>
 		);
 	}
 
-	onKeyPress(target) {
-		if(target.charCode == 13){
-			console.log('ENTER!');
+	onInputChange(searchTerm) {
+		this.setState({searchTerm})
+		this.props.onSearchTermChange(searchTerm);
+	}
+
+	onKeyPress(charCode) {
+		if (charCode == 13){
+			this.onInputChange(this.state.searchTerm);
 		}
 	}
 }

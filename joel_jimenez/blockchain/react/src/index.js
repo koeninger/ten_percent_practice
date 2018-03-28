@@ -1,3 +1,4 @@
+import _ from 'lodash';
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import YoutubeSearch from 'youtube-api-search';
@@ -10,25 +11,42 @@ import APP_KEY from './components/youtube_api_key';
 class App extends Component {
 	constructor(props) {
 		super(props);
-		this.state = { videos: [] };
 
+		this.state = {
+			videos: [],
+			selectedVideo: null
+		};
+
+		this.videoSearch('surfboards');
+	}
+
+	videoSearch(searchTerm){
 		YoutubeSearch({
 			key: APP_KEY,
-			term: 'vsauce'
+			term: searchTerm
 		}, (videos) => {
-			this.setState({ videos });
+			this.setState({
+				videos: videos,
+				selectedVideo: videos[0]
+			});
 		});
 	}
 
-	render() { 
+	render() {
+		const videoSearch = _.debounce( (searchTerm) => {
+			this.videoSearch(searchTerm)
+		}, 300);
+
 		return (
 			<div className="row">
-				<div className="col-lg mt-3">
-					<SearchBar />
-					<VideoDetail video={this.state.videos[0]} />
+				<div className="col-md mt-3">
+					<SearchBar onSearchTermChange={videoSearch} />
+					<VideoDetail video={this.state.selectedVideo} />
 				</div>
-				<div className="col-lg-3 mt-3">
-					<VideoList videos={this.state.videos} />
+				<div className="col-md-4 mt-3">
+					<VideoList
+						videos={this.state.videos}
+						onVideoSelect={selectedVideo => this.setState({selectedVideo})} />
 				</div>
 			</div>
 		);
