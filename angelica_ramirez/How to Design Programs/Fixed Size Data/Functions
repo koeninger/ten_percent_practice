@@ -453,3 +453,42 @@ Create appropriate files, launch main, and check whether it delivers the expecte
 (main "first.dat" "last.dat" "sig.dat" "letter.dat")
 (read-file "letter.dat")
 
+Interactive Programs
+
+Exercise 32 Think of 10 different forms of events that software applications on such computers will have to deal with.
+eye movements, skin temperature, heart rate, car speed, car positions, etc. 
+
+big-bang: an expression that describes how a program connects with a small segment of the world; a description of a small world
+it's initial state, how states are transformed, how states are rendered and how big-bang may determine other attributes of the
+current state
+
+(define (number->square s) 
+  (square s "solid" "red"))
+>(number->square 5)
+>(number->square 20)
+behaves like a batch program: consumes a number and produces an image
+
+Now try big-bang
+(big-bang 100 [to-draw number->square])
+displays a 100x100 square in a separate window and keeps running, once stopped it returns the current state (initial state) of 100
+
+Now
+(big-bang 100
+  [to-draw number->square]
+  [on-tick sub1]
+  [stop-when zero?])
+on-tick: tells how to deal with clock ticks
+stop-when: says when to stop
+Can be read: every time the clock ticks, subtract 1 from current state, then check whether zero? is true of the new state and if so,
+stop, and everytime an event handler returns a value, use number->square to render it as an image 
+
+Add a clause for key events: (define (reset s ke) 100)
+(big-bang 100 
+  [to-draw number->square[
+  [on-tick sub1]
+  [stop-when zero?]
+  [on-key reset])
+When press a key, it resets to 100x100 square
+
+
+

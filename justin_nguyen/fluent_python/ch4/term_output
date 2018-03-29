@@ -163,3 +163,7 @@ True
 >>> eszett, eszett_cf
 ('ß', 'ss')
 
+
+>>> fruits = ['caju', 'atemoia', 'cajá', 'açaí', 'acerola']
+>>> sorted(fruits)
+['acerola', 'açaí', 'atemoia', 'cajá', 'caju']
