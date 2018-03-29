@@ -266,4 +266,99 @@ Determine the best ticket price to a dime.
 (define (loop ticket-start ticket-end)
   (while (<= ticket-start ticket-end) (profit ticket-start) (+ ticket-start 0.1)))
 
-This should work, it doesn't because no while, but it should.
+This should work, it doesn't because no while, but it should
+
+
+Exercise 29. After studying the costs of a show, the owner discovered several
+ways of lowering the cost. As a result of these improvements, there is no
+longer a fixed cost; a variable cost of $1.50 per attendee remains.
+
+(define default-price 5.0)
+(define default-attendance 120)
+(define average-attendance-change 15)
+(define default-price-delta 0.1)
+(define variable-cost 1.5)
+
+(define (attendees ticket-price)
+  (- default-attendance (* (- ticket-price default-price) (/ average-attendance-change default-price-delta))))
+
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+
+(define (cost ticket-price)
+  (* variable-cost (attendees ticket-price)))
+
+(define (profit ticket-price)
+  (- (revenue ticket-price)
+     (cost ticket-price)))
+
+ > (profit 1)
+ -360
+ > (profit 2)
+ 285
+ > (profit 3)
+ 630
+ > (profit 4)
+ 675
+ > (profit 5)
+ 420
+ >
+
+
+2.4 Global Constants
+
+For every constant mentioned in a problem statement, introduce one
+constant definition.
+
+Exercise 30. Define constants for the price optimization program at the movie
+theater so that the price sensitivity of attendance (15 people for every 10
+cents) becomes a computed constant.
+
+(define default-price 5.0)
+(define default-attendance 120)
+(define average-attendance-change 15)
+(define default-price-delta 0.1)
+(define variable-cost 1.5)
+(define price-sensitivity (/ average-attendance-change default-price-delta))
+(define price-sensitivity2 (/ 15 0.1))
+
+(define (attendees ticket-price)
+  (- default-attendance (* (- ticket-price default-price) (price-sensitivty))))
+
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+
+(define (cost ticket-price)
+  (* variable-cost (attendees ticket-price)))
+
+(define (profit ticket-price)
+  (- (revenue ticket-price)
+     (cost ticket-price)))
+
+
+2.5 Programs
+
+You are ready to create simple programs. From a coding perspective, a program 
+is just a bunch of function and constant definitions. Usually one function is
+singled out as the “main” function, and this main function tends to compose
+others. From the perspective of launching a program, however, there are two
+distinct kinds:
+
+    a batch program consumes all of its inputs at once and computes its result.
+    Its main function is the composition of auxiliary functions, which may
+    refer to additional auxiliary functions, and so on. When we launch a
+    batch program, the operating system calls the main function on its inputs
+    and waits for the program’s output.
+
+    an interactive program consumes some of its inputs, computes, produces
+    some output, consumes more input, and so on. When an input shows up, we
+    speak of an event, and we create interactive programs as event-driven
+    programs. The main function of such an event-driven program uses an
+    expression to describe which functions to call for which kinds of events.
+    These functions are called event handlers.
+
+When we launch an interactive program, the main function informs the operating
+system of this description. As soon as input events happen, the operating
+system calls the matching event handler. Similarly, the operating system knows
+from the description when and how to present the results of these function
+calls as output.
