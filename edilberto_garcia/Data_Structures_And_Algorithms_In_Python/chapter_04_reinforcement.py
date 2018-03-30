@@ -45,8 +45,14 @@ def product(a,b):
 
 # print product(13,5)
 
+# C-4.16 Write a short recursive Python function that takes a character string s and
+# outputs its reverse.
 
-
+def string_reverse(string):
+    if len(string) == 0:
+        return string
+    return string_reverse(string[1:]) + string[0]
+print string_reverse('POIUYTREWQ');
 
 # *************************************************** #
 # *************************************************** #

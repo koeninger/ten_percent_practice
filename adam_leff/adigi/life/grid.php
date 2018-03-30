@@ -46,7 +46,7 @@ class Grid
     public function setMemoryAt($addr, $val){
         $x = intval($addr/self::SIZE);
         $y = $addr % self::SIZE;
-        $this->_grid[$x][$y]->value = $val;
+        $this->_grid[$x][$y]->setValue($val);
     }
     
     public function subleq(){
