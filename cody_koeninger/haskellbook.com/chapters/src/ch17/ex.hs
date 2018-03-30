@@ -1,3 +1,5 @@
+{-# LANGUAGE GeneralizedNewtypeDeriving #-}
+
 import Control.Applicative
 import Data.List (elemIndex)
 import Data.Monoid
@@ -97,5 +99,66 @@ instance (Arbitrary a) => Arbitrary (List a) where
 
 instance (Eq a) => EqProp (List a) where (=-=) = eq
 
-checkAll :: IO ()
-checkAll = quickBatch (applicative (Cons ("_", "_", 1 :: Integer) Nil))
+take' :: Int -> List a -> List a
+take' _ Nil = Nil
+take' x (Cons a r) | x > 0 = Cons a (take' (x - 1) r)
+                   | otherwise = Nil
+
+repeat' :: a -> List a
+repeat' x = Cons x (repeat' x)
+
+newtype ZipList' a = ZipList' (List a) deriving (Eq, Show, Arbitrary)
+
+instance Eq a => EqProp (ZipList' a) where
+  xs =-= ys = eq xs' ys'
+    where xs' = let (ZipList' l) = xs
+                in take' 3000 l
+          ys' = let (ZipList' l) = ys
+                in take' 3000 l
+
+instance Functor ZipList' where
+  fmap f (ZipList' xs) =
+    ZipList' $ fmap f xs
+
+instance Applicative ZipList' where
+  pure x = ZipList' (repeat' x)
+  (ZipList' zf) <*> (ZipList' zx) = ZipList' (recur zf zx)
+    where
+      recur _ Nil = Nil
+      recur Nil _ = Nil
+      recur (Cons f fs) (Cons x xs) = Cons (f x) (recur fs xs)
+                             
+data Validation e a
+  = Fail e
+  | Suc a
+  deriving (Eq, Show)
+
+instance Functor (Validation e) where
+  fmap _ (Fail x) = Fail x
+  fmap f (Suc x) = Suc (f x)
+
+instance Monoid e => Applicative (Validation e) where
+  pure x = Suc x
+  (Fail x) <*> (Fail y) = Fail (mappend x y)
+  (Fail x) <*> (Suc _) = Fail x
+  (Suc _) <*> (Fail x) = Fail x
+  (Suc f) <*> (Suc x) = Suc (f x)
+
+instance (Arbitrary a, Arbitrary b) => Arbitrary (Validation a b) where
+  arbitrary = do
+    a <- arbitrary
+    b <- arbitrary
+    frequency [(1, return $ Fail a)
+              ,(2, return $ Suc b)]
+
+instance (Eq a, Eq b) => EqProp (Validation a b) where (=-=) = eq
+
+checkValidation :: IO ()
+checkValidation = quickBatch (applicative ((Suc ("_", "_", 1 :: Integer)) :: Validation [Char] ([Char], [Char], Integer)))
+
+checkZipList :: IO ()
+checkZipList = quickBatch (applicative (ZipList' (Cons ("_", "_", 1 :: Integer) Nil)))
+
+checkList :: IO ()
+checkList = quickBatch (applicative (Cons ("_", "_", 1 :: Integer) Nil))
+
