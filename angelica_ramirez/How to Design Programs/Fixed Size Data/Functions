@@ -490,5 +490,22 @@ Add a clause for key events: (define (reset s ke) 100)
   [on-key reset])
 When press a key, it resets to 100x100 square
 
+Figure 14: consists of 2 constant definitions followed by 3 funtions definitions: main (launches a big-bang interactive program),
+place-dot-at (which translates the current state into an image), and stop (which throws away its inputs and produces 0)
 
+(define BACKGROUND (empty-scene 100 100))
+(define DOT (circle 3 "solid" "red"))
+ 
+(define (main y)
+  (big-bang y
+    [on-tick sub1]
+    [stop-when zero?]
+    [to-draw place-dot-at]
+    [on-key stop]))
+ 
+(define (place-dot-at y)
+  (place-image DOT 50 y BACKGROUND))
+ 
+(define (stop y ke)
+  0)
 
