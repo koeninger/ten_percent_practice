@@ -338,7 +338,7 @@ cents) becomes a computed constant.
 
 2.5 Programs
 
-You are ready to create simple programs. From a coding perspective, a program 
+You are ready to create simple programs. From a coding perspective, a program
 is just a bunch of function and constant definitions. Usually one function is
 singled out as the “main” function, and this main function tends to compose
 others. From the perspective of launching a program, however, there are two
@@ -362,3 +362,10 @@ system of this description. As soon as input events happen, the operating
 system calls the matching event handler. Similarly, the operating system knows
 from the description when and how to present the results of these function
 calls as output.
+
+Programs are even more useful if they can retrieve the input from some file
+and deliver the output to some other file. Indeed, the name “batch program”
+dates to the early days of computing when a program read a file (or several
+files) from a batch of punch cards and placed the result in some other file(s),
+also a batch of cards. Conceptually, a batch program reads the input file(s)
+at once and also produces the result file(s) all at once.
