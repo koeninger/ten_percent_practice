@@ -83,3 +83,81 @@ attributes specific to functions, not found in generic python user-defined objec
 >>> def func(): pass
 >>> sorted(set(dir(func)) - set(dir(obj)))
 ['__annotations__', '__call__', '__closure__', '__code__', '__defaults__', '__get__', '__globals__', '__kwdefaults__', '__name__', '__qualname__']
+
+
+
+
+>>> from tag import tag
+>>> tag('p', 'hello')
+'<p>hello</p>'
+>>> print(tag('p', 'hello', 'world'))
+<p>hello</p>
+<p>world</p>
+>>> tag('p','hello',id=33)
+'<p id="33">hello</p>'
+>>> print(tag('p', 'hello', 'world', cls='sidebar'))
+<p class="sidebar">hello</p>
+<p class="sidebar">world</p>
+>>> print(tag(content='testing', name='img'))
+<img content="testing" \>
+>>> print(tag('br'))
+<br \>
+>>> my_tag = {'name': 'img', 'title': 'Sunset Boulevard', 'src': 'sunset.jpg', 'cls': 'framed'}
+>>> print(tag(**my_tag))
+<img class="framed" src="sunset.jpg" title="Sunset Boulevard" \>
+
+
+
+>>> def f(a, *, b):
+...     return a, b
+>>> f(1, b=2)
+(1, 2)
+
+
+>>> from clip import clip
+>>> from clip import clip
+>>> clip.__defaults__
+(80,)
+>>> clip.__code__
+<code object clip at 0x106960ed0, file "/Users/jnguyen/programming/ten_percent_practice/justin_nguyen/fluent_python/ch5/clip.py", line 2>
+>>> clip.__code__.co_varnames
+('text', 'max_len', 'end', 'space_before', 'space_after')
+>>> clip.__code__.co_argcount
+2
+
+
+>>> from inspect import signature
+>>> sig = signature(clip)
+>>> sig
+<Signature (text, max_len=80)>
+>>> str(sig)
+'(text, max_len=80)'
+>>> for name, param in sig.parameters.items():
+...     print(param.kind, ':', name, '=', param.default)
+POSITIONAL_OR_KEYWORD : text = <class 'inspect._empty'>
+POSITIONAL_OR_KEYWORD : max_len = 80
+
+
+>>> from inspect import signature
+>>> sig = signature(clip)
+>>> sig
+<Signature (text, max_len=80)>
+>>> str(sig)
+'(text, max_len=80)'
+>>> for name, param in sig.parameters.items():
+...     print(param.kind, ':', name, '=', param.default)
+POSITIONAL_OR_KEYWORD : text = <class 'inspect._empty'>
+POSITIONAL_OR_KEYWORD : max_len = 80
+>>>
+>>>
+>>> import inspect
+>>> sig = inspect.signature(tag)
+>>> my_tag = {'name': 'img', 'title': 'Sunset Boulevard', 'src': 'sunset.jpg', 'cls': 'framed'}
+>>> bound_args = sig.bind(**my_tag)
+>>> bound_args
+<BoundArguments (name='img', cls='framed', attrs={'title': 'Sunset Boulevard', 'src': 'sunset.jpg'})>
+>>> for name, val in bound_args.arguments.items():
+...     print(name, '=', val)
+name = img
+cls = framed
+attrs = {'title': 'Sunset Boulevard', 'src': 'sunset.jpg'}
