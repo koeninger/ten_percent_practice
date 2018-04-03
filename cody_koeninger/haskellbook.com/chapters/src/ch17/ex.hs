@@ -269,6 +269,10 @@ instance (Monoid a) => Applicative (Four' a) where
   pure x = Four' mempty mempty mempty x
   (Four' x y z f) <*> (Four' x' y' z' b) = Four' (mappend x x') (mappend y y') (mappend z z') (f b)
 
+
+combos :: [a] -> [b] -> [c] -> [(a, b, c)]
+combos = liftA3 (,,)
+
 qbTriple = ("_", "_", 1 :: (Sum Integer))
 
 checkFour' :: IO ()
