@@ -1,3 +1,7 @@
+/*
+	Compiles both CampaingFactory and Campaign contracts and saves them in a build directory
+*/
+
 const path = require('path');
 const solc = require('solc');
 const fs = require('fs-extra');
