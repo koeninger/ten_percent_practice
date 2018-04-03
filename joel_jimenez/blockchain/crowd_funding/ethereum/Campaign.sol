@@ -1,5 +1,6 @@
 pragma solidity ^0.4.17;
 
+// Contract that manages the instances of a campaign contract
 contract CampaignFactory {
     // Keep track of all deployed instinces of the campaign contract
     address[] public campaigns;
@@ -17,6 +18,7 @@ contract CampaignFactory {
     }
 }
 
+// Contract for a specific campaign
 contract Campaign {
     // Structure that defines a spending request
     struct Request{
