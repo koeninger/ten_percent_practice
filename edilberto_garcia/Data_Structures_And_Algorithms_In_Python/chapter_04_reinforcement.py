@@ -49,12 +49,32 @@ def product(a,b):
 # outputs its reverse.
 
 def string_reverse(string):
+    # if len(string) > 0:
+        # print "String in this iteration: ", string, "\n\tWhat we're passing in here", string[1:], "\n\tstring[0]:", string[0]
     if len(string) == 0:
         return string
     return string_reverse(string[1:]) + string[0]
-print string_reverse('POIUYTREWQ');
+# print string_reverse('POIUYTREWQ');
 
 # *************************************************** #
+
+# C-4.17 Write a short recursive Python function that determines if a string s is a
+# palindrome, that is, it is equal to its reverse. For example, racecar and
+# gohangasalamiimalasagnahog are palindromes.
+
+
+def rec_is_palindrome(string):
+    # print string
+    if len(string) == 1:
+        return True
+    print 'comparing', string[0], string[-1] 
+    if string[0] != string[-1]:
+        return False
+    return rec_is_palindrome(string[1::-1])
+
+print rec_is_palindrome('racecar')
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #

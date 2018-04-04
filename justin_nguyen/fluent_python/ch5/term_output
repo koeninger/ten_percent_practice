@@ -1,0 +1,163 @@
+
+first class functions
+
+>>> def factorial(n):
+...     '''returns n!'''
+...     return 1 if n < 2 else n * factorial(n-1)
+>>> factorial(42)
+1405006117752879898543142606244511569936384000000000
+>>> factorial.__doc__
+'returns n!'
+>>> type(factorial)
+<class 'function'>
+
+
+>>> fact = factorial
+>>> fact
+<function factorial at 0x105cf0730>
+>>> fact(5)
+120
+>>> map(factorial, range(11))
+<map object at 0x105b4fda0>
+>>> list(map(fact, range(11)))
+[1, 1, 2, 6, 24, 120, 720, 5040, 40320, 362880, 3628800]
+
+
+higher order functions
+
+>>> fruits = ['strawberry', 'fig', 'apple', 'cherry', 'raspberry', 'banana']
+>>> sorted(fruits, key=len)
+['fig', 'apple', 'cherry', 'banana', 'raspberry', 'strawberry']
+
+
+
+>>> def reverse(word):
+...     return word[::-1]
+>>> reverse('testing')
+'gnitset'
+>>> sorted(fruits, key=reverse)
+['banana', 'apple', 'fig', 'raspberry', 'strawberry', 'cherry']
+
+
+listcomp vs map/filter
+
+>>> list(map(fact, range(6)))
+[1, 1, 2, 6, 24, 120]
+>>> [fact(n) for n in range(6)]
+[1, 1, 2, 6, 24, 120]
+>>> list(map(factorial, filter(lambda n: n % 2, range(6))))
+[1, 6, 120]
+>>> [factorial(n) for n in range(6) if n % 2]
+[1, 6, 120]
+
+
+>>> from functools import reduce
+>>> from operator import add
+>>> reduce(add, range(100))
+4950
+>>> sum(range(100))
+4950
+
+
+>>> fruits = ['strawberry', 'fig', 'apple', 'cherry', 'raspberry', 'banana']
+>>> sorted(fruits, key=lambda word: word[::-1])
+['banana', 'apple', 'fig', 'raspberry', 'strawberry', 'cherry']
+
+
+
+>>> import bingo
+>>> b = bingo.BingoCage(range(3))
+>>> b.pick()
+1
+>>> b()
+0
+>>> callable(b)
+True
+>>>
+
+
+attributes specific to functions, not found in generic python user-defined objects
+
+>>> class C: pass
+>>> obj = C()
+>>> def func(): pass
+>>> sorted(set(dir(func)) - set(dir(obj)))
+['__annotations__', '__call__', '__closure__', '__code__', '__defaults__', '__get__', '__globals__', '__kwdefaults__', '__name__', '__qualname__']
+
+
+
+
+>>> from tag import tag
+>>> tag('p', 'hello')
+'<p>hello</p>'
+>>> print(tag('p', 'hello', 'world'))
+<p>hello</p>
+<p>world</p>
+>>> tag('p','hello',id=33)
+'<p id="33">hello</p>'
+>>> print(tag('p', 'hello', 'world', cls='sidebar'))
+<p class="sidebar">hello</p>
+<p class="sidebar">world</p>
+>>> print(tag(content='testing', name='img'))
+<img content="testing" \>
+>>> print(tag('br'))
+<br \>
+>>> my_tag = {'name': 'img', 'title': 'Sunset Boulevard', 'src': 'sunset.jpg', 'cls': 'framed'}
+>>> print(tag(**my_tag))
+<img class="framed" src="sunset.jpg" title="Sunset Boulevard" \>
+
+
+
+>>> def f(a, *, b):
+...     return a, b
+>>> f(1, b=2)
+(1, 2)
+
+
+>>> from clip import clip
+>>> from clip import clip
+>>> clip.__defaults__
+(80,)
+>>> clip.__code__
+<code object clip at 0x106960ed0, file "/Users/jnguyen/programming/ten_percent_practice/justin_nguyen/fluent_python/ch5/clip.py", line 2>
+>>> clip.__code__.co_varnames
+('text', 'max_len', 'end', 'space_before', 'space_after')
+>>> clip.__code__.co_argcount
+2
+
+
+>>> from inspect import signature
+>>> sig = signature(clip)
+>>> sig
+<Signature (text, max_len=80)>
+>>> str(sig)
+'(text, max_len=80)'
+>>> for name, param in sig.parameters.items():
+...     print(param.kind, ':', name, '=', param.default)
+POSITIONAL_OR_KEYWORD : text = <class 'inspect._empty'>
+POSITIONAL_OR_KEYWORD : max_len = 80
+
+
+>>> from inspect import signature
+>>> sig = signature(clip)
+>>> sig
+<Signature (text, max_len=80)>
+>>> str(sig)
+'(text, max_len=80)'
+>>> for name, param in sig.parameters.items():
+...     print(param.kind, ':', name, '=', param.default)
+POSITIONAL_OR_KEYWORD : text = <class 'inspect._empty'>
+POSITIONAL_OR_KEYWORD : max_len = 80
+>>>
+>>>
+>>> import inspect
+>>> sig = inspect.signature(tag)
+>>> my_tag = {'name': 'img', 'title': 'Sunset Boulevard', 'src': 'sunset.jpg', 'cls': 'framed'}
+>>> bound_args = sig.bind(**my_tag)
+>>> bound_args
+<BoundArguments (name='img', cls='framed', attrs={'title': 'Sunset Boulevard', 'src': 'sunset.jpg'})>
+>>> for name, val in bound_args.arguments.items():
+...     print(name, '=', val)
+name = img
+cls = framed
+attrs = {'title': 'Sunset Boulevard', 'src': 'sunset.jpg'}
