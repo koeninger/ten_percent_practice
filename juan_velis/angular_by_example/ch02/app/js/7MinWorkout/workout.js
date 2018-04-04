@@ -98,7 +98,6 @@ angular.module('7minWorkout')
           });
 
           workout.exercises.push({
-          workout.exercises.push({
               details: new Exercise({
                   name: "pushUp",
                   title: "Push Up",
