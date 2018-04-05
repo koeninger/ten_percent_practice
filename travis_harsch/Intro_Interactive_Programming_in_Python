@@ -499,3 +499,26 @@ def is_lunchtime(hour, is_am):
 def is_leap_year(year):
     '''returns leap year for divisible by four, not by 100, by 400'''
     return ((year % 4) == 0 and ((year % 100) != 0 or (year % 400) == 0))
+
+#5 - interval intersections
+def interval_intersect(a, b, c, d):
+    """Returns whether the intervals [a,b] and [c,d] intersect."""
+    return (c <= b) and (a <= d)
+
+#6 - name and age 
+def name_and_age(name, age):
+	"""Returns a string stating the person's age."""
+	if age >= 0:
+		return name + " is " + str(age) + " years old."
+	else:
+		return "Error: Invalid age"
+
+#7 - print digits 
+def print_digits(number):
+	"""Prints the tens and ones digit of an integer in [0,100)."""
+	
+	if 0 <= number < 100:
+		print "The tens digit is " + str(number // 10) + ",",
+		print "and the ones digit is " + str(number % 10) + "."
+	else:
+		print "Error: Input is not a two-digit number."

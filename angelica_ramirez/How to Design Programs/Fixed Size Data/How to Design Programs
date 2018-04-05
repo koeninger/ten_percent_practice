@@ -1,0 +1,51 @@
+A good programcomes with a short write-up that explains what it does, what inputs it expects, and what it produces 
+
+programming product: the program's connection to the problem statement is evident so that a small change to the problem statement is easy to
+translate into a small change to the program 
+
+Exercise 33: research the "year 2000" problem
+Y2K problem, Millennium bug, Y2K bug
+was a class of computer bugs related to the formatting and storage of calendar data for dates beginning the year 2000
+problems arose or were anticipated because many programs repsresent 4-digit years with only the final 2 digits making the 
+2000 year indistinguishable from 1900 
+
+3.1 Designing Functions
+
+the purpose of a program is to describe a computational process that consumes some information and produces new information
+think of information as facts about the program's domain 
+for a program to process information it must turn the information into some form of data in the programming language, then
+process the data, and then turn the resulting data into information again 
+an interactive program may even intermingle these steps by acquiring more information from the world as needed and delivering 
+information in between 
+
+model view controller (MVC) the way BSL and DrRacket separate data processing from parsing information into data and turning 
+data into information 
+
+program design must start with the connection between information and data and we should decide how to use our chosen programming
+language to represent the relevant pieces of information as data and how we should interpret data as information 
+
+Designing a program that consumes and produces information inf the form of numbers, an interpreetation requires explaining what
+a number as 42 denotes in the domain: 
+42 could refer to # of pixels from top margin in the domain of images
+42 could mean a temperature
+etc. 
+the key is to know how to go from numbers as information to numbers as data and vice versa
+
+data definitions: write down this knowledge in the form of comments and serves 2 purposes:
+names a collection of data, a class, using a meaningful word
+informs readres how to crete elements of this class and how to decide whether some arbitrary piece of data belongs to the collection
+Example:
+; A Temperature is a Number.
+; interpretation represents Celsius degrees 
+
+The Design Process: 
+1. Express how you wish to represent the information as data
+; We use numbers to represent centimeters.
+formulate data definitions, like the one for Temperature, for the classes of data that are considered critical for the program
+
+2. write down a signature, statement of purpose, and a function header
+function signature: a comment that tells the readers of the design how many inputs the function consumers, which classes they
+draw from, and what kind of data it produces
+; String -> Number
+; Temperature -> String
+
