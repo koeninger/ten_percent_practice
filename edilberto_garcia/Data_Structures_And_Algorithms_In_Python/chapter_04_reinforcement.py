@@ -64,15 +64,13 @@ def string_reverse(string):
 
 
 def rec_is_palindrome(string):
-    # print string
     if len(string) == 1:
         return True
-    print 'comparing', string[0], string[-1] 
     if string[0] != string[-1]:
         return False
-    return rec_is_palindrome(string[1::-1])
+    return rec_is_palindrome(string[1:-1])
 
-print rec_is_palindrome('racecar')
+# print rec_is_palindrome('race4car'), rec_is_palindrome('madamimadam')
 
 
 # *************************************************** #
