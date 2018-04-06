@@ -17,11 +17,11 @@ class Grid
                 $this->_grid[$i][$j]->value = mt_rand(-30,31);
             }
         }
+        $this->display();
         return $this->_grid;
     }
     
     public function tick(){
-        $this->display();
         $this->subleq();
         $this->display();
     }
@@ -30,7 +30,7 @@ class Grid
         for($i = 0; $i < self::SIZE; $i++){
             $line = '';
             for($j = 0; $j < self::SIZE; $j++){
-                $line .= $this->_grid[$i][$j]->value . " ";
+                $line .= $this->_grid[$i][$j]->displayString() . " ";
             }
             echo $line . "\n";
         }
@@ -56,7 +56,7 @@ class Grid
             $a_addr = $this->getMemoryAt($a_addr * -1);
         }
         if($i == self::SIZE * self::SIZE){
-            $this->_pc = 0;
+            $this->_pc++;
             return;
         }
         $i = 0;
@@ -65,7 +65,7 @@ class Grid
             $b_addr = $this->getMemoryAt($b_addr * -1);
         }
         if($i == self::SIZE * self::SIZE){
-            $this->_pc = 0;
+            $this->_pc++;
             return;
         }
         $a_val = $this->getMemoryAt($a_addr);
@@ -77,11 +77,9 @@ class Grid
             $c_val = $this->getMemoryAt($c_val * -1);
         }
         if($i == self::SIZE * self::SIZE){
-            $this->_pc = 0;
+            $this->_pc++;
             return;
         }
-        
-        echo "PC: " . $this->_pc . " Addresses: " . $a_addr . " " . $b_addr . " Instruction: " . $a_val . " " . $b_val . " "  . $c_val . "\n";
         
         $b_val = $b_val - $a_val;
         $this->setMemoryAt($b_addr,$b_val);
