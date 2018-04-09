@@ -72,8 +72,17 @@ def rec_is_palindrome(string):
 
 # print rec_is_palindrome('race4car'), rec_is_palindrome('madamimadam')
 
-
 # *************************************************** #
+
+# C-4.18 Use recursion to write a Python function for determining if a string s has
+# more vowels than consonants.
+
+def recursive_has_more_vowels(s):
+    if len(s) == 1 :
+        return False
+    
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
