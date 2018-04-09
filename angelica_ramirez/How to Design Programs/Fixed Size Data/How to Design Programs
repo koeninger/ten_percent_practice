@@ -46,6 +46,35 @@ formulate data definitions, like the one for Temperature, for the classes of dat
 2. write down a signature, statement of purpose, and a function header
 function signature: a comment that tells the readers of the design how many inputs the function consumers, which classes they
 draw from, and what kind of data it produces
+Example: 
 ; String -> Number
 ; Temperature -> String
+; Number String Image -> Image 
+purpose statement: a comment that summarizes the puprose of the function in a single line
+write down the shortes possible answer to the question. What does the function compute?
+good programmers write 2 purpose statements: 1 for the reaer who may have to modiy the code and 
+1 for the person who wishes to use the program but not read it 
+header: a simplistic function definition also called stub
+(define (f a-string) 0)
+(define (g n) "a")
+(define (h numb str img) (empty-scene 100 100)) 
+Example: 
+; Number String Image -> Image
+; adds s to img,
+; y pixels from the top and 10 from the left
+(define (add-image y s img)
+  (empty-scene 100 100)) 
+  
+3. illustrate the signature and the purpose statement with some functional examples
+functional example: pick 1 piece of data from each input class from the signature and determine what you expect back
+add the examples between the purpose statement and the header 
+Example: 
+; Number -> Number
+; computes the area of a square with side len
+; given: 2, expect: 4
+; given: 7, expect: 49
+(define (area-of-square len) 0)
+
+4. 
+
 
