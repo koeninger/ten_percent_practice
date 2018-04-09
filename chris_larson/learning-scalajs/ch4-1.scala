@@ -56,3 +56,12 @@ def sum(items: Int*): Int = {
 
 sum(10, 20, 30)
 sum()
+
+def max(x: Int)(y: Int) = if (x > y) x else y
+val larger = max(20)(39)
+
+def identity(s: String): String = s
+def identity(i: Int): Int = i
+def identity[A](a: A): A = a
+val s: String = identity("Hello")
+val d = identity(2.717)
