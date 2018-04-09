@@ -103,4 +103,8 @@ Start: (f (f 1 (* 2 3)) 19)
 (+ 117 36r10)
 478
 
-
+;Exercise 123. Write down a rule that shows how to reformulate
+; (if exp-test exp-then exp-else)
+; as a cond expression. 
+ (cond  [ (boolean=? exp-test #true) exp-then ]
+        [ else exp-else] )

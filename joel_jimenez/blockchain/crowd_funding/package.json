@@ -1,0 +1,19 @@
+{
+  "name": "crowdcoin",
+  "version": "1.0.0",
+  "description": "The frontend app that interacts with the campaign contract",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha",
+    "dev": "next dev -p 8088"
+  },
+  "author": "Joel",
+  "license": "ISC",
+  "dependencies": {
+    "bulma": "^0.6.2",
+    "next": "^4.1.4",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1",
+    "web3": "^1.0.0-beta.26"
+  }
+}

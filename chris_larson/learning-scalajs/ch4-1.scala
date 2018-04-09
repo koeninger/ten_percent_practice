@@ -30,3 +30,38 @@ def power(x: Int, n: Int, t: Int = 1): Long = {
 power(2, 8)
 power(2,1)
 power(2, 0)
+
+def max(a: Int, b: Int, c: Int) = {
+  def max(x: Int, y: Int) = if (x > y) x else y
+  max(a, max(b, c))
+}
+
+max(42, 181, 19)
+
+def greet(prefix: String, name: String) = s"$prefix $name"
+val greeting1 = greet("Ms", "Brown")
+val greeting2 = greet(name = "Brown", prefix = "Ms")
+
+def greeting(prefix: String = "", name: String) = s"$prefix $name"
+val greeting3 = greeting(name = "Paul")
+
+def bettergreet(name: String, prefix: String = "") = s"$prefix $name"
+val greeting4 = bettergreet("Ola")
+
+def sum(items: Int*): Int = {
+  var total = 0
+  for (i <- items) total += i
+  total
+}
+
+sum(10, 20, 30)
+sum()
+
+def max(x: Int)(y: Int) = if (x > y) x else y
+val larger = max(20)(39)
+
+def identity(s: String): String = s
+def identity(i: Int): Int = i
+def identity[A](a: A): A = a
+val s: String = identity("Hello")
+val d = identity(2.717)
