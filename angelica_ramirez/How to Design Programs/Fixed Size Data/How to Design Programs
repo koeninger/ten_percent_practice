@@ -75,6 +75,113 @@ Example:
 ; given: 7, expect: 49
 (define (area-of-square len) 0)
 
-4. 
+4. take inventory, to understand what are the givens and what we need to compute, we replace the function's body with a template
+right now the template contains just the parameters
+(define (area-of-square len)
+  (... len ...)) 
 
+5. time to code/program, to write executable expressions and function definitions; replace the body of the function with an expression that
+attempts to compute from the pieces in the template what the purpose statement promises
+Example 
+; Number -> Number
+; computes the area of a square with side len
+; given: 2, expect: 4
+; given: 7, expect: 49
+(define (area-of-square len)
+  (sqr len))
+Example: 
+; Number String Image -> Image
+; adds s to img, y pixels from top, 10 pixels to the left
+; given
+;   5 for y,
+;   "hello" for s, and
+;   (empty-scene 100 100) for img
+; expected: 
+;   (place-image (text "hello" 10 "red") 10 5 ...)
+;   where ... is (empty-scene 100 100)
+(define (add-image y s img)
+  (place-image (text s 10 "red") 10 y img)) 
+  
+6. test the function on the examples that you worked out before
+> (area-of-square 2)
+4
+> (area-of-quare 2)
+> 49
+The results must match the output you expect, if it doesn't match consider the following:
+- you miscalculated and determined the wrong expected output for some of the examples
+- the function definition computes the wrong result (this is a logical error in the program, known as a bug)
+- both the examples and the function definition are wrong
 
+Exercise 34 Design the function string-first which extracts the first character from a non-empty string. Don't worry about empty strings
+; String -> String
+; extracts the first character from a non-empty string
+; given: "hello", expect: "h"
+; given: "h", expect: "h"
+; (define (string-first str) ... str ... ...)) 
+(define 
+    (string-first str)
+    (substring str 0 1))
+    
+>(string-first "hello")
+"h"
+>(string-first "h")
+"h"
+
+Exercise 35 Design the function string-last, which extracts the last character from a non-empty string
+; String -> String
+; extracts the last character from a non-empty string
+; given: "hello", expect: "o"
+; given: "o", expect: "o"
+; (define (string-last str) (... str (- (... str) ...)))
+(define
+  (string-last str)
+  (string-ith str (- (string-length str) 1)))
+
+> (string-last "hello")
+"o"
+> (string-last "o")
+"o"
+
+Exercise 36 Design the function image-area, which counts the number of pixels in a given image
+; Image -> Number
+; counts the number of pixels in a given image
+; given: (square 10 "solid" "blue"), expect: 100
+; given: (triangle 3 "solid" "blue"), expect: 9
+; (define (image-area img) (* (... img) (... img)))
+(define 
+  (image-area img)
+  (* (image-width img) (image-height img)))
+
+> (image-area (square 10 "solid" "blue"))
+100
+> (image-area (square 3 "solid" "blue"))
+9
+
+Exercise 37 Design the function string-rest, which produces a string like the given one with the first character removed
+; String -> String
+; produces a string likes the given string with the first character removed
+; given: "hello", expect" "ello"
+; given: "h", expect ""
+; (define (string-rest str) (... str ...))
+(define 
+  (string-rest str) 
+  (substring str 1)) 
+
+> (string-rest "hello")
+"ello"
+> (string-rest "h")
+""
+
+Exercise 38 Design the function string-remove-last, which produces a string like the given one with the last character removed
+; String -> String
+; produces a string like the given string with the last character removed
+; given: "hello", expect "hell"
+; given: "h", expect: ""
+; (define (string-remove-last str) (... str ... (- (... str) 1))) 
+(define (string-remove-last str)
+  (substring str 0 (- (string-length str) 1)))
+  
+> (string-remove-last "hello")
+"hell"
+> (string-remove-last "h")
+""
