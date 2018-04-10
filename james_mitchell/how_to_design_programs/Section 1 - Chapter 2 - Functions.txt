@@ -369,3 +369,32 @@ dates to the early days of computing when a program read a file (or several
 files) from a batch of punch cards and placed the result in some other file(s),
 also a batch of cards. Conceptually, a batch program reads the input file(s)
 at once and also produces the result file(s) all at once.
+
+
+Exercise 31.
+Here is a letter-writing batch program that reads names from three files and
+writes a letter to one:
+(define (main in-fst in-lst in-signature out)
+  (write-file out
+              (letter (read-file in-fst)
+                      (read-file in-lst)
+                      (read-file in-signature))))
+The function consumes four strings: the first three are the names of input
+files and the last one serves as an output file. It uses the first three to
+read one string each from the three named files, hands these strings to letter,
+and eventually writes the result of this function call into the file named by
+out, the fourth argument to main.
+
+Create appropriate files, launch main, and check whether it delivers the
+expected letter in a given file.
+
+(write-file "first.dat" "James")
+(write-file "last.dat" "Mitchell")
+(write-file "sig.dat" "Lottery Commission")
+
+> (main "first.dat" "last.dat" "sig.dat" "output.dat")
+"output.dat"
+> (read-file "output.dat")
+"Dear James,\n\nWe have discovered that all people with the\nlast name Mitchell
+have won our lottery. So, \nJames, hurry and pick up your prize.\n\nSincerely,
+\n\nLottery Commission"
