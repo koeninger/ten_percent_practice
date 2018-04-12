@@ -185,3 +185,37 @@ Exercise 38 Design the function string-remove-last, which produces a string like
 "hell"
 > (string-remove-last "h")
 ""
+
+3.3 Domain Knowledge
+knowledge from external domains (math, mustic, bio, etc.)
+knowledge about the library functions in the chosen programming language (2htd/image in BSL)
+
+3.4 From Functions to Programs
+to remind yourself of the existance of defined global constants, you may wish to add the constants to templates 
+wish list a list of needed functions, each entry should consist of:
+  a menaingful name for the function
+  a signature
+  a purpose statement
+for the design of a batch program, put the main function on the wish list and start designing it 
+for the design of an interactive program, put the event handlers, the stop-when function and scene-rendering function on the list
+pick a wish and design the function
+
+3.5 On Testing
+; Number -> Number
+; converts Fahrenheit temperatures to Celsius
+; given 32, expect 0
+; given 212, expect 100
+; given -40, expect -40
+(define (f2c f)
+  (* 5/9 (- f 32))) 
+
+testing calls for three computatins and three comparisons, you can formulate these and add them to the definitions
+(check-expect (f2c -40) -40)
+(check-expect (f2c 32) 0)
+(check-expect (f2c 212) 100)
+
+click RUN, Dr. Rocket says all passed or will show which and why one failed
+; Number -> Number
+; converts Fahrenheit temperatures to Celsius temperatures 
+ 
+check-expects can be added before or after the function definition 
