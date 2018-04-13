@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Title, Section, Field, FieldLabel, FieldBody, Label, Control, Input, Button, Notification } from 'bloomer';
+import { Title, Section, Field, Columns, Column, Label, Control, Input, Button, Notification } from 'bloomer';
 import factory from '../ethereum/factory';
 import web3 from '../ethereum/web3'
+import { Router } from '../routes';
 
-class CampaignNew extends Component {
+class NewCampaign extends Component {
 	state = {
 		minimumContribution: '',
 		messageText: '',
@@ -22,18 +23,27 @@ class CampaignNew extends Component {
 
 		event.preventDefault();
 		try{
+			// Get accounts from web3
 			const accounts = await web3.eth.getAccounts();
 
+			// Create campaign
 			await factory.methods
 				.createCampaign(this.state.minimumContribution)
 				.send({
 					from: accounts[0]
 				});
 
+			// New campaign was created successfully!
 			this.setState({
 				messageText: 'Campaign was created successfully!',
 				messageColor: 'success',
-				messageHidden: false,
+				messageHidden: false
+			});
+
+			// Redirect back to campaign page
+			Router.replaceRoute('/');
+			window.location.reload();
+			this.setState({
 				isCreating: false
 			});
 
@@ -51,12 +61,12 @@ class CampaignNew extends Component {
 	render() {
 		return (
 			<Section>
-				<Title isSize={4}>Create a New Campaign</Title>
-				<Field isHorizontal>
-					<FieldLabel isNormal>
-						<Label>Contribution:</Label>
-					</FieldLabel>
-					<FieldBody>
+				<Title isSize={4} hasTextAlign="centered">Create a New Campaign</Title>
+				<Columns isVCentered>
+					<Column isSize='1/4'>
+						<Label>Minimum Contribution:</Label>
+					</Column>
+					<Column>
 						<Field hasAddons>
 							<Control isExpanded>
 								<Input type="text" placeholder='Minimum Contribution that will be required by users' value={this.state.minimumContribution} onChange={event => this.setState({ minimumContribution: event.target.value})} />
@@ -65,18 +75,18 @@ class CampaignNew extends Component {
 								<Button isStatic>wei</Button>
 							</Control>
 						</Field>
-					</FieldBody>
-				</Field>
-				<Field isHorizontal>
-					<FieldLabel />
-					<FieldBody>
+					</Column>
+				</Columns>
+				<Columns>
+					<Column isSize='1/4' style={{ padding: 0 }} />
+					<Column>
 						<Field>
 							<Control>
-								<Button isColor='info' isLoading={this.state.isCreating} onClick={this.onSubmit}>Submit</Button>
+								<Button isColor='info' isLoading={this.state.isCreating} onClick={this.onSubmit}>Create</Button>
 							</Control>
 						</Field>
-					</FieldBody>
-				</Field>
+					</Column>
+				</Columns>
 				<Notification isColor={this.state.messageColor} isHidden={this.state.messageHidden}>
 					<span>{this.state.messageText}</span>
 				</Notification>
@@ -85,4 +95,4 @@ class CampaignNew extends Component {
 	}
 }
 
-export default CampaignNew;
+export default NewCampaign;

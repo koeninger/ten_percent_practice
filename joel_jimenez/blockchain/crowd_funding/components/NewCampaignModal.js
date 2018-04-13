@@ -1,6 +1,6 @@
 import React, { Component } from'react';
 import { Modal, ModalBackground, ModalContent, Notification, Delete } from 'bloomer';
-import NewCampaign from './new';
+import NewCampaign from './NewCampaign';
 
 class NewCampaignModal extends Component {
 	openModal = () => {
@@ -21,17 +21,15 @@ class NewCampaignModal extends Component {
 
 	render(){
 		return (
-			<div>
-				<Modal isActive={this.state.isModalActive}>
-					<ModalBackground />
-					<ModalContent>
-						<Notification>
-							<Delete onClick={this.closeModal} />
-							<NewCampaign />
-						</Notification>
-					</ModalContent>
-				</Modal>
-			</div>
+			<Modal isActive={this.state.isModalActive}>
+				<ModalBackground />
+				<ModalContent>
+					<Notification>
+						<Delete isSize="large" onClick={this.closeModal} />
+						<NewCampaign />
+					</Notification>
+				</ModalContent>
+			</Modal>
 		);
 	}
 };

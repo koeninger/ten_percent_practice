@@ -1,11 +1,11 @@
 import React from 'react';
 import Layout from '../../components/Layout';
-import CampaignNew from '../../components/new';
+import NewCampaign from '../../components/NewCampaign';
 
 export default () => {
 	return (
 		<Layout>
-			<CampaignNew />
+			<NewCampaign />
 		</Layout>
 	);
 }

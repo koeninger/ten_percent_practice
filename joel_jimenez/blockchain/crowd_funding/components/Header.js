@@ -1,38 +1,19 @@
 import React, { Component } from 'react';
-import { Container, Hero, HeroBody, HeroFooter, Title, Tabs, Tab, TabList, TabLink } from 'bloomer';
+import { Container, Hero, HeroBody, HeroFooter, Title, Subtitle, Tabs, Tab, TabList, TabLink } from 'bloomer';
 import Menu from './Menu';
 
-class Header extends Component {
-	componentDidMount() {
-		try{
-			if (document.location.pathname == '/'){
-				this.setState({
-					isTabActive: true
-				});
-			}
-		} catch(error){
-			console.log(error);
-		}
-	}
-
-	state = {
-		isTabActive: false
-	};
-
-	render() {
-		return (
-			<Hero isColor='info'>
-				<HeroBody>
-					<Container>
-						<Title>CrowdCoin</Title>
-					</Container>
-				</HeroBody>
-				<HeroFooter>
-					<Menu />
-				</HeroFooter>
-			</Hero>
-		);
-	}
+export default props => {
+	return (
+		<Hero isColor='primary' isSize='large'>
+			<HeroBody>
+				<Container>
+					<Title>CrowdCoin</Title>
+					<Subtitle>CrowdCoin interacts with a live smart-contract deployed in the Rinkeby Ethereum test network.</Subtitle>
+				</Container>
+			</HeroBody>
+			<HeroFooter>
+				<Menu onClickNewCampaign={props.onClickNewCampaign} />
+			</HeroFooter>
+		</Hero>
+	);
 }
-
-export default Header;

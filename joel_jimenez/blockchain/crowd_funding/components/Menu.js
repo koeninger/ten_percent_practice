@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Container, Tabs, Tab, TabList, TabLink } from 'bloomer';
-import NewCampaignModal from './NewCampaignModal';
 
 class Menu extends Component {
 	componentDidMount() {
@@ -21,15 +20,14 @@ class Menu extends Component {
 
 	render() {
 		return (
-			<Tabs isBoxed isSize="large">
+			<Tabs isBoxed isToggle isSize="medium">
 				<Container>
 					<TabList>
 						<Tab isActive={this.state.isTabActive}>
 							<TabLink title="Created Campaigns" href="/">Campaigns</TabLink>
 						</Tab>
 						<Tab>
-							<NewCampaignModal ref={instance => { this.child = instance; }} />
-							<TabLink title="New Campaign" onClick={() => { this.child.openModal(); }}>&#10010;</TabLink>
+							<TabLink title="New Campaign" onClick={this.props.onClickNewCampaign}>&#10010;</TabLink>
 						</Tab>
 					</TabList>
 				</Container>

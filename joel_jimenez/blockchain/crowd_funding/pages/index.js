@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import factory from '../ethereum/factory';
-import { Title, Section, Card, CardContent } from 'bloomer';
+import { Title, Section, Box } from 'bloomer';
 import Layout from '../components/Layout';
 
 class CampaignIndex extends Component {
@@ -12,12 +12,11 @@ class CampaignIndex extends Component {
 	renderCampaigns() {
 		const campaigns = this.props.campaigns.map(address => {
 			return (
-				<Card key={address}>
-					<CardContent>
-						<Title isSize={5}>{address}</Title>
-						<a>View campaign</a>
-					</CardContent>
-				</Card>
+				<Box key={address}>
+					<Title isSize={5}>{address}</Title>
+					<a>View campaign</a>
+				</Box>
+				
 			);
 		});
 
