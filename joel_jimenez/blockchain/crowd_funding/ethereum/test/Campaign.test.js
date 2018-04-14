@@ -22,11 +22,11 @@ beforeEach(async () => {
 		data: compiledFactory.bytecode
 	}).send({
 		from: accounts[0],
-		gas: '1000000'
+		gas: '3000000'
 	});
 
 	// Create a new campaign using CampaignFactory
-	await factory.methods.createCampaign('100').send({
+	await factory.methods.createCampaign(100,"Test campaign").send({
 		from: accounts[0],
 		gas: '1000000'
 	});
@@ -74,7 +74,7 @@ describe('Campaigns', () => {
 	});
 
 	it('allows manager to make a payment request', async () => {
-		const desc = 'Test payment request';
+		const desc = "Test payment request";
 
 		await campaign.methods.createRequest(desc, '100', accounts[2]).send({
 			from: accounts[0],
@@ -82,7 +82,7 @@ describe('Campaigns', () => {
 		});
 
 		const request = await campaign.methods.requests(0).call();
-		assert.equal(desc, request.description);
+		assert.equal(desc, request.requestDescription);
 	});
 
 	it('proccess requests', async () => {
@@ -127,7 +127,7 @@ describe('Campaigns', () => {
 		try{
 			await campaign.methods.finalizeRequest(0).send({
 				from: accounts[0],
-				gass: '100000'
+				gass: '1000000'
 			});
 		} catch(err){
 			pass = true;
@@ -151,5 +151,10 @@ describe('Campaigns', () => {
 			pass = true;
 		}
 		assert(pass);
+	});
+
+	it('checks that summary of campaign is available', async () => {
+		const campaignSummary = await campaign.methods.getSummary().call();
+		assert(campaignSummary);
 	});
 });

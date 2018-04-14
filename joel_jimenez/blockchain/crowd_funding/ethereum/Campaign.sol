@@ -6,9 +6,9 @@ contract CampaignFactory {
     address[] public campaigns;
 
     // Creates a new campaign
-    function createCampaign(uint minimum) public {
+    function createCampaign(uint minimum, string description) public {
         // Creates new instance of Campaign contract
-        address newCampaign = new Campaign(minimum, msg.sender);
+        address newCampaign = new Campaign(minimum, description, msg.sender);
         // Store address of new contract instance
         campaigns.push(newCampaign);
     }
@@ -22,8 +22,8 @@ contract CampaignFactory {
 contract Campaign {
     // Structure that defines a spending request
     struct Request{
-        string description;
-        uint value;
+        string requestDescription;
+        uint requestValue;
         address recipient;
         bool complete;
         uint approvalCount;
@@ -31,6 +31,7 @@ contract Campaign {
     }
 
 
+    string public campaignDescription;
     Request[] public requests;					// List of created spending requests
     address public manager;						// Creator of the campaign
     uint public minimumContribution;			// Minimum amount of Wei required to contribute to campaign
@@ -46,8 +47,9 @@ contract Campaign {
 
 
     // Constructor that initiates a campaign
-    function Campaign(uint minimum, address creator) public {
+    function Campaign(uint minimum, string description, address creator) public {
         manager = creator;
+        campaignDescription = description;
         minimumContribution = minimum;
     }
 
@@ -62,11 +64,11 @@ contract Campaign {
     }
 
     // Creates a spending request (restricted to managers only)
-    function createRequest(string description, uint value, address recipient) public restricted {
+    function createRequest(string requestDescription, uint requestValue, address recipient) public restricted {
         // New spending request from manager
         Request memory newRequest = Request({
-            description: description,
-            value: value,
+            requestDescription: requestDescription,
+            requestValue: requestValue,
             recipient: recipient,
             complete: false,
             approvalCount: 0
@@ -101,8 +103,23 @@ contract Campaign {
         require(request.approvalCount > (approversCount/2));
 
         // Send the money to the reciepient of spending request
-        request.recipient.transfer(request.value);
+        request.recipient.transfer(request.requestValue);
         // Mark request as complete
         request.complete = true;
+    }
+
+    // Returns a summary of details for a campaing
+    function getSummary() public view returns (uint, uint, uint, uint, address) {
+        return (
+            minimumContribution,
+            this.balance,
+            requests.length,
+            approversCount,
+            manager
+        );
+    }
+
+    function getRequestsCount() public view returns (uint) {
+        return requests.length;
     }
 }

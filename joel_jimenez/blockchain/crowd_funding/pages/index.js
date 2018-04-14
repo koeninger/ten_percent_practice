@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import factory from '../ethereum/factory';
 import { Title, Section, Box } from 'bloomer';
 import Layout from '../components/Layout';
+import { Link } from '../routes';
 
 class CampaignIndex extends Component {
 	static async getInitialProps() {
@@ -10,15 +11,25 @@ class CampaignIndex extends Component {
 	}
 
 	renderCampaigns() {
-		const campaigns = this.props.campaigns.map(address => {
-			return (
-				<Box key={address}>
-					<Title isSize={5}>{address}</Title>
-					<a>View campaign</a>
-				</Box>
-				
+		let campaigns;
+		
+		if (this.props.campaigns.length){
+			campaigns = this.props.campaigns.map(address => {
+				return (
+					<Box key={address}>
+						<Title isSize={5}>{address}</Title>
+						<Link route={`/campaigns/${address}`}>
+							<a>View campaign</a>
+						</Link>
+					</Box>
+					
+				);
+			});
+		} else{
+			campaigns = (
+				<Title hasTextAlign="centered">No Campaigns found!</Title>
 			);
-		});
+		}
 
 		return campaigns;
 	}

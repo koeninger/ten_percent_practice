@@ -5,7 +5,7 @@ export default () => {
 	const year = new Date().getFullYear();
 	
 	return (
-		<Hero isColor='dark' isSize='medium'>
+		<Hero isColor='light' isSize='medium'>
 			<HeroBody>
 				<Container hasTextAlign="centered">
 					<Subtitle>&copy; {year} Joel Jimenez</Subtitle>

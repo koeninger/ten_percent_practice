@@ -18,7 +18,7 @@ const deploy = async () => {
 		data: CampaignFactory.bytecode
 	}).send({
 		from: accounts[0],
-		gas: '1000000'
+		gas: '2000000'
 	});
 	console.log("Contract has been deployed to " + result.options.address);
 };

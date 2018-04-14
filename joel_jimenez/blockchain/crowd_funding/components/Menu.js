@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Tabs, Tab, TabList, TabLink } from 'bloomer';
+import { Link } from '../routes';
 
 class Menu extends Component {
 	componentDidMount() {
@@ -24,7 +25,9 @@ class Menu extends Component {
 				<Container>
 					<TabList>
 						<Tab isActive={this.state.isTabActive}>
-							<TabLink title="Created Campaigns" href="/">Campaigns</TabLink>
+							<Link route="/">
+								<a title="Created Campaigns">Campaigns</a>
+							</Link>
 						</Tab>
 						<Tab>
 							<TabLink title="New Campaign" onClick={this.props.onClickNewCampaign}>&#10010;</TabLink>

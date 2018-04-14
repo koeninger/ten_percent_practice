@@ -6,6 +6,7 @@ import { Router } from '../routes';
 
 class NewCampaign extends Component {
 	state = {
+		campaignDescription: '',
 		minimumContribution: '',
 		messageText: '',
 		messageColor: '',
@@ -15,9 +16,8 @@ class NewCampaign extends Component {
 
 	onSubmit = async (event) => {
 		this.setState({
-			messageText: '',
-			messageColor: '',
-			messageHidden: true,
+			messageText: 'Creating Campaign . . .',
+			messageColor: 'info',
 			isCreating: true
 		});
 
@@ -28,7 +28,7 @@ class NewCampaign extends Component {
 
 			// Create campaign
 			await factory.methods
-				.createCampaign(this.state.minimumContribution)
+				.createCampaign(this.state.minimumContribution, this.state.campaignDescription)
 				.send({
 					from: accounts[0]
 				});
@@ -36,8 +36,7 @@ class NewCampaign extends Component {
 			// New campaign was created successfully!
 			this.setState({
 				messageText: 'Campaign was created successfully!',
-				messageColor: 'success',
-				messageHidden: false
+				messageColor: 'success'
 			});
 
 			// Redirect back to campaign page
@@ -52,7 +51,6 @@ class NewCampaign extends Component {
 			this.setState({
 				messageText: 'Error: Unable to create new campaign.',
 				messageColor: 'danger',
-				messageHidden: false,
 				isCreating: false
 			});
 		}
@@ -62,6 +60,18 @@ class NewCampaign extends Component {
 		return (
 			<Section>
 				<Title isSize={4} hasTextAlign="centered">Create a New Campaign</Title>
+				<Columns isVCentered>
+					<Column isSize='1/4'>
+						<Label>Campaign Description:</Label>
+					</Column>
+					<Column>
+						<Field>
+							<Control isExpanded>
+								<Input type="text" placeholder='Name or description of campaign' value={this.state.campaignDescription} onChange={event => this.setState({ campaignDescription: event.target.value})} />
+							</Control>
+						</Field>
+					</Column>
+				</Columns>
 				<Columns isVCentered>
 					<Column isSize='1/4'>
 						<Label>Minimum Contribution:</Label>
@@ -87,9 +97,7 @@ class NewCampaign extends Component {
 						</Field>
 					</Column>
 				</Columns>
-				<Notification isColor={this.state.messageColor} isHidden={this.state.messageHidden}>
-					<span>{this.state.messageText}</span>
-				</Notification>
+				<Notification isColor="light" hasTextAlign="centered" hasTextColor={this.state.messageColor}>{this.state.messageText}</Notification>
 			</Section>
 		);
 	}
