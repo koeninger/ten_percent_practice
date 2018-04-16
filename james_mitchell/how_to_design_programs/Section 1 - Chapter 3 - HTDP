@@ -22,3 +22,80 @@ and parts refine and expand the recipe in one way or another.
 
 
 3.1 Designing Functions
+
+Since this knowledge is so important for everyone who reads the program,
+we often write it down in the form of comments, which we call data definitions.
+A data definition serves two purposes. First, it names a collection of
+data—a class—using a meaningful word. Second,Computing scientists use
+“class” to mean something like a “mathematical set.” it informs readers
+how to create elements of this class and how to decide whether some arbitrary
+piece of data belongs to the collection.
+
+Here is a data definition for one of the above examples:
+; A Temperature is a Number.
+; interpretation represents Celsius degrees
+
+The Design Process: Once you understand how to represent input information as
+data and to interpret output data as information, the design of an individual
+function proceeds according to a straightforward process:
+
+Express how you wish to represent information as data. A one-line comment
+suffices:
+; We use numbers to represent centimeters.
+
+Formulate data definitions, like the one for Temperature, for the classes of
+data you consider critical for the success of your program.
+
+Write down a signature, a statement of purpose, and a function header.
+
+A function signature is a comment that tells the readers of your design how
+many inputs your function consumes, from which classes they are drawn, and what
+kind of data it produces. Here are three examples for functions that
+respectively
+
+consume one String and produce a Number:
+; String -> Number
+
+consume a Temperature and produce a String:
+; Temperature -> String
+
+consume a Number, a String, and an Image:
+; Number String Image -> Image
+
+Stop! What does this function produce?
+
+An image?
+
+A purpose statement is a BSL comment that summarizes the purpose of the
+function in a single line. If you are ever in doubt about a purpose statement,
+write down the shortest possible answer to the question
+what does the function compute?
+
+Every reader of your program should understand what your functions compute
+without having to read the function itself.
+
+Our parameter names reflect what kind of data the parameter represents.
+Sometimes, you may wish to use names that suggest the purpose of the parameter.
+When you formulate a purpose statement, it is often useful to employ the
+parameter names to clarify what is computed. For example,
+; Number String Image -> Image
+; adds s to img,
+; y pixels from the top and 10 from the left
+(define (add-image y s img)
+  (empty-scene 100 100))
+
+
+Illustrate the signature and the purpose statement with some functional
+examples. To construct a functional example, pick one piece of data from
+each input class from the signature and determine what you expect back.
+
+Suppose you are designing a function that computes the area of a square.
+Clearly this function consumes the length of the square’s side, and that is
+best represented with a (positive) number. Assuming you have done the first
+process step according to the recipe, you add the examples between the
+purpose statement and the header and get this:
+; Number -> Number
+; computes the area of a square with side len
+; given: 2, expect: 4
+; given: 7, expect: 49
+(define (area-of-square len) 0)
