@@ -4,6 +4,7 @@ include 'cell.php';
 class Grid
 {
     const SIZE = 6;
+    const MUTATION_RATE = 999999;
     
     private $_grid;
     private $_pc = 0;
@@ -47,6 +48,9 @@ class Grid
         $x = intval($addr/self::SIZE);
         $y = $addr % self::SIZE;
         $this->_grid[$x][$y]->setValue($val);
+        if(rand(0,self::MUTATION_RATE) == 0){
+            $this->_grid[$x][$y]->mutate();
+        }
     }
     
     public function subleq(){

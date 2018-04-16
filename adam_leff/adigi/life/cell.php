@@ -30,4 +30,12 @@ class Cell
         
         return $addition . $str;
     }
+    
+    private function mutate(){
+        $str = decbin($this->value);
+        $flip = rand(0,7);
+        $length = strlen($str);
+        $str[$length - $flip] = ($str[$length - $flip] == '1' ? '0' : '1');
+        $this->value = bindec($str);
+    }
 }
