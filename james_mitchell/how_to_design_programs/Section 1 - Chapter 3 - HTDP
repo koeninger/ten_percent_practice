@@ -1,0 +1,24 @@
+The first few chapters of this book show that learning to program requires
+some mastery of many concepts. On the one hand, programming needs a language,
+a notation for communicating what we wish to compute. The languages for
+formulating programs are artificial constructions, though acquiring a
+programming language shares some elements with acquiring a natural language.
+Both come with vocabulary, grammar, and an understanding of what “phrases” mean.
+
+Exercise 33. Research the “year 2000” problem.
+
+Here we present a design recipe that integrates a step-by-step process with a
+way of organizing programs around problem data. For the readers who don’t like
+to stare at blank screens for a long time, this design recipe offers a way to
+make progress in a systematic manner. For those of you who teach others to
+design programs, the recipe is a device for diagnosing a novice’s difficulties.
+For others, our recipe might be something that they can apply to other
+areas—say, medicine, journalism, or engineering. For those who wish to become
+real programmers, the design recipe also offers a way to understand and work
+on existing programs—though not all programmers use a method like this design
+recipe to come up with programs. The rest of this chapter is dedicated to the
+first baby steps into the world of the design recipe; the following chapters
+and parts refine and expand the recipe in one way or another.
+
+
+3.1 Designing Functions

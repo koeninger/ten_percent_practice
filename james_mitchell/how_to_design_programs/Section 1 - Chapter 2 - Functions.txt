@@ -398,3 +398,83 @@ expected letter in a given file.
 "Dear James,\n\nWe have discovered that all people with the\nlast name Mitchell
 have won our lottery. So, \nJames, hurry and pick up your prize.\n\nSincerely,
 \n\nLottery Commission"
+
+
+Exercise 32. Most people no longer use desktop computers just to run
+applications but also employ cell phones, tablets, and their cars’ information
+control screen. Soon people will use wearable computers in the form of
+intelligent glasses, clothes, and sports gear. In the somewhat more distant
+future, people may come with built-in bio computers that directly interact
+with body functions. Think of ten different forms of events that software
+applications on such computers will have to deal with.
+
+In order to understand the evaluation of big-bang expressions in general, let’s look at a schematic version:
+
+(big-bang cw0
+  [on-tick tock]
+  [on-key ke-h]
+  [on-mouse me-h]
+  [to-draw render]
+  [stop-when end?]
+  ...)
+This big-bang expression specifies three event handlers—tock, ke-h, and
+me-h—and a stop-when clause.
+The evaluation of this big-bang expression starts with cw0, which is usually
+an expression. DrRacket, our operating system, installs the value of cw0 as
+the current state. It uses render to translate the current state into an
+image, which is then displayed in a separate window. Indeed, render is the
+only means for a big-bang expression to present data to the world.
+
+Here is how events are processed:
+Every time the clock ticks, DrRacket applies tock to big-bang’s current state
+ and receives a value in response; big-bang treats this return value as the
+ next current state.
+
+Every time a key is pressed, DrRacket applies ke-h to big-bang’s current state
+ and a string that represents the key; for example, pressing the “a” key is
+ represented with "a" and the left arrow key with "left". When ke-h returns a
+  value, big-bang treats it as the next current state.
+
+Every time a mouse enters the window, leaves it, moves, or is clicked,
+DrRacket applies me-h to big-bang’s current state, the event’s x- and
+y-coordinates, and a string that represents the kind of mouse event that
+happened; for example, clicking a mouse’s button is represented with
+"button-down". When me-h returns a value, big-bang treats it as the next
+current state.
+
+All events are processed in order; if two events seem to happen at the same
+time, DrRacket acts as a tie-breaker and arranges them in some order.
+After an event is processed, big-bang uses both end? and render to check the
+current state:
+(end? cw) produces a Boolean value. If it is ##true, big-bang stops the
+computation immediately. Otherwise it proceeds.
+
+(render cw) is expected to produce an image and big-bang displays this image
+in a separate window.
+
+
+Let’s interpret this table with the specific sequence of events: the user
+presses the “a” key, then the clock ticks, and finally the user clicks the
+mouse to trigger a “button down” event at position (90,100). Then, in Racket
+notation,
+
+cw1 is the result of (ke-h cw0 "a");
+
+cw2 is the result of (tock cw1); and
+
+cw3 is the result of (me-h cw2 90 100 "button-down").
+
+We can actually express these three steps as a sequence of three definitions:
+(define cw1 (ke-h cw0 "a"))
+(define cw2 (tock cw1))
+(define cw3 (me-h cw2 "button-down" 90 100))
+
+
+By now, you may feel that these first two chapters are overwhelming. They
+introduce many new concepts, including a new language, its vocabulary,
+its meaning, its idioms, a tool for writing down texts in this vocabulary,
+and a way of running these programs. Confronted with this plethora of ideas,
+you may wonder how one creates a program when presented with a problem
+statement. To answer this central question, the next chapter takes a step
+back and explicitly addresses the systematic design of programs. So take a
+breather and continue when ready.
