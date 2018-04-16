@@ -24,12 +24,18 @@ def main():
         xSqTotal = xSqTotal + point.getX() * point.getX()
         ySqTotal = ySqTotal + point.getY() * point.getY()
     
-    t = Text(Point(2,2), getY(count, xTotal, yTotal, xyTotal, xSqTotal, ySqTotal))
-    t.draw(win)
+    m = getM(count, xTotal, yTotal, xyTotal, xSqTotal, ySqTotal)
+    y0 = getY(0, m, yTotal, xTotal, count)
+    y10 = getY(10, m, yTotal, xTotal, count)
+    line = Line(Point(0, y0), Point(10, y10))
+    line.draw(win)    
     win.getMouse()
     win.close()
 
-def getY(count, xTotal, yTotal, xyTotal, xSqTotal, ySqTotal):
+def getY(x, m, yTotal, xTotal, n):
+    return (yTotal / n) + m * (x - (xTotal / n ))
+
+def getM(count, xTotal, yTotal, xyTotal, xSqTotal, ySqTotal):
     return (count * xyTotal - xTotal * yTotal) / (count * xSqTotal - xTotal * xTotal) * (count * ySqTotal - yTotal * yTotal)
 
 def drawButton(win, ll, ur):
