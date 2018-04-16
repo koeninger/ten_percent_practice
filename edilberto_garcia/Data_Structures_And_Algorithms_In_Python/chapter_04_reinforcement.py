@@ -45,11 +45,49 @@ def product(a,b):
 
 # print product(13,5)
 
+# C-4.16 Write a short recursive Python function that takes a character string s and
+# outputs its reverse.
 
-
+def string_reverse(string):
+    # if len(string) > 0:
+        # print "String in this iteration: ", string, "\n\tWhat we're passing in here", string[1:], "\n\tstring[0]:", string[0]
+    if len(string) == 0:
+        return string
+    return string_reverse(string[1:]) + string[0]
+# print string_reverse('POIUYTREWQ');
 
 # *************************************************** #
+
+# C-4.17 Write a short recursive Python function that determines if a string s is a
+# palindrome, that is, it is equal to its reverse. For example, racecar and
+# gohangasalamiimalasagnahog are palindromes.
+
+
+def rec_is_palindrome(string):
+    if len(string) == 1:
+        return True
+    if string[0] != string[-1]:
+        return False
+
+    print 'rec_is_palindrome(',string[1:-1],')'
+    return rec_is_palindrome(string[1:-1])
+
+print rec_is_palindrome('race4car'), rec_is_palindrome('madamimadam')
+
 # *************************************************** #
+
+# C-4.18 Use recursion to write a Python function for determining if a string s has
+# more vowels than consonants.
+
+def recursive_has_more_vowels(string, vowels = [], consonants = []):
+    # taking advantage of the python parameter caching hack
+    if len(string) <= 1:
+        return False
+    
+
+# print recursive_has_more_vowels('F')
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
