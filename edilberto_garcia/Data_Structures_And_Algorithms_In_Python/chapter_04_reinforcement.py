@@ -72,7 +72,7 @@ def rec_is_palindrome(string):
     print 'rec_is_palindrome(',string[1:-1],')'
     return rec_is_palindrome(string[1:-1])
 
-print rec_is_palindrome('race4car'), rec_is_palindrome('madamimadam')
+# print rec_is_palindrome('race4car'), rec_is_palindrome('madamimadam')
 
 # *************************************************** #
 
@@ -84,11 +84,26 @@ def recursive_has_more_vowels(string, vowels = [], consonants = []):
     if len(string) <= 1:
         return False
     
-
+#todo: finish this
 # print recursive_has_more_vowels('F')
 
 
 # *************************************************** #
+
+# C-4.19 Write a short recursive Python function that rearranges a sequence of integer values 
+# so that all the even values appear before all the odd values.
+
+def recursive_evens_before_odds(sequence):
+    if len(sequence) <= 1:
+        return sequence
+
+    midpoint = len(sequence) / 2
+    recursive_evens_before_odds(sequence)
+    recursive_evens_before_odds(sequence + midpoint)
+    print 'Recursion ended, list: => ', sequence
+
+recursive_evens_before_odds([1,2,4,57,8,9,3,2,6,8,4,8,9])
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
