@@ -24,6 +24,10 @@
             android:parentActivityName=".MainActivity"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <provider
+            android:name="com.erickudler.ghost.data.GhostContentProvider"
+            android:authorities="com.erickudler.ghost"
+            android:exported="false"/>
     </application>
 
 </manifest>
