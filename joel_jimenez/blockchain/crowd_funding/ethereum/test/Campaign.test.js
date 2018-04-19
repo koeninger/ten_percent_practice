@@ -31,12 +31,13 @@ beforeEach(async () => {
 		gas: '1000000'
 	});
 
-	// Save campaign (the first element in array) from getCampaigns()
-	[campaignAddress] = await factory.methods.getCampaigns().call();
+	// Get first campaign
+	campaign = await factory.methods.campaigns(0).call();
+
 	// Pull created campaign into web3
 	campaign = await new web3.eth.Contract(
 		JSON.parse(compiledCampaign.interface),
-		campaignAddress
+		campaign[0]
 	);
 });
 
@@ -155,6 +156,12 @@ describe('Campaigns', () => {
 
 	it('checks that summary of campaign is available', async () => {
 		const campaignSummary = await campaign.methods.getSummary().call();
-		assert(campaignSummary);
+		
+		assert(campaignSummary[0]);
+		assert(campaignSummary[1]);
+		assert(campaignSummary[2]);
+		assert(campaignSummary[3]);
+		assert(campaignSummary[4]);
+		assert(campaignSummary[5]);
 	});
 });

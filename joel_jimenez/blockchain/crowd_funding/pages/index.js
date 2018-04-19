@@ -1,12 +1,24 @@
 import React, {Component} from 'react';
 import factory from '../ethereum/factory';
-import { Title, Section, Box } from 'bloomer';
+import { Title, Subtitle, Section, Box } from 'bloomer';
 import Layout from '../components/Layout';
 import { Link } from '../routes';
 
 class CampaignIndex extends Component {
 	static async getInitialProps() {
-		const campaigns = await factory.methods.getCampaigns().call();
+		let campaigns = [];
+
+		for (let i = 0; true; i++){
+			try{
+				let newCampaign = await factory.methods.campaigns(i).call();
+				campaigns.push(newCampaign);
+
+			} catch(err){
+				// console.log(err);
+				break;
+			}
+		}
+
 		return { campaigns };
 	}
 
@@ -14,11 +26,17 @@ class CampaignIndex extends Component {
 		let campaigns;
 		
 		if (this.props.campaigns.length){
-			campaigns = this.props.campaigns.map(address => {
+			campaigns = this.props.campaigns.map(campaign => {
+				console.log(campaign);
+				let campaignAddress = campaign[0];
+				let description = campaign[1];
+				let minimum = campaign[2];
+				
 				return (
-					<Box key={address}>
-						<Title isSize={5}>{address}</Title>
-						<Link route={`/campaigns/${address}`}>
+					<Box key={campaignAddress}>
+						<Title isSize={5}>{description}</Title>
+						<Subtitle>Minimum contribution: {minimum}</Subtitle>
+						<Link route={`/campaigns/${campaignAddress}`}>
 							<a>View campaign</a>
 						</Link>
 					</Box>

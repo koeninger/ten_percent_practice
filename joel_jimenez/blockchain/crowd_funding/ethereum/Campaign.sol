@@ -2,19 +2,29 @@ pragma solidity ^0.4.17;
 
 // Contract that manages the instances of a campaign contract
 contract CampaignFactory {
+    // Defines a short description of the campaign
+    struct CampaignShort{
+        address campaignAddress;
+        string description;
+        uint minimum;
+    }
     // Keep track of all deployed instinces of the campaign contract
-    address[] public campaigns;
+    CampaignShort[] public campaigns;
 
     // Creates a new campaign
     function createCampaign(uint minimum, string description) public {
         // Creates new instance of Campaign contract
-        address newCampaign = new Campaign(minimum, description, msg.sender);
+        address campaignAddress = new Campaign(minimum, description, msg.sender);
+        
+        // Factory will keep a description of each campaign
+        CampaignShort memory newCampaign = CampaignShort({
+            campaignAddress: campaignAddress,
+            description: description,
+            minimum: minimum
+        });
+        
         // Store address of new contract instance
         campaigns.push(newCampaign);
-    }
-
-    function getCampaigns() public view returns (address[]) {
-        return campaigns;
     }
 }
 
@@ -102,15 +112,16 @@ contract Campaign {
         // Check that at least half of contributors have approved the sending request
         require(request.approvalCount > (approversCount/2));
 
-        // Send the money to the reciepient of spending request
+        // Send the money to the receipient of spending request
         request.recipient.transfer(request.requestValue);
         // Mark request as complete
         request.complete = true;
     }
 
     // Returns a summary of details for a campaing
-    function getSummary() public view returns (uint, uint, uint, uint, address) {
+    function getSummary() public view returns (string, uint, uint, uint, uint, address) {
         return (
+            campaignDescription,
             minimumContribution,
             this.balance,
             requests.length,
