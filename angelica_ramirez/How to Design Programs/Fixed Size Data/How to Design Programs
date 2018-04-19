@@ -219,3 +219,18 @@ click RUN, Dr. Rocket says all passed or will show which and why one failed
 ; converts Fahrenheit temperatures to Celsius temperatures 
  
 check-expects can be added before or after the function definition 
+; Number -> Number
+; converts Fahrenheit temperatures to Celsius temperatures 
+ 
+(check-expect (f2c -40) -40)
+(check-expect (f2c 32) 0)
+(check-expect (f2c 212) 100)
+ 
+(define (f2c f)
+  (* 5/9 (- f 32)))
+  
+check-expect also works for images 
+this form of testing is dubbed unit testing 
+
+3.6 Designing World Problems 
+
