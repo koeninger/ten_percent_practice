@@ -19,6 +19,7 @@ public class GhostContract  {
                 BASE_CONTENT_URI.buildUpon().appendPath(PATH_TIMERS).build();
         public static final String TABLE_NAME = "timers";
         public static final String COLUMN_NAME = "name";
+        public static final String COLUMN_BEST_TIME = "best_time";
         public static final String COLUMN_NUM_OF_STEPS = "num_of_steps";
         public static final String COLUMN_TIMESTAMP = "timestamp";
     }
