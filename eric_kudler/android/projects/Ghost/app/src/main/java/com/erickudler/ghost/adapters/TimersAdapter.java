@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.erickudler.ghost.R;
 import com.erickudler.ghost.data.GhostContract;
+import com.erickudler.ghost.datasets.Duration;
 import com.erickudler.ghost.datasets.Timer;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder> {
@@ -57,11 +58,13 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         // - replace the contents of the view with that element
 
         int nameIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_NAME);
+        int durationIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_BEST_TIME);
         int numOfStepsIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_NUM_OF_STEPS);
 
         mDataset.moveToPosition(position);
+        Duration duration = new Duration(mDataset.getInt(durationIndex));
         holder.mTimerName.setText(mDataset.getString(nameIndex));
-        holder.mBestTime.setText("01:50");
+        holder.mBestTime.setText(duration.toString());
         holder.mTimerStepCounter.setText("No of steps: " + mDataset.getString(numOfStepsIndex));
     }
 
