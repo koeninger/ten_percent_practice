@@ -2,7 +2,9 @@ package com.erickudler.ghost.adapters;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
+import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -19,13 +21,15 @@ import com.erickudler.ghost.datasets.Duration;
 import com.erickudler.ghost.datasets.Timer;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder> {
+    public static final String EXTRA_TIMER_ID = "id";
+
     private Cursor mDataset;
     private Context mContext;
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class ViewHolder extends RecyclerView.ViewHolder implements View.OnCreateContextMenuListener {
         // each data item is just a string in this case
         public TextView mTimerName;
         public TextView mBestTime;
@@ -35,6 +39,18 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
             mTimerName = itemView.findViewById(R.id.tv_timer_name);
             mBestTime = itemView.findViewById(R.id.tv_timer_best_time);
             mTimerStepCounter = itemView.findViewById(R.id.tv_step_counter);
+
+            v.setOnCreateContextMenuListener(this);
+        }
+
+        @Override
+        public void onCreateContextMenu(ContextMenu contextMenu, View view, ContextMenu.ContextMenuInfo contextMenuInfo) {
+            switch (view.getId()) {
+                case R.id.timer_list_item:
+                    Intent editIntent = new Intent(view.getContext(), EditTimerActivity.class);
+                    editIntent.putExtra(EXTRA_TIMER_ID, (int) view.getTag());
+                    view.getContext().startActivity(editIntent);
+            }
         }
     }
 
