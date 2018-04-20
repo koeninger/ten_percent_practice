@@ -5,11 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.erickudler.ghost.EditTimerActivity;
+import com.erickudler.ghost.MainActivity;
 import com.erickudler.ghost.R;
 import com.erickudler.ghost.data.GhostContract;
 import com.erickudler.ghost.datasets.Duration;
@@ -42,10 +45,8 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
 
     // Create new views (invoked by the layout manager)
     @Override
-    public TimersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
-                                                   int viewType) {
+    public TimersAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // create a new view
-
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.timer_view, parent, false);
         ViewHolder vh = new ViewHolder(view);
         return vh;
@@ -57,6 +58,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
+        int idIndex = mDataset.getColumnIndex(GhostContract.TimerEntry._ID);
         int nameIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_NAME);
         int durationIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_BEST_TIME);
         int numOfStepsIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_NUM_OF_STEPS);
@@ -66,6 +68,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         holder.mTimerName.setText(mDataset.getString(nameIndex));
         holder.mBestTime.setText(duration.toString());
         holder.mTimerStepCounter.setText("No of steps: " + mDataset.getString(numOfStepsIndex));
+        holder.itemView.setTag(mDataset.getInt(idIndex));
     }
 
     public Cursor swapCursor(Cursor c) {
