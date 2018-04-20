@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import factory from '../ethereum/factory';
-import { Title, Subtitle, Section, Box } from 'bloomer';
+import { Title, Subtitle, Section, Notification } from 'bloomer';
 import Layout from '../components/Layout';
 import { Link } from '../routes';
 
@@ -27,19 +27,18 @@ class CampaignIndex extends Component {
 		
 		if (this.props.campaigns.length){
 			campaigns = this.props.campaigns.map(campaign => {
-				console.log(campaign);
 				let campaignAddress = campaign[0];
 				let description = campaign[1];
 				let minimum = campaign[2];
 				
 				return (
-					<Box key={campaignAddress}>
+					<Notification isColor="light" key={campaignAddress}>
 						<Title isSize={5}>{description}</Title>
 						<Subtitle>Minimum contribution: {minimum}</Subtitle>
 						<Link route={`/campaigns/${campaignAddress}`}>
 							<a>View campaign</a>
 						</Link>
-					</Box>
+					</Notification>
 					
 				);
 			});

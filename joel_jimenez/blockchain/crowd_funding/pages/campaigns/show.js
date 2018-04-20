@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-import { Section, Tile, Box, Title, Subtitle, Button } from 'bloomer';
+import { Section, Tile, Notification, Title, Subtitle, Button } from 'bloomer';
 import web3 from '../../ethereum/web3';
 import Layout from '../../components/Layout';
 import Campaign from '../../ethereum/campaign';
-import ContributeForm from '../../components/contributeForm'
+import ContributeForm from '../../components/contributeForm';
+import { Link } from '../../routes';
 
 class ShowCampaign extends Component {
 	static async getInitialProps(props) {
@@ -44,50 +45,52 @@ class ShowCampaign extends Component {
 					</Tile>
 					<Tile isParent>
 						<Tile isChild>
-							<Box>
+							<Notification isColor='light'>
 								<Title isSize={5}>{this.props.manager}</Title>
 								<Subtitle isSize={5}>Campaign Manger</Subtitle>
 								<Subtitle isSize={6}>The creator of the campaign and manger of payment requests.</Subtitle>
-							</Box>
+							</Notification>
 						</Tile>
 					</Tile>
 					<Tile>
 						<Tile isParent isVertical>
 							<Tile isChild>
-								<Box>
+								<Notification isColor='light'>
 									<Title isSize={4}>{this.props.minimumContribution}</Title>
 									<Subtitle isSize={5}>Minimum Contribution (wei)</Subtitle>
 									<Subtitle isSize={6}>The minimum amount of wei required to contribute to campaign.</Subtitle>
-								</Box>
+								</Notification>
 							</Tile>
 							<Tile isChild>
-								<Box>
+								<Notification isColor='light'>
 									<Title isSize={4}>{web3.utils.fromWei(this.props.balance, 'ether')}</Title>
 									<Subtitle isSize={5}>Total Balance (ether)</Subtitle>
 									<Subtitle isSize={6}>The total amount of wei currently contributed to campaign.</Subtitle>
-								</Box>
+								</Notification>
 							</Tile>
 						</Tile>
 						<Tile isParent isVertical>
 							<Tile isChild>
-								<Box>
+								<Notification isColor='light'>
 									<Title isSize={4}>{this.props.requestsCount}</Title>
 									<Subtitle isSize={5}>Requests</Subtitle>
 									<Subtitle isSize={6}>The current number of payment requests in the campaign.</Subtitle>
-								</Box>
+								</Notification>
 							</Tile>
 							<Tile isChild>
-								<Box>
+								<Notification isColor='light'>
 									<Title isSize={4}>{this.props.approversCount}</Title>
 									<Subtitle isSize={5}>Contributors</Subtitle>
 									<Subtitle isSize={6}>The number of contributors that can aprove requests in this campaign.</Subtitle>
-								</Box>
+								</Notification>
 							</Tile>
 						</Tile>
 					</Tile>
 					<Tile isParent>
-						<Tile isChild hasTextAlign="centered">
-							<Button isColor='info'>View Requests</Button>
+						<Tile isChild>
+							<Link route={`/campaigns/${this.props.address}/requests`}>
+								<Button isColor='info'>View Requests</Button>
+							</Link>
 						</Tile>
 					</Tile>
 				</Tile>
