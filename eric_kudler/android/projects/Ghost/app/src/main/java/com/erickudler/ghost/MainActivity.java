@@ -60,6 +60,13 @@ public class MainActivity extends AppCompatActivity implements
         getSupportLoaderManager().initLoader(TIMERS_LOADER_ID, null, this);
     }
 
+    protected void onResume() {
+        super.onResume();
+
+        // re-queries for all tasks
+        getSupportLoaderManager().restartLoader(TIMERS_LOADER_ID, null, this);
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

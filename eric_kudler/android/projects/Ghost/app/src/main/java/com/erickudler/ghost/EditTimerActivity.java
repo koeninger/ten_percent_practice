@@ -33,6 +33,6 @@ public class EditTimerActivity extends AppCompatActivity {
         values.put(GhostContract.TimerEntry.COLUMN_NUM_OF_STEPS, Math.round(Math.random() * 10 + 1));
 
         getContentResolver().insert(GhostContract.TimerEntry.CONTENT_URI, values);
-        finish(); 
+        finish();
     }
 }

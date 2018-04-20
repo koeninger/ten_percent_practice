@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class GhostDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ghost.db";
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 7;
 
     public GhostDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
