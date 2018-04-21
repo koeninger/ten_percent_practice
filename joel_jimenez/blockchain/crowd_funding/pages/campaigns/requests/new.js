@@ -1,28 +1,28 @@
 import React, { Component } from 'react';
-import { Section, Title, Subtitle, Button } from 'bloomer';
+import { Link } from '../../../routes';
+import { Section, Button } from 'bloomer';
 import Layout from '../../../components/Layout';
+import NewRequestForm from '../../../components/newRequest';
 
-class NewRequests extends Component {
+class NewRequest extends Component {
 	static async getInitialProps(props) {
 		const address = props.query.address;
 
 		return {address};
 	}
-	
-	renderNewRequest() {
-		return (
-			<Section>
-				<Title isSize={4}>New Request</Title>
-				<Subtitle isSize={5}>New Request</Subtitle>
-			</Section>
-		);
-	}
 
 	render() {
 		return (
-			<Layout>{this.renderNewRequest()}</Layout>
+			<Layout>
+				<Section>
+					<Link route={`/campaigns/${this.props.address}/requests`}>
+						<Button isColor="info">&larr; View Requests</Button>
+					</Link>
+					<NewRequestForm address={this.props.address} />
+				</Section>
+			</Layout>
 		);
 	}
 }
 
-export default NewRequests;
+export default NewRequest;
