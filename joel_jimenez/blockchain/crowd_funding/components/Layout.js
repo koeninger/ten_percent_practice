@@ -15,7 +15,7 @@ class Layout extends Component {
 				<NewCampaignModal ref={instance => { this.child = instance; }} />
 				<Header onClickNewCampaign={() => { this.child.openModal(); }} />
 				<Container>{this.props.children}</Container>
-				<Footer />
+				{/* <Footer /> */}
 			</div>
 		);
 	}

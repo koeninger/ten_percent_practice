@@ -65,3 +65,17 @@ def identity(i: Int): Int = i
 def identity[A](a: A): A = a
 val s: String = identity("Hello")
 val d = identity(2.717)
+
+val s = "vacation.jpg"
+val isJPEG = s.endsWith(".jpg")
+
+val d = 65.642
+d.round
+d.floor
+d.compare(18.0)
+d.+(2.721)
+
+d compare 18.0
+d + 2.721
+
+1 + 2 + 3

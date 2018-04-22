@@ -550,3 +550,63 @@ test("Scott")
 test("John")
 test("Stephen")
 test("Mary")
+
+
+
+#9 - Pig Latin formula
+def pig_latin(word):
+    """Returns the (simplified) Pig Latin version of the word."""
+    
+    first_letter = word[0]
+    
+#10 - # Compute the smaller root of a quadratic equation.
+
+###################################################
+# Smaller quadratic root formula
+def smaller_root(a, b, c):
+    """
+    Returns the smaller root of a quadratic equation with the
+    given coefficients.
+    """
+        discriminant = b ** 2 - 4 * a * c
+    if discriminant < 0 or a == 0:
+        print "Error: No real solutions"
+    else:
+        discriminant_sqrt = discriminant ** 0.5
+        # Choose the positive or negative square root that leads to a smaller root.
+        if a > 0:
+            smaller = - discriminant_sqrt
+        else:
+            smaller = discriminant_sqrt
+        return (-b + smaller) / (2 * a)
+# Tests
+def test(a, b, c):
+    """Tests the smaller_root function."""
+    
+    print "The smaller root of " + str(a) + "x^2 + " + str(b) + "x + " + str(c) + " is:" 
+    print str(smaller_root(a, b, c))
+test(1, 2, 3)
+test(2, 0, -10)
+test(6, -3, 5)
+
+    rest_of_word = word[1 : ]
+    
+        if (first_letter == "a" or first_letter == "e" or first_letter == "i" or
+        first_letter == "o" or first_letter == "u"):
+        return word + "way"
+    else:
+        return rest_of_word + first_letter + "ay"
+
+# Tests
+def test(word):
+    """Tests the pig_latin function."""
+    
+    print pig_latin(word)
+    
+test("pig")
+test("owl")
+test("python")
+
+#igpay
+#owlway
+#ythonpay

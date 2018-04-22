@@ -11,20 +11,22 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class GhostDbHelper extends SQLiteOpenHelper {
 
     private static final String DATABASE_NAME = "ghost.db";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 7;
 
-    private GhostDbHelper(Context context) {
+    public GhostDbHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
-    public void onCreate(SQLiteDatabase sqLiteDatabase) {
+    public void onCreate(SQLiteDatabase db) {
         final String SQL_CREATE_TIMER_TABLE = "CREATE TABLE " + GhostContract.TimerEntry.TABLE_NAME + " (" +
                 GhostContract.TimerEntry._ID + " INTEGER PRIMARY KEY AUTOINCREMENT," +
                 GhostContract.TimerEntry.COLUMN_NAME + " TEXT NOT NULL, " +
+                GhostContract.TimerEntry.COLUMN_BEST_TIME + " INTEGER NOT NULL, " +
                 GhostContract.TimerEntry.COLUMN_NUM_OF_STEPS + " INTEGER NOT NULL, " +
                 GhostContract.TimerEntry.COLUMN_TIMESTAMP + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP" +
-                "); ";
+                ");";
+        db.execSQL(SQL_CREATE_TIMER_TABLE);
     }
 
     @Override
