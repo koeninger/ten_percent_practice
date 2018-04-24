@@ -86,8 +86,6 @@ def montage(images, saveto='montage.png'):
     m : numpy.ndarray
         Montage image.
     """
-    if isinstance(images, list):
-        images = np.array(images)
     img_h = images.shape[1]
     img_w = images.shape[2]
     n_plots = int(np.ceil(np.sqrt(images.shape[0])))

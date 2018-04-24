@@ -102,9 +102,30 @@ def recursive_evens_before_odds(sequence):
     recursive_evens_before_odds(sequence + midpoint)
     print 'Recursion ended, list: => ', sequence
 
-recursive_evens_before_odds([1,2,4,57,8,9,3,2,6,8,4,8,9])
+# recursive_evens_before_odds([1,2,4,57,8,9,3,2,6,8,4,8,9])
 
 # *************************************************** #
+
+# Implement a recursive function with signature 'find(path, filename)'
+# that reports all entries of the file system rooted at the given path having the given file name.
+
+
+def find(path, filename):
+    import os
+    print "In path: ", path
+    if os.path.isdir(path):
+        for filestr in os.listdir(path):
+            if filestr == filename:
+                print "Comparing ", filestr, "to ", filename
+                return 'Match in: ', os.path.join(path, filestr)
+            else :
+                sub_path = os.path.join(path, filestr)
+                find(sub_path, filename)
+
+print find('/Users/egarcia/Downloads', 'world_bank.json')
+
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #

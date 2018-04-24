@@ -173,6 +173,49 @@ instance (Arbitrary a, Arbitrary b) => Arbitrary (Bigger a b) where
 
 instance (Eq a, Eq b) => EqProp (Bigger a b) where (=-=) = eq
 
+data Tree a
+  = Empty
+  | Leaf a
+  | Node (Tree a) a (Tree a)
+  deriving (Eq, Show)
+
+instance Functor Tree where
+  fmap _ Empty = Empty
+  fmap fn (Leaf a) = Leaf (fn a)
+  fmap fn (Node t a t') = Node (fmap fn t) (fn a) (fmap fn t')
+
+instance Foldable Tree where  
+  foldMap _ Empty = mempty
+  foldMap fn (Leaf a) = fn a
+  foldMap fn (Node t a t') =
+    let lh = foldMap fn t
+        rh = foldMap fn t'
+    in mconcat [lh, fn a, rh]
+
+instance Traversable Tree where
+  traverse _ Empty = pure Empty
+  traverse fn (Leaf a) = Leaf <$> fn a
+  traverse fn (Node t a t') =
+    let lh = traverse fn t
+        rh = traverse fn t'
+    in  Node <$> lh <*> fn a <*> rh
+
+instance (Arbitrary a) => Arbitrary (Tree a) where
+  arbitrary = do
+    a <- arbitrary
+    lh <- arbitrary
+    rh <- arbitrary
+    frequency [(1, return Empty)
+            ,(2, return $ Leaf a)
+            ,(3, return $ Node lh a rh)]
+
+instance (Eq a) => EqProp (Tree a) where (=-=) = eq
+
+checkTree = do
+  let t :: Tree (Int, Int, [Int])
+      t = undefined
+  quickBatch (traversable t)
+  
 checkBigger = do
   let t :: Bigger Int (Int, Int, [Int])
       t = undefined

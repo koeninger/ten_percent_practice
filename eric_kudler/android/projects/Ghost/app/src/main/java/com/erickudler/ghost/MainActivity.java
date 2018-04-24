@@ -1,24 +1,35 @@
 package com.erickudler.ghost;
 
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.AsyncTaskLoader;
+import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.erickudler.ghost.adapters.TimersAdapter;
+import com.erickudler.ghost.data.GhostContract;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     private RecyclerView mTimersView;
-    private RecyclerView.Adapter mTimersAdapter;
+    private TimersAdapter mTimersAdapter;
     private RecyclerView.LayoutManager mTimersLayoutManager;
+
+    private static final int TIMERS_LOADER_ID = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         mTimersLayoutManager = new LinearLayoutManager(this);
         mTimersView.setLayoutManager(mTimersLayoutManager);
 
-        mTimersAdapter = new TimersAdapter();
+        mTimersAdapter = new TimersAdapter(getApplicationContext());
         mTimersView.setAdapter(mTimersAdapter);
 
 
@@ -45,6 +56,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(editIntent);
             }
         });
+
+        getSupportLoaderManager().initLoader(TIMERS_LOADER_ID, null, this);
+    }
+
+    protected void onResume() {
+        super.onResume();
+
+        // re-queries for all tasks
+        getSupportLoaderManager().restartLoader(TIMERS_LOADER_ID, null, this);
     }
 
     @Override
@@ -67,5 +87,64 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<Cursor>(this) {
+
+            // Initialize a Cursor, this will hold all the task data
+            Cursor mTimerData = null;
+
+            // onStartLoading() is called when a loader first starts loading data
+            @Override
+            protected void onStartLoading() {
+                if (mTimerData != null) {
+                    // Delivers any previously loaded data immediately
+                    deliverResult(mTimerData);
+                } else {
+                    // Force a new load
+                    forceLoad();
+                }
+            }
+
+            // loadInBackground() performs asynchronous loading of data
+            @Override
+            public Cursor loadInBackground() {
+                // Will implement to load data
+
+                // Query and load all task data in the background; sort by priority
+                // [Hint] use a try/catch block to catch any errors in loading data
+
+                try {
+                    return getContentResolver().query(GhostContract.TimerEntry.CONTENT_URI,
+                            null,
+                            null,
+                            null,
+                            null);
+
+                } catch (Exception e) {
+                    Log.e("com.erickudler.ghost", "Failed to asynchronously load data.");
+                    e.printStackTrace();
+                    return null;
+                }
+            }
+
+            // deliverResult sends the result of the load, a Cursor, to the registered listener
+            public void deliverResult(Cursor data) {
+                mTimerData = data;
+                super.deliverResult(data);
+            }
+        };
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        mTimersAdapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        mTimersAdapter.swapCursor(null);
     }
 }

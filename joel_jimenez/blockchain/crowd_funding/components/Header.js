@@ -4,7 +4,7 @@ import Menu from './Menu';
 
 export default props => {
 	return (
-		<Hero isColor='primary' isSize='large'>
+		<Hero isColor='primary'>
 			<HeroBody>
 				<Container>
 					<Title>CrowdCoin</Title>
