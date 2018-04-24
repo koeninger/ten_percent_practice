@@ -1,0 +1,22 @@
+>>> def deco(func):
+...     def inner():
+...         print('running inner()')
+...     return inner
+>>> @deco
+... def target():
+...     print('running target()')
+>>> target()
+running inner()
+>>> target
+<function deco.<locals>.inner at 0x1061946a8>
+
+
+
+❯ python3 registration.py
+running register(<function f1 at 0x102387bf8>)
+running register(<function f2 at 0x102387b70>)
+running main()
+registry -> [<function f1 at 0x102387bf8>, <function f2 at 0x102387b70>]
+running f1()
+running f2()
+running f3()
