@@ -96,4 +96,16 @@ class Grid
             $this->_pc += 3;
         }
     }
+    
+    public function connect(){
+        for($i = 0; $i < self::SIZE; $i++){
+            for($j = 0; $j < self::SIZE; $j++){
+                
+            }
+        }
+    }
+    
+    public function toBinary($val){
+        
+    }
 }
