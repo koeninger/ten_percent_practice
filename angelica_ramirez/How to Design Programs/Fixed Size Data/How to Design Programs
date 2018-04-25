@@ -234,3 +234,30 @@ this form of testing is dubbed unit testing
 
 3.6 Designing World Problems 
 
+Sample Problem Design a program that moves a car from left to right on the world canvas, three pixels per clock tick.
+1. for all properties of the world that remain the same over time and are needed to render it as an image, introduce constnats
+via definitions
+  two kinds of constants
+    a. "physical" describe general attributes of objects in the world such as speed, color, height, etc.
+ for the sample: the radius of the wheels and distance between the wheels are physical constnats
+      (define WIDTH-OF-WORLD 200)
+      (define WHEEL-RADIUS 5)
+      (define WHEEL-DISTANCE (* WHEEL-RADIUS 5)) 
+    b. graphical constants are images of objefcts in the world, the program composes them into images that represent the compete state of the world
+      for the sample: wheel images of car are the graphical constants
+          (define WHEEL
+            (circle WHEEL-RADIUS "solid" "black"))
+          (define SPACE 
+            (rectangle ... WHEEL-RADIUS ... "white"))
+          (define BOTH-WHEELS
+            (beside WHEEL SPACE WHEEL))
+       graphical constatns are usually computed and tend to involve physical constants and other images
+2. the properties that change over time give rise to the current state of the world (clock ticks, keystrokes, or mouse actions)
+  the task is to develop a data representation for all possible states of the world, resulting in data definition and a comment that tells how to represent world information as data and how to interpret data as information about the world
+  for the example: car's distance from the left margin that changes over time
+    ; A WorldState is a Number.
+    ; interpretation the number of pixels between
+    ; the left border of the scene and the car
+  also the count of number of clock ticks that have passed and to use this number as the state of the owrld 
+    ; 
+ 
