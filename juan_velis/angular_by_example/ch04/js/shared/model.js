@@ -1,4 +1,4 @@
-﻿'use strict';
+'use strict';
 
 /* Model classes */
 angular.module('app')
@@ -9,7 +9,7 @@ angular.module('app')
             this.description = args.description;
             this.image = args.image;
             this.related = {};
-            this.related.videos = args.videos;
+            this.related.videos = args.videos || [];
             this.nameSound = args.nameSound;
             this.procedure = args.procedure;
         }

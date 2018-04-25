@@ -188,7 +188,6 @@ angular.module('7minWorkout')
               }),
               duration: 30
           });
-
           return workout;
       }
 
