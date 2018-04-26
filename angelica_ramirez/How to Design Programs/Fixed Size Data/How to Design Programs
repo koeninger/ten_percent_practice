@@ -243,7 +243,7 @@ via definitions
       (define WIDTH-OF-WORLD 200)
       (define WHEEL-RADIUS 5)
       (define WHEEL-DISTANCE (* WHEEL-RADIUS 5)) 
-    b. graphical constants are images of objefcts in the world, the program composes them into images that represent the compete state of the world
+    b. graphical constants are images of objects in the world, the program composes them into images that represent the compete state of the world
       for the sample: wheel images of car are the graphical constants
           (define WHEEL
             (circle WHEEL-RADIUS "solid" "black"))
@@ -258,6 +258,68 @@ via definitions
     ; A WorldState is a Number.
     ; interpretation the number of pixels between
     ; the left border of the scene and the car
-  also the count of number of clock ticks that have passed and to use this number as the state of the owrld 
-    ; 
+  also the count of number of clock ticks that have passed and to use this number as the state of the world 
+    ; A WorldState is a WorldState
+    ; state-of-the-world the number of clock ticks that have passsed 
+ 3. Need to design a number of functions os that you can form a valid big-bang expression
+  need a function that maps any given state into an image so that big-bang cna redner the sequence of states as images
+    ; render
+  need to decide which kinds of events hsould change which aspects of the world state
+    ; clock-tick-handler
+    ; keystroke-handler
+    ; mouse-event-handler
+  the problem statement suggest that the progrm should stop if it has certain properties
+    ; end? 
+  example:
+    ; WorldState -> Image
+    ; places the image of the car x pixels from 
+    ; the left margin of the BACKGROUND image 
+    (define (render x)
+      BACKGROUND)
+      
+    ; WorldState -> WorldState
+    ; adds 3 to x to move the car right
+    (define (tock x)
+      x)
+ 4. need a main function, doesn't demand design or test, and exists to launch the program 
+ sample:
+ ; WorldState -> WorldState 
+ ; luanches the program from some initial state
+ (define (main ws)
+  (big-bang ws
+    [on-tick tock]
+    [to-draw render]))
+    
+Exercise 39 (define WHEEL-RADIUS 5)
+ single point of control: ensures that the image can be enlarged or reduced via single change to a constant definition 
+ a good design employs this idea as much as possible
+ Develop image of car so that WHEEL-RADIUS remains the single point of control 
  
+; Physical Constants
+(define WIDTH-OF-WORLD 400)
+(define HEIGHT-OF-WORLD 50)
+
+; Graphical Constants
+(define WHEEL-RADIUS 5)
+(define WHEEL-DISTANCE
+  (* WHEEL-RADIUS 5))
+
+(define WHEEL
+  (circle WHEEL-RADIUS "solid" "black"))
+(define SPACE
+  (rectangle WHEEL-DISTANCE WHEEL-RADIUS "solid" "white"))
+(define BOTH-WHEELS
+  (beside WHEEL SPACE WHEEL))
+
+(define BODY-LENGTH
+  (+ WHEEL-RADIUS WHEEL-RADIUS WHEEL-DISTANCE))
+(define BODY-HEIGHT
+  (+ WHEEL-RADIUS WHEEL-RADIUS))
+(define BODY
+  (above
+    (rectangle (/ BODY-LENGTH 2) (/ BODY-HEIGHT 2) "solid" "red")
+    (rectangle BODY-LENGTH BODY-HEIGHT "solid" "red")))
+
+(define CAR
+  (overlay/align/offset "middle" "bottom" BOTH-WHEELS 0 (- 0 WHEEL-RADIUS) BODY))
+
