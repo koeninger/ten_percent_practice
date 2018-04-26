@@ -99,3 +99,76 @@ purpose statement and the header and get this:
 ; given: 2, expect: 4
 ; given: 7, expect: 49
 (define (area-of-square len) 0)
+
+
+; Number String Image -> Image
+; adds s to img, y pixels from top, 10 pixels to the left
+; given:
+;    5 for y,
+;    "hello" for s, and
+;    (empty-scene 100 100) for img
+; expected:
+;    (place-image (text "hello" 10 "red") 10 5 ...)
+;    where ... is (empty-scene 100 100)
+(define (add-image y s img)
+  (place-image (text s 10 "red") 10 y img))
+
+
+3.2 Finger Exercises: Functions
+
+Exercise 34. Design the function string-first, which extracts the first
+character from a non-empty string. Don’t worry about empty strings.
+
+; String -> !String
+; Given a string extract first character
+; Given: "h"            expected: "h"
+; Given: "hello world"  expected: "h"
+; (define (string-first str) "")
+
+(define (string-first str)
+  (substring str 0 1))
+
+Exercise 35. Design the function string-last, which extracts the last
+character from a non-empty string.
+
+; String -> !String
+; Given a string extract last character
+; Given: "h"            expected: "h"
+; Given: "hello world"  expected: "d"
+;(define (string-last str) "")
+
+(define (string-last str)
+    (substring str (- (string-length str) 1)))
+
+Exercise 36. Design the function image-area, which counts the number of
+pixels in a given image.
+
+; Image -> Number
+; Given an image, return area in pixels
+; (define (image-area img)
+
+(define (image-area img)
+  (* (image-height img) (image-width img)))
+
+Exercise 37. Design the function string-rest, which produces a string like
+the given one with the first character removed.
+
+; String -> String
+; Given a string, return the string minus the first character
+; Given: "h",     expect: ""
+; Given: "hello", expect "ello"
+; (define (string-remain str) "")
+
+(define (string-remain str)
+  (substring str 1))
+
+Exercise 38. Design the function string-remove-last, which produces a string
+like the given one with the last character removed.
+
+; String -> String
+; Given a string remove last char
+; Given "h",     expect: ""
+; Given "hello", expect: "hell"
+
+(define (string-remove-last str)
+  (substring str 0 (- (string-length str) 1)))
