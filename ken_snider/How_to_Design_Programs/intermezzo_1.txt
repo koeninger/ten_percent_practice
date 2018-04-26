@@ -124,3 +124,31 @@ Start: (f (f 1 (* 2 3)) 19)
         [ else exp-else] )
 
 ===
+
+;Exercise 124. Evaluate the following program, step-by-step:
+;(define PRICE 5)
+;(define SALES-TAX (* 0.08 PRICE))
+;(define TOTAL (+ PRICE SALES-TAX))
+
+Start: (define PRICE 5)
+(define SALES-TAX .4)
+(define TOTAL (+ 5 .4)
+
+;Does the evaluation of the following program signal an error?
+;(define COLD-F 32)
+;(define COLD-C (fahrenheit->celsius COLD-F))
+;(define (fahrenheit->celsius f)
+; (* 5/9 (- f 32)))
+
+Yes, farenheit->celsius is used before it is defined.
+
+;How about the next one?
+;(define LEFT -100)
+;(define RIGHT 100)
+;(define (f x) (+ (* 5 (expt x 2)) 10))
+;(define f@LEFT (f LEFT))
+;(define f@RIGHT (f RIGHT))
+
+No error, in this case LEFT and RIGHT are defined before they are used in their function definitions.
+
+===
