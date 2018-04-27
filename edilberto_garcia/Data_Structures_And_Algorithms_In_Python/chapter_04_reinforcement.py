@@ -106,7 +106,7 @@ def recursive_evens_before_odds(sequence):
 
 # *************************************************** #
 
-# Implement a recursive function with signature 'find(path, filename)'
+# P-4.23 Implement a recursive function with signature 'find(path, filename)'
 # that reports all entries of the file system rooted at the given path having the given file name.
 
 
@@ -122,11 +122,12 @@ def find(path, filename):
                 sub_path = os.path.join(path, filestr)
                 find(sub_path, filename)
 
-print find('/Users/egarcia/Downloads', 'world_bank.json')
-
+# print find('/Users/egarcia/Downloads', 'world_bank.json')
 
 
 # *************************************************** #
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
