@@ -32,7 +32,7 @@ class Requests extends Component {
 		// Create a row for a request in the table
 		const requestRows = this.props.requests.map( (request, index) => {
 			return <RequestRow
-				id={index + 1}
+				id={index}
 				key={index}
 				request={request}
 				address={this.props.address}

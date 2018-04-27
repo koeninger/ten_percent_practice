@@ -10,6 +10,7 @@ contract CampaignFactory {
     }
     // Keep track of all deployed instinces of the campaign contract
     CampaignShort[] public campaigns;
+    uint public campaignCount; 
 
     // Creates a new campaign
     function createCampaign(uint minimum, string description) public {
@@ -25,6 +26,7 @@ contract CampaignFactory {
         
         // Store address of new contract instance
         campaigns.push(newCampaign);
+        campaignCount++;
     }
 }
 
@@ -58,6 +60,8 @@ contract Campaign {
 
     // Constructor that initiates a campaign
     function Campaign(uint minimum, string description, address creator) public {
+        require(minimum > 0);
+
         manager = creator;
         campaignDescription = description;
         minimumContribution = minimum;
@@ -68,9 +72,11 @@ contract Campaign {
         // The contribution must be greater than minimumContribution
         require(msg.value > minimumContribution);
 
-        // Store contributors address
-        approvers[msg.sender] = true;
-        approversCount++;
+        if(!approvers[msg.sender]){
+            // Store contributors address
+            approvers[msg.sender] = true;
+            approversCount++;
+        }
     }
 
     // Creates a spending request (restricted to managers only)
