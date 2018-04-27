@@ -16,7 +16,7 @@ class NewRequest extends Component {
 			<Layout>
 				<Section>
 					<Link route={`/campaigns/${this.props.address}/requests`}>
-						<Button isColor="info">&larr; View Requests</Button>
+						<Button isColor="info" isPulled='right'>&larr; View Requests</Button>
 					</Link>
 					<NewRequestForm address={this.props.address} />
 				</Section>

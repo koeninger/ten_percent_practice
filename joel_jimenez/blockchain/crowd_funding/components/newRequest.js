@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Title, Section, Field, Columns, Column, Label, Control, Input, Button, Notification } from 'bloomer';
 import Campaign from '../ethereum/campaign';
 import web3 from '../ethereum/web3'
-import { Link, Router } from '../routes';
+import { Router } from '../routes';
 
 class NewRequestForm extends Component {
     static async getInitialProps() {
@@ -31,8 +31,8 @@ class NewRequestForm extends Component {
 		event.preventDefault();
 		try{
             // Get values for new requests
-            const { description, value, recipient } = this.state;
-            console.log(description, value, recipient);
+            const { requestDescription, valueAmount, recipient } = this.state;
+            console.log(requestDescription, valueAmount, recipient);
 
             // Get instance of campaign
             const campaign = Campaign(this.props.address);
@@ -42,7 +42,7 @@ class NewRequestForm extends Component {
 
 			// Create request
 			await campaign.methods
-				.createRequest(description, web.utils.toWei(value, 'ether'), recipient)
+				.createRequest(requestDescription, web3.utils.toWei(valueAmount, 'ether'), recipient)
 				.send({
 					from: accounts[0]
 				});
@@ -51,15 +51,13 @@ class NewRequestForm extends Component {
 			this.setState({
 				messageText: 'Request was created successfully!',
 				messageColor: 'success',
-                hideMessage: false
+                hideMessage: false,
+				isCreating: true
 			});
 
-			// // Redirect back to requests page
-			// Router.replaceRoute('/');
+			// Redirect back to requests page
+			Router.replaceRoute(`/campaigns/${this.props.address}/requests/new`);
 			// window.location.reload();
-			// this.setState({
-			// 	isCreating: false
-			// });
 
 		} catch(error){
 			console.log(error);
