@@ -6,18 +6,16 @@ import { Link } from '../routes';
 
 class CampaignIndex extends Component {
 	static async getInitialProps() {
-		let campaigns = [];
+		// Get number of campaigns created in factory
+		const campaignCount = await factory.methods.campaignCount().call();
 
-		for (let i = 0; true; i++){
-			try{
-				let newCampaign = await factory.methods.campaigns(i).call();
-				campaigns.push(newCampaign);
-
-			} catch(err){
-				// console.log(err);
-				break;
-			}
-		}
+		// Create array of size campaignCount. For each element, make a request to contract by index. Returns filled array
+		const campaigns = await Promise.all(
+			Array( parseInt(campaignCount) ).fill()
+			.map( (element, index) => {
+				return factory.methods.campaigns(index).call();
+			})
+		);
 
 		return { campaigns };
 	}
@@ -32,14 +30,14 @@ class CampaignIndex extends Component {
 				let minimum = campaign[2];
 				
 				return (
-					<Notification isColor="light" key={campaignAddress}>
-						<Title isSize={5}>{description}</Title>
-						<Subtitle>Minimum contribution: {minimum}</Subtitle>
-						<Link route={`/campaigns/${campaignAddress}`}>
-							<a>View campaign</a>
-						</Link>
-					</Notification>
-					
+					<Link route={`/campaigns/${campaignAddress}`}>
+						<a>
+							<Notification isColor="light" key={campaignAddress}>
+								<Title isSize={5}>{description}</Title>
+								<Subtitle>Minimum contribution: {minimum}</Subtitle>
+							</Notification>
+						</a>
+					</Link>
 				);
 			});
 		} else{

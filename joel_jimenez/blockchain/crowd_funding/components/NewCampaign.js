@@ -17,8 +17,9 @@ class NewCampaign extends Component {
 	onSubmit = async (event) => {
 		this.setState({
 			messageText: 'Creating Campaign . . .',
-			messageColor: 'info',
-			isCreating: true
+			messageColor: 'primary',
+			isCreating: true,
+			messageHidden: false
 		});
 
 		event.preventDefault();
@@ -43,7 +44,8 @@ class NewCampaign extends Component {
 			Router.replaceRoute('/');
 			window.location.reload();
 			this.setState({
-				isCreating: false
+				isCreating: false,
+				messageHidden: true
 			});
 
 		} catch(error){
@@ -97,7 +99,7 @@ class NewCampaign extends Component {
 						</Field>
 					</Column>
 				</Columns>
-				<Notification isColor="light" hasTextAlign="centered" hasTextColor={this.state.messageColor}>{this.state.messageText}</Notification>
+				<Notification isColor={this.state.messageColor} isHidden={this.state.messageHidden} hasTextAlign="centered">{this.state.messageText}</Notification>
 			</Section>
 		);
 	}

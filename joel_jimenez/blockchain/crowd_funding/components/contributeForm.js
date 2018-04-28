@@ -9,14 +9,16 @@ class ContributeForm extends Component {
 		contribution: '',
 		messageColor: '',
 		messageText: '',
-		isCreating: false
+		isCreating: false,
+		messageHidden: true
 	};
 
 	onSubmit = async (event) => {
 		this.setState({
-			messageText: 'Contributing to campaign . . .',
-			messageColor: 'info',
-			isCreating: true
+			messageText: 'Contributing to campaign...',
+			messageColor: 'primary',
+			isCreating: true,
+			messageHidden: false
 		});
 
 		event.preventDefault();
@@ -68,10 +70,10 @@ class ContributeForm extends Component {
 				</Field>
 				<Field>
 					<Control>
-						<Button isColor='info' isLoading={this.state.isCreating} onClick={this.onSubmit}>Create</Button>
+						<Button isColor='info' isLoading={this.state.isCreating} onClick={this.onSubmit}>Contribute</Button>
 					</Control>
 				</Field>
-				<Notification isColor="white" hasTextAlign="centered" hasTextColor={this.state.messageColor}>{this.state.messageText}</Notification>
+				<Notification isColor={this.state.messageColor} hasTextAlign="centered" isHidden={this.state.messageHidden}>{this.state.messageText}</Notification>
 			</Section>
 		);
 	};

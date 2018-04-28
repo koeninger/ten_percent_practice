@@ -23,9 +23,9 @@ class NewRequestForm extends Component {
 	onSubmit = async (event) => {
 		this.setState({
 			messageText: 'Creating Request . . .',
-			messageColor: 'info',
+			messageColor: 'primary',
 			isCreating: true,
-            hideMessage: true
+            hideMessage: false
 		});
 
 		event.preventDefault();
@@ -51,8 +51,10 @@ class NewRequestForm extends Component {
 			this.setState({
 				messageText: 'Request was created successfully!',
 				messageColor: 'success',
-                hideMessage: false,
-				isCreating: true
+				isCreating: false,
+				requestDescription: '',
+				valueAmount: '',
+				recipient: '',
 			});
 
 			// Redirect back to requests page
@@ -64,8 +66,7 @@ class NewRequestForm extends Component {
 			this.setState({
 				messageText: 'Error: Unable to create new request.',
 				messageColor: 'danger',
-				isCreating: false,
-                hideMessage: false
+				isCreating: false
 			});
 		}
 	};

@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import { Button, Tag, Notification } from 'bloomer';
 import web3 from '../ethereum/web3';
 import Campaign from '../ethereum/campaign';
+import { Router } from '../routes';
 
 class RequestRow extends Component{
-	static async componentWillMount(props) {
+	componentWillMount(props) {
 		const { id, request, approversCount } = this.props;
 		const requestValue = web3.utils.fromWei(request.requestValue, 'ether');
 
@@ -12,17 +13,19 @@ class RequestRow extends Component{
 			finalizeButtonHidden: request.complete,
 			finalizeMessageHidden: !request.complete
 		});
+		console.log(request.complete);
+		console.log(this.state);
 	}
 
 	state = {
 		isApproving: false,
 		approveMessage: '',
-		approveMessageColor: '',
+		approveMessageColor: 'success',
 		approveMessageHidden: true,
 		approveButtonHidden: false,
 		isFinalizing: false,
 		finalizeMessage: '',
-		finalizeMessageColor: '',
+		finalizeMessageColor: 'dark',
 		finalizeMessageHidden: true,
 		finalizeButtonHidden: false
 	};
@@ -32,7 +35,7 @@ class RequestRow extends Component{
 			isApproving: true,
 			approveMessage: 'Request is being approved...',
 			approveMessageHidden: false,
-			approveMessageColor: 'info'
+			approveMessageColor: 'primary'
 		});
 
 		try{
@@ -50,6 +53,9 @@ class RequestRow extends Component{
 				approveButtonHidden: true
 			});
 
+			// Router.replaceRoute('/');
+			// window.location.reload();
+
 		} catch(error){
 			console.log(error);
 
@@ -66,7 +72,7 @@ class RequestRow extends Component{
 			isFinalizing: true,
 			finalizeMessage: 'Request is being finalized...',
 			finalizeMessageHidden: false,
-			finalizeMessageColor: 'info'
+			finalizeMessageColor: 'primary'
 		});
 
 		try{
@@ -80,9 +86,12 @@ class RequestRow extends Component{
 			this.setState({
 				isFinalizing: false,
 				finalizeMessage: 'Finalized!',
-				finalizeMessageColor: 'success',
+				finalizeMessageColor: 'dark',
 				finalizeButtonHidden: true
 			});
+
+			// Router.replaceRoute('/');
+			// window.location.reload();
 
 		} catch(error){
 			console.log(error);
@@ -111,6 +120,7 @@ class RequestRow extends Component{
 					<Tag isHidden={this.state.approveMessageHidden} isColor={this.state.approveMessageColor}>{this.state.approveMessage}</Tag>
 				</td>
 				<td>
+					<p>{request.complete}</p>
 					<Button isHidden={this.state.finalizeButtonHidden} isColor='dark' isOutlined isLoading={this.state.isFinalizing} onClick={this.onFinalize}>Finalize</Button>
 					<Tag isHidden={this.state.finalizeMessageHidden} isColor={this.state.finalizeMessageColor}>{this.state.finalizeMessage}</Tag>
 				</td>

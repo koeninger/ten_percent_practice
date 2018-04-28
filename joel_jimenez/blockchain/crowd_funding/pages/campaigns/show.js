@@ -65,7 +65,7 @@ class ShowCampaign extends Component {
 								<Notification isColor='light'>
 									<Title isSize={4}>{web3.utils.fromWei(this.props.balance, 'ether')}</Title>
 									<Subtitle isSize={5}>Total Balance (ether)</Subtitle>
-									<Subtitle isSize={6}>The total amount of wei currently contributed to campaign.</Subtitle>
+									<Subtitle isSize={6}>The total amount of ether currently contributed to campaign.</Subtitle>
 								</Notification>
 							</Tile>
 						</Tile>
