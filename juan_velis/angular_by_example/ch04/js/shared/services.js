@@ -190,6 +190,7 @@ angular.module('app')
 
         var setupInitialWorkouts = function () {
             var exercises = service.getExercises();
+            // There is only one workout defined by default. 
             var workout = new WorkoutPlan({
                 name: "7minWorkout",
                 title: "7 Minute Workout",
@@ -248,12 +249,21 @@ angular.module('app')
             workouts.push(workout);
         };
 
+        service.getWorkout = function (name) {
+            var result = null;
+            angular.forEach(service.getWorkouts(), function (workout) {
+                if (workout.name === name) result = workout;
+            });
+            return result;
+        };
+
         var init = function () {
             setupInitialExercises();
             setupInitialWorkouts();
         };
 
         init();
+
         return service;
     }]);
 

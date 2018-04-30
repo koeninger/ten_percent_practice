@@ -19,7 +19,6 @@ textarea {
     max-width: 280px;
 }
 
-/* styles for validation helpers - start*/
 .field-validation-error {
     color: #b94a48;
 }
@@ -43,9 +42,7 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
-/* styles for validation helpers - end */
 
-/*styles for top nav bar - start*/
 .navbar-default.top-navbar {
     background-color: #4eaded;
     border-color: #4eaded;
@@ -62,9 +59,7 @@ input[type="checkbox"].input-validation-error {
     margin-top: 15px;
     margin-bottom: 15px;
 }
-/*styles for top nav bar - end*/
 
-/*styles for left nav bar - start*/
 .left-nav-bar {
     background-color: #1ba2db;
     min-height: 100%;
@@ -77,9 +72,7 @@ input[type="checkbox"].input-validation-error {
     text-align:center;
     width:100%;
 }
-/*styles for left nav bar - end*/
 
-/*styles for container - start*/
 .workout-display-div {
     text-align: center;
     padding: 40px;
@@ -93,9 +86,7 @@ input[type="checkbox"].input-validation-error {
 .workout-display-div .time-progress{
     margin-top:40px;
 }
-/*styles for container - end*/
 
-/*Styles for start page - start*/
 .text-center{
     color:#4eaded;
 }
@@ -114,9 +105,7 @@ input[type="checkbox"].input-validation-error {
 #start a .glyphicon {
     top:8px;
 }
-/*Styles for start page - end*/
 
-/*Styles for workout page - start*/
 .workout-app-container{
     padding-top:15px;
 }
@@ -130,7 +119,7 @@ input[type="checkbox"].input-validation-error {
     top:0px;
     width:100%;
     height:100%;
-    opacity:0;
+    opacity:0;      /*Comment this line to try our mouse event based pause and resume. */
     z-index:10; 
  
 }
@@ -168,9 +157,7 @@ input[type="checkbox"].input-validation-error {
     height:100px;
     color:#4eaded;
 }
-/*Styles for workout page - end*/
 
-/*Animation effects workout*/
 div[ng-view] {
     position: absolute;
     width: 100%;
@@ -210,10 +197,6 @@ div[ng-view].ng-leave-active {
     animation: bounceOut 1s;
 }
 
-
-
-/*Animation effects Workout- end*/
-
 /*Workout Builder Styles*/
 #left-nav-exercises button {
     margin-bottom:4px;
@@ -239,32 +222,39 @@ div[ng-view].ng-leave-active {
 
 /*styles for tile - start*/
 .exercise.tile {
-    padding: 10px;
+    width:320px;
+    height:226px;
+    color:white;
     margin-bottom:10px;
-    width:370px;
-    height:240px;
+    background:#61b9ff;
+
 }
-.exercise.tile:nth-child(n){
-    background-color:#02c69a;
+
+.exercise.tile .title {
+    width:inherit;
+    background:#9d4a9c;
+    font-size:14pt;
+    padding:5px;
 }
-.exercise.tile div{
+.exercise.tile .index{
+    width:40px;
     float:left;
+    font-size:20pt;
+    text-align:center;
+    padding-top:10px;
 }
-.exercise.tile div:first-child{
-    width:50px;
-    font-size: 40px;
-}
-.exercise.tile div:nth-child(2){
-    width:245px;
-}
-.exercise.tile div:nth-child(2) input{
-    display:block;
-}
-.exercise.tile div:nth-child(2) div{
-    margin:10px 0px 10px 0px;
-}
-.exercise.tile div:last-child{
+.exercise.tile .order{
     width:53px;
+    float:right;
+}
+.exercise.tile .main {
+    width:225px;
+    float:left;
+    padding:4px;
+}
+.exercise.tile img{
+    width:100%;
+    height:120px;
 }
 
 .workout.tile {
@@ -302,3 +292,8 @@ div[ng-view].ng-leave-active {
     background:#1D89CF;
 }
 /*styles for tile- end*/
+
+.select-duration {
+    color:rgb(51,51,51);
+    margin-top:2px;
+}

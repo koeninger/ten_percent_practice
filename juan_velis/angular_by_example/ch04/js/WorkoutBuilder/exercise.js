@@ -1,7 +1,10 @@
 'use strict';
 
 angular.module('WorkoutBuilder')
-  .controller('ExercisesNavController', ['$scope', 'WorkoutService', function ($scope, WorkoutService) {
+  .controller('ExercisesNavController', ['$scope', 'WorkoutService', 'WorkoutBuilderService', function ($scope, WorkoutService, WorkoutBuilderService) {
+      $scope.addExercise = function (exercise) {
+          WorkoutBuilderService.addExercise(exercise);
+      }
       var init = function () {
           $scope.exercises = WorkoutService.getExercises();
       };
@@ -15,6 +18,13 @@ angular.module('WorkoutBuilder')
       }
       var init = function () {
           $scope.exercises = WorkoutService.getExercises();
+      };
+      init();
+  }]);
+
+angular.module('WorkoutBuilder')
+  .controller('ExerciseDetailController', ['$scope', 'WorkoutService', '$routeParams', function ($scope, WorkoutService, $routeParams) {
+      var init = function () {
       };
       init();
   }]);
