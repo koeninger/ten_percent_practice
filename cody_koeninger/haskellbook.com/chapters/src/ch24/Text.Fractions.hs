@@ -24,7 +24,19 @@ integerEof = do
   it <- integer
   e <- eof
   return it
-      
+
+parseDouble :: Parser Double
+parseDouble = do
+  whole <- decimal
+  char '.'
+  part <- decimal
+  return $ (fromIntegral whole) + ((fromIntegral part) / 100.0)
+
+type RationalOrDouble = Either Rational Double
+
+parseFractionOrDouble :: Parser RationalOrDouble
+parseFractionOrDouble = (Left <$> try parseFraction) <|> (Right <$> parseDouble)
+  
 main :: IO ()
 main = do
   let ppf s = print $ parseString parseFraction mempty s
@@ -34,3 +46,5 @@ main = do
   ppf badFraction
   print $ parseString integerEof mempty "123"
   print $ parseString integerEof mempty "123asd"
+  print $ parseString parseFractionOrDouble mempty "1/3"
+  print $ parseString parseFractionOrDouble mempty "1.3"
