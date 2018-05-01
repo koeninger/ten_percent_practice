@@ -323,3 +323,21 @@ Exercise 39 (define WHEEL-RADIUS 5)
 (define CAR
   (overlay/align/offset "middle" "bottom" BOTH-WHEELS 0 (- 0 WHEEL-RADIUS) BODY))
 
+;;;;; next entry on the wish list is the clock tick handling function:
+
+; WorldState is a Number
+; interpretation the number of pixels between the left border and the car 
+
+;; Functions
+
+;WorldState -> WorldState
+; moves the car by 3 pixels for every clock tick
+(define (tock ws) ws) 
+(check-expect (tock 20) 23)
+(check-expect (tock 78) 81)
+
+(define (tock ws)
+  (+ ws 3)) 
+  
+
+
