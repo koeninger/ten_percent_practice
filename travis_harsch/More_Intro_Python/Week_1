@@ -12,3 +12,28 @@ print 4 * 7
 
 #5 circumference of circle with 8 radius, 3.14 for pi constant
 print 2 * 8 * 3.14
+
+
+#variable - placeholder, used to keep from recomputing
+
+#variable can have underscore, case sensitive, cannot contain numbers
+#give memorable names
+
+#assign to variable with =
+
+#examples
+
+my_name = "Travis Harsch"
+print my_name
+
+my_age = 39
+print my_age
+
+#birthday
+#my_age + 1
+
+#my_age = my_age + 1
+
+my_age += 1
+#adds value on the right to the left, then stores result in left-side variable
+print my_age
