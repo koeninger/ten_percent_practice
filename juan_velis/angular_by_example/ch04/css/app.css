@@ -13,12 +13,14 @@ body {
     font-weight: 400;
 }
 
+/* Set width on the form input elements since they're 100% wide by default */
 input,
 select,
 textarea {
     max-width: 280px;
 }
 
+/* styles for validation helpers - start*/
 .field-validation-error {
     color: #b94a48;
 }
@@ -42,7 +44,9 @@ input[type="checkbox"].input-validation-error {
 .validation-summary-valid {
     display: none;
 }
+/* styles for validation helpers - end */
 
+/*styles for top nav bar - start*/
 .navbar-default.top-navbar {
     background-color: #4eaded;
     border-color: #4eaded;
@@ -59,7 +63,9 @@ input[type="checkbox"].input-validation-error {
     margin-top: 15px;
     margin-bottom: 15px;
 }
+/*styles for top nav bar - end*/
 
+/*styles for left nav bar - start*/
 .left-nav-bar {
     background-color: #1ba2db;
     min-height: 100%;
@@ -72,7 +78,9 @@ input[type="checkbox"].input-validation-error {
     text-align:center;
     width:100%;
 }
+/*styles for left nav bar - end*/
 
+/*styles for container - start*/
 .workout-display-div {
     text-align: center;
     padding: 40px;
@@ -86,7 +94,9 @@ input[type="checkbox"].input-validation-error {
 .workout-display-div .time-progress{
     margin-top:40px;
 }
+/*styles for container - end*/
 
+/*Styles for start page - start*/
 .text-center{
     color:#4eaded;
 }
@@ -105,7 +115,9 @@ input[type="checkbox"].input-validation-error {
 #start a .glyphicon {
     top:8px;
 }
+/*Styles for start page - end*/
 
+/*Styles for workout page - start*/
 .workout-app-container{
     padding-top:15px;
 }
@@ -124,6 +136,7 @@ input[type="checkbox"].input-validation-error {
  
 }
 
+/*Comment this style to try our mouse event based pause and resume. */
 #pause-overlay:hover {
     opacity:.8;     
 }
@@ -157,7 +170,9 @@ input[type="checkbox"].input-validation-error {
     height:100px;
     color:#4eaded;
 }
+/*Styles for workout page - end*/
 
+/*Animation effects workout*/
 div[ng-view] {
     position: absolute;
     width: 100%;
@@ -196,6 +211,10 @@ div[ng-view].ng-leave-active {
     -ms-animation: bounceOut 1s;
     animation: bounceOut 1s;
 }
+
+
+
+/*Animation effects Workout- end*/
 
 /*Workout Builder Styles*/
 #left-nav-exercises button {
@@ -292,8 +311,3 @@ div[ng-view].ng-leave-active {
     background:#1D89CF;
 }
 /*styles for tile- end*/
-
-.select-duration {
-    color:rgb(51,51,51);
-    margin-top:2px;
-}
