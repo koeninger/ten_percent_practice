@@ -24,13 +24,13 @@ class CampaignIndex extends Component {
 		let campaigns;
 		
 		if (this.props.campaigns.length){
-			campaigns = this.props.campaigns.map(campaign => {
+			campaigns = this.props.campaigns.map( (campaign, index) => {
 				let campaignAddress = campaign[0];
 				let description = campaign[1];
 				let minimum = campaign[2];
 				
 				return (
-					<Link route={`/campaigns/${campaignAddress}`}>
+					<Link route={`/campaigns/${campaignAddress}`} key={index}>
 						<a>
 							<Notification isColor="light" key={campaignAddress}>
 								<Title isSize={5}>{description}</Title>

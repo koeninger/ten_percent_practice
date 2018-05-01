@@ -5,26 +5,32 @@ import Campaign from '../ethereum/campaign';
 import { Router } from '../routes';
 
 class RequestRow extends Component{
-	componentWillMount(props) {
+	async componentWillMount(props) {
 		const { id, request, approversCount } = this.props;
 		const requestValue = web3.utils.fromWei(request.requestValue, 'ether');
 
+		const campaign = Campaign(this.props.address);
+		const accounts = await web3.eth.getAccounts();
+		const isAproved = await campaign.methods.isContributorApprover(id, accounts[0]).call();
+
 		this.setState({
+			approveButtonHidden: isAproved,
+			approveMessageHidden: !isAproved,
 			finalizeButtonHidden: request.complete,
-			finalizeMessageHidden: !request.complete
+			finalizeMessageHidden: !request.complete,
+			isApproving: false,
+			isFinalizing: false
 		});
-		console.log(request.complete);
-		console.log(this.state);
 	}
 
 	state = {
-		isApproving: false,
-		approveMessage: '',
+		isApproving: true,
+		approveMessage: 'Approved',
 		approveMessageColor: 'success',
 		approveMessageHidden: true,
 		approveButtonHidden: false,
-		isFinalizing: false,
-		finalizeMessage: '',
+		isFinalizing: true,
+		finalizeMessage: 'Complete',
 		finalizeMessageColor: 'dark',
 		finalizeMessageHidden: true,
 		finalizeButtonHidden: false
@@ -116,12 +122,11 @@ class RequestRow extends Component{
 				<td>{request.recipient}</td>
 				<td>{request.approvalCount}/{approversCount}</td>
 				<td>
-					<Button isHidden={this.state.approveButtonHidden} isColor='success' isOutlined isLoading={this.state.isApproving} onClick={this.onApprove}>Approve</Button>
+					<Button isHidden={this.state.approveButtonHidden} isColor='success' isOutlined isLoading={this.state.isApproving} onClick={this.onApprove} isSize="small">Approve</Button>
 					<Tag isHidden={this.state.approveMessageHidden} isColor={this.state.approveMessageColor}>{this.state.approveMessage}</Tag>
 				</td>
 				<td>
-					<p>{request.complete}</p>
-					<Button isHidden={this.state.finalizeButtonHidden} isColor='dark' isOutlined isLoading={this.state.isFinalizing} onClick={this.onFinalize}>Finalize</Button>
+					<Button isHidden={this.state.finalizeButtonHidden} isColor='dark' isOutlined isLoading={this.state.isFinalizing} onClick={this.onFinalize} isSize="small">Finalize</Button>
 					<Tag isHidden={this.state.finalizeMessageHidden} isColor={this.state.finalizeMessageColor}>{this.state.finalizeMessage}</Tag>
 				</td>
 			</tr>

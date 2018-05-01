@@ -54,7 +54,7 @@ describe('Campaigns', () => {
 
 	it('allows users to contribute and marks them as approvers', async () => {
 		await campaign.methods.contribute().send({
-			value: '200',
+			value: '100',
 			from: accounts[1]
 		});
 		const isApprover = await campaign.methods.approvers(accounts[1]).call();
@@ -163,5 +163,37 @@ describe('Campaigns', () => {
 		assert(campaignSummary[3]);
 		assert(campaignSummary[4]);
 		assert(campaignSummary[5]);
+	});
+
+	it('checks that summary of campaign is available', async () => {
+		const campaignSummary = await campaign.methods.getSummary().call();
+		
+		assert(campaignSummary[0]);
+		assert(campaignSummary[1]);
+		assert(campaignSummary[2]);
+		assert(campaignSummary[3]);
+		assert(campaignSummary[4]);
+		assert(campaignSummary[5]);
+	});
+
+	it('checks that contributor has approved campaign', async () => {
+		await campaign.methods.contribute().send({
+			value: web3.utils.toWei('10', 'ether'),
+			from: accounts[1]
+		});
+
+		await campaign.methods.createRequest('Test payment requests approvals', web3.utils.toWei('5', 'ether'), accounts[2]).send({
+			from: accounts[0],
+			gas: '1000000'
+		});
+
+		await campaign.methods.approveRequest(0).send({
+			from: accounts[1],
+			gas: '1000000'
+		});
+
+		const isApproved = await campaign.methods.isContributorApprover(0, accounts[1]).call();
+		console.log(isApproved);
+		assert(isApproved);
 	});
 });

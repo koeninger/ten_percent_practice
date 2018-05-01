@@ -70,7 +70,7 @@ contract Campaign {
     // Allows users to contribute to campaign if enough ether is sent
     function contribute() public payable {
         // The contribution must be greater than minimumContribution
-        require(msg.value > minimumContribution);
+        require(msg.value >= minimumContribution);
 
         if(!approvers[msg.sender]){
             // Store contributors address
@@ -138,5 +138,15 @@ contract Campaign {
 
     function getRequestsCount() public view returns (uint) {
         return requests.length;
+    }
+
+    // Checks if a contributor has approved a given request
+    function isContributorApprover(uint index, address contributor) public view returns (bool) {
+
+        // Get the request from the index parameter
+        Request storage request = requests[index];
+
+        // Check if contributor has approved that request
+        return request.approvals[contributor];
     }
 }
