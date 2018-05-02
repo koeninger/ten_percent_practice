@@ -307,12 +307,12 @@ Exercise 39 (define WHEEL-RADIUS 5)
 (define WHEEL
   (circle WHEEL-RADIUS "solid" "black"))
 (define SPACE
-  (rectangle WHEEL-DISTANCE WHEEL-RADIUS "solid" "white"))
+  (rectangle WHEEL-RADIUS WHEEL-RADIUS "solid" "white"))
 (define BOTH-WHEELS
   (beside WHEEL SPACE WHEEL))
 
 (define BODY-LENGTH
-  (+ WHEEL-RADIUS WHEEL-RADIUS WHEEL-DISTANCE))
+  (+ WHEEL-RADIUS WHEEL-DISTANCE))
 (define BODY-HEIGHT
   (+ WHEEL-RADIUS WHEEL-RADIUS))
 (define BODY
@@ -323,6 +323,13 @@ Exercise 39 (define WHEEL-RADIUS 5)
 (define CAR
   (overlay/align/offset "middle" "bottom" BOTH-WHEELS 0 (- 0 WHEEL-RADIUS) BODY))
 
+(define Y-CAR
+  (- HEIGHT-OF-WORLD
+    (/ (image-height CAR) 2)))
+
+(define BACKGROUND
+  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
+    
 ;;;;; next entry on the wish list is the clock tick handling function:
 
 ; WorldState is a Number
@@ -339,5 +346,19 @@ Exercise 39 (define WHEEL-RADIUS 5)
 (define (tock ws)
   (+ ws 3)) 
   
+Example 40 formulate the examples as BSL test using the check-expect form 
+introduce a mistake, re-run the tests. 
 
-
+second entry on wish list specifies a function that translates the state of the world into an image
+; WorldState -> Image
+; places the care into the BACKGROUND scene,
+; according to the given wordl state
+(define (render ws) 
+  BACKGROUND) 
+  
+examples:
+ws         an expression
+50         (place-image CAR 50 Y-CAR BACKGROUND)
+100        (place-image CAR 100 Y-CAR BACKGROUND)
+150        (place-image CAR 150 Y-CAR BACKGROUND)
+200        (place-image CAR 200 Y-CAR BACKGROUND)
