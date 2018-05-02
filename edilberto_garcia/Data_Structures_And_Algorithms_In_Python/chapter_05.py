@@ -1,5 +1,16 @@
-# P-5.32 Write a Python function that takes two three-dimensional numeric data sets and adds them componentwise.
+# P-5.33:  Write a Python program for a matrix class that can add and multiply two-dimensional arrays of numbers,
+ # assuming the dimensions agree appropriately for the operation.
 
+class Matrix:
+	matrix = []
+
+	def add(self, other):
+		result = []
+		for i in range(self.matrix):
+			for j in range (i):
+				
+
+	def multiply(self, other):
 
 
 # *************************************************** #
