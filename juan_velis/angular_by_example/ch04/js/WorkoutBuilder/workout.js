@@ -12,10 +12,18 @@ angular.module('WorkoutBuilder')
   }]);
 
 angular.module('WorkoutBuilder')
-  .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', function ($scope, WorkoutBuilderService, selectedWorkout, $location) {
+  .controller('WorkoutDetailController', ['$scope', 'WorkoutBuilderService', 'selectedWorkout', '$location', '$routeParams', function ($scope, WorkoutBuilderService, selectedWorkout, $location, $routeParams) {
       $scope.removeExercise = function (exercise) {
           WorkoutBuilderService.removeExercise(exercise);
       };
+
+      $scope.save = function () {
+          $scope.submitted = true;      // Will force validations
+          if ($scope.formWorkout.$invalid) return;
+          $scope.workout = WorkoutBuilderService.save();
+          $scope.formWorkout.$setPristine();
+          $scope.submitted = false;
+      }
 
       $scope.$watch('formWorkout.exerciseCount', function (newValue) {
           if (newValue) {
@@ -43,6 +51,15 @@ angular.module('WorkoutBuilder')
       //        restWatch(); //De-register the watch.
       //    }
       //});
+      $scope.hasError = function (modelController, error) {
+          return (modelController.$dirty || $scope.submitted) && error;
+      }
+
+      $scope.reset = function () {
+          $scope.workout = WorkoutBuilderService.startBuilding($routeParams.id);
+          $scope.formWorkout.$setPristine();
+          $scope.submitted = false;      // Will force validations
+      };
 
       $scope.moveExerciseTo = function (exercise, location) {
           WorkoutBuilderService.moveExerciseTo(exercise, location);
@@ -69,6 +86,14 @@ angular.module('WorkoutBuilder')
                          { title: "4 minutes 45 seconds", value: 285 },
                          { title: "5 minutes", value: 300 }];
 
+      $scope.canDeleteWorkout = function () {
+          return WorkoutBuilderService.canDeleteWorkout();
+      }
+
+      $scope.deleteWorkout = function () {
+          WorkoutBuilderService.delete();
+          $location.path('/builder/workouts/');
+      };
       var init = function () {
           $scope.workout = selectedWorkout;
       };
