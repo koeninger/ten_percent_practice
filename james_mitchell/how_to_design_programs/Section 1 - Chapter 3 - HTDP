@@ -197,3 +197,46 @@ from understanding the possibilities of the 2htdp/image library.
 
 
 3.4 From Functions to Programs
+
+Multi-function programs come about because interactive programs automatically
+need functions that handle key and mouse events, functions that render the
+state as music, and possibly more. Even batch programs may require several
+different functions because they perform several separate tasks. Sometimes the
+problem statement itself suggests these tasks; other times you will discover
+the need for auxiliary functions as you are in the middle of designing some
+function.
+
+
+3.5 On Testing
+
+Hence, it is critical to mechanize tests instead of performing them manually.
+Like many programming languages, BSL includes a testing facility, and DrRacket
+is aware of this facility. To introduce this testing facility, we take a
+second look at the function that converts temperatures in Fahrenheit to Celsius
+temperatures from Programs. Here is the definition:
+
+; Number -> Number
+; converts Fahrenheit temperatures to Celsius
+; given 32, expect 0
+; given 212, expect 100
+; given -40, expect -40
+(define (f2c f)
+  (* 5/9 (- f 32)))
+
+Testing the function’s examples calls for three computations and three
+comparisons between two numbers each. You can formulate these tests and add
+them to the definitions area in DrRacket:
+
+(check-expect (f2c -40) -40)
+(check-expect (f2c 32) 0)
+(check-expect (f2c 212) 100)
+
+Because it is so useful to have DrRacket conduct the tests and not to check
+everything yourself manually, we immediately switch to this style of testing
+for the rest of the book. This form of testing is dubbed unit testing, and
+BSL’s unit-testing framework is especially tuned for novice programmers. One
+day you will switch to some other programming language; one of your first
+tasks will be to figure out its unit-testing framework.
+
+
+3.6 Designing World Programs
