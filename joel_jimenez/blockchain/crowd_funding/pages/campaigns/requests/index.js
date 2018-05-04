@@ -4,6 +4,8 @@ import { Link } from '../../../routes';
 import Campaign from '../../../ethereum/campaign';
 import Layout from '../../../components/Layout';
 import RequestRow from '../../../components/requestRow';
+import NewRequest from '../../../components/newRequest';
+import NewModal from '../../../components/NewModal';
 
 class Requests extends Component {
 	static async getInitialProps(props) {
@@ -59,6 +61,8 @@ class Requests extends Component {
 	}
 
 	render() {
+		const newModal = <NewRequest address={this.props.address} />;
+		
 		return (
 			<Layout>
 				<Section>
@@ -68,9 +72,8 @@ class Requests extends Component {
 					<Title isSize={4}>Payment Requests</Title>
 					<Subtitle isSize={5}>{this.props.campaignDescription}</Subtitle>
 					{this.renderRequests()}
-					<Link route={`/campaigns/${this.props.address}/requests/new`}>
-						<Button isColor='info'>New Request</Button>
-					</Link>
+					<NewModal newModal={newModal} ref={instance => { this.child = instance; }} />
+					<Button isColor='info' onClick={() => { this.child.openModal(); }}>New Request</Button>
 				</Section>
 			</Layout>
 		);

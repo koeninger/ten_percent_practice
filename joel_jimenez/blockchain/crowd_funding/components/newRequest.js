@@ -58,8 +58,8 @@ class NewRequestForm extends Component {
 			});
 
 			// Redirect back to requests page
-			Router.replaceRoute(`/campaigns/${this.props.address}/requests/new`);
-			// window.location.reload();
+			Router.replaceRoute(`/campaigns/${this.props.address}/requests`);
+			window.location.reload();
 
 		} catch(error){
 			console.log(error);
