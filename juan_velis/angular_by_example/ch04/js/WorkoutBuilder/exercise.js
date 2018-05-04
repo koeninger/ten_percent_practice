@@ -23,8 +23,47 @@ angular.module('WorkoutBuilder')
   }]);
 
 angular.module('WorkoutBuilder')
-  .controller('ExerciseDetailController', ['$scope', 'WorkoutService', '$routeParams', function ($scope, WorkoutService, $routeParams) {
-      var init = function () {
+  .controller('ExerciseDetailController', ['$scope', 'WorkoutService', '$routeParams', 'ExerciseBuilderService', '$location', function ($scope, WorkoutService, $routeParams, ExerciseBuilderService, $location) {
+
+      $scope.save = function () {
+          $scope.submitted = true;      // Will force validations
+          if ($scope.formExercise.$invalid) return;
+          $scope.exercise = ExerciseBuilderService.save();
+          $scope.formExercise.$setPristine();
+          $scope.submitted = false;
       };
+
+      $scope.hasError = function (modelController, error) {
+          return (modelController.$dirty || $scope.submitted) && error;
+      };
+
+      $scope.reset = function () {
+          $scope.exercise = ExerciseBuilderService.startBuilding($routeParams.id);
+          $scope.formExercise.$setPristine();
+          $scope.submitted = false;      // Will force validations
+      };
+
+      $scope.canDeleteExercise = function () {
+          return ExerciseBuilderService.canDeleteExercise();
+      }
+
+      $scope.deleteExercise = function () {
+          ExerciseBuilderService.delete();
+          $location.path('/builder/exercises/');
+      };
+
+      $scope.addVideo = function () {
+          ExerciseBuilderService.addVideo();
+      };
+
+      $scope.deleteVideo = function (index) {
+          ExerciseBuilderService.deleteVideo(index);
+      };
+
+      var init = function () {
+          // We do not use the resolve property on the route to load exercise as we do it with workout.
+          $scope.exercise = ExerciseBuilderService.startBuilding($routeParams.id);
+      };
+
       init();
   }]);
