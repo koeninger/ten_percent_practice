@@ -352,7 +352,7 @@ introduce a mistake, re-run the tests.
 second entry on wish list specifies a function that translates the state of the world into an image
 ; WorldState -> Image
 ; places the care into the BACKGROUND scene,
-; according to the given wordl state
+; according to the given world state
 (define (render ws) 
   BACKGROUND) 
   
@@ -362,3 +362,16 @@ ws         an expression
 100        (place-image CAR 100 Y-CAR BACKGROUND)
 150        (place-image CAR 150 Y-CAR BACKGROUND)
 200        (place-image CAR 200 Y-CAR BACKGROUND)
+
+; WorldState -> Image
+; places the car into the BACKGROUND scene,
+; according to the given world state 
+;(check-expect (render 50) (place-image CAR 50 Y-CAR BACKGROUND)
+;(check-expect (render 100) (place-image CAR 100 Y-CAR BACKGROUND)
+;(check-expect (render 150) (place-image CAR 150 Y-CAR BACKGROUND)
+;(check-expect (render 200) (place-image CAR 150 Y-CAR BACKGROUND)
+(define (render ws) 
+  (place-image CAR ws Y-CAR BACKGROUND))
+
+
+
