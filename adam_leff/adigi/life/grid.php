@@ -98,8 +98,8 @@ class Grid
     }
     
     public function connect(){
-        for($i = 0; $i < self::SIZE; $i++){
-            for($j = 0; $j < self::SIZE; $j++){
+        for($addr = 0; $addr <= self::SIZE * self::SIZE; $addr++){
+            foreach($this->neighbors($addr) as $address){
                 
             }
         }
@@ -107,5 +107,31 @@ class Grid
     
     public function toBinary($val){
         
+    }
+    
+    public function neighbors($addr){
+        $x = intval($addr/self::SIZE);
+        $y = $addr % self::SIZE;
+        
+        $all = [
+            [$x-1,$y-1],
+            [$x-1,$y],
+            [$x-1,$y+1],
+            [$x,$y-1],
+            [$x,$y+1],
+            [$x+1,$y-1],
+            [$x+1,$y],
+            [$x+1,$y+1]
+        ];
+        
+        $neighbors = [];
+        
+        foreach($all as $index){
+            if($index[0] > 0 && $index[0] < self::SIZE && $index[1] > 0 && $index[1] < self::SIZE){
+                $neighbors[] = $index;
+            }
+        }
+        
+        return $neighbors;
     }
 }
