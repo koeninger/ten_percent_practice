@@ -49,12 +49,56 @@ running f3()
 <Order total: 42.00 due: 39.90>
 
 
->>> def f1(a):
-... print(a)
-... print(b)
->>> f1(3)
-3
 >>> b = 6
->>> f1(3)
+>>> def f2(a):
+...     print(a)
+...     print(b)
+...     b = 9
+>>> f2(3)
 3
-6
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+  File "<stdin>", line 3, in f2
+UnboundLocalError: local variable 'b' referenced before assignment
+local variable 'b' referenced before assignment
+
+
+# class based
+
+>>> avg = Averager()
+>>> avg(10)
+10.0
+>>> avg(11)
+10.5
+>>> avg(12)
+11.0
+
+
+# using higher order functions
+
+>>> import averager
+>>> avg = averager.make_averager()
+>>> avg(10)
+10.0
+>>> avg(11)
+10.5
+>>> avg(12)
+11.0
+>>>
+
+
+# clock demo
+**************************************** calling snooze(.123)
+[272727.90346458s] snooze(0.123) -> None
+**************************************** calling factorial(6)
+[272727.90357759s] factorial(1) -> 1
+[272727.90359263s] factorial(2) -> 2
+[272727.90360168s] factorial(3) -> 6
+[272727.90361007s] factorial(4) -> 24
+[272727.90361840s] factorial(5) -> 120
+[272727.90363485s] factorial(6) -> 720
+6! =  720
+
+
+
+

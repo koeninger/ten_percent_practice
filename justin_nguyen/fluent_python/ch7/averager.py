@@ -1,9 +1,10 @@
-class Averager():
+def make_averager():
+    series = []
 
-    def __init__(self):
-        self.series = []
+    def averager(new_value):
+        series.append(new_value)
+        # series (in averager) is a free variable (not bound to local scope)
+        total = sum(series)
+        return total/len(series)
 
-    def __call__(self, new_value):
-        self.series.append(new_value)
-        total = sum(self.series)
-        return total/len(self.series)
+    return averager
