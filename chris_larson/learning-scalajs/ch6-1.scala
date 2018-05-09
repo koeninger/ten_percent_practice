@@ -40,3 +40,12 @@ def visit(i: List[Int]) { if (i.size > 0) {print(i.head + ", ");
   visit(i.tail)
 }}
 visit(primes)
+
+var primes = List(2, 3, 5, 7, 11, 13)
+var i = primes
+while(i != Nil) { print(i.head + ", "); i=i.tail}
+val l: List[Int] = List()
+l == Nil
+val m: List[String] = List("a")
+m.head
+m.tail == Nil
