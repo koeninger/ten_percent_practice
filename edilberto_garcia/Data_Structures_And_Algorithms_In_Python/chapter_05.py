@@ -7,13 +7,13 @@ class Matrix:
 	def add(self, other):
 		result = []
 		for i in range(self.matrix):
-			for j in range (i):
-				
-
+			for subindex, j in range(i):
+				result[i][subindex] = j + other.matrix[i][subindex]
+		return matrix 
+	
 	def multiply(self, other):
+		# 
 
-
-# *************************************************** #
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
