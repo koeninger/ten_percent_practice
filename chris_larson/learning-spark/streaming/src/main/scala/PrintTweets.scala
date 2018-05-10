@@ -1,14 +1,17 @@
 package com.hyfnlocal.sparkstreaming
 
 import org.apache.spark._
-import org.apache.spark.SparkContext._
 import org.apache.spark.streaming._
-import org.apache.spark.streaming.twitter._
 import org.apache.spark.streaming.StreamingContext._
+import org.apache.spark.SparkContext._
+import org.apache.spark.streaming.Seconds._
+import org.apache.spark.streaming.twitter._
+import org.apache.spark.streaming.twitter._
+import org.apache.spark.streaming.twitter.TwitterUtils
 import org.apache.log4j.Level
 import Utilities._
 
-object PrintTweets {
+object printtweets {
   def main(args: Array[String]) {
     setupTwitter()
     val ssc = new StreamingContext("local[*]", "PrintTweets", Seconds(1))
