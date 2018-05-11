@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
-import { Container, Button } from 'semantic-ui-react';
-import List from './List';
+import { Container } from 'semantic-ui-react';
+// import List from './List';
+import UserInput from './UserInput';
+import UserOutput from './UserOutput';
 
 class App extends Component {
 	state = {
@@ -17,13 +19,22 @@ class App extends Component {
 				name: "Work on ten percent",
 				completed: false
 			}
-		]
+		],
+		username: "Joel"
 	};
+
+	changeUsernameHandler = (event) => {
+		this.setState({
+			username: event.target.value
+		});
+	}
 	
 	render() {
 		return (
 			<Container>
-				<List items={this.state.list} />
+				{/* <List items={this.state.list} /> */}
+				<UserInput change={this.changeUsernameHandler} username={this.state.username} />
+				<UserOutput username={this.state.username} />
 			</Container>
 		);
 	}
