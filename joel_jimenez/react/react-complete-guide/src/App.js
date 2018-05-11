@@ -1,19 +1,32 @@
 import React, { Component } from 'react';
-import Header from './Header';
-import { BrowserRouter } from 'react-router-dom';
+import { Container, Button } from 'semantic-ui-react';
+import List from './List';
 
 class App extends Component {
-  render() {
-    return (
-      <BrowserRouter>
-        <Header />
-		{/* 
-			Account selection
-			List of transactions
-		*/}
-      </BrowserRouter>
-    );
-  }
+	state = {
+		list: [
+			{
+				name: "Take out the trash",
+				completed: false
+			},
+			{
+				name: "Pay credit card bill",
+				completed: true
+			},
+			{
+				name: "Work on ten percent",
+				completed: false
+			}
+		]
+	};
+	
+	render() {
+		return (
+			<Container>
+				<List items={this.state.list} />
+			</Container>
+		);
+	}
 }
 
 export default App;
