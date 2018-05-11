@@ -1,0 +1,32 @@
+BUTTONS <button>
+
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>Title</title>
+    </head>
+    <body>
+      <h1>Heading</h1>
+      <button>Click</button>
+    </body>
+    </html>
+    
+HEADERS <h1>
+
+<!DOCTYPE html>
+<!--
+When you've finished your headers, click over to solution.html in this workspace to see how I did it.
+-->
+<body>
+  <p>Add your headers below this paragraph element! Add an h1, h2, h3, and h4. You should see your new headers displayed in the preview pane.
+  </p>
+  <h1>1</h1>
+  <h2>2</h2>
+  <h3>2</h3>
+  <h4>4</h4>
+</body>
+</html>
+
+UNORDERED LIST <ul> unordered list, typically bullet points 
+
