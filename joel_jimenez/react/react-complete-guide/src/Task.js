@@ -9,7 +9,7 @@ const Task = (props) => {
 					<Checkbox 
 						checked={props.completed} 
 						label={props.name} 
-						onClick={props.click}
+						onChange={props.change} 
 					/>
 				</List.Description>
 			</List.Content>
