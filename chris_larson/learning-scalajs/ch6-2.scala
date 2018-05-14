@@ -64,3 +64,41 @@ List(2, 5, 5, 3, 2).toString
 import collection.JavaConverters._
 List(12, 29).asJava
 new java.util.ArrayList(5).asScala
+
+val statuses = List(500, 404)
+val msg = statuses.head match {
+  case x if x < 500 => "okay"
+  case _ => "whoah, an error"
+}
+
+val msg = statuses match {
+  case x if x contains(500) => "has error"
+  case _ => "okay"
+}
+
+val msg = statuses match {
+  case List(404, 500) => "not found & error"
+  case List(500, 404) => "error & not found"
+  case List(200, 200) => "okay"
+  case _ => "not sure what happened"
+}
+
+val msg = statuses match {
+  case List(500, x) => s"Error followed by $x"
+  case List(e, x) => s"$e was followed by $x"
+}
+
+val head = List('r', 'g', 'b') match {
+  case x :: xs => x
+  case Nil => ' '
+}
+
+val code = ('h', 204, true) match {
+  case (_, _, false) => 501
+  case ('c', _, true) => 302
+  case ('h', x, true) => x
+  case (c, x, true) => {
+    println(s"Did not expect code $c")
+    x
+  }
+}
