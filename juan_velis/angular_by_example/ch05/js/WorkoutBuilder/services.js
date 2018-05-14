@@ -8,21 +8,24 @@ angular.module('app')
     });
 
 angular.module('WorkoutBuilder')
-    .factory("WorkoutBuilderService", ['WorkoutService', 'WorkoutPlan', 'Exercise', function (WorkoutService, WorkoutPlan, Exercise) {
+    .factory("WorkoutBuilderService", ['WorkoutService', 'WorkoutPlan', 'Exercise', '$q', function (WorkoutService, WorkoutPlan, Exercise, $q) {
         var service = {};
         var buildingWorkout;
         var newWorkout;
         service.startBuilding = function (name) {
             //We are going to edit an existing workout
             if (name) {
-                buildingWorkout = WorkoutService.getWorkout(name);
-                newWorkout = false;
+                return WorkoutService.getWorkout(name).then(function (workout) {
+                    buildingWorkout = workout;
+                    newWorkout = false;
+                    return buildingWorkout;
+                });
             }
             else {
                 buildingWorkout = new WorkoutPlan({});
                 newWorkout = true;
+                return $q.when(buildingWorkout);
             }
-            return buildingWorkout;
         };
 
         service.removeExercise = function (exercise) {
@@ -59,21 +62,26 @@ angular.module('WorkoutBuilder')
     }]);
 
 angular.module('WorkoutBuilder')
-    .factory("ExerciseBuilderService", ['WorkoutService', 'Exercise', function (WorkoutService, Exercise) {
+    .factory("ExerciseBuilderService", ['WorkoutService', 'Exercise', '$q', function (WorkoutService, Exercise, $q) {
         var service = {};
         var buildingExercise;
         var newExercise;
         service.startBuilding = function (name) {
+            var defer = $q.defer();
             //We are going to edit an existing exercise
             if (name) {
-                buildingExercise = WorkoutService.getExercise(name);
-                newExercise = false;
+                WorkoutService.getExercise(name).then(function (exercise) {
+                    buildingExercise = exercise;
+                    newExercise = false;
+                    defer.resolve(buildingExercise);
+                });
             }
             else {
                 buildingExercise = new Exercise({});
+                defer.resolve(buildingExercise);
                 newExercise = true;
             }
-            return buildingExercise;
+            return defer.promise;
         };
 
         service.save = function () {

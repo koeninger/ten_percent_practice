@@ -6,7 +6,9 @@ angular.module('WorkoutBuilder')
           WorkoutBuilderService.addExercise(exercise);
       }
       var init = function () {
-          $scope.exercises = WorkoutService.getExercises();
+          WorkoutService.getExercises().then(function (exercises) {
+              $scope.exercises = exercises;
+          });
       };
       init();
   }]);
@@ -17,7 +19,7 @@ angular.module('WorkoutBuilder')
           $location.path('/builder/exercises/' + exercise.name);
       }
       var init = function () {
-          WorkoutService.getExercises().success(function (data) {
+          WorkoutService.getExercises().then(function (data) {
               $scope.exercises = data;
           });
       };
@@ -64,7 +66,9 @@ angular.module('WorkoutBuilder')
 
       var init = function () {
           // We do not use the resolve property on the route to load exercise as we do it with workout.
-          $scope.exercise = ExerciseBuilderService.startBuilding($routeParams.id);
+          ExerciseBuilderService.startBuilding($routeParams.id).then(function (exercise) {
+              $scope.exercise = exercise;
+          });
       };
 
       init();

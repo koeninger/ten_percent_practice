@@ -18,19 +18,26 @@ angular.module('app')
             apiKey = key;
             collectionsUrl = apiUrl + dbName + "/collections";
         }
+
         this.$get = ['WorkoutPlan', 'Exercise', '$http', '$q', function (WorkoutPlan, Exercise, $http, $q) {
             var service = {};
+            var workouts = [];
+            var exercises = [];
 
             service.getExercises = function () {
-                return $http.get(collectionsUrl + "/exercises", { params: { apiKey: apiKey } });
+                return $http.get(collectionsUrl + "/exercises", { params: { apiKey: apiKey } })
+                    .then(function (response) {
+                        return response.data.map(function (exercise) {
+                            return new Exercise(exercise);
+                        })
+                    });
             };
-            
+
             service.getExercise = function (name) {
-                var result = null;
-                angular.forEach(service.getExercises(), function (exercise) {
-                    if (exercise.name === name) result = angular.copy(exercise);
-                });
-                return result;
+                return $http.get(collectionsUrl + "/exercises/" + name, { params: { apiKey: apiKey } })
+                    .then(function (response) {
+                        return new Exercise(response.data);
+                    });
             };
 
             service.updateExercise = function (exercise) {
@@ -59,16 +66,27 @@ angular.module('app')
                 if (exerciseIndex >= 0) exercises.splice(exerciseIndex, 1);
             };
 
+
             service.getWorkouts = function () {
-                return $http.get(collectionsUrl + "/workouts", { params: { apiKey: apiKey } });
+                return $http.get(collectionsUrl + "/workouts", { params: { apiKey: apiKey } })
+                        .then(function (response) {
+                            return response.data.map(function (workout) {
+                                return new WorkoutPlan(workout);
+                            });
+                        });
             };
 
             service.getWorkout = function (name) {
-                var result = null;
-                angular.forEach(service.getWorkouts(), function (workout) {
-                    if (workout.name === name) result = angular.copy(workout);
-                });
-                return result;
+                return $q.all([service.getExercises(), $http.get(collectionsUrl + "/workouts/" + name, { params: { apiKey: apiKey } })])
+                    .then(function (response) {
+                        var allExercises = response[0];
+                        var workout = new WorkoutPlan(response[1].data);
+                        
+                        angular.forEach(response[1].data.exercises, function (exercise) {
+                            exercise.details = allExercises.filter(function (e) { return e.name === exercise.name; })[0];
+                        });
+                        return workout;
+                    });
             };
 
             service.updateWorkout = function (workout) {
@@ -100,6 +118,9 @@ angular.module('app')
 
             return service;
         }];
-        
-    });
 
+        var init = function () {
+        };
+
+        init();
+    });
