@@ -40,3 +40,27 @@ def reduceOp[A, B](l: List[A], start: B)(f: (B, A) => B): B = {
 val included = reduceOp(List(46, 19, 92), false) { (a, i) => if (a) a else (i == 19)
 }
 val answer = reduceOp(List(11.3, 23.5, 7.2), 0.0)(_ + _)
+
+val alist = List(4, 5, 6)
+alist.fold(0)(_ + _)
+alist.foldLeft(0)(_ + _)
+alist.foldRight(0)(_ + _)
+alist.reduce(_ + _)
+alist.reduceLeft(_ + _)
+alist.reduceRight(_ + _)
+alist.scan(0)(_ + _)
+alist.scanLeft(0)(_ + _)
+alist.scanRight(0)(_ + _)
+val included = List(46, 19, 92).foldLeft(false) { (a, i) => if (a) a else (i == 19)}
+val answer = List(11.3, 23.5, 7.2).reduceLeft(_ + _)
+
+List(24, 99, 104).mkString(", ")
+List('f', 't').toBuffer
+Map("a" -> 1, "b" -> 2).toList
+Set(1 -> true, 3 -> true).toMap
+List(2, 5, 5, 3, 2).toSet
+List(2, 5, 5, 3, 2).toString
+
+import collection.JavaConverters._
+List(12, 29).asJava
+new java.util.ArrayList(5).asScala
