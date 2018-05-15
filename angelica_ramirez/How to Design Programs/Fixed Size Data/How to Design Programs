@@ -369,7 +369,7 @@ ws         an expression
 ;(check-expect (render 50) (place-image CAR 50 Y-CAR BACKGROUND)
 ;(check-expect (render 100) (place-image CAR 100 Y-CAR BACKGROUND)
 ;(check-expect (render 150) (place-image CAR 150 Y-CAR BACKGROUND)
-;(check-expect (render 200) (place-image CAR 150 Y-CAR BACKGROUND)
+;(check-expect (render 200) (place-image CAR 200 Y-CAR BACKGROUND)
 (define (render ws) 
   (place-image CAR ws Y-CAR BACKGROUND))
 
