@@ -89,16 +89,76 @@ local variable 'b' referenced before assignment
 
 # clock demo
 **************************************** calling snooze(.123)
-[272727.90346458s] snooze(0.123) -> None
+[0.12775384s] snooze(0.123) -> None
 **************************************** calling factorial(6)
-[272727.90357759s] factorial(1) -> 1
-[272727.90359263s] factorial(2) -> 2
-[272727.90360168s] factorial(3) -> 6
-[272727.90361007s] factorial(4) -> 24
-[272727.90361840s] factorial(5) -> 120
-[272727.90363485s] factorial(6) -> 720
+[0.00000108s] factorial(1) -> 1
+[0.00002277s] factorial(2) -> 2
+[0.00003737s] factorial(3) -> 6
+[0.00005155s] factorial(4) -> 24
+[0.00006579s] factorial(5) -> 120
+[0.00008311s] factorial(6) -> 720
 6! =  720
 
 
 
+# fib
+[0.00000046s] fibonacci(0) -> 0
+[0.00000057s] fibonacci(1) -> 1
+[0.00006497s] fibonacci(2) -> 1
+[0.00000032s] fibonacci(1) -> 1
+[0.00000034s] fibonacci(0) -> 0
+[0.00000035s] fibonacci(1) -> 1
+[0.00001353s] fibonacci(2) -> 1
+[0.00002696s] fibonacci(3) -> 2
+[0.00010984s] fibonacci(4) -> 3
+[0.00000030s] fibonacci(1) -> 1
+[0.00000028s] fibonacci(0) -> 0
+[0.00000035s] fibonacci(1) -> 1
+[0.00001314s] fibonacci(2) -> 1
+[0.00002620s] fibonacci(3) -> 2
+[0.00000031s] fibonacci(0) -> 0
+[0.00000034s] fibonacci(1) -> 1
+[0.00001354s] fibonacci(2) -> 1
+[0.00000028s] fibonacci(1) -> 1
+[0.00000034s] fibonacci(0) -> 0
+[0.00000032s] fibonacci(1) -> 1
+[0.00001355s] fibonacci(2) -> 1
+[0.00002646s] fibonacci(3) -> 2
+[0.00005253s] fibonacci(4) -> 3
+[0.00009256s] fibonacci(5) -> 5
+[0.00021590s] fibonacci(6) -> 8
+8
+
+
+# fib + lru decorator
+[0.00000048s] fibonacci(0) -> 0
+[0.00000056s] fibonacci(1) -> 1
+[0.00006845s] fibonacci(2) -> 1
+[0.00000092s] fibonacci(3) -> 2
+[0.00008830s] fibonacci(4) -> 3
+[0.00000068s] fibonacci(5) -> 5
+[0.00010337s] fibonacci(6) -> 8
+8
+
+
+# singledispatch decorator
+>>> from htmlizer import htmlize
+>>> htmlize({1,2,3})
+'<pre>{1, 2, 3}</pre>'
+>>> htmlize(abs)
+'<pre>&lt;built-in function abs&gt;</pre>'
+>>> htmlize(42)
+'<pre>42</pre>'
+>>> htmlize("Hello world")
+'<pre>&#x27;Hello world&#x27;</pre>'
+>>> print(htmlize(['alpha', 66, {3, 2, 1}]))
+<pre>[&#x27;alpha&#x27;, 66, {1, 2, 3}]</pre>
+
+>>> from htmlizer2 import htmlize
+>>> print(htmlize(['alpha', 66, {3, 2, 1}]))
+<ul>
+<li><p>alpha</p><li>
+</li><pre>66 (0x42)</pre><li>
+</li><pre>{1, 2, 3}</pre></li>
+</ul>
 
