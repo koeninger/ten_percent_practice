@@ -1,16 +1,17 @@
 import React from 'react';
-import { List, Checkbox } from 'semantic-ui-react';
+import { List, Header } from 'semantic-ui-react';
 
 const Task = (props) => {
+	let checkbox = 'square';
+	if(props.completed){
+		checkbox = 'check square';
+	}
 	return (
-		<List.Item>
+		<List.Item onClick={props.click}>
+			<List.Icon name={checkbox} verticalAlign="middle" size='large' />
 			<List.Content>
 				<List.Description>
-					<Checkbox 
-						checked={props.completed} 
-						label={props.name} 
-						onChange={props.change} 
-					/>
+					<Header>{props.name}</Header>
 				</List.Description>
 			</List.Content>
 		</List.Item>

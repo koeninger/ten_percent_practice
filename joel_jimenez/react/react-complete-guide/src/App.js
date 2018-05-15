@@ -1,40 +1,23 @@
 import React, { Component } from 'react';
-import { Container } from 'semantic-ui-react';
-// import List from './List';
-import UserInput from './UserInput';
-import UserOutput from './UserOutput';
+import { Container, Dropdown } from 'semantic-ui-react';
+import TaskList from './List';
 
 class App extends Component {
 	state = {
-		list: [
+		selected_list: 1,
+		lists: [
 			{
-				name: "Take out the trash",
-				completed: false
-			},
-			{
-				name: "Pay credit card bill",
-				completed: true
-			},
-			{
-				name: "Work on ten percent",
-				completed: false
+				key: 1,
+				value: 1,
+				text: "Chores"
 			}
-		],
-		username: "Joel"
-	};
-
-	changeUsernameHandler = (event) => {
-		this.setState({
-			username: event.target.value
-		});
+		]
 	}
-	
 	render() {
 		return (
 			<Container>
-				{/* <List items={this.state.list} /> */}
-				<UserInput change={this.changeUsernameHandler} username={this.state.username} />
-				<UserOutput username={this.state.username} />
+				<Dropdown placeholder='List' search selection options={this.state.lists} value={this.state.selected_list} />
+				<TaskList list={this.state.selected_list} />
 			</Container>
 		);
 	}
