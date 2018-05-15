@@ -1,14 +1,26 @@
 import React, { Component } from 'react';
-import Header from './Header';
+import { Container, Dropdown } from 'semantic-ui-react';
+import TaskList from './List';
 
 class App extends Component {
-  render() {
-    return (
-      <div>
-        <Header />
-      </div>
-    );
-  }
+	state = {
+		selected_list: 1,
+		lists: [
+			{
+				key: 1,
+				value: 1,
+				text: "Chores"
+			}
+		]
+	}
+	render() {
+		return (
+			<Container>
+				<Dropdown placeholder='List' search selection options={this.state.lists} value={this.state.selected_list} />
+				<TaskList list={this.state.selected_list} />
+			</Container>
+		);
+	}
 }
 
 export default App;

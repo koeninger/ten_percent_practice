@@ -16,3 +16,9 @@ Spark SQL
 sbt package
 ../spark/bin/spark-submit --class "sparksql" --master local[4] target/scala-2.11/spark-sql_2.11-0.0.1.jar
 ~~~~
+
+
+Spark Streaming
+~~~~
+../spark/bin/spark-submit --class "com.hyfnlocal.sparkstreaming.printtweets" --packages org.apache.bahir:spark-streaming-twitter_2.11:2.2.0 --master local[4] target/scala-2.11/print-tweets_2.11-0.0.1.jar
+~~~~

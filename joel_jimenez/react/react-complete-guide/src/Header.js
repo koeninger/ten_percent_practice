@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import { Menu } from 'semantic-ui-react';
 
 class Header extends Component {
-    state = {};
+    state = {
+		activeItem: 'Transactions'
+	};
 
     onClickItem = (e, { name }) => {
         this.setState({ activeItem: name });
@@ -14,14 +16,16 @@ class Header extends Component {
         return (
             <Menu>
                 <Menu.Item
-                name='Accounts'
-                active={activeItem === 'Accounts'}
-                onClick={this.onClickItem}
+                name='Transactions'
+                active={activeItem === 'Transactions'}
+				onClick={this.onClickItem}
+				href='/'
                 />
                 <Menu.Item
                 name='Budgets'
                 active={activeItem === 'Budgets'}
-                onClick={this.onClickItem}
+				onClick={this.onClickItem}
+				href='/budgets'
                 />
             </Menu>
         );
