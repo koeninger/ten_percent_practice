@@ -339,7 +339,6 @@ Exercise 39 (define WHEEL-RADIUS 5)
 
 ;WorldState -> WorldState
 ; moves the car by 3 pixels for every clock tick
-(define (tock ws) ws) 
 (check-expect (tock 20) 23)
 (check-expect (tock 78) 81)
 
@@ -353,8 +352,8 @@ second entry on wish list specifies a function that translates the state of the 
 ; WorldState -> Image
 ; places the care into the BACKGROUND scene,
 ; according to the given world state
-(define (render ws) 
-  BACKGROUND) 
+; (define (render ws) 
+  BACKGROUND) ; stub 
   
 examples:
 ws         an expression
@@ -366,10 +365,10 @@ ws         an expression
 ; WorldState -> Image
 ; places the car into the BACKGROUND scene,
 ; according to the given world state 
-;(check-expect (render 50) (place-image CAR 50 Y-CAR BACKGROUND)
-;(check-expect (render 100) (place-image CAR 100 Y-CAR BACKGROUND)
-;(check-expect (render 150) (place-image CAR 150 Y-CAR BACKGROUND)
-;(check-expect (render 200) (place-image CAR 200 Y-CAR BACKGROUND)
+(check-expect (render 50) (place-image CAR 50 Y-CAR BACKGROUND)
+(check-expect (render 100) (place-image CAR 100 Y-CAR BACKGROUND)
+(check-expect (render 150) (place-image CAR 150 Y-CAR BACKGROUND)
+(check-expect (render 200) (place-image CAR 200 Y-CAR BACKGROUND)
 (define (render ws) 
   (place-image CAR ws Y-CAR BACKGROUND))
 
@@ -395,10 +394,24 @@ Change BACKGROUND to include tree
  ;; end car simulaton when car reaches end of world 
  (check-expect (end? 0) #false)
  (check-expect (end? 100) #false)
- (check-expect (end? (+ WIDTH-OF-WORLD (/ (image-width CAR) 2))) #true)
+ (check-expect (end? 415) #true)
  
- (define (end? ws)
-  (>= ws 
-    (+
+(define (end? ws)
+  (>= ws
+      (+ WIDTH-OF-WORLD
+         (/ (image-height CAR) 2))))
+         
+; main: WorldState -> WorldState
+; launch the program from some initial state
+; run: (main 0)
+(define (main ws)
+  (big-bang ws
+    (on-tick tock)
+    (to-draw render)
+    (stop-when end?)))
+    
+    
+         
+
 
 
