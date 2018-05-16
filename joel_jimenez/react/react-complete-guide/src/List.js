@@ -1,30 +1,20 @@
 import React, { Component } from 'react';
-import { List } from 'semantic-ui-react';
+import { Table, Header } from 'semantic-ui-react';
 import Task from './Task';
 
 class ListGroup extends Component {
 	state = {
-		list: [
-			{
-				id: 1,
-				name: "Take out the trash",
-				completed: false
-			},
-			{
-				id: 2,
-				name: "Pay credit card bill",
-				completed: true
-			},
-			{
-				id: 3,
-				name: "Work on ten percent",
-				completed: false
-			}
-		]
+		list: []
 	};
 
+	static getDerivedStateFromProps(props) {
+		return {
+			list: props.items
+		};
+	}
+
 	clickTask = (task_id) => {
-		const task_index = this.state.list.findIndex(i => {
+		const task_index = this.state.list.findIndex( i => {
 			return i.id === task_id;
 		});
 
@@ -41,16 +31,43 @@ class ListGroup extends Component {
 		});
 	}
 
-	render(){
-		const list = this.state.list.map( (task, index) => {
-			return (
-				<Task key={"task_" + task.id} name={task.name} completed={task.completed} click={() => this.clickTask(task.id)} />
-			);
+	deleteTask = (task_id) => {
+		const task_index = this.state.list.findIndex( i => {
+			return i.id === task_id;
 		});
 
-		return (
-			<List divided relaxed size="large">{list}</List>
-		);
+		const tasks = [...this.state.list];
+		tasks.splice(task_index, 1);
+
+		this.setState({
+			list: tasks
+		});
+	}
+
+	render(){
+		if(this.state.list){
+			const list = this.state.list.map( (task, index) => {
+				return (
+					<Task 
+						key={"task_" + task.id} 
+						name={task.name} 
+						completed={task.completed} 
+						clickTask={() => this.clickTask(task.id)} 
+						deleteTask={() => this.deleteTask(task.id)} 
+					/>
+				);
+			});
+	
+			return (
+				<Table unstackable collapsing fixed size='large'>
+					<Table.Body>{list}</Table.Body>
+				</Table>
+			);
+		} else{
+			return (
+				<Header>No tasks found.</Header>
+			);
+		}
 	}
 }
 
