@@ -1,5 +1,5 @@
 import React from 'react';
-import { Table, Header, Icon, Button } from 'semantic-ui-react';
+import { Grid, Header, Icon, Button } from 'semantic-ui-react';
 
 const Task = (props) => {
 	let checkbox = 'square';
@@ -11,20 +11,20 @@ const Task = (props) => {
 	}
 
 	return (
-		<Table.Row>
-			<Table.Cell onClick={props.clickTask}>
+		<Grid.Row className="padding-none">
+			<Grid.Column onClick={props.clickTask} textAlign="right" className="click-column">
 				<Icon name={checkbox} size='large' />
-			</Table.Cell>
-			<Table.Cell onClick={props.clickTask} width={12}>
+			</Grid.Column>
+			<Grid.Column onClick={props.clickTask} textAlign="left" width={10} className="click-column">
 				<Header>{task_name}</Header>
-			</Table.Cell>
-			{/* <Table.Cell textAlign='right'>
+			</Grid.Column>
+			{/* <Grid.Column>
 				<Button icon='edit' color='teal' onClick={props.editTask} />
-			</Table.Cell> */}
-			<Table.Cell>
+			</Grid.Column> */}
+			<Grid.Column>
 				<Button icon='delete' color='red' onClick={props.deleteTask} />
-			</Table.Cell>
-		</Table.Row>
+			</Grid.Column>
+		</Grid.Row>
 	);
 };
 

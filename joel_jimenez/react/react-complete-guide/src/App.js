@@ -1,73 +1,32 @@
 import React, { Component } from 'react';
-import { Container, Dropdown, Header, Button } from 'semantic-ui-react';
+import { Container, Tab, Header, Button } from 'semantic-ui-react';
 import TaskList from './List';
 import './App.css';
 
 class App extends Component {
 	state = {
-		list_id: 0,
-		selected_list: [],
+		active_index: 0,
 		lists: [
 			{
-				key: 1,
-				value: 1,
-				text: "Tasks",
-				tasks: [
-					{
-						id: 1,
-						name: "Take out the trash",
-						completed: false
-					},
-					{
-						id: 2,
-						name: "Pay credit card bill",
-						completed: true
-					},
-					{
-						id: 3,
-						name: "Work on ten percent",
-						completed: false
-					}
-				]
+				id: 1,
+				menuItem: "Tasks"
 			},
 			{
-				key: 2,
-				value: 2,
-				text: "Shopping",
-				tasks: [
-					{
-						id: 1,
-						name: "Milk",
-						completed: true
-					},
-					{
-						id: 2,
-						name: "Eggs",
-						completed: false
-					},
-					{
-						id: 3,
-						name: "Bread",
-						completed: false
-					}
-				]
+				id: 2,
+				menuItem: "Shopping"
 			}
-		]
+		],
+		open_list_modal: false
 	}
 
 	componentDidMount(){
-		this.changeList(1);
+		this.changeList(0);
 	}
 
-	changeList = (list_id) => {
-		// Update the ID of selected list
+	changeList = (list_index) => {
+		// Update the index of selected list
 		this.setState({
-			list_id: list_id
-		});
-
-		// Get list with matching ID
-		const list_index = this.state.lists.findIndex( i => {
-			return i.key === list_id;
+			active_index: list_index
 		});
 
 		// Update list
@@ -77,15 +36,28 @@ class App extends Component {
 		});
 	}
 
+	openListModal(){
+		this.setState({
+			openListModal: true
+		});
+	}
+
 	render() {
 		return (
 			<Container>
-				<Header></Header>
-				<Header>To Do List</Header>
-				<Dropdown search selection placeholder='List' options={this.state.lists} value={this.state.list_id} onChange={(event, data) => this.changeList(data.value)} />
-				<Button primary content='New List' icon='add' labelPosition='left' />
-				<Button secondary content='New Task' icon='add' labelPosition='left' />
-				<TaskList items={this.state.selected_list} />
+				<Header textAlign="center" className="padding-small">To Do List</Header>
+				<Tab panes={this.state.lists} 
+					activeIndex={this.state.active_index} 
+					onTabChange={(event, data) => this.changeList(data.activeIndex)}  
+					menu={{ secondary: true, pointing: true }} 
+				/>
+				<Container textAlign="center">
+					<Button primary className="margin-small" content='New List' icon='add' labelPosition='left' onClick={() => this.openListModal()} />
+					<Button secondary className="margin-small" content='New Task' icon='add' labelPosition='left' />
+				</Container>
+				<Tab.Pane>
+					<TaskList listId={this.state.lists[this.state.active_index].id} />
+				</Tab.Pane>
 			</Container>
 		);
 	}
