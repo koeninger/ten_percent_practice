@@ -1,5 +1,7 @@
 {-# LANGUAGE InstanceSigs #-}
 
+import Control.Monad
+
 newtype Compose f g a = Compose { getCompose :: f (g a) } deriving (Eq, Show)
 
 instance (Functor f, Functor g) => Functor (Compose f g) where
@@ -99,3 +101,13 @@ instance (Applicative f) => Applicative (IdentityT f) where
   pure = IdentityT . pure
 
   (IdentityT ffn) <*> (IdentityT fx) = IdentityT (ffn <*> fx)
+
+instance (Monad m) => Monad (IdentityT m) where
+  return = pure
+
+  (>>=) :: IdentityT m a
+        -> (a -> IdentityT m b)
+        -> IdentityT m b
+  (IdentityT ma) >>= f =
+    let aimb = ma >>= (runIdentityT . f)
+    in IdentityT aimb
