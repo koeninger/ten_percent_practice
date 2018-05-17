@@ -90,30 +90,33 @@ angular.module('app')
             };
 
             service.updateWorkout = function (workout) {
-                for (var i = 0; i < workouts.length; i++) {
-                    if (workouts[i].name === workout.name) {
-                        workouts[i] = workout;
-                        break;
-                    }
-                }
-                return workout;
+                return service.getWorkout(workout.name)
+                    .then(function (original) {
+                        if (original) {
+                            var workoutToSave = angular.copy(workout);
+                            workoutToSave.exercises = workoutToSave.exercises.map(function (exercise) { return { name: exercise.details.name, duration: exercise.duration } });
+                            return $http.put(collectionsUrl + "/workouts/" + original.name, workoutToSave, { params: { apiKey: apiKey } });
+                        }
+                    })
+                    .then(function (response) {
+                        return workout;
+                    });
             };
 
             service.addWorkout = function (workout) {
                 if (workout.name) {
-                    workouts.push(workout);
-                    return workout;
+                    var workoutToSave = angular.copy(workout);
+                    workoutToSave.exercises = workoutToSave.exercises.map(function (exercise) { return { name: exercise.details.name, duration: exercise.duration } });
+                    workoutToSave._id = workoutToSave.name;
+                    return $http.post(collectionsUrl + "/workouts", workoutToSave, { params: { apiKey: apiKey } })
+                                .then(function (response) {
+                                    return workout
+                                });
                 }
             }
 
             service.deleteWorkout = function (workoutName) {
-                var workoutIndex;
-                angular.forEach(workouts, function (w, index) {
-                    if (w.name === workoutName) {
-                        workoutIndex = index;
-                    }
-                });
-                workouts.splice(workoutIndex, 1);
+                return $http.delete(collectionsUrl + "/workouts/" + workoutName, { params: { apiKey: apiKey } });
             };
 
             return service;

@@ -37,10 +37,12 @@ angular.module('WorkoutBuilder')
         };
 
         service.save = function () {
-            var workout = newWorkout ? WorkoutService.addWorkout(buildingWorkout)
+            var promise = newWorkout ? WorkoutService.addWorkout(buildingWorkout)
                                 : WorkoutService.updateWorkout(buildingWorkout);
-            newWorkout = false;
-            return workout;
+            promise.then(function (workout) {
+                newWorkout = false;
+            });
+            return promise;
         };
 
         service.moveExerciseTo = function (exercise, toIndex) {
@@ -55,7 +57,7 @@ angular.module('WorkoutBuilder')
 
         service.delete = function () {
             if (newWorkout) return; // A new workout cannot be deleted.
-            WorkoutService.deleteWorkout(buildingWorkout.name);
+            return WorkoutService.deleteWorkout(buildingWorkout.name);
         }
 
         return service;
