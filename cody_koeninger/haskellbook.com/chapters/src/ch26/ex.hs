@@ -73,3 +73,53 @@ swapEither :: Either e a
            -> Either a e
 swapEither (Left e) = Right e
 swapEither (Right a) = Left a
+
+eitherT :: Monad m
+        => (a -> m c)
+        -> (b -> m c)
+        -> EitherT a m b
+        -> m c
+eitherT a2mc b2mc (EitherT meab) =
+  meab >>= (\e -> case e of
+               Left a -> a2mc a
+               Right b -> b2mc b)
+
+newtype StateT s m a =
+  StateT { runStateT :: s -> m (a, s) }
+
+instance (Functor m) => Functor (StateT s m) where
+  fmap :: (a -> b) -> StateT s m a -> StateT s m b
+  fmap f (StateT run) = StateT (
+    \s ->
+      let mas = run s
+          mbs = fmap
+            (\ (a, s) -> ((f a), s))
+            mas
+      in mbs)
+
+instance (Monad m) => Applicative (StateT s m) where
+  pure a = StateT (\s -> pure (a, s))
+
+  (<*>) :: StateT s m (a -> b)
+        -> StateT s m a
+        -> StateT s m b
+  (StateT sma2b) <*> (StateT sma) =
+    StateT (
+    \s -> do
+      (a2b, s2) <- sma2b s
+      (a, s3) <- sma s2
+      return ((a2b a), s3)
+    )
+
+instance (Monad m) => Monad (StateT s m) where
+  return = pure
+
+  (>>=) :: StateT s m a
+        -> (a -> StateT s m b)
+        -> StateT s m b
+  (StateT sma) >>= f =
+    StateT (
+    \s -> do
+      (a, s2) <- sma s
+      runStateT (f a) s2
+    )
