@@ -241,6 +241,8 @@ tasks will be to figure out its unit-testing framework.
 
 3.6 Designing World Programs
 
+Exercise 39: Develop your favorite image of an automobile so that WHEEL-RADIUS
+remains the single point of control
 
 (define WIDTH-OF-WORLD 400)
 (define HEIGHT-OF-WORLD 40)
@@ -300,3 +302,13 @@ tasks will be to figure out its unit-testing framework.
    (big-bang ws
      [on-tick tock]
      [to-draw render]))
+
+
+Exercise 40. Formulate the examples as BSL tests, that is, using the
+check-expect form. Introduce a mistake. Re-run the tests.
+
+
+(check-expect (render 50)
+              (place-image CAR 50 Y-CAR BACKGROUND))
+(check-expect (render 200)
+              (place-image CAR 200 Y-CAR BACKGROUND))
