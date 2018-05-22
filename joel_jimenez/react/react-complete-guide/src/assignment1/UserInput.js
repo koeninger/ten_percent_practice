@@ -6,7 +6,7 @@ const UserInput = (props) => {
 		<Input 
 			placeholder='User Input' 
 			onChange={props.change} 
-			value={props.username} 
+			value={props.name} 
 		/>
 	);
 };

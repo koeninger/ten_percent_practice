@@ -6,7 +6,7 @@ angular.module('WorkoutBuilder')
           $location.path('/builder/workouts/' + workout.name);
       }
       var init = function () {
-          WorkoutService.getWorkouts().success(function (data) {
+          WorkoutService.getWorkouts().then(function (data) {
               $scope.workouts = data;
           });
       };
@@ -22,9 +22,11 @@ angular.module('WorkoutBuilder')
       $scope.save = function () {
           $scope.submitted = true;      // Will force validations
           if ($scope.formWorkout.$invalid) return;
-          $scope.workout = WorkoutBuilderService.save();
-          $scope.formWorkout.$setPristine();
-          $scope.submitted = false;
+          WorkoutBuilderService.save().then(function (workout) {
+              $scope.workout = workout;
+              $scope.formWorkout.$setPristine();
+              $scope.submitted = false;
+          });
       }
 
       $scope.$watch('formWorkout.exerciseCount', function (newValue) {
@@ -93,8 +95,9 @@ angular.module('WorkoutBuilder')
       }
 
       $scope.deleteWorkout = function () {
-          WorkoutBuilderService.delete();
-          $location.path('/builder/workouts/');
+          WorkoutBuilderService.delete().then(function (data) {
+              $location.path('/builder/workouts/');
+          });
       };
       var init = function () {
           $scope.workout = selectedWorkout;

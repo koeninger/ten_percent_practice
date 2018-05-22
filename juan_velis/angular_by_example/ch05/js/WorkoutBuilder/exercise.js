@@ -6,7 +6,7 @@ angular.module('WorkoutBuilder')
           WorkoutBuilderService.addExercise(exercise);
       }
       var init = function () {
-          $scope.exercises = WorkoutService.getExercises();
+          $scope.exercises = WorkoutService.Exercises.query();
       };
       init();
   }]);
@@ -17,9 +17,7 @@ angular.module('WorkoutBuilder')
           $location.path('/builder/exercises/' + exercise.name);
       }
       var init = function () {
-          WorkoutService.getExercises().success(function (data) {
-              $scope.exercises = data;
-          });
+          $scope.exercises = WorkoutService.Exercises.query();
       };
       init();
   }]);
@@ -30,9 +28,10 @@ angular.module('WorkoutBuilder')
       $scope.save = function () {
           $scope.submitted = true;      // Will force validations
           if ($scope.formExercise.$invalid) return;
-          $scope.exercise = ExerciseBuilderService.save();
-          $scope.formExercise.$setPristine();
-          $scope.submitted = false;
+          ExerciseBuilderService.save().then(function (data) {
+              $scope.formExercise.$setPristine();
+              $scope.submitted = false;
+          });
       };
 
       $scope.hasError = function (modelController, error) {
@@ -50,8 +49,9 @@ angular.module('WorkoutBuilder')
       }
 
       $scope.deleteExercise = function () {
-          ExerciseBuilderService.delete();
-          $location.path('/builder/exercises/');
+          ExerciseBuilderService.delete().then(function (data) {
+              $location.path('/builder/exercises/');
+          });
       };
 
       $scope.addVideo = function () {
