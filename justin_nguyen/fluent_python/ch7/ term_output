@@ -162,3 +162,49 @@ local variable 'b' referenced before assignment
 </li><pre>{1, 2, 3}</pre></li>
 </ul>
 
+
+
+>>> import registration_factory
+running register(active=False)->decorate(<function f1 at 0x103ee0c80>)
+running register(active=True)->decorate(<function f2 at 0x103ee00d0>)
+<module 'registration_factory' from '/Users/jnguyen/programming/ten_percent_practice/justin_nguyen/fluent_python/ch7/registration_factory.py'>
+>>> registration_factory.registry
+{<function f2 at 0x103ee00d0>}
+
+
+
+
+>>> registry
+{<function f2 at 0x103ee00d0>}
+>>> register()(f3)
+running register(active=True)->decorate(<function f3 at 0x103ee07b8>)
+<function f3 at 0x103ee07b8>
+>>> registry
+{<function f3 at 0x103ee07b8>, <function f2 at 0x103ee00d0>}
+>>> register(active=False)(f2)
+running register(active=False)->decorate(<function f2 at 0x103ee00d0>)
+<function f2 at 0x103ee00d0>
+>>> registry
+{<function f3 at 0x103ee07b8>}
+
+
+
+❯ python3 clockdecorator_param.py
+[0.12577200s] snooze(0.123) -> None
+[0.12714601s] snooze(0.123) -> None
+[0.12405086s] snooze(0.123) -> None
+
+
+❯ python3 clock_param_demo.py
+snooze: 0.12324190139770508s
+snooze: 0.12693190574645996s
+snooze: 0.12510108947753906s
+
+
+❯ python3 clock_param_demo2.py
+snooze(0.123) dt=0.127s
+snooze(0.123) dt=0.123s
+snooze(0.123) dt=0.125s
+
+
+
