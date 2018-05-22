@@ -72,3 +72,24 @@ height = 7
 perimeter = width * 2 + height * 2
 print "A rectangle " + str(width) + " inches wide and " + str(height),
 print "inches high has a perimeter of " + str(perimeter) + " inches."
+
+#4 - area of rectangle
+width = 10
+height = 10
+area = width * height
+print "A rectangle " + str(width) + " inches wide and " + str(height),
+print "inches high has an area of " + str(area) + " inches."
+
+#5 - circumference of circle
+PI = 3.14
+radius = 8
+circumference = 2 * PI * radius
+print "A circle with a radius of " + str(radius),
+print "inches has a circumference of " + str(circumference) + " inches."
+
+#6 area of circle
+PI = 3.14
+radius = 8
+area = PI * radius ** 2
+print "A circle with a radius of " + str(radius),
+print "inches has an area of " + str(area) + " inches."
