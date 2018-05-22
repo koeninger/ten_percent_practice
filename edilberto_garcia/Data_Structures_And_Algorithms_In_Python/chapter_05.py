@@ -13,8 +13,11 @@ class Matrix:
 				result.append(row)
 		return result 
 	
+
+
 	def multiply(self, other):
-		return ''
+		for index,val in enumerate(self.matrix):
+
 
 matrix_a = Matrix()
 matrix_a.matrix = [
