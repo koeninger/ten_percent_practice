@@ -1,6 +1,10 @@
 {-# LANGUAGE InstanceSigs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
+
+import Control.Monad (liftM)
+import Control.Monad.IO.Class
+
 newtype MaybeT m a =
   MaybeT { runMaybeT :: m (Maybe a) }
 
@@ -123,3 +127,42 @@ instance (Monad m) => Monad (StateT s m) where
       (a, s2) <- sma s
       runStateT (f a) s2
     )
+
+newtype ReaderT r m a =
+  ReaderT { runReaderT :: r -> m a }
+
+instance (Functor m) => Functor (ReaderT r m) where
+  fmap :: (a -> b) -> ReaderT r m a -> ReaderT r m b
+  fmap = FIXME
+
+class MonadTrans t where
+  lift :: (Monad m)
+       => m a
+       -> t m a
+
+instance MonadTrans MaybeT where
+  lift = MaybeT . liftM Just
+
+instance MonadTrans (ReaderT r) where
+  lift = ReaderT . const
+
+instance MonadTrans (EitherT e) where
+  lift :: (Monad m)
+       => m a
+       -> EitherT e m a
+  lift = EitherT . liftM Right       
+
+instance MonadTrans (StateT s) where
+  lift :: (Monad m)
+       => m a
+       -> StateT s m a
+  lift ma = StateT (
+    \s ->
+      fmap (\a -> (a, s)) ma
+    )
+
+instance (MonadIO m) => MonadIO (MaybeT m) where
+  liftIO = lift . liftIO
+
+instance (MonadIO m) => MonadIO (ReaderT r m) where
+  liftIO = lift . liftIO
