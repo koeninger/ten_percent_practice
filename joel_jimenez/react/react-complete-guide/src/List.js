@@ -5,59 +5,13 @@ import Task from './Task';
 class ListGroup extends Component {
 	state = {
 		selected_list: [],
-		lists: [
-			{
-				id: 1,
-				tasks: [
-					{
-						id: 1,
-						name: "Take out the trash",
-						completed: false
-					},
-					{
-						id: 2,
-						name: "Pay credit card bill",
-						completed: true
-					},
-					{
-						id: 3,
-						name: "Work on ten percent",
-						completed: false
-					}
-				]
-			},
-			{
-				id: 2,
-				tasks: [
-					{
-						id: 1,
-						name: "Milk",
-						completed: true
-					},
-					{
-						id: 2,
-						name: "Eggs",
-						completed: false
-					},
-					{
-						id: 3,
-						name: "Bread",
-						completed: false
-					}
-				]
-			}
-		],
 		open_modal: false,
 		task_to_delete: null
 	};
 
 	static getDerivedStateFromProps(nextProps, prevState) {
-		const list_index = prevState.lists.findIndex( i => {
-			return i.id === nextProps.listId;
-		});
-
 		return {
-			selected_list: prevState.lists[list_index].tasks
+			selected_list: nextProps.list
 		};
 	}
 

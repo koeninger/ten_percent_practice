@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Container, Tab, Header, Button } from 'semantic-ui-react';
 import TaskList from './List';
 import './App.css';
+import NewList from './NewList';
+import NewTask from './NewTask';
 
 class App extends Component {
 	state = {
@@ -9,14 +11,54 @@ class App extends Component {
 		lists: [
 			{
 				id: 1,
-				menuItem: "Tasks"
+				menuItem: "Tasks",
+				tasks: [
+					{
+						id: 1,
+						name: "Take out the trash",
+						completed: false
+					},
+					{
+						id: 2,
+						name: "Pay credit card bill",
+						completed: true
+					},
+					{
+						id: 3,
+						name: "Work on ten percent",
+						completed: false
+					}
+				]
 			},
 			{
 				id: 2,
-				menuItem: "Shopping"
+				menuItem: "Shopping",
+				tasks: [
+					{
+						id: 1,
+						name: "Milk",
+						completed: true
+					},
+					{
+						id: 2,
+						name: "Eggs",
+						completed: false
+					},
+					{
+						id: 3,
+						name: "Bread",
+						completed: false
+					}
+				]
 			}
 		],
-		open_list_modal: false
+		new_list_name: "",
+		is_creating_new_task: false,
+		is_creating_new_task: false,
+		is_creating_new_task: false,
+		new_list_message_hidden: true,
+		new_list_message_color: "",
+		new_list_message_text: ""
 	}
 
 	componentDidMount(){
@@ -28,17 +70,40 @@ class App extends Component {
 		this.setState({
 			active_index: list_index
 		});
-
-		// Update list
-		const list = this.state.lists[list_index];
-		this.setState({
-			selected_list: list.tasks
-		});
 	}
 
-	openListModal(){
+	createNewList = () => {
+		const lists = this.state.lists.slice();
 		this.setState({
-			openListModal: true
+			is_creating_new_task: true,
+			new_list_message_hidden: false,
+			new_list_message_color: "blue",
+			new_list_message_text: "Creating new list"
+		});
+
+		setTimeout(() => {
+			const new_list = {
+				id: lists.length + 1,
+				menuItem: this.state.new_list_name,
+				tasks: []
+			};
+			lists.push(new_list);
+
+			this.setState({
+				// active_index: lists.length - 1,
+				lists: lists,
+				new_list_name: "",
+				is_creating_new_task: false,
+				new_list_message_color: "green",
+				new_list_message_text: "New list has been created"
+			});
+			console.log(this.state.lists);
+		}, 2000);
+	}
+
+	changeNewList = (event) => {
+		this.setState({
+			new_list_name: event.target.value
 		});
 	}
 
@@ -52,11 +117,17 @@ class App extends Component {
 					menu={{ secondary: true, pointing: true }} 
 				/>
 				<Container textAlign="center">
-					<Button primary className="margin-small" content='New List' icon='add' labelPosition='left' onClick={() => this.openListModal()} />
-					<Button secondary className="margin-small" content='New Task' icon='add' labelPosition='left' />
+					<NewList value={this.state.new_list_name} 
+						click={this.createNewList} 
+						change={this.changeNewList} 
+						is_loading={this.state.is_creating_new_task}
+						message_hidden={this.state.new_list_message_hidden} 
+						message_color={this.state.new_list_message_color} 
+						message_text={this.state.new_list_message_text} />
+					<NewTask />
 				</Container>
 				<Tab.Pane>
-					<TaskList listId={this.state.lists[this.state.active_index].id} />
+					<TaskList list={this.state.lists[this.state.active_index].tasks} />
 				</Tab.Pane>
 			</Container>
 		);
