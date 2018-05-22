@@ -1,0 +1,17 @@
+.modal{
+	margin: auto !important;
+}
+.click-column{
+	cursor: pointer;
+	padding: 2rem 1rem !important;
+	margin: 0rem !important;
+}
+.padding-none{
+	padding: 0rem !important;
+}
+.margin-small{
+	margin: 1rem !important;
+}
+.padding-small{
+	padding: 1rem !important;
+}

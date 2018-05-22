@@ -10,4 +10,10 @@
 
 ;Exercise 13 Define the function string-first, which extracts the first 1String from a non-empty string.
 
-(define (string-first x) (= (string-length x) 1))
+(define (string-first x) (string-ith x 1))
+
+;Exercise 14. Define the function string-last, which extracts the last 1String from a non-empty string. 
+
+(define (string-first x) (string-ith x (- (string-length x) 1)))
+
+

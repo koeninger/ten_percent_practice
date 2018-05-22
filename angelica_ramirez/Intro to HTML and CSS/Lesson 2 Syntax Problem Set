@@ -30,3 +30,164 @@ When you've finished your headers, click over to solution.html in this workspace
 
 UNORDERED LIST <ul> unordered list, typically bullet points 
 
+Exercise: add an unordered list element with 3 child elements (HTML, CSS, JavaScrip)
+
+<!DOCTYPE html>
+<html>
+  <body>
+  <p>Create an unordered list! Make a list of the three web languages: HTML, CSS and JavaScript.</p>
+  <ul>
+    <li>HTML</li>
+    	<ul>
+          <li>subitem1</li>
+          <li>subitem2</li>
+    	</ul>
+    <li>CSS</li>
+    	<ul>
+          <li>subitem1</li>
+          <li>subitem2</li>
+    	</ul>
+    <li>JavaScript</li>
+  </ul>
+</body>
+</html>
+
+TREE TO HTML 
+
+Exercise: add an <h1> tag with some content, add a <div> tag, 
+add 2 paragraph tags as child elements to the <div>, add text content to each paragraph element 
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <h1>Heading</h1>
+  <div>
+    <p>Paragraph1</p>
+    <p>Paragraph2</p>
+  </div>
+</body>
+</html>
+
+CONSTRUCTING LINKS
+hyperlinks are created with anchor elements, generally look like: 
+<a href="https://www.website.com">Website</a>
+<a opening tag
+href (reference) is the attribute
+attributes describes the properties of elements
+
+Format: 
+a space between a and href
+no spaces around the =
+website has 2 " around it 
+no spaces between href attribute and > of the opening tag
+
+Quiz: type in a link that points to https://www.google.com and displays as Google
+
+<a href="https://www.google.com">Google</a>
+
+IMAGES <img> as the element
+<img src="http://www.website.com/image.jpg" alt=alternative description">
+source attribute src 
+since hosted online "http://www."
+alt important for people who use screen readers to browse the web 
+images do not need closing tags (called void elements)
+
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="utf-8">
+      <title>Title</title>
+    </head>
+    <body>
+      <h1>Heading</h1>
+        <div>
+          <p>Paragraph</p>
+          <img src="http://udacity.github.io/fend/images/udacity.png" alt="Udacity logo">
+        </div>
+    </body>
+    </html>
+    
+A GUIDE TO PATHS 
+path is a way of describing where a file is stored, local and external paths 
+example of a local: /Users/Cameron/Documetns/file.txt 
+Absolute path to index.html: 
+  file:///Users/Cameron/Udacity/CD/fend/fend-refresh/index.html (when opening in browser)
+External paths: use servers that run software that exposes the files from the web, using external paths 
+different protocols, most common are HTTP and HTTPS
+Relative paths: similar to absolut paths but describes how to find a path to a file form a directory that is not the root directory 
+  they work the same for both local and external paths 
+External path: 
+  <a href="http://labs.udacity.com/fend/example/hello-world.html">Hello, world!</a>
+Local path: 
+  <a href="/Users/cameron/Udacity/etc/labs/fend/example/hello-world.html">Hello, world!</a>
+both are links to the same file using absolute paths 
+  /fend/example/hello-world.html mean the same thing 
+relative path: example/hello-world.html
+if you are editing /Users/cameron/Udacity/etc/labs/fend/test.html
+you can reference hello-world.html by describing how to get from it's location in fend/ to hello-world.html 
+  takes advantage that test.html and example/ are in the same directory 
+  
+  If editing a file in /Users/cameron/Udacity/etc/labs/ and want to write path to hello-world.html
+    relative path: fend/example/hello-world.html 
+2 files: 
+  http://labs.udacity.com/science/sciences.html
+  http://labs.udacity.com/science/physics/relativity.html
+  
+  in order to write relative path from sciences.html to relativity.html, will need to include the path that describes hwo to get 
+  from science/ to relativity.html
+    <a href="phsyics/relativity.html">Einstein's Special Relativity</a>
+    
+FIGURES
+
+Exercise: need to edit index.html so that caption displays below the image
+use a relative path to the image, which is going to be in the same directory as index.html
+1. create a <figure> element
+2. add an <img> element whose src attribute points to the provided image 
+3. add an alt attribute to the image
+4. add a <figcaption> element with the text for the image's caption
+5. change the markdown code to a real HTML link 
+
+<!DOCTYPE html>
+<html lang="en">
+<body>
+  <!--
+  You'll see some text written like this below: [words that are displayed](http://website.com). This is Markdown syntax for a link. You can think of Markdown as HTML shorthand. You'll need to turn it into HTML that looks like <a href="http://website.com">words that are displayed</a>.
+  Learn more about Markdown here: https://daringfireball.net/projects/markdown/
+  -->
+  <!-- Turn this into HTML! -->
+  <figure>
+    <img src="redwoods_state_park.jpg" alt="Redwoods state park">
+    <figcaption>Stout Memorial Grove in Jedediah Smith Redwoods State Park in 2011 by Chmee2 (Own work) GFDL or CC BY-SA 3.0, via Wikimedia Commons - <a href="https://commons.wikimedia.org/wiki/File%3AStout_Memorial_Grove_in_Jedediah_Smith_Redwoods_State_Park_in_2011_(22).JPG">Source</a>
+    </figcaption>
+  </figure>
+</body>
+</html>
+
+MOCKUP TO WEBSITE 
+Exercise: recereate website to look identical to mockup 
+1. position the text content to match the mockup
+2. style the content to match the mockup
+3. add any images that are missing (don't forget to include the alt attribute)
+
+<!DOCTYPE html>
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8">
+      <title>Web Dev Blog Post</title>
+    </head>
+    <body>
+        <h1>Hottest Jobs in 2016 #2: Web Developer</h1>
+
+        <p>By <strong><em>Cristopher Watkins</em></strong>
+        </p>
+
+        <p>January 19, 2016</p>
+
+        <img src="http://i1.wp.com/blog.udacity.com/wp-content/uploads/2016/01/Slack-for-iOS-Upload.jpg?zoom=2&amp;resize=320%2C168" alt="Hottest Jobs in 2016 #2: Web Developer">
+
+        <p>There is a simple reason why Web Developer is such a hot job right now. Put simply, what Web Developers do is create how we experience … the web. If you proceed from the notion that every person who engages with the web would prefer a great experience, then you can say that everyone who engages with the web would prefer that a Web Developer have done a great job. Companies of course know this, so they hire Web Developers to ensure their sites provide great experiences. So, lots of websites and lots of users means lots of demand. LOTS of demand. 🔥
+        </p>
+    </body>
+  </html>
+
+
+

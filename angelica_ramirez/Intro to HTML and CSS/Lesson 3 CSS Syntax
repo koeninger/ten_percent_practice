@@ -1,0 +1,118 @@
+Code sets
+  div { ;;;; selector 
+    text-align: right; ;;;;declaration page 
+    }
+    
+<!DOCTYPE html>
+
+<!-- Instructions: Change the color of "Hello, world!" to green. -->
+
+<html>
+<head>
+	<title>Quiz - Hello, world!</title>
+    <style>
+    h1 {
+      color: green;
+    }
+		p {
+			color: blue;
+		}        
+        /* add CSS here */
+    </style>
+</head>
+<body>
+	<h1>Hello, world!</h1>
+	<p>Are you ready for your first challenge?</p>
+	<p>Let's add some style to this webpage!</p>
+</body>
+</html>
+
+Comments: want to add as reminder, helpful when testing code 
+format of comment /* add CSS here */ 
+
+HTML Comment format 
+<!-- This is a comment -->
+<div class="example">Words, words, words.</div>
+
+Tag Selector Quiz: Which paragraph(s) would be affected? 
+p {
+  text-align: right;
+}
+Answer: all paragraphs
+
+Attributes and Selectors: 
+class can be added to multiple elements 
+ids can only be used once per page 
+
+Tag Selector
+h1 {
+  color: green;
+}
+class Attribute Selector
+.book-summary {
+  color: blue;
+}
+id attribute selector
+#site-description {
+  color: red;
+}
+
+Selectors Quiz: which HTML elements match the given CSS statement? 
+.right {
+   text-align: right;
+} 
+1. <div class="right"></div> 
+2. <a href="#" class="leftright"></a>
+3. <button id="right"></button>
+4. <p class="highlight module right"></p>
+Answer: 1 and 4 
+order of classes do not matter and multiple classes can be added as long as there is a space between 
+
+CSS References Quiz: Use CSS References to answer the questions below 
+1. What CSS property is used to italicize text? font-style
+2. What CSS property is used to underline text? font-decoration
+3. What CSS property is used to uppercase text? font-transfor
+4. What CSS property is used to bold text? font-weight 
+
+CSS units: absolute and relative 
+absolute: px, mm, in, cm
+relative: %, em, vw, vh 
+
+Units in CSS Quiz: Add the following changes to the website
+<!DOCTYPE html>
+
+<!-- Instructions: Add the following changes to this webpage:
+
+* set the first div's width to 100px (pixels)
+* set the second div's height to 200px (pixels)
+* set the third div's margin to 1em
+* set the fourth div's font-size to 2em
+
+-->
+
+<html>
+<head>
+    <title>Quiz - Units in CSS</title>
+    <style>
+    	.first {
+            width: 100px;
+    	}
+    	.second {
+            height: 200px
+    	}
+    	.third {
+            margin: 1em
+    	}
+    	.fourth {
+            font-size: 2em
+    	}
+    </style>
+</head>
+<body>
+	<div class="first"></div>
+	<div class="second"></div>
+	<div class="third">Hammock ex plaid nulla. Nihil stumptown gastropub, dreamcatcher gochujang franzen cillum cliche keffiyeh pop-up pug small batch knausgaard. Fanny pack elit you probably haven't heard of them before they sold out. Sint elit tofu et veniam irony 3 wolf moon. VHS slow-carb trust fund chartreuse wolf. Qui sed dreamcatcher cronut, hoodie fixie normcore. Gochujang dolor consectetur post-ironic.</div>
+	<div class="fourth">Hammock ex plaid nulla. Nihil stumptown gastropub, dreamcatcher gochujang franzen cillum cliche keffiyeh pop-up pug small batch knausgaard. Fanny pack elit you probably haven't heard of them before they sold out. Sint elit tofu et veniam irony 3 wolf moon. VHS slow-carb trust fund chartreuse wolf. Qui sed dreamcatcher cronut, hoodie fixie normcore. Gochujang dolor consectetur post-ironic.</div>
+</body>
+</html>
+
