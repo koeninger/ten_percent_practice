@@ -116,3 +116,31 @@ Units in CSS Quiz: Add the following changes to the website
 </body>
 </html>
 
+CSS Colors
+Express color by specifying the amount of RDGRBL that should be present
+Common way
+	RGB
+		Red: 0-255
+		Green: 0-255
+		Blue: 0-255
+		Example Magenta
+			body {
+			   background-color: rgb(255, 0, 255);
+			}
+	Hexedecimal (in decimal) 
+		Red: 00-FF
+		Green: 00-FF
+		Blue: 00-FF
+		Example Magenta
+			body {
+			   background-color: #ff00ff;
+			}
+helpful to use a color picker
+
+Exercise Which CSS declarations can beused to represent the standard color for blue?
+1. color: #ff0000;
+2. color: blue;
+3. color: rgb(0, 0, 255);
+4. color: #ffff00
+5. color: #00f;
+Answers: 2, 3, 5
