@@ -133,8 +133,36 @@ newtype ReaderT r m a =
 
 instance (Functor m) => Functor (ReaderT r m) where
   fmap :: (a -> b) -> ReaderT r m a -> ReaderT r m b
-  fmap = FIXME
+  fmap f (ReaderT run) = ReaderT (
+    \r ->
+      let ma = run r
+          mb = fmap f ma
+      in mb)
 
+instance (Applicative m) => Applicative (ReaderT r m) where
+  pure a = ReaderT (\r -> pure a)
+
+  (<*>) :: ReaderT r m (a -> b)
+        -> ReaderT r m a
+        -> ReaderT r m b
+  (ReaderT rma2b) <*> (ReaderT rma) =
+    ReaderT (
+    \r -> (rma2b r) <*> (rma r)
+    )
+
+instance (Monad m) => Monad (ReaderT r m) where
+  return = pure
+
+  (>>=) :: ReaderT r m a
+        -> (a -> ReaderT r m b)
+        -> ReaderT r m b
+  (ReaderT rma) >>= f =
+    ReaderT (
+    \r -> do
+      a <- rma r
+      runReaderT (f a) r
+    )
+    
 class MonadTrans t where
   lift :: (Monad m)
        => m a
@@ -165,4 +193,7 @@ instance (MonadIO m) => MonadIO (MaybeT m) where
   liftIO = lift . liftIO
 
 instance (MonadIO m) => MonadIO (ReaderT r m) where
+  liftIO = lift . liftIO
+
+instance (MonadIO m) => MonadIO (StateT s m) where
   liftIO = lift . liftIO
