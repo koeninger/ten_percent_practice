@@ -32,3 +32,15 @@ nextError orElse nextError
 nextError.toOption
 nextError map (_ * 2)
 nextError match { case util.Success(x) => x; case util.Failure(error) => -1 }
+nextError
+
+val input = "123"
+val result = util.Try(input.toInt) orElse util.Try(input.trim.toInt)
+result foreach { r => println(s"Parsed '$input' to $r!")}
+val x = result match {
+  case util.Success(x) => Some(x)
+  case util.Failure(ex) => {
+    println(s"Couldn't parse input '$input'")
+    None
+  }
+}
