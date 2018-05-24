@@ -24,5 +24,4 @@ angular.module('app')
       $scope.$on('$routeChangeSuccess', function (e, current,previous) {
           $scope.currentRoute = current;
       });
-
   }]);

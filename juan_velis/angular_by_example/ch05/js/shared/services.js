@@ -8,14 +8,13 @@ angular.module('app')
 
 angular.module('app')
     .provider("WorkoutService", function () {
-        var apiUrl = "https://api.mongolab.com/api/1/databases/";
+        var apiUrl = "https://api.mlab.com/api/1/databases/";
         var collectionsUrl = null;
         var database = null;
         var apiKey = null;
 
-        this.configure = function (dbName, key) {
+        this.configure = function (dbName) {
             database = database;
-            apiKey = key;
             collectionsUrl = apiUrl + dbName + "/collections";
         }
 
@@ -24,10 +23,10 @@ angular.module('app')
             var workouts = [];
             var exercises = [];
 
-            service.Exercises = $resource(collectionsUrl + "/exercises/:id", { apiKey: apiKey}, { update: { method: 'PUT' } });
+            service.Exercises = $resource(collectionsUrl + "/exercises/:id", {}, { update: { method: 'PUT' } });
 
             service.getWorkouts = function () {
-                return $http.get(collectionsUrl + "/workouts", { params: { apiKey: apiKey } })
+                return $http.get(collectionsUrl + "/workouts")
                         .then(function (response) {
                             return response.data.map(function (workout) {
                                 return new WorkoutPlan(workout);
@@ -36,7 +35,7 @@ angular.module('app')
             };
 
             service.getWorkout = function (name) {
-                return $q.all([service.Exercises.query().$promise, $http.get(collectionsUrl + "/workouts/" + name, { params: { apiKey: apiKey } })])
+                return $q.all([service.Exercises.query().$promise, $http.get(collectionsUrl + "/workouts/" + name)])
                     .then(function (response) {
                         var allExercises = response[0];
                         var workout = new WorkoutPlan(response[1].data);
@@ -54,7 +53,7 @@ angular.module('app')
                         if (original) {
                             var workoutToSave = angular.copy(workout);
                             workoutToSave.exercises = workoutToSave.exercises.map(function (exercise) { return { name: exercise.details.name, duration: exercise.duration } });
-                            return $http.put(collectionsUrl + "/workouts/" + original.name, workoutToSave, { params: { apiKey: apiKey } });
+                            return $http.put(collectionsUrl + "/workouts/" + original.name, workoutToSave);
                         }
                     })
                     .then(function (response) {
@@ -67,7 +66,7 @@ angular.module('app')
                     var workoutToSave = angular.copy(workout);
                     workoutToSave.exercises = workoutToSave.exercises.map(function (exercise) { return { name: exercise.details.name, duration: exercise.duration } });
                     workoutToSave._id = workoutToSave.name;
-                    return $http.post(collectionsUrl + "/workouts", workoutToSave, { params: { apiKey: apiKey } })
+                    return $http.post(collectionsUrl + "/workouts", workoutToSave)
                                 .then(function (response) {
                                     return workout
                                 });
@@ -75,7 +74,7 @@ angular.module('app')
             }
 
             service.deleteWorkout = function (workoutName) {
-                return $http.delete(collectionsUrl + "/workouts/" + workoutName, { params: { apiKey: apiKey } });
+                return $http.delete(collectionsUrl + "/workouts/" + workoutName);
             };
 
             return service;
@@ -85,4 +84,23 @@ angular.module('app')
         };
 
         init();
+    });
+
+angular.module('app')
+    .provider('ApiKeyAppenderInterceptor', function () {
+        var apiKey = null;
+        this.setApiKey = function (key) {
+            apiKey = key;
+        }
+        this.$get = ['$q', function ($q) {
+            return {
+                'request': function (config) {
+                    if (apiKey && config && config.url.toLowerCase().indexOf("https://api.mlab.com") >= 0) {
+                        config.params = config.params || {};
+                        config.params.apiKey = apiKey;
+                    }
+                    return config || $q.when(config);
+                }
+            }
+        }];
     });
