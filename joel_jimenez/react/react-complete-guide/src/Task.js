@@ -21,7 +21,7 @@ const Task = (props) => {
 			{/* <Grid.Column>
 				<Button icon='edit' color='teal' onClick={props.editTask} />
 			</Grid.Column> */}
-			<Grid.Column>
+			<Grid.Column className="margin-none">
 				<Button icon='delete' color='red' onClick={props.deleteTask} />
 			</Grid.Column>
 		</Grid.Row>

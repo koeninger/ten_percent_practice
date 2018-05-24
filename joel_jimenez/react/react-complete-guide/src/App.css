@@ -9,9 +9,9 @@
 .padding-none{
 	padding: 0rem !important;
 }
+.margin-none{
+	margin: 0rem !important;
+}
 .margin-small{
 	margin: 1rem !important;
-}
-.padding-small{
-	padding: 1rem !important;
 }

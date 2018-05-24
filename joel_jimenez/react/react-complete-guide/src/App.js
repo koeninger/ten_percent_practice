@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-import { Container, Tab, Header, Confirm, Dimmer, Loader } from 'semantic-ui-react';
-import TaskList from './List';
+import { Container, Tab, Header, Dimmer, Loader, Button } from 'semantic-ui-react';
+import List from './List';
 import './App.css';
 import NewList from './NewList';
 import NewTask from './NewTask';
+import ConfirmDelete from './ConfirmDelete';
 
 class App extends Component {
 	state = {
@@ -18,9 +19,7 @@ class App extends Component {
 		new_task_name: "",
 		is_creating_new_task: false,
 		new_task_message_type: "hidden",
-		new_task_message_content: "",
-		open_delete_task_modal: false,
-		task_to_delete: null
+		new_task_message_content: ""
 	}
 
 	componentDidMount(){
@@ -104,6 +103,32 @@ class App extends Component {
 		});
 	}
 
+	confirmDeleteList = () => {
+		this.setState({
+			confirmDeleteOpen: true,
+			nameToDelete: this.state.lists[this.state.active_index].menuItem,
+			deleteFunction: () => {
+				this.deleteList()
+			}
+		});
+	}
+
+	deleteList = () => {
+		// Make a copy of lists
+		const lists = [...this.state.lists];
+
+		// Remove list by active index
+		lists.splice(this.state.active_index, 1);
+
+		// Save the changes in state
+		this.setState({
+			confirmDeleteOpen: false,
+			nameToDelete: "",
+			active_index: lists.length - 1,
+			lists: lists
+		});
+	}
+
 
 // TASK functions
 	// Clicking on a task toggles marking it complete
@@ -119,34 +144,30 @@ class App extends Component {
 		this.setState(lists);
 	}
 
-	// Deleting a task removes it from a list
-	deleteTask = (task_id) => {
-		// Make a copy of lists
-		const lists = [...this.state.lists];
-		// Find the matching id of task in list
-		const task_index = lists[this.state.active_index].tasks.findIndex( i => {
-			return i.id === task_id;
+	// Confirm delete task modal
+	confirmDeleteTask = (task_index) => {
+		this.setState({
+			confirmDeleteOpen: true,
+			nameToDelete: this.state.lists[this.state.active_index].tasks[task_index].name,
+			deleteFunction: () => {
+				this.deleteTask(task_index)
+			}
 		});
-		// Remove task from list
-		lists[this.state.active_index].tasks.splice(task_index, 1);
-		this.setState(lists);
 	}
 
-	// Functions for confirm delete task modal
-	openDeleteTask = (task_id) => {
+	// Deleting a task removes it from a list
+	deleteTask = (task_index) => {
+		// Make a copy of lists
+		const lists = [...this.state.lists];
+
+		// Remove task from list
+		lists[this.state.active_index].tasks.splice(task_index, 1);
+
+		// Save the changes in state
 		this.setState({
-			open_delete_task_modal: true,
-			task_to_delete: task_id
-		});
-	}
-	confirmDeleteTask = () => {
-		this.deleteTask(this.state.task_to_delete);
-		this.closeDeleteTask();
-	}
-	closeDeleteTask = () => {
-		this.setState({
-			open_delete_task_modal: false,
-			task_to_delete: null
+			confirmDeleteOpen: false,
+			nameToDelete: "",
+			lists: lists
 		});
 	}
 
@@ -204,15 +225,10 @@ class App extends Component {
 			if(this.state.lists[this.state.active_index].tasks.length){
 				rendered_tasks = (
 					<Tab.Pane>
-						<TaskList 
-							openDeleteTask={this.openDeleteTask} 
+						<List 
+							openDeleteTask={this.confirmDeleteTask} 
 							clickTask={this.clickTask} 
 							list={this.state.lists[this.state.active_index].tasks} 
-						/>
-						<Confirm
-							open={this.state.open_delete_task_modal}
-							onCancel={this.closeDeleteTask}
-							onConfirm={this.confirmDeleteTask}
 						/>
 					</Tab.Pane>
 				);
@@ -236,6 +252,13 @@ class App extends Component {
 					/>
 				)}
 				<Container textAlign="center">
+					<NewTask value={this.state.new_task_name} 
+						click={this.createNewTask} 
+						change={this.changeNewTask} 
+						is_loading={this.state.is_creating_new_task}
+						message_type={this.state.new_task_message_type} 
+						message_content={this.state.new_task_message_content}
+					/>
 					<NewList value={this.state.new_list_name} 
 						click={this.createNewList} 
 						change={this.changeNewList} 
@@ -243,12 +266,15 @@ class App extends Component {
 						message_type={this.state.new_list_message_type} 
 						message_content={this.state.new_list_message_content}
 					/>
-					<NewTask value={this.state.new_task_name} 
-						click={this.createNewTask} 
-						change={this.changeNewTask} 
-						is_loading={this.state.is_creating_new_task}
-						message_type={this.state.new_task_message_type} 
-						message_content={this.state.new_task_message_content}
+					<Button negative 
+						className="margin-small" content="Delete List" icon='delete' labelPosition='left' 
+						onClick={ this.confirmDeleteList } 
+					/>
+					<ConfirmDelete 
+						isOpen={this.state.confirmDeleteOpen} 
+						name={this.state.nameToDelete} 
+						cancel={() => this.setState({confirmDeleteOpen: false})} 
+						delete={this.state.deleteFunction}
 					/>
 				</Container>
 				{this.renderTasks()}

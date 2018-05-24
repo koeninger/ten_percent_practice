@@ -13,7 +13,7 @@ const List = (props) => {
 					name={task.name} 
 					completed={task.completed} 
 					clickTask={() => props.clickTask(task.id)} 
-					deleteTask={() => props.openDeleteTask(task.id)} 
+					deleteTask={() => props.openDeleteTask(index)} 
 				/>
 			);
 		});
