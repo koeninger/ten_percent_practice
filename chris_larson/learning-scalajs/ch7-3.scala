@@ -20,3 +20,21 @@ nextFtr() onFailure { case _ => "Error!" }
 nextFtr() onSuccess { case x => s"Got $x" }
 concurrent.Future sequence List(nextFtr(1), nextFtr(5))
 
+import concurrent.Future
+def cityTemp(name: String): Double = {
+  val key = io.Source.fromFile("../../../openweathermap.txt").getLines.toList
+  val url = "http://api.openweathermap.org/data/2.5/weather"
+  val cityUrl = s"$url?q=$name&appid=" + key(0)
+  println(cityUrl)
+  val json = io.Source.fromURL(cityUrl).mkString.trim
+  val pattern = """.*temp":([\d.]+).*""".r
+  val pattern(temp) = json
+  temp.toDouble
+}
+val cityTemps = Future sequence Seq(
+  Future(cityTemp("Fresno")), Future(cityTemp("Tempe"))
+)
+cityTemps onSuccess {
+  case Seq(x,y) if x > y => println(s"Fresno is warmer: $x K")
+  case Seq(x,y) if y > x => println(s"Tempe is warmer: $y K")
+}
