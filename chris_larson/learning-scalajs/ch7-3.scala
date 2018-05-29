@@ -38,3 +38,8 @@ cityTemps onSuccess {
   case Seq(x,y) if x > y => println(s"Fresno is warmer: $x K")
   case Seq(x,y) if y > x => println(s"Tempe is warmer: $y K")
 }
+
+import concurrent.duration._
+val maxTime = Duration(10, SECONDS)
+val amount = concurrent.Await.result(nextFtr(5), maxTime)
+val amount = concurrent.Await.result(nextFtr(5), maxTime)
