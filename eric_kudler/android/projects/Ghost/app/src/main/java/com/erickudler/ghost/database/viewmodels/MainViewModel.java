@@ -27,7 +27,7 @@ public class MainViewModel extends AndroidViewModel {
         tasks = database.timerDao().loadAllTimers();
     }
 
-    public LiveData<List<Timer>> getTasks() {
+    public LiveData<List<Timer>> getTimers() {
         return tasks;
     }
 }

@@ -22,7 +22,7 @@ public class EditTimerViewModel extends ViewModel {
     }
 
     // COMPLETED (7) Create a getter for the task variable
-    public LiveData<Timer> getTask() {
+    public LiveData<Timer> getTimer() {
         return task;
     }
 }
