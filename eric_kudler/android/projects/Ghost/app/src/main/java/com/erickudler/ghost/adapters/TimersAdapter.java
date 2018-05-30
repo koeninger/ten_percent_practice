@@ -18,12 +18,14 @@ import com.erickudler.ghost.MainActivity;
 import com.erickudler.ghost.R;
 import com.erickudler.ghost.data.GhostContract;
 import com.erickudler.ghost.datasets.Duration;
-import com.erickudler.ghost.datasets.Timer;
+import com.erickudler.ghost.database.Timer;
+
+import java.util.List;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder> {
     public static final String EXTRA_TIMER_ID = "id";
 
-    private Cursor mDataset;
+    private List<Timer> mTimers;
     private Context mContext;
 
     // Provide a reference to the views for each data item
@@ -74,40 +76,29 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        int idIndex = mDataset.getColumnIndex(GhostContract.TimerEntry._ID);
-        int nameIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_NAME);
-        int durationIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_BEST_TIME);
-        int numOfStepsIndex = mDataset.getColumnIndex(GhostContract.TimerEntry.COLUMN_NUM_OF_STEPS);
-
-        mDataset.moveToPosition(position);
-        Duration duration = new Duration(mDataset.getInt(durationIndex));
-        holder.mTimerName.setText(mDataset.getString(nameIndex));
+        Timer timer = mTimers.get(position);
+        Duration duration = new Duration(timer.getBestTime());
+        holder.mTimerName.setText(timer.getName());
         holder.mBestTime.setText(duration.toString());
-        holder.mTimerStepCounter.setText("No of steps: " + mDataset.getString(numOfStepsIndex));
-        holder.itemView.setTag(mDataset.getInt(idIndex));
+        holder.mTimerStepCounter.setText("No of steps: " + timer.getNumOfSteps());
+        holder.itemView.setTag(timer.getId());
     }
 
-    public Cursor swapCursor(Cursor c) {
-        // check if this cursor is the same as the previous cursor (mCursor)
-        if (mDataset == c) {
-            return null; // bc nothing has changed
-        }
-        Cursor temp = mDataset;
-        this.mDataset = c; // new cursor value assigned
 
-        //check if this is a valid cursor, then update the cursor
-        if (c != null) {
+    public void setTimers(List<Timer> timers) {
+        if (timers != null) {
+            mTimers = timers;
             this.notifyDataSetChanged();
         }
-        return temp;
     }
+
 
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        if (mDataset == null) {
+        if (mTimers == null) {
             return 0;
         }
-        return mDataset.getCount();
+        return mTimers.size();
     }
 }

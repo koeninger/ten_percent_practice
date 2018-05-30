@@ -21,10 +21,15 @@ import android.widget.Toast;
 
 import com.erickudler.ghost.adapters.TimersAdapter;
 import com.erickudler.ghost.data.GhostContract;
+import com.erickudler.ghost.database.AppDatabase;
+import com.erickudler.ghost.database.Timer;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<Cursor> {
+        LoaderManager.LoaderCallbacks<List<Timer>> {
 
+    private AppDatabase mDb;
     private RecyclerView mTimersView;
     private TimersAdapter mTimersAdapter;
     private RecyclerView.LayoutManager mTimersLayoutManager;
@@ -37,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar_main);
         setSupportActionBar(toolbar);
+
+        mDb = AppDatabase.getInstance(getApplicationContext());
 
         mTimersView = (RecyclerView) findViewById(R.id.rv_timers);
         mTimersView.setHasFixedSize(true);
@@ -90,11 +97,11 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<Cursor>(this) {
+    public Loader<List<Timer>> onCreateLoader(int id, Bundle args) {
+        return new AsyncTaskLoader<List<Timer>>(this) {
 
             // Initialize a Cursor, this will hold all the task data
-            Cursor mTimerData = null;
+            List<Timer> mTimerData = null;
 
             // onStartLoading() is called when a loader first starts loading data
             @Override
@@ -110,18 +117,14 @@ public class MainActivity extends AppCompatActivity implements
 
             // loadInBackground() performs asynchronous loading of data
             @Override
-            public Cursor loadInBackground() {
+            public List<Timer> loadInBackground() {
                 // Will implement to load data
 
                 // Query and load all task data in the background; sort by priority
                 // [Hint] use a try/catch block to catch any errors in loading data
 
                 try {
-                    return getContentResolver().query(GhostContract.TimerEntry.CONTENT_URI,
-                            null,
-                            null,
-                            null,
-                            null);
+                    return mDb.timerDao().loadAllTimers();
 
                 } catch (Exception e) {
                     Log.e("com.erickudler.ghost", "Failed to asynchronously load data.");
@@ -131,7 +134,7 @@ public class MainActivity extends AppCompatActivity implements
             }
 
             // deliverResult sends the result of the load, a Cursor, to the registered listener
-            public void deliverResult(Cursor data) {
+            public void deliverResult(List<Timer> data) {
                 mTimerData = data;
                 super.deliverResult(data);
             }
@@ -139,12 +142,12 @@ public class MainActivity extends AppCompatActivity implements
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mTimersAdapter.swapCursor(data);
+    public void onLoadFinished(Loader<List<Timer>> loader, List<Timer> data) {
+        mTimersAdapter.setTimers(data);
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        mTimersAdapter.swapCursor(null);
+    public void onLoaderReset(Loader<List<Timer>> loader) {
+        mTimersAdapter.setTimers(null);
     }
 }
