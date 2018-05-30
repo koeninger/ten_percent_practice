@@ -1,4 +1,4 @@
-package com.erickudler.ghost.database;
+package com.erickudler.ghost.database.accessors;
 
 import android.arch.persistence.room.Database;
 import android.arch.persistence.room.Room;
@@ -6,6 +6,10 @@ import android.arch.persistence.room.RoomDatabase;
 import android.arch.persistence.room.TypeConverters;
 import android.content.Context;
 import android.util.Log;
+
+import com.erickudler.ghost.database.DateConverter;
+import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.TimerDao;
 
 /**
  * Created by ekudler on 5/14/18.
