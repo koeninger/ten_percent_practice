@@ -13,7 +13,7 @@ import java.util.Date;
  * Created by ekudler on 5/14/18.
  */
 
-@Entity(tableName = "task")
+@Entity(tableName = "timers")
 public class Timer {
 
     @PrimaryKey(autoGenerate = true)
@@ -33,6 +33,18 @@ public class Timer {
         this.numOfSteps = numOfSteps;
         this.bestTime = bestTime;
         this.timestamp = timestamp;
+    }
+
+    @Ignore
+    public Timer(String name, int numOfSteps, int bestTime, Date timestamp) {
+        this.name = name;
+        this.numOfSteps = numOfSteps;
+        this.bestTime = bestTime;
+        this.timestamp = timestamp;
+    }
+
+    public int getId() {
+        return id;
     }
 
     public String getName() {

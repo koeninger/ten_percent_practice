@@ -1,5 +1,6 @@
 package com.erickudler.ghost.database;
 
+import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.OnConflictStrategy;
@@ -12,17 +13,18 @@ import java.util.List;
  * Created by ekudler on 5/14/18.
  */
 
+@Dao
 public interface TimerDao {
 
     @Query("SELECT * FROM timers")
-    List<Timer> loadAllTasks();
+    List<Timer> loadAllTimers();
 
     @Insert
-    void insertTask(Timer timer);
+    void insertTimer(Timer timer);
 
     @Update(onConflict = OnConflictStrategy.REPLACE)
-    void updateTask(Timer timer);
+    void updateTimer(Timer timer);
 
     @Delete
-    void deleteTask(Timer timer);
+    void deleteTimer(Timer timer);
 }
