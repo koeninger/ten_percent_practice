@@ -32,6 +32,7 @@ library
                      , transformers
                      , trifecta
                      , parsers
+                     , mtl
   default-language:    Haskell2010
 
 executable haskellbook-exe
