@@ -398,8 +398,8 @@ Change BACKGROUND to include tree
  
 (define (end? ws)
   (>= ws
-      (- WIDTH-OF-WORLD
-         (/ (image-width CAR) 2))))
+      (+ WIDTH-OF-WORLD
+         (/ (image-height CAR) 2))))
          
 ; main: WorldState -> WorldState
 ; launch the program from some initial state
@@ -480,8 +480,8 @@ Completed:
  
 (define (end? ws)
   (>= ws
-      (- WIDTH-OF-WORLD
-         (/ (image-width CAR) 2))))
+      (+ WIDTH-OF-WORLD
+         (/ (image-height CAR) 2))))
 
 ; main: WorldState -> WorldState
 ; launch the program from some initial state
@@ -494,3 +494,4 @@ Completed:
     
 Exercise 42 Modify the interpretation of the sample data definition so that a state denotes the x-coordinate 
 of the right-most edge of the car.         
+
