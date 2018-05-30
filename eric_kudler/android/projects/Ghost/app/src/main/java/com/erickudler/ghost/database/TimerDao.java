@@ -28,4 +28,7 @@ public interface TimerDao {
 
     @Delete
     void deleteTimer(Timer timer);
+
+    @Query("SELECT * FROM timers WHERE id = :id")
+    LiveData<Timer> loadTimerById(int id);
 }
