@@ -1,11 +1,11 @@
 package com.erickudler.ghost;
 
-import android.content.ContentValues;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.AsyncTaskLoader;
 import android.support.v4.content.Loader;
@@ -17,16 +17,15 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import com.erickudler.ghost.adapters.TimersAdapter;
-import com.erickudler.ghost.database.AppDatabase;
+import com.erickudler.ghost.database.accessors.AppDatabase;
 import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.viewmodels.MainViewModel;
 
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements
-        LoaderManager.LoaderCallbacks<List<Timer>> {
+public class MainActivity extends AppCompatActivity {
 
     private AppDatabase mDb;
     private RecyclerView mTimersView;
@@ -63,14 +62,12 @@ public class MainActivity extends AppCompatActivity implements
             }
         });
 
-        getSupportLoaderManager().initLoader(TIMERS_LOADER_ID, null, this);
+        setupViewModel();
     }
 
     protected void onResume() {
         super.onResume();
 
-        // re-queries for all tasks
-        getSupportLoaderManager().restartLoader(TIMERS_LOADER_ID, null, this);
     }
 
     @Override
@@ -95,58 +92,13 @@ public class MainActivity extends AppCompatActivity implements
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public Loader<List<Timer>> onCreateLoader(int id, Bundle args) {
-        return new AsyncTaskLoader<List<Timer>>(this) {
-
-            // Initialize a Cursor, this will hold all the task data
-            List<Timer> mTimerData = null;
-
-            // onStartLoading() is called when a loader first starts loading data
+    private void setupViewModel() {
+        MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
+        viewModel.getTasks().observe(this, new Observer<List<Timer>>() {
             @Override
-            protected void onStartLoading() {
-                if (mTimerData != null) {
-                    // Delivers any previously loaded data immediately
-                    deliverResult(mTimerData);
-                } else {
-                    // Force a new load
-                    forceLoad();
-                }
+            public void onChanged(@Nullable List<Timer> timers) {
+                mTimersAdapter.setTimers(timers);
             }
-
-            // loadInBackground() performs asynchronous loading of data
-            @Override
-            public List<Timer> loadInBackground() {
-                // Will implement to load data
-
-                // Query and load all task data in the background; sort by priority
-                // [Hint] use a try/catch block to catch any errors in loading data
-
-                try {
-                    return mDb.timerDao().loadAllTimers();
-
-                } catch (Exception e) {
-                    Log.e("com.erickudler.ghost", "Failed to asynchronously load data.");
-                    e.printStackTrace();
-                    return null;
-                }
-            }
-
-            // deliverResult sends the result of the load, a Cursor, to the registered listener
-            public void deliverResult(List<Timer> data) {
-                mTimerData = data;
-                super.deliverResult(data);
-            }
-        };
-    }
-
-    @Override
-    public void onLoadFinished(Loader<List<Timer>> loader, List<Timer> data) {
-        mTimersAdapter.setTimers(data);
-    }
-
-    @Override
-    public void onLoaderReset(Loader<List<Timer>> loader) {
-        mTimersAdapter.setTimers(null);
+        });
     }
 }

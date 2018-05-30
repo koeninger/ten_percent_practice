@@ -1,5 +1,6 @@
 package com.erickudler.ghost.database;
 
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Delete;
 import android.arch.persistence.room.Insert;
@@ -17,7 +18,7 @@ import java.util.List;
 public interface TimerDao {
 
     @Query("SELECT * FROM timers")
-    List<Timer> loadAllTimers();
+    LiveData<List<Timer>> loadAllTimers();
 
     @Insert
     void insertTimer(Timer timer);

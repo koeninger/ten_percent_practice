@@ -1,13 +1,12 @@
 package com.erickudler.ghost;
 
-import android.content.ContentValues;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 
-import com.erickudler.ghost.database.AppDatabase;
+import com.erickudler.ghost.database.accessors.AppDatabase;
 import com.erickudler.ghost.database.Timer;
 
 import java.util.Date;
