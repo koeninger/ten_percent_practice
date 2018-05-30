@@ -1,0 +1,92 @@
+>>> a = [1, 2, 3]
+>>> b = a
+>>> a.append(4)
+>>> b
+[1, 2, 3, 4]
+
+
+# below, variable y was never created because error occured during evaluation
+
+>>> class Gizmo:
+...     def __init__(self):
+...         print('Gizmo id: %d' % id(self))
+>>> x = Gizmo()
+Gizmo id: 4507476320
+>>> y = Gizmo() * 10
+Gizmo id: 4507492984
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unsupported operand type(s) for *: 'Gizmo' and 'int'
+unsupported operand type(s) for *: 'Gizmo' and 'int'
+>>> dir()
+['Gizmo', '_', '_3', '_4', '__annotations__', '__builtins__', '__cached__', '__doc__', '__file__', '__loader__', '__name__', '__package__', '__spec__', 'a', 'b', 'run', 'unicode_literals', 'x']
+
+
+
+>>> charles = {'name': 'Charles L. Dodgson', 'born': 1832}
+>>> lewis = charles
+>>> lewis is charles
+True
+>>> id(charles), id(lewis)
+(4507573200, 4507573200)
+>>> lewis['balance'] = 950
+>>> charles
+{'name': 'Charles L. Dodgson', 'born': 1832, 'balance': 950}
+
+
+# they are equal due to dict's __eq__ implementation. but they are not the same object
+
+>>> alex = {'name': 'Charles L. Dodgson', 'born': 1832, 'balance': 950}
+>>> alex == charles
+True
+>>> alex is not charles
+True
+
+
+
+>>> t1 = (1, 2, [30, 40])
+>>> t2 = (1, 2, [30, 40])
+>>> t1 == t2
+True
+>>> id(t1[-1])
+4505859464
+>>> t1[-1].append(99)
+>>> t1
+(1, 2, [30, 40, 99])
+>>> id(t1[-1])
+4505859464
+>>> t1 == t2
+False
+
+
+>>> t1 == t2
+False
+>>> l1 = [3, [55, 44], (7, 8, 9)]
+>>> l2 = list(l1)
+>>> l2
+[3, [55, 44], (7, 8, 9)]
+>>> l2 == l1
+True
+>>> l2 is l1
+False
+
+
+
+# shallow copy means copy refs to other lists..
+
+>>> l1 = [3, [66, 55, 44], (7, 8, 9)]
+>>> l2 = list(l1)
+>>> l1.append(100)
+>>> l1[1].remove(55)
+>>> l1
+[3, [66, 44], (7, 8, 9), 100]
+>>> l2
+[3, [66, 44], (7, 8, 9)]
+>>> l2[1] += [33, 22]
+>>> l2[2] += (10, 11)
+>>> l1
+[3, [66, 44, 33, 22], (7, 8, 9), 100]
+>>> l2
+[3, [66, 44, 33, 22], (7, 8, 9, 10, 11)]
+
+
