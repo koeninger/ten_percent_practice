@@ -22,7 +22,6 @@ import com.erickudler.ghost.database.Timer;
 import java.util.List;
 
 public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder> {
-    public static final String EXTRA_TIMER_ID = "id";
 
     private List<Timer> mTimers;
     private Context mContext;
@@ -49,7 +48,7 @@ public class TimersAdapter extends RecyclerView.Adapter<TimersAdapter.ViewHolder
             switch (view.getId()) {
                 case R.id.timer_list_item:
                     Intent editIntent = new Intent(view.getContext(), EditTimerActivity.class);
-                    editIntent.putExtra(EXTRA_TIMER_ID, (int) view.getTag());
+                    editIntent.putExtra(EditTimerActivity.EXTRA_TIMER_ID, (int) view.getTag());
                     view.getContext().startActivity(editIntent);
             }
         }
