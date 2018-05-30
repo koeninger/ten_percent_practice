@@ -20,7 +20,6 @@ import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.erickudler.ghost.adapters.TimersAdapter;
-import com.erickudler.ghost.data.GhostContract;
 import com.erickudler.ghost.database.AppDatabase;
 import com.erickudler.ghost.database.Timer;
 

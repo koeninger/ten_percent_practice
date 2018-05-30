@@ -16,7 +16,6 @@ import android.widget.TextView;
 import com.erickudler.ghost.EditTimerActivity;
 import com.erickudler.ghost.MainActivity;
 import com.erickudler.ghost.R;
-import com.erickudler.ghost.data.GhostContract;
 import com.erickudler.ghost.datasets.Duration;
 import com.erickudler.ghost.database.Timer;
 

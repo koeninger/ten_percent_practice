@@ -7,7 +7,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 
-import com.erickudler.ghost.data.GhostContract;
 import com.erickudler.ghost.database.AppDatabase;
 import com.erickudler.ghost.database.Timer;
 
