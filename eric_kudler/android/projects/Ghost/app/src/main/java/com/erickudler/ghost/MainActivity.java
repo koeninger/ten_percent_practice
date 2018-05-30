@@ -32,8 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private TimersAdapter mTimersAdapter;
     private RecyclerView.LayoutManager mTimersLayoutManager;
 
-    private static final int TIMERS_LOADER_ID = 0;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewModel() {
         MainViewModel viewModel = ViewModelProviders.of(this).get(MainViewModel.class);
-        viewModel.getTasks().observe(this, new Observer<List<Timer>>() {
+        viewModel.getTimers().observe(this, new Observer<List<Timer>>() {
             @Override
             public void onChanged(@Nullable List<Timer> timers) {
                 mTimersAdapter.setTimers(timers);
