@@ -93,3 +93,24 @@ radius = 8
 area = PI * radius ** 2
 print "A circle with a radius of " + str(radius),
 print "inches has an area of " + str(area) + " inches."
+
+#7 - future value template
+present_value = 1000
+annual_rate = 7
+years = 10
+
+future_value = present_value * (1 + 0.01 * annual_rate) ** years
+
+print "The future value of $" + str(present_value) + " in " + str(years),
+print "years at an annual rate of " + str(annual_rate) + "% is $" + str(future_value) + "."
+
+#8 - name tag template
+first_name = "Joe"
+last_name = "Warren"
+name_tag = "My name is " + first_name + " " + last_name
+print name_tag
+
+#9 - name and age template
+name = "Joe Warren"
+age = 52
+statement = name + " is " + str(age)
