@@ -41,3 +41,10 @@ class C extends B {
 val hiA = new A().hi
 val hiB = new B().hi
 val hiC = new C().hi
+
+val a: A = new A
+val a: A = new B 
+val b: B = new B 
+
+val misc = List(new C, new A, new B)
+val messages = misc.map(_.hi).distinct.sorted
