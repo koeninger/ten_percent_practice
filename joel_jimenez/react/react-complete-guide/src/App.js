@@ -252,7 +252,19 @@ class App extends Component {
 					/>
 				)}
 				<Container textAlign="center">
+					<Button.Group className="margin-small">
+						<Button primary content='New List' icon='add' labelPosition='left' 
+							onClick={() => this.setState({openNewListModal: true})} 
+						/>
+						<Button secondary content='New Task' icon='add' labelPosition='left' 
+							onClick={() => this.setState({openNewTaskModal: true})} 
+						/>
+						<Button negative content="Delete List" icon='delete' labelPosition='left' 
+							onClick={ this.confirmDeleteList } 
+						/>
+					</Button.Group>
 					<NewTask value={this.state.new_task_name} 
+						isOpen={ this.state.openNewTaskModal } 
 						click={this.createNewTask} 
 						change={this.changeNewTask} 
 						is_loading={this.state.is_creating_new_task}
@@ -260,15 +272,12 @@ class App extends Component {
 						message_content={this.state.new_task_message_content}
 					/>
 					<NewList value={this.state.new_list_name} 
+						isOpen={ this.state.openNewListModal } 
 						click={this.createNewList} 
 						change={this.changeNewList} 
 						is_loading={this.state.is_creating_new_list}
 						message_type={this.state.new_list_message_type} 
 						message_content={this.state.new_list_message_content}
-					/>
-					<Button negative 
-						className="margin-small" content="Delete List" icon='delete' labelPosition='left' 
-						onClick={ this.confirmDeleteList } 
 					/>
 					<ConfirmDelete 
 						isOpen={this.state.confirmDeleteOpen} 

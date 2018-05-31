@@ -2,12 +2,8 @@ import React from 'react';
 import { Modal, Button, Input, Message } from 'semantic-ui-react';
 
 const NewList = (props) => {
-	const new_list_button = (
-		<Button primary className="margin-small" content='New List' icon='add' labelPosition='left' />
-	);
-
 	return (
-		<Modal trigger={new_list_button} size="tiny">
+		<Modal open={props.isOpen} size="tiny">
 			<Modal.Header>Create new list</Modal.Header>
 			<Modal.Content>
 				<Modal.Description>

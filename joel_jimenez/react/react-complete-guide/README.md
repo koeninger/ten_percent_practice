@@ -8,3 +8,4 @@ npm start
 ## Topics covered:
 * React components
 * New ES6 features and syntax
+* Dynamic styling
