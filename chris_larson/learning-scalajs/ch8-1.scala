@@ -28,3 +28,16 @@ val sizes = users map (_.name.size)
 val sorted = users sortBy (_.name)
 val third = users find (_.name contains "3")
 val greet = third map (_.greet) getOrElse "hi"
+
+class A {
+  def hi = "Hello from A"
+  override def toString = getClass.getName
+}
+class B extends A
+class C extends B {
+  override def hi = "hi C -> " + super.hi
+}
+
+val hiA = new A().hi
+val hiB = new B().hi
+val hiC = new C().hi
