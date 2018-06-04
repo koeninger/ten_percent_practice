@@ -12,3 +12,10 @@ println(t2.make)
 class Lotus(val color: String, reserved: Boolean) extends Car("Lotus", reserved)
 val l = new Lotus("Silver", false)
 println(s"Rquest a ${l.color} ${l.make}")
+
+class Car(val make: String, var reserved: Boolean = true, val year: Int = 2018) {
+  override def toString = s"$year $make, reserved = $reserved"
+}
+val a = new Car("Acura")
+val l = new Car("Lexus", year = 2010)
+val p = new Car(reserved = false, make = "Porsche")
