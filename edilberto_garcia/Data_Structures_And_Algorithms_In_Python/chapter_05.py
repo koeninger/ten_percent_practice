@@ -16,11 +16,15 @@ class Matrix:
 
 
 	def multiply(self, other):
-		product = []
+		product = [0] * len(self.matrix)
 		# for index,val in enumerate(self.matrix):
 		for i in range(len(self.matrix)):
+			product[i] = [0] * len(self.matrix[i])
+			print 'i:', i
 			for j in range(len(other.matrix[0])):
+				print 'j:', j
 				for k in range(len(self.matrix[0])):
+					print 'k:', k
 					product[i][j] += self.matrix[i][k] * other.matrix[k][j]
 		return product
 
@@ -30,8 +34,7 @@ matrix_a.matrix = [
 	[12,15,7,4],
 	[14,6,20,8],
 	[2,17,16,11],
-	[9,18,5,13],
-	[10,3,1,19]
+	[9,18,5,13]
 ]
 
 matrix_b = Matrix()
@@ -39,8 +42,7 @@ matrix_b.matrix = [
 	[19,12,1,9],
 	[17,15,3,18],
 	[7,10,20,2],
-	[11,14,4,8],
-	[5,6,13,16]
+	[11,14,4,8]
 ]
 
 
