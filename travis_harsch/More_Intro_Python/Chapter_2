@@ -1,0 +1,14 @@
+Functions in Python
+# computes the area of a triangle (comment out what it does)
+def triangle_area(base, height):     # header - ends in colon (define name of function, then inputs/parameters)
+    area = (1.0 / 2) * base * height # body - all of body is indented (same level of indention - indicates end of function)
+    return area                      # body - return outputs value (return = output)
+functions only executed when called
+function as a box - takes inputs, creates output - names exist only within functions
+   calling the function
+
+single-input function
+# converts fahrenheit to celsius
+def fahrenheit2celsius(fahrenheit):
+    celsius = (5.0 / 9) * (fahrenheit - 32)
+    return celsius
