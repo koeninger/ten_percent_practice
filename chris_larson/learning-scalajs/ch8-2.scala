@@ -60,3 +60,19 @@ notification.register(new Listener {
   def trigger { println(s"Trigger at ${new java.util.Date}")}
 })
 notification.sendNotification
+
+class Printer(msg: String) {
+  def print(s: String): Unit = println(s"$msg: $s")
+  def print(l: Seq[String]): Unit = print(l.mkString(", "))
+}
+new Printer("Today's Report").print("Foggy" :: "Rainy" :: "Hot" :: Nil)
+
+class Multiplier(factor: Int) {
+  def apply(input: Int) = input * factor
+}
+val tripleMe = new Multiplier(3)
+val tripled = tripleMe.apply(10)
+val tripled2 = tripleMe(10)
+
+val l = List('a', 'b', 'c')
+val character = l(1)
