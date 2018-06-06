@@ -42,3 +42,21 @@ val m: Car = new RedMini(2005)
 class Mini(val year: Int, val color: String) extends Car
 val redMini: Car = new Mini(2005, "Red")
 println(s"Got a ${redMini.color} Mini")
+
+abstract class Listener { def trigger }
+val myListener = new Listener {
+  def trigger { println(s"Trigger at ${new java.util.Date}")}
+}
+myListener.trigger
+
+abstract class Listener { def trigger }
+class Listening {
+  var listener: Listener = null
+  def register(l: Listener) { listener = l }
+  def sendNotification() { listener.trigger }
+}
+val notification = new Listening()
+notification.register(new Listener {
+  def trigger { println(s"Trigger at ${new java.util.Date}")}
+})
+notification.sendNotification
