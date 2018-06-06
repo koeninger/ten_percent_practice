@@ -90,3 +90,104 @@ False
 [3, [66, 44, 33, 22], (7, 8, 9, 10, 11)]
 
 
+
+
+>>> import copy
+>>> from bus import Bus
+>>> bus1 = Bus(['Alice', 'Bill', 'Claire', 'David'])
+>>> bus2 = copy.copy(bus1)
+>>> bus3 = copy.deepcopy(bus1)
+>>> id(bus1), id(bus2), id(bus3)
+(4576292032, 4576805832, 4578474752)
+>>> bus1.drop('Bill')
+>>> bus2.passengers
+['Alice', 'Claire', 'David']
+>>> id(bus1.passengers), id(bus2.passengers), id(bus3.passengers)
+(4577357128, 4577357128, 4578991624)
+>>> bus3.passengers
+['Alice', 'Bill', 'Claire', 'David']
+
+
+
+>>> a = [10, 20]
+>>> b = [a, 30]
+>>> a.append(b)
+>>> a
+[10, 20, [[...], 30]]
+>>> c = copy.deepcopy(a)
+>>> c
+[10, 20, [[...], 30]]
+
+
+# parameter passing: call by sharing
+
+>>> def f(a, b):
+...     a += b
+...     return a
+>>> x = 1
+>>> y = 2
+>>> f(x, y)
+3
+>>> x, y
+(1, 2)
+>>> a = [1, 2]
+>>> b = [3, 4]
+>>> f(a, b)
+[1, 2, 3, 4]
+>>> a, b
+([1, 2, 3, 4], [3, 4])
+>>> t = (10, 20)
+>>> u = (30, 40)
+>>> f(t, u)
+(10, 20, 30, 40)
+>>> t, u
+((10, 20), (30, 40))
+
+
+
+
+>>> from hauntedbus import HauntedBus
+>>> bus1 = HauntedBus
+>>> bus1 = HauntedBus(['Alice','Bill'])
+>>> bus1.passengers
+['Alice', 'Bill']
+>>> bus1.pick('Charlie')
+>>> bus1.drop('Alice')
+>>> bus1.passengers
+['Bill', 'Charlie']
+>>> bus2 = HauntedBus()
+>>> bus2.pick('Carrie')
+>>> bus2.passengers
+['Carrie']
+>>> bus3 = HauntedBus()
+>>> bus3.passengers
+['Carrie']
+>>> bus3.pick('Dave')
+>>> bus2.passengers
+['Carrie', 'Dave']
+>>> bus2.passengers is bus3.passengers
+True
+>>> bus1.passengers
+['Bill', 'Charlie']
+
+
+
+>>> dir(HauntedBus.__init__)
+['__annotations__', '__call__', '__class__', '__closure__', '__code__', '__defaults__', '__delattr__', '__dict__', '__dir__', '__doc__', '__eq__', '__format__', '__ge__', '__get__', '__getattribute__', '__globals__', '__gt__', '__hash__', '__init__', '__init_subclass__', '__kwdefaults__', '__le__', '__lt__', '__module__', '__name__', '__ne__', '__new__', '__qualname__', '__reduce__', '__reduce_ex__', '__repr__', '__setattr__', '__sizeof__', '__str__', '__subclasshook__']
+>>> HauntedBus.__init__.__defaults__
+(['Carrie', 'Dave'],)
+>>> HauntedBus.__init__.__defaults__[0] is bus2.passengers
+True
+
+
+
+>>> from twilightbus import TwilightBus
+>>> basketball_team = ['Sue', 'Tina', 'Maya', 'Diana', 'Pat']
+>>> bus = TwilightBus(basketball_team)
+>>> bus.drop('Tina')
+>>> bus.drop('Pat')
+>>> basketball_team
+['Sue', 'Maya', 'Diana']
+
+
+
