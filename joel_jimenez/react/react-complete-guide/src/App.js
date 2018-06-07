@@ -265,6 +265,7 @@ class App extends Component {
 					</Button.Group>
 					<NewTask value={this.state.new_task_name} 
 						isOpen={ this.state.openNewTaskModal } 
+						cancel={() => this.setState({openNewTaskModal: false})} 
 						click={this.createNewTask} 
 						change={this.changeNewTask} 
 						is_loading={this.state.is_creating_new_task}
@@ -273,6 +274,7 @@ class App extends Component {
 					/>
 					<NewList value={this.state.new_list_name} 
 						isOpen={ this.state.openNewListModal } 
+						cancel={() => this.setState({openNewListModal: false})} 
 						click={this.createNewList} 
 						change={this.changeNewList} 
 						is_loading={this.state.is_creating_new_list}

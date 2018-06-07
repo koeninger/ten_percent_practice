@@ -8,10 +8,13 @@ const NewTask = (props) => {
 			<Modal.Content>
 				<Modal.Description>
 					<Input fluid placeholder='New Task' label="Task name" className="margin-small" onChange={props.change} loading={props.is_loading} value={props.value} />
-					<Button primary onClick={props.click} loading={props.is_loading} className="margin-small">Create Task</Button>
 					<Message info className={props.message_type} header={props.message_content} />
 				</Modal.Description>
 			</Modal.Content>
+			<Modal.Actions>
+				<Button onClick={props.cancel} className="margin-small">Cancel</Button>
+				<Button primary onClick={props.click} loading={props.is_loading} className="margin-small">Create Task</Button>
+			</Modal.Actions>
 		</Modal>
 	);
 };
