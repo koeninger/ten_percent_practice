@@ -76,3 +76,10 @@ val tripled2 = tripleMe(10)
 
 val l = List('a', 'b', 'c')
 val character = l(1)
+class RandomPoint {
+  val x = { println("creating x"); util.Random.nextInt }
+  lazy val y = { println("now y"); util.Random.nextInt }
+}
+val p = new RandomPoint()
+println(s"Location is ${p.x}, ${p.y}")
+println(s"Location is ${p.x}, ${p.y}")
