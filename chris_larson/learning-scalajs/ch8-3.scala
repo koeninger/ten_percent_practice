@@ -11,3 +11,13 @@ val q = new Queue[Int]
 q.enqueue(3, 4, 5)
 val pop = q.dequeue
 println(q)
+
+import collection.mutable.{Queue, ArrayBuffer}
+val q = new Queue[Int]
+val b = new ArrayBuffer[String]
+val m = Map(1 -> 2)
+
+import collection.mutable.{Map=>MutMap}
+val m1 = Map(1 -> 2)
+val m2 = MutMap(2 -> 3)
+m2.remove(2); println(m2)
