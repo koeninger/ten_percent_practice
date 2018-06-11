@@ -21,3 +21,28 @@ import collection.mutable.{Map=>MutMap}
 val m1 = Map(1 -> 2)
 val m2 = MutMap(2 -> 3)
 m2.remove(2); println(m2)
+
+// package com {
+//   package oreilly {
+//     class Config(val baseUrl: String = "http://localhost")
+//   }
+// }
+
+// val url = new com.oreilly.Config().baseUrl
+
+class User { protected val passwd = scala.util.Random.nextString(10) }
+class ValidUser extends User { def isValid = ! passwd.isEmpty }
+val isValid = new ValidUser().isValid
+
+class User(private var password: String) {
+  def update(p: String) {
+    println("Modifying the password!")
+    password = p
+  }
+  def validate(p: String) = p == password
+}
+val u = new User("1234")
+val isValid = u.validate("4567")
+u.update("4567")
+val isValid = u.validate("4567"
+)
