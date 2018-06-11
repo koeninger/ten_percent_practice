@@ -1,38 +1,30 @@
 <?php 
+$memory = [3,4,6,7,7,7,3,4,0];
+$_pc = 0;
+
+function getMemoryAt($pc){
+    global $memory, $_pc;
+    return $memory[$pc];
+}
+
+function setMemoryAt($addr,$val){
+    global $memory, $_pc;
+    $memory[$addr] = $val;
+}
+
 function subleq(){
-    $i = 0;
-    $a_addr = $this->getMemoryAt($_pc);
-    while($a_addr < 0 && $i < (self::SIZE * self::SIZE)){
-        $a_addr = $this->getMemoryAt($a_addr * -1);
-    }
-    if($i == self::SIZE * self::SIZE){
-        $_pc++;
-        return;
-    }
-    $i = 0;
-    $b_addr = $this->getMemoryAt($_pc + 1);
-    while($b_addr < 0 && $i < (self::SIZE * self::SIZE)){
-        $b_addr = $this->getMemoryAt($b_addr * -1);
-    }
-    if($i == self::SIZE * self::SIZE){
-        $_pc++;
-        return;
-    }
-    $a_val = $this->getMemoryAt($a_addr);
-    $b_val = $this->getMemoryAt($b_addr);
+    global $memory, $_pc;
+    $a_addr = getMemoryAt($_pc);
+
+    $b_addr = getMemoryAt($_pc + 1);
+
+    $a_val = getMemoryAt($a_addr);
+    $b_val = getMemoryAt($b_addr);
     
-    $i = 0;
-    $c_val = $this->getMemoryAt($_pc + 2);
-    while($c_val < 0 && $i < (self::SIZE * self::SIZE)){
-        $c_val = $this->getMemoryAt($c_val * -1);
-    }
-    if($i == self::SIZE * self::SIZE){
-        $_pc++;
-        return;
-    }
+    $c_val = getMemoryAt($_pc + 2);
     
     $b_val = $b_val - $a_val;
-    $this->setMemoryAt($b_addr,$b_val);
+    setMemoryAt($b_addr,$b_val);
     
     
     
@@ -41,4 +33,11 @@ function subleq(){
     } else {
         $_pc += 3;
     }
+    
+    print_r($memory);
+    echo $_pc;
 }
+
+subleq();
+subleq();
+subleq();
