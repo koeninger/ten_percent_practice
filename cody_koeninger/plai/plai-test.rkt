@@ -10,3 +10,5 @@
 (check-equal? (interp (plusC (numC 23) (numC 42))) 65 "interp plus")
 
 (check-equal? (interp (multC (numC 5) (numC 23))) 115 "interp mult")
+
+(check-equal? (interp (parse '(if (+ 0 0) (* 1 2) (* 3 4)))) 12 "interp if false")
