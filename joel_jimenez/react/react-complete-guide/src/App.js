@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import { Container, Tab, Header, Dimmer, Loader, Button } from 'semantic-ui-react';
 import List from './List';
+import NavBar from './NavBar';
 import './App.css';
 import NewList from './NewList';
 import NewTask from './NewTask';
@@ -243,6 +244,7 @@ class App extends Component {
 				<Dimmer active={this.state.getting_lists}>
 					<Loader size='large'>Loading</Loader>
 				</Dimmer>
+				<NavBar activeItem='lists' />
 				<Header textAlign="center" className="padding-small">To Do List</Header>
 				{this.state.lists.length > 0 && (
 					<Tab panes={this.state.lists} 
@@ -252,17 +254,15 @@ class App extends Component {
 					/>
 				)}
 				<Container textAlign="center">
-					<Button.Group className="margin-small">
-						<Button primary content='New List' icon='add' labelPosition='left' 
-							onClick={() => this.setState({openNewListModal: true})} 
-						/>
-						<Button secondary content='New Task' icon='add' labelPosition='left' 
-							onClick={() => this.setState({openNewTaskModal: true})} 
-						/>
-						<Button negative content="Delete List" icon='delete' labelPosition='left' 
-							onClick={ this.confirmDeleteList } 
-						/>
-					</Button.Group>
+					<Button className="margin-small" primary content='New List' icon='add' labelPosition='left' 
+						onClick={() => this.setState({openNewListModal: true})} 
+					/>
+					<Button className="margin-small" secondary content='New Task' icon='add' labelPosition='left' 
+						onClick={() => this.setState({openNewTaskModal: true})} 
+					/>
+					<Button className="margin-small" negative content="Delete List" icon='delete' labelPosition='left' 
+						onClick={ this.confirmDeleteList } 
+					/>
 					<NewTask value={this.state.new_task_name} 
 						isOpen={ this.state.openNewTaskModal } 
 						cancel={() => this.setState({openNewTaskModal: false})} 
