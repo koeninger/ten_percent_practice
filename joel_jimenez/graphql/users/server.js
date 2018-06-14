@@ -5,8 +5,8 @@ const schema = require('./schema/schema')
 const PORT = 4000;
 const app = express();
 app.use('/graphql', expressGraphQL({
-	graphiql: true,
-	schema
+	schema,
+	graphiql: true
 }));
 
 app.listen(PORT, () => {

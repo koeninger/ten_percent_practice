@@ -1,18 +1,5 @@
 const graphql = require('graphql');
-const _ = require('lodash');
-
-const users = [
-	{
-		id: '1',
-		name: 'Bill',
-		age: 26
-	},
-	{
-		id: '2',
-		name: 'Jane',
-		age: 21
-	}
-];
+const axios = require('axios');
 
 const {
 	GraphQLObjectType,
@@ -41,9 +28,8 @@ const RootQuery = new GraphQLObjectType({
 				}
 			},
 			resolve(parentValue, args) {
-				return _.find(users, {
-					id: args.id
-				});
+				const url = `http://10.116.53.33:3004/users/${args.id}`;
+				return axios.get(url).then(response => response.data);
 			}
 		}
 	}
