@@ -191,3 +191,38 @@ True
 
 
 
+>>> import weakref
+>>> s1 = {1, 2, 3}
+>>> s2 = s1
+>>> def bye():
+...     print("gone")
+>>> ender = weakref.finalize(s1, bye)
+>>> ender.alive
+True
+>>> del s1
+>>> ender.alive
+True
+>>> s2 = 'spam'
+gone
+>>> ender.alive
+False
+
+
+
+
+>>> import weakref
+>>> from cheese import Cheese
+>>> stock = weakref.WeakValueDictionary()
+>>> catalog = [Cheese('Red Leicester'), Cheese('Tilsit'), Cheese('Brie'), Cheese('Parmesan')]
+>>> for cheese in catalog:
+...     stock[cheese.kind] = cheese
+>>> sorted(stock.keys())
+['Brie', 'Parmesan', 'Red Leicester', 'Tilsit']
+>>> del catalog
+>>> sorted(stock.keys())
+['Parmesan']
+>>> del cheese
+>>> sorted(stock.keys())
+[]
+
+

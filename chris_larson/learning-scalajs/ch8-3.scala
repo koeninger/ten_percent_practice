@@ -46,3 +46,22 @@ val isValid = u.validate("4567")
 u.update("4567")
 val isValid = u.validate("4567"
 )
+
+// :past -raw
+// package com.oreilly {
+//   private[oreilly] class Config {
+//     val url = "http://localhost"
+//   }
+
+//   class Authentication {
+//     private[this] val password = "jason"
+//     def validate = password.size > 0
+//   }
+
+//   class Test {
+//     println(s"url = ${new Config().url}")
+//   }
+// }
+
+val valid = new com.oreilly.Authentication().validate
+new com.oreilly.Test
