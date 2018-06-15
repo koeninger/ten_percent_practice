@@ -20,6 +20,13 @@
 (define-type FunDefC
   [fdC (name : symbol) (arg : symbol) (body : ExprC)])
 
+(define-type Binding
+  [bind (name : symbol) (val : number)])
+
+(define-type-alias Env (listof Binding))
+(define mt-env empty)
+(define extend-env cons)
+
 (define (parse [s : s-expression]) : ExprC
   (cond
     [(s-exp-number? s) (numC (s-exp->number s))]
@@ -53,15 +60,25 @@
                    [(equal? n (fdC-name (first fds))) (first fds)]
                    [else (get-fundef n (rest fds))])]))
 
-(define (interp [e : ExprC] [fds : (listof FunDefC)]) : number
+(define (lookup [i : symbol] [env : Env]) : number
+  (cond
+    [(empty? env) (error 'lookup "unbound identifier")]
+    [(equal? i (bind-name (first env))) (bind-val (first env))]
+    [else (lookup i (rest env))]))
+
+(define (interp [e : ExprC] [env : Env] [fds : (listof FunDefC)]) : number
   (type-case ExprC e
     [numC (n) n]
-    [plusC (l r) (+ (interp l fds) (interp r fds))]
-    [multC (l r) (* (interp l fds) (interp r fds))]
+    [plusC (l r) (+ (interp l env fds) (interp r env fds))]
+    [multC (l r) (* (interp l env fds) (interp r env fds))]
     [appC (f a) (local ([define fd (get-fundef f fds)])
-                  (interp (subst (interp a fds) (fdC-arg fd) (fdC-body fd)) fds))]
-    [idC (_) (error 'interp "unbound identifier")]
-    [ifC (b t f) (if (eq? (interp b fds) 0) (interp f fds) (interp t fds))]))
+                  (interp (fdC-body fd)
+                          (extend-env (bind (fdC-arg fd)
+                                            (interp a env fds))
+                                      mt-env)
+                          fds))]
+    [idC (i) (lookup i env)]
+    [ifC (b t f) (if (eq? (interp b env fds) 0) (interp f env fds) (interp t env fds))]))
 
 (define (desugar [as : ExprS]) : ExprC
   (type-case ExprS as

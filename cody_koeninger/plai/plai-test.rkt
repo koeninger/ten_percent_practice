@@ -1,18 +1,30 @@
-#lang racket/base
+#lang plai-typed
 
-(require rackunit
-         "plai.rkt")
+(require "plai.rkt")
 
 (define fds (list))
 
-(check-equal? (parse '(+ 23 42)) (plusC (numC 23) (numC 42)) "parse plus")
+(test (parse '(+ 23 42))
+      (plusC (numC 23) (numC 42)))
 
-(check-equal? (interp (numC 5) fds) 5 "interp num")
+(test (interp (numC 5) mt-env fds)
+      5)
 
-(check-equal? (interp (plusC (numC 23) (numC 42)) fds) 65 "interp plus")
+(test (interp (plusC (numC 23) (numC 42)) mt-env fds)
+      65)
 
-(check-equal? (interp (multC (numC 5) (numC 23)) fds) 115 "interp mult")
+(test (interp (multC (numC 5) (numC 23)) mt-env fds)
+      115)
 
-(check-equal? (interp (parse '(if (+ 0 0) (* 1 2) (* 3 4))) fds) 12 "interp if false")
+(test (interp (parse '(if (+ 0 0) (* 1 2) (* 3 4))) mt-env fds)
+      12)
 
-(check-equal? (interp (parse '(if (+ 0 1) (* 1 2) (* 3 4))) fds) 2 "interp if true")
+(test (interp (parse '(if (+ 0 1) (* 1 2) (* 3 4))) mt-env fds)
+      2)
+
+
+(test/exn (interp (appC 'f1 (numC 3))
+                  mt-env
+                  (list (fdC 'f1 'x (appC 'f2 (numC 4)))
+                        (fdC 'f2 'y (plusC (idC 'x) (idC 'y)))))
+          "lookup: unbound identifier")
