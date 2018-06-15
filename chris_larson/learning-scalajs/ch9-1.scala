@@ -16,8 +16,8 @@ val text = HtmlUtils.removeMarkup(html)
 // class Multiplier(val x: Int) { def product(y: Int) = x * y }
 // object Multiplier { def apply(x: Int) = new Multiplier(x) }
 
-val tripler = Multiplier(3)
-val result = tripler.product(13)
+//val tripler = Multiplier(3)
+//val result = tripler.product(13)
 
 // object DBConnection {
 //   private val db_url = "jdbc://localhost"
@@ -34,4 +34,13 @@ val result = tripler.product(13)
 //   println(s"Created new connection for " + props("url"))
 // }
 
-val conn = DBConnection()
+//val conn = DBConnection()
+
+case class Character(name: String, isThief: Boolean)
+val h = Character("Hadrian", true)
+val r = h.copy(name = "Royce")
+h == r
+h match {
+  case Character(x, true) => s"$x is a thief"
+  case Character(x, false) => s"$x is not a thief"
+}
