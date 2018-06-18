@@ -45,14 +45,30 @@ matrix_b.matrix = [
 	[11,14,4,8]
 ]
 
-
 # print matrix_a.add(matrix_b)
-
-
-
-print matrix_a.multiply(matrix_b)
+# print matrix_a.multiply(matrix_b)
 
 # *************************************************** #
+
+# P-5.34 Write a program that can perform the Caesar cipher for English messages that include both upper- and lowercase characters.
+
+def caesar_cypher_decode(message, offset):
+	result = ''
+
+	for char in message:
+		char_num = ord(char)
+		if char_num in range(65,91):
+			if char_num + offset > 91:
+				char_num = (char_num + offset) % 91
+			else:
+				char_num = char_num + offset
+
+			result += chr(char_num)
+	return result
+
+
+print caesar_cypher_decode('SHPX ZR', 13)
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
