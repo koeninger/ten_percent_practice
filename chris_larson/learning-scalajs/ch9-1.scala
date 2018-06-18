@@ -44,3 +44,31 @@ h match {
   case Character(x, true) => s"$x is a thief"
   case Character(x, false) => s"$x is not a thief"
 }
+
+trait HtmlUtils {
+  def removeMarkup(input: String) = {
+    input
+    .replaceAll("""</?\w[^>]*>""","")
+    .replaceAll("<.*>","")
+  }
+}
+
+class Page(val s: String) extends HtmlUtils {
+  def asPlainText = removeMarkup(s)
+}
+new Page("<html><body><h1>Introduction</h1></body></html>").asPlainText
+
+trait SafeStringUtils {
+  def trimToNone(s: String): Option[String] = {
+    Option(s) map(_.trim) filterNot(_.isEmpty)
+  }
+}
+class Page(val s: String) extends SafeStringUtils with HtmlUtils {
+  def asPlainText: String = {
+    trimToNone(s) map removeMarkup getOrElse "n/a"
+  }
+}
+
+new Page("<html><body><h1>Introduction</h1></body></html>").asPlainText
+new Page(" ").asPlainText
+new Page(null).asPlainText
