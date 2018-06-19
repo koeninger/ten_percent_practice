@@ -29,3 +29,23 @@ def fahrenheit2kelvin(fahrenheit):
 k1 = fahrenheit2kelvin(32)
 k2 = fahrenheit2kelvin(212)
 print k1, k2
+
+#better to use existing functions instead of recalculating - fix one error instead of several
+
+# prints hello, world!
+def hello():
+    print "Hello, world!"
+#function without a return value
+#python - value of none - shows up when there's no return statement
+
+
+# test!!!
+hello()      # call to hello prints "Hello, world!"
+h = hello()  # call to hello prints "Hello, world!" a second time
+print h      # prints None since there was no return value
+
+#problem - get the tens and ones digit of a numbers
+num = 49
+tens = num // 10
+ones = num % 10
+print tens, ones
