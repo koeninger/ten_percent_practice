@@ -72,3 +72,19 @@ class Page(val s: String) extends SafeStringUtils with HtmlUtils {
 new Page("<html><body><h1>Introduction</h1></body></html>").asPlainText
 new Page(" ").asPlainText
 new Page(null).asPlainText
+
+trait Base { override def toString = "Base" }
+trait A extends Base { override def toString = "A->" + super.toString }
+trait B extends Base { override def toString = "B->" + super.toString }
+trait C extends Base { override def toString = "C->" + super.toString }
+class D extends A with B with C { override def toString = "D->" + super.toString }
+new D()
+
+class RGBColor(val color: Int) { def hex = f"$color%06X" }
+val green = new RGBColor(255 << 8).hex
+trait Opaque extends RGBColor { override def hex = s"${super.hex}FF" }
+trait Sheer extends RGBColor { override def hex = s"${super.hex}33" }
+class Paint(color: Int) extends RGBColor(color) with Opaque
+class Overlay(color: Int) extends RGBColor(color) with Sheer
+val red = new Paint(128 << 16).hex
+val blue = new Overlay(192).hex
