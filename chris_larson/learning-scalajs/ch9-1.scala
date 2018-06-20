@@ -88,3 +88,26 @@ class Paint(color: Int) extends RGBColor(color) with Opaque
 class Overlay(color: Int) extends RGBColor(color) with Sheer
 val red = new Paint(128 << 16).hex
 val blue = new Overlay(192).hex
+
+class A { def hi = "hi" }
+trait B { self: A =>
+  override def toString = "B: " + hi
+}
+class C extends B
+class C extends A with B 
+new C()
+
+class TestSuite(suiteName: String) { def start() {} }
+trait RandomSeeded { self: TestSuite =>
+  def randomStart() {
+    util.Random.setSeed(System.currentTimeMillis)
+    self.start()
+  }  
+}
+class IdSpec extends TestSuite("ID Tests") with RandomSeeded {
+  def testId() { println(util.Random.nextInt != 1) }
+  override def start() { testId() }
+
+  println("Starting...")
+  randomStart()
+}

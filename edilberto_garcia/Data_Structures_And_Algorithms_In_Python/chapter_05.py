@@ -54,7 +54,8 @@ matrix_b.matrix = [
 
 def caesar_cypher_decode(message, offset):
 	result = ''
-
+	offset = offset % 26
+	
 	for char in message:
 		char_num = ord(char)
 		if char_num in range(65,91):
