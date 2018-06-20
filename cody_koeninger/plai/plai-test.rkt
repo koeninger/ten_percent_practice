@@ -23,7 +23,7 @@
       (numV 2))
 
  
-(test (v*s-v (interp (appC (lamC 'x (appC (lamC 'y (plusC (idC 'x) (idC 'y)))
+(test (v*s-v (interp (appC (lamC 'x (appC (lamC 'y (plusC (varC 'x) (varC 'y)))
                                           (numC 4)))
                         (numC 3))
                   mt-env mt-store))
@@ -32,7 +32,7 @@
 (test (v*s-v (interp
        (appC (appC (lamC 'x
                         (lamC 'y
-                             (plusC (idC 'x) (idC 'y))))
+                             (plusC (varC 'x) (varC 'y))))
                    (numC 4))
              (numC 5))
        mt-env mt-store))
@@ -40,8 +40,8 @@
 
 (test/exn (v*s-v (interp
        (appC
-        (appC (lamC 'f (lamC 'x (appC (idC 'f) (numC 10))))
-              (lamC 'y (plusC (idC 'x) (idC 'y))))
+        (appC (lamC 'f (lamC 'x (appC (varC 'f) (numC 10))))
+              (lamC 'y (plusC (varC 'x) (varC 'y))))
         (numC 23))
        mt-env mt-store))
       "lookup: unbound identifier")
