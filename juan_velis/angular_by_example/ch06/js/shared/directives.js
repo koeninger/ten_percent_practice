@@ -14,21 +14,27 @@ angular.module('app').directive('ngConfirm', [function () {
         }
     }
 }]);
-
-// Angular validator pre Angular 1.3
+// Angular validator pre Angular 1.3.
 //angular.module('app').directive('remoteValidator', ['$parse', function ($parse) {
 //    return {
-//        require: 'ngModel',
-//        link: function (scope, elm, attr, ngModelCtrl) {
+//        restrict: 'A',
+//        priority: 5,
+//        require: ['ngModel', '?^busyIndicator'],
+//        link: function (scope, elm, attr, ctrls) {
 //            var expfn = $parse(attr["remoteValidatorFunction"]);
 //            var validatorName = attr["remoteValidator"];
+//            var ngModelCtrl = ctrls[0];
+//            var busyIndicator = ctrls[1];
 //            ngModelCtrl.$parsers.push(function (value) {
 //                var result = expfn(scope, { 'value': value });
 //                if (result.then) {
+//                    if (busyIndicator) busyIndicator.show();
 //                    result.then(function (data) { //For promise type result object
-//                        ngModelCtrl.$setValidity(validatorName, true);
+//                        if (busyIndicator) busyIndicator.hide();
+//                        ngModelCtrl.$setValidity(validatorName, data);
 //                    }, function (error) {
-//                        ngModelCtrl.$setValidity(validatorName, false);
+//                        if (busyIndicator) busyIndicator.hide();
+//                        ngModelCtrl.$setValidity(validatorName, true);
 //                    });
 //                }
 //                return value;
@@ -40,13 +46,53 @@ angular.module('app').directive('ngConfirm', [function () {
 // Angular validator using Angular 1.3
 angular.module('app').directive('remoteValidator', ['$parse', function ($parse) {
     return {
-        require: 'ngModel',
-        link: function (scope, elm, attr, ngModelCtrl) {
+        restrict: 'A',
+        require: ['ngModel', '?^busyIndicator'],
+        link: function (scope, elm, attr, ctrls) {
             var expfn = $parse(attr["remoteValidatorFunction"]);
             var validatorName = attr["remoteValidator"];
+            var ngModelCtrl = ctrls[0];
+            var busyIndicator = ctrls[1];
+
             ngModelCtrl.$asyncValidators[validatorName] = function (value) {
                 return expfn(scope, { 'value': value });
             }
+            if (busyIndicator) {
+                scope.$watch(function () { return ngModelCtrl.$pending; }, function (newValue) {
+                    if (newValue) busyIndicator.show();
+                    else busyIndicator.hide();
+                });
+            }
         }
+    }
+}]);
+
+angular.module('app').directive('updateOnBlur', function () {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        priority: '100',
+        link: function (scope, elm, attr, ngModelCtrl) {
+            if (attr.type === 'radio' || attr.type === 'checkbox') return;
+            elm.unbind('input').unbind('keydown').unbind('change');
+            elm.bind('blur', function () {
+                scope.$apply(function () {
+                    ngModelCtrl.$setViewValue(elm.val());
+                });
+            });
+        }
+    };
+});
+
+angular.module('app').directive('busyIndicator', ['$compile', function ($compile) {
+    return {
+        scope: true,
+        transclude: true,
+        template: '<div><div ng-transclude=""></div><label ng-show="busy" class="text-info glyphicon glyphicon-refresh spin"></label></div>',
+        controller: ['$scope', function ($scope) {
+            this.show = function () { $scope.busy = true; }
+            this.hide = function () { $scope.busy = false; }
+        }]
+
     }
 }]);
