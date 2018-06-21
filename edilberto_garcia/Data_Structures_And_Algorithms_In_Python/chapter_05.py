@@ -59,16 +59,16 @@ def caesar_cypher_decode(message, offset):
 	for char in message:
 		char_num = ord(char)
 		if char_num in range(65,91):
-			if char_num + offset > 91:
-				char_num = (char_num + offset) % 91
+			if char_num + offset >= 90:
+				# print char, ': 65 + (char_num + offset - 90): ', (65 + (char_num + offset - 90))
+				result += chr(65 + (char_num + offset - 90))
 			else:
-				char_num = char_num + offset
-
-			result += chr(char_num)
+				# print char, ': char_num + offset: ', char_num + offset 
+				result += chr(char_num + offset)
 	return result
 
+print caesar_cypher_decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13)
 
-print caesar_cypher_decode('SHPX ZR', 13)
 
 # *************************************************** #
 # *************************************************** #
