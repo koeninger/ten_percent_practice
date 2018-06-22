@@ -49,6 +49,9 @@ CREATE TABLE IF NOT EXISTS users
 insertUser :: Query
 insertUser = "INSERT INTO users VALUES (?, ?, ?, ?, ?, ?)"
 
+updateUser :: Query
+updateUser = "UPDATE users SET shell = ?, homeDirectory = ?, realName = ?, phone = ? WHERE username = ?"
+
 allUsers :: Query
 allUsers = "SELECT * from users"
 

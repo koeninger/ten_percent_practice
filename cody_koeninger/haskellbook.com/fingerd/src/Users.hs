@@ -21,9 +21,9 @@ main = do
   conn <- open "finger.db"
   args <- SE.getArgs
   case args of
-    (un : sh : hd : rn : ph : []) ->
-      execute conn insertUser meRow
-      where meRow :: UserRow
-            meRow = (Null, T.pack un, T.pack sh, T.pack hd, T.pack rn, T.pack ph)
+    ("insert" : un : sh : hd : rn : ph : []) ->
+      execute conn insertUser (Null, T.pack un, T.pack sh, T.pack hd, T.pack rn, T.pack ph)
+    ("update" : un : sh : hd : rn : ph : []) ->
+      execute conn updateUser (T.pack sh, T.pack hd, T.pack rn, T.pack ph, T.pack un)
     _ -> throwIO BadUserRow
   SQLite.close conn
