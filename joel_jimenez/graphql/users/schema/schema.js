@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 const axios = require('axios');
-const data_url = "http://10.116.53.33:3004"
+const data_url = " http://localhost:3004"
 
 const {
 	GraphQLObjectType,
@@ -58,6 +58,13 @@ const UserType = new GraphQLObjectType({
 const RootQuery = new GraphQLObjectType({
 	name: 'RootQueryType',
 	fields: {
+		users: {
+			type: new GraphQLList(UserType),
+			resolve(parentValue, args) {
+				return axios.get(`${data_url}/users`)
+						.then(response => response.data);
+			}
+		},
 		user: {
 			type: UserType,
 			args: {
