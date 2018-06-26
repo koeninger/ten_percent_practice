@@ -4,3 +4,11 @@
   (* 10 a))
 
 DrRacked appears to calculate each step, as evidenced by it making the same calculation twice in stepping through (+ (ff 1) (ff 1)).
+
+;Exercise 22. Use DrRacket’s stepper on this program fragment:
+;(define (distance-to-origin x y)
+;  (sqrt (+ (sqr x) (sqr y))))
+;(distance-to-origin 3 4)
+;Does the explanation match your intuition? 
+
+Yes - DrRacket evaluates the first viarable in the most-nested parenthesis first (x), followed by the second (y), then steps down and evaluates the next set of parenthesis in the function.
