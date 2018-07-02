@@ -49,3 +49,24 @@ num = 49
 tens = num // 10
 ones = num % 10
 print tens, ones
+
+# Remainder - modular arithmetic
+
+# systematically restrict computation to a range
+# long division - divide by a number, we get a quotient plus a remainder
+# quotient is integer division //, the remainder is % (Docs)
+
+
+#problem - get the tens and ones digit of a numbers
+num = 49
+tens = num // 10
+ones = num % 10
+print tens, ones
+print 10 * tens + ones
+
+#application - 24 hour clock
+
+hour = 20
+shift = 8
+print (hour + shift) % 24
+
