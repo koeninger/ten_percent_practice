@@ -20,9 +20,9 @@ angular.module('WorkoutBuilder')
       };
 
       $scope.save = function () {
-          $scope.submitted = true;      // Will force validations
           if ($scope.formWorkout.$invalid) return;
-          WorkoutBuilderService.save().then(function (workout) {
+          $scope.submitted = true;      // Will force validations
+          return WorkoutBuilderService.save().then(function (workout) {
               $scope.workout = workout;
               $scope.formWorkout.$setPristine();
               $scope.submitted = false;
