@@ -71,6 +71,18 @@ print caesar_cypher_decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13)
 
 
 # *************************************************** #
+
+# P-5.35 Implement a class, SubstitutionCipher, with a constructor that takes a string with the 26 uppercase letters
+# in an arbitrary order and uses that for the forward mapping for encryption
+# You should derive the backward mapping from the forward version.
+
+
+
+class SubCipher():
+	def __init__(self, mapping):
+		# for a-z using index
+		# append mapping[index]
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
@@ -79,4 +91,4 @@ print caesar_cypher_decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13)
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
-# *************************************************** #
+# *************************************************** 
