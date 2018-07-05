@@ -29,3 +29,5 @@ def increment[B <: Base](b: Base) = {
 }
 
 val l: List[Base] = List[Sub]()
+val x: (Int, Int) = Tuple2(10, 20)
+println("Does the arity = 2? " + (x.productArity == 2))
