@@ -10,9 +10,9 @@ class ExTest extends FunSuite {
 
   test("fairFromBiased is fair") {
     val d = new BiasedDie(6)
-    val unfair = (1 to 100000).map(_ => d())
+    val unfair = (1 to 1000000).map(_ => d())
     assert(unfair.sum.toDouble / unfair.size !== 3.5)
-    val fair = (1 to 100000).map(_ => fairFromBiased(d))
+    val fair = (1 to 1000000).map(_ => fairFromBiased(d))
     assert(fair.sum.toDouble / fair.size === 3.5)
   }
 }
