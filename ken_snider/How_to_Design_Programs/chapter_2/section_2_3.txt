@@ -1,0 +1,82 @@
+; program:
+;(define (attendees ticket-price)
+;  (- 120 (* (- ticket-price 5.0) (/ 15 0.1))))
+;(define (revenue ticket-price)
+;  (* ticket-price (attendees ticket-price)))
+;(define (cost ticket-price)
+;  (+ 180 (* 0.04 (attendees ticket-price))))
+;(define (profit ticket-price)
+;  (- (revenue ticket-price)
+;     (cost ticket-price)))
+
+; Exercise 27. Our solution to the sample problem contains several constants in the middle of functions. As One Program, Many Definitions already points out, it is best to give names to such constants so that future readers understand where these numbers come from. Collect all definitions in DrRacket’s definitions area and change them so that all magic numbers are refactored into constant definitions. 
+
+(define base-attendees 120)
+(define base-price 5)
+(define attendence-lost-per-dime 15)
+(define fixed-base-cost 180)
+(define fixed-attendee-cost 0.04)
+
+; Exercise 28. Determine the poteontial profit for these ticket prices: $1, $2, $3, $4, and $5. Which price maximizes the profit of the movie theater? Determine the best ticket price to a dime. 
+
+> (profit 5)
+415.2
+> (profit 4)
+889.2
+> (profit 3)
+1063.2
+> (profit 2)
+937.2
+> (profit 1)
+511.2
+
+> (profit 3.1)
+1059.3
+> (profit 2.9)
+1064.1
+> (profit 2.8)
+1062
+
+; Optimum profit at $2.90
+
+; Exercise 29. After studying the costs of a show, the owner discovered several ways of lowering the cost. As a result of these improvements, there is no longer a fixed cost; a variable cost of $1.50 per attendee remains.
+; Modify both programs to reflect this change. When the programs are modified, test them again with ticket prices of $3, $4, and $5 and compare the results.
+
+(define base-attendees 120)
+(define base-price 5.0)
+(define attendence-lost-per-dime 15)
+(define fixed-base-cost 180)
+(define fixed-attendee-cost 1.50)
+
+(define (attendees ticket-price)
+  (- base-attendees (* (- ticket-price base-price) (/ attendence-lost-per-dime 0.1))))
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+(define (cost ticket-price)
+  (* fixed-attendee-cost (attendees ticket-price)))
+(define (profit ticket-price)
+  (- (revenue ticket-price)
+     (cost ticket-price)))
+
+> (profit 5)
+420
+> (profit 4)
+675
+> (profit 3)
+630
+> (profit 2)
+285
+> (profit 4.1)
+663
+> (profit 3.9)
+684
+> (profit 3.8)
+690
+> (profit 3.7)
+693
+> (profit 3.6)
+693
+> (profit 3.5)
+690
+
+Turns out the owner is better off with the fixed cost. Max profit is $693 at $3.70/3.80, compared to 1064 at $2.90 with the old system!
