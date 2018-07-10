@@ -12,26 +12,30 @@ const GET_USERS = gql`
 `;
 
 class App extends Component {
-  render() {
-    return (
-      <Query query={GET_USERS}>
-        {({ loading, error, data }) => {
-          if (loading) return 'Loading...';
-          if (error) return `Error! ${error.message}`;
+	render() {
+		return (
+			<Query query={GET_USERS}>
+				{({ loading, error, data }) => {
+					if (loading) return 'Loading...';
 
-          return (
-            <div>
-              {data.users.map(user => (
-                <p key={user.id} value={user.name}>
-                  {user.name}
-                </p>
-              ))}
-            </div>
-          );
-        }}
-      </Query>
-    );
-  }
+					if (error){
+						console.log(error);
+						return `Error! ${error.message}`;
+					}
+
+					return (
+						<div>
+							{data.users.map(user => (
+								<p key={user.id} value={user.name}>
+								{user.name}
+								</p>
+							))}
+						</div>
+					);
+				}}
+			</Query>
+		);
+	}
 }
 
 export default App;
