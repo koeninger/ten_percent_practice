@@ -34,7 +34,7 @@ object Hello {
     val table2 = slide2.createTable()
     table2.setAnchor(new Rectangle(75, 50, 450, 300));
     val headerRow = table2.addRow();
-    for (i <- 0 to 2) {
+    for (i <- 0 to 3) {
       val th = headerRow.addCell()
       val p = th.addNewTextParagraph()
       p.setTextAlign(TextAlign.CENTER)
@@ -47,6 +47,20 @@ object Hello {
       th.setBorderColor(BorderEdge.bottom, Color.white)
 
       table2.setColumnWidth(i, 150)
+    }
+
+    val dataRow = table2.addRow();
+    for (i <- 0 to 3) {
+      val th = dataRow.addCell()
+      val p = th.addNewTextParagraph()
+      p.setTextAlign(TextAlign.CENTER)
+      val r = p.addNewTextRun()
+      r.setText("Header " + i)
+      r.setBold(true)
+      r.setFontColor(Color.black)
+      //th.setFillColor(new Color(79, 129, 189))
+      th.setBorderWidth(BorderEdge.bottom, 2.0)
+      th.setBorderColor(BorderEdge.bottom, Color.black)
     }
 
     val fos = new FileOutputStream("slideshow.pptx")
