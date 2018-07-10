@@ -32,7 +32,7 @@ object Hello {
     val blankLayout = defaultMaster.getLayout(SlideLayout.BLANK);
     val slide2 = ppt.createSlide(blankLayout)
     val table2 = slide2.createTable()
-    table2.setAnchor(new Rectangle(50, 50, 450, 300));
+    table2.setAnchor(new Rectangle(75, 50, 450, 300));
     val headerRow = table2.addRow();
     for (i <- 0 to 2) {
       val th = headerRow.addCell()
@@ -48,7 +48,6 @@ object Hello {
 
       table2.setColumnWidth(i, 150)
     }
-
 
     val fos = new FileOutputStream("slideshow.pptx")
     ppt.write(fos)
