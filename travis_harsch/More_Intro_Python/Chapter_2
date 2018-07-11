@@ -70,3 +70,41 @@ hour = 20
 shift = 8
 print (hour + shift) % 24
 
+#application - screen wraparound
+
+width = 800
+position = 797
+move = 5
+position = (position + move) % width
+print position
+
+width = 800
+position = 2
+move = -5
+position = (position + move) % width
+print position
+
+
+#data conversions
+#convert an integer into string
+#convert hour into 24-hour format "3:00" always print
+
+hour = 3
+ones = hour % 10
+tens = hour // 10
+print tens, ones
+print tens, ones, ":00"
+print str(tens), str(ones), ":00"
+#string format - converts something into a string
+print str(tens) + str(ones) + ":00"
+
+# convert a string into numbers with int and float
+
+
+#modules - import and module name
+
+import simplegui #drawing
+
+import math #math
+
+import random #functions for random numbers
