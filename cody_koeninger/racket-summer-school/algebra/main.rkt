@@ -48,21 +48,22 @@
 
 (define-syntax (make-operator stx)
   (syntax-parse stx
-    ([_ (opname opfn) ...]  
+    ([_ op]  
      #'(begin
-         (begin
-           (define-syntax (opname stx)
-             (syntax-parse stx
-               [(o n1 n2) #`(#,opfn n1 n2)]))
-           (provide (rename-out [opname opfn]) )) ...))))
+         (define-syntax (my-op-name stx)
+           (syntax-parse stx
+             [(o n1 n2) #`(#,op n1 n2)]))
+         (provide (rename-out [my-op-name op]))))))
 
-(make-operator
- (plus +)
- (minus -)
- (mult *)
- (div /)
- (gt >)
- (gte >=))
+(make-operator +)
+(make-operator -)
+
+(define-syntax (make-operators stx)
+  (syntax-parse stx
+    ([_ op ...]
+     #'(begin (make-operator op) ...))))
+
+(make-operators * / > >=)
     
 (define-syntax (complain-app stx)
   (define (complain msg src-stx)
