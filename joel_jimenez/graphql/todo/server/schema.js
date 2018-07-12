@@ -1,6 +1,6 @@
 const graphql = require('graphql');
 const axios = require('axios');
-const data_url = " http://localhost:3004"
+const data_url = "http://localhost:3004"
 
 const {
 	GraphQLObjectType,

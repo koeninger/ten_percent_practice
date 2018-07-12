@@ -12,7 +12,21 @@ const GET_LISTS = gql`
 	}
 `;
 
-const Lists = () => {
+const formatListOptions = (lists) => {
+	const listOptions = [];
+
+	lists.forEach(function (list, index) {
+		listOptions.push({
+			key: list.id,
+			value: list.id,
+			text: list.name
+		});
+	});
+
+	return listOptions;
+};
+
+const Lists = (props) => {
 	return (
 		<Query query={GET_LISTS}>
 			{({ loading, error, data }) => {
@@ -22,15 +36,14 @@ const Lists = () => {
 					console.log(error);
 					return `Error! ${error.message}`;
 				}
+				console.log(props);
 
 				return (
-					<Dropdown placeholder='Lists' fluid search selection>
-						<Dropdown.Menu>
-							{data.lists.map(list => (
-								<Dropdown.Item text={list.name} value={list.id} />
-							))}
-						</Dropdown.Menu>
-					</Dropdown>
+					<Dropdown placeholder='Lists' search selection 
+						options={formatListOptions(data.lists)} 
+						defaultValue={props.listId} 
+						onChange={props.setList} 
+					/>
 				);
 			}}
 		</Query>

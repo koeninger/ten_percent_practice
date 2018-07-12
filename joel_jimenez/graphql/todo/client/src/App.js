@@ -1,10 +1,25 @@
 import React, { Component } from 'react';
-import Lists from './Lists';
+import { Container } from 'semantic-ui-react';
+import Header from './Header';
+import Tasks from './Tasks';
 
 class App extends Component {
+	state = {
+		selectedList: "1"
+	}
+
+	setList = (e, {value}) => {
+		this.setState({
+			selectedList: value
+		});
+	}
+
 	render() {
 		return (
-			<Lists />
+			<Container>
+				<Header setList={this.setList} listId={this.state.selectedList} />
+				<Tasks listId={this.state.selectedList} />
+			</Container>
 		);
 	}
 }
