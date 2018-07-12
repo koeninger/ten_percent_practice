@@ -67,7 +67,7 @@ def caesar_cypher_decode(message, offset):
 				result += chr(char_num + offset)
 	return result
 
-print caesar_cypher_decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13)
+# print caesar_cypher_decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13)
 
 
 # *************************************************** #
@@ -79,10 +79,13 @@ print caesar_cypher_decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13)
 
 
 class SubCipher():
+	cipher = ''
 	def __init__(self, mapping):
-		# for a-z using index
-		# append mapping[index]
+		for i in range(65,91):
+			print i, chr(i)
 
+
+test = SubCipher('QAZWSXEDCRFVTGBYHNUJMIKOLP')
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
