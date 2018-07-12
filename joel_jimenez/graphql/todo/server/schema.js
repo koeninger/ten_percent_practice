@@ -26,7 +26,7 @@ const ListType = new GraphQLObjectType({
 						.then(response => response.data);
 			}
 		}
-	})
+	}) 
 });
 
 const TaskType = new GraphQLObjectType({
@@ -52,14 +52,14 @@ const RootQuery = new GraphQLObjectType({
 	name: 'RootQueryType',
 	fields: {
 		tasks: {
-			type: new GraphQLList(taskType),
+			type: new GraphQLList(TaskType),
 			resolve(parentValue, args) {
 				return axios.get(`${data_url}/tasks`)
 						.then(response => response.data);
 			}
 		},
 		task: {
-			type: taskType,
+			type: TaskType,
 			args: {
 				id: {
 					type: GraphQLString
@@ -67,6 +67,13 @@ const RootQuery = new GraphQLObjectType({
 			},
 			resolve(parentValue, args) {
 				return axios.get(`${data_url}/tasks/${args.id}`)
+						.then(response => response.data);
+			}
+		},
+		lists: {
+			type: new GraphQLList(ListType),
+			resolve(parentValue, args) {
+				return axios.get(`${data_url}/lists`)
 						.then(response => response.data);
 			}
 		},
