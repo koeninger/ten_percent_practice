@@ -505,7 +505,7 @@ Add to graphical constants:
   3.7 Virtual Pet Worlds
   (define cat1 )
   
-  Exercise 45 design a "virtual cat" world program that continuously moves the cat from left to right. Let's call it cat-prog
+Exercise 45 design a "virtual cat" world program that continuously moves the cat from left to right. Let's call it cat-prog
   and let's assume it consumes the starting position of the cat. Make the cat move three pixels per clock tick. Whenever the cat
   disappears on the right, it reapears on the left. You may wish to read up on the modulo function. 
     modulo function
@@ -516,4 +516,33 @@ Add to graphical constants:
       (modulo 3 -4)
       -1 
   
+; Physical Constants
+(define WIDTH-OF-WORLD 400)
+(define HEIGHT-OF-WORLD 200)
 
+; Graphical Constants
+(define CAT1 .)
+
+(define Y-CAT1
+	(- HEIGHT-OF-WORLD (image-width CAT1)))
+
+(define BACKGROUND
+  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
+
+;WorldState -> WorldState
+; moves the CAT1 by 3 pixels for every clock tick
+(check-expect (tock 20) 23)
+(check-expect (tock 78) 81)
+
+(define (tock ws)
+  (+ ws 3))
+
+; WorldState -> Image
+; places the CAT1 into the BACKGROUND scene,
+; according to the given world state 
+(check-expect (render 50) (place-image CAT1 50 Y-CAT1 BACKGROUND))
+(check-expect (render 100) (place-image CAT1 100 Y-CAT1 BACKGROUND))
+(check-expect (render 150) (place-image CAT1 150 Y-CAT1 BACKGROUND))
+(check-expect (render 200) (place-image CAT1 200 Y-CAT1 BACKGROUND))
+(define (render ws) 
+  (place-image CAT1 ws Y-CAT1 BACKGROUND))
