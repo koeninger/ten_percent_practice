@@ -45,3 +45,19 @@ val doubler = (i: Int) => i*2
 val plus3 = (i: Int) => i+3
 val prepend = (doubler compose plus3)(1)
 val append = (doubler andThen plus3)(1)
+
+object Doubly {
+  def print(num: Double)(implicit fmt: String) = {
+    println(fmt format num)
+  }
+}
+
+Doubly.print(3.724)
+Doubly.print(3.724)("%.1f")
+
+case class USD(amount: Double) {
+  implicit val printFmt = "%.2f"
+  def print = Doubly.print(amount)
+}
+
+new USD(81.924).print
