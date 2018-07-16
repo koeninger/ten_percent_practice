@@ -1,6 +1,7 @@
 package algo.ch3
 
 import scala.collection.mutable.StringBuilder
+import scala.math.Ordering
 
 class DoubleLinkedList[T]() {
   import DoubleLinkedList._
@@ -63,6 +64,14 @@ class DoubleLinkedList[T]() {
       }
       i = n
     }
+  }
+
+  def isSorted(implicit cmp: Ordering[T]): Boolean = {
+    fold((None: Option[T], true))((accum, x) => accum match {
+      case (_, false) => (None, false)
+      case (None, true) => (Option(x), true)
+      case (Some(prior), true) => (Option(x), cmp.lteq(prior, x))
+    })._2
   }
 }
 

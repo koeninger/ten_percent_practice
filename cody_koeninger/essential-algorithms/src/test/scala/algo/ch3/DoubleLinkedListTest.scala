@@ -23,4 +23,15 @@ class DoubleLinkedListTest extends FunSuite {
     d.deleteAll(1)
     assert(d.toString === "(3, 2)")
   }
+
+  test("sorting") {
+    val d = new DoubleLinkedList[Int]
+    d.addBottom(1)
+    d.addBottom(2)
+    d.addBottom(3)
+    d.addBottom(4)
+    assert(d.isSorted)
+    d.addTop(5)
+    assert(!d.isSorted)
+  }
 }
