@@ -1,0 +1,55 @@
+
+# example of vector class
+>>> from vector2d import Vector2d
+>>> v1 = Vector2d(3, 4)
+>>> print(v1.x, v1.y)
+3.0 4.0
+>>> x, y = v1
+>>> x, y
+(3.0, 4.0)
+>>> v1
+Vector2d(3.0, 4.0)
+>>> v1_clone = eval(repr(v1))
+>>> v1 == v1_clone
+True
+>>> print(v1)
+(3.0, 4.0)
+>>> octets = bytes(v1)
+>>> octets
+b'd\x00\x00\x00\x00\x00\x00\x08@\x00\x00\x00\x00\x00\x00\x10@'
+>>> abs(v1)
+5.0
+>>> bool(v1), bool(Vector2d(0, 0))
+(True, False)
+
+
+
+# class vs static methods
+# classmethod always receives class as arg
+# staticmethod is just a function
+>>> class Demo:
+...     @classmethod
+...     def klassmeth(*args):
+...         return args
+...     @staticmethod
+...     def statmeth(*args):
+...         return args
+>>> Demo.klassmeth()
+(<class '__main__.Demo'>,)
+>>> Demo.klassmeth('spam')
+(<class '__main__.Demo'>, 'spam')
+>>> Demo.statmeth()
+()
+>>> Demo.statmeth('spam')
+('spam',)
+
+
+
+#formatting
+>>> brl = 1/2.43
+>>> brl
+0.4115226337448559
+>>> format(brl, '0.4f')
+'0.4115'
+>>> '1 BRL = {rate:0.2f} USD'.format(rate=brl)
+'1 BRL = 0.41 USD'
