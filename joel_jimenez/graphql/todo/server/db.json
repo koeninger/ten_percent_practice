@@ -3,17 +3,20 @@
 	  {
 		"id": "1",
 		"name": "Log hours",
-		"listId": "1"
+		"listId": "1",
+		"completed": false
 	  },
 	  {
 		"id": "2",
 		"name": "Milk",
-		"listId": "2"
+		"listId": "2",
+		"completed": true
 	  },
 	  {
 		"id": "3",
 		"name": "Bread",
-		"listId": "2"
+		"listId": "2",
+		"completed": false
 	  }
 	],
 	"lists": [

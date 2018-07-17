@@ -7,7 +7,8 @@ const {
 	GraphQLString,
 	GraphQLSchema,
 	GraphQLList,
-	GraphQLNonNull
+	GraphQLNonNull,
+	GraphQLBoolean
 } = graphql;
 
 const ListType = new GraphQLObjectType({
@@ -37,6 +38,9 @@ const TaskType = new GraphQLObjectType({
 		},
 		name: {
 			type: GraphQLString
+		},
+		completed: {
+			type: GraphQLBoolean
 		},
 		list: {
 			type: ListType,

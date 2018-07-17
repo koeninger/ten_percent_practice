@@ -4,8 +4,8 @@ import Lists from './Lists';
 
 const Header = (props) => {
 	return (
-		<Menu stackable icon='labeled' size='large'>
-			<Menu.Item>
+		<Menu stackable icon='labeled' size='huge'>
+			<Menu.Item header>
 				<Lists setList={props.setList} listId={props.listId} />
 			</Menu.Item>
 			<Menu.Menu position='right'>

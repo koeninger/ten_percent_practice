@@ -33,10 +33,9 @@ const Lists = (props) => {
 				if (loading) return 'Loading...';
 
 				if (error){
-					console.log(error);
-					return `Error! ${error.message}`;
+					console.log(error.message);
+					return `No lists found.`;
 				}
-				console.log(props);
 
 				return (
 					<Dropdown placeholder='Lists' search selection 

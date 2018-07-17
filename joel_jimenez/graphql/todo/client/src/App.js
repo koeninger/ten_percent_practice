@@ -14,11 +14,15 @@ class App extends Component {
 		});
 	}
 
+	toggleTask = (test) => {
+		console.log(test);
+	}
+
 	render() {
 		return (
 			<Container>
 				<Header setList={this.setList} listId={this.state.selectedList} />
-				<Tasks listId={this.state.selectedList} />
+				<Tasks listId={this.state.selectedList} toggleTask={this.toggleTask} />
 			</Container>
 		);
 	}

@@ -1,7 +1,7 @@
 import React from 'react';
 import gql from 'graphql-tag';
 import { Query } from 'react-apollo';
-import { List } from 'semantic-ui-react';
+import { Grid, Segment, Header, Button, Icon } from 'semantic-ui-react';
 
 const Tasks = (props) => {
 
@@ -11,27 +11,53 @@ const Tasks = (props) => {
 				tasks{
 					id
 					name
+					completed
 				}
 			}
 		}
 	`;
-
+	
 	return (
 		<Query query={GET_TASKS} variables={{ listId: props.listId.toString() }}>
 			{({ loading, error, data }) => {
-				if (loading) return 'Loading...';
+				if (loading) return <Segment loading />;
 
 				if (error){
-					console.log(error);
-					return `Error! ${error.message}`;
+					console.log(error.message);
+					return `No tasks found.`;
 				}
 
 				return (
-					<List verticalAlign='middle' size='huge'>
-						{data.list.tasks.map(task => (
-							<List.Item className='padding-5' key={task.id}>{task.name}</List.Item>
-						))}
-					</List>
+					<Segment>
+						<Grid divided='vertically' verticalAlign='middle'>
+							{data.list.tasks.map(task => (
+
+								<Grid.Row columns={3} key={task.id} textAlign='center' className='no-margin-children no-padding small-padding-children'>
+									<Grid.Column width={2} onClick={() => props.toggleTask(task.id)}>
+										<Icon name={task.completed ? 'check square outline' : 'square outline'} />
+									</Grid.Column>
+									<Grid.Column mobile={8} computer={10} onClick={() => {
+										task.completed = !task.completed
+										props.toggleTask(task.id);
+									}}>
+										<Header size='large'>
+											{task.completed ? (<s>{task.name}</s>) : task.name}
+										</Header>
+									</Grid.Column>
+									<Grid.Column width={2}>
+										<Button color='teal' icon>
+											<Icon name='edit' />
+										</Button>
+									</Grid.Column>
+									<Grid.Column width={2}>
+										<Button color='orange' icon>
+											<Icon name='delete' />
+										</Button>
+									</Grid.Column>
+								</Grid.Row>
+							))}
+						</Grid>
+					</Segment>
 				);
 			}}
 		</Query>
