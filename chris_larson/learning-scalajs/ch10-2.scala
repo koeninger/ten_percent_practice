@@ -37,3 +37,12 @@ trait UserFactory extends Factory {
 
 trait Factory[A] {def create: A }
 trait UserFactory extends Factory[User] { def create = new User("") }
+
+class BaseUser(val name: String)
+class Admin(name: String, val level: String) extends BaseUser(name)
+class Customer(name: String) extends BaseUser(name)
+class PreferredCustomer(name: String) extends BaseUser(name)
+
+def check[A <: BaseUser](u: A) { if (u.name.isEmpty) println("Fail!") }
+check(new Customer("Fred"))
+check(new Admin("", "strict"))
