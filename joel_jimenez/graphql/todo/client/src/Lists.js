@@ -30,7 +30,7 @@ const Lists = (props) => {
 	return (
 		<Query query={GET_LISTS}>
 			{({ loading, error, data }) => {
-				if (loading) return 'Loading...';
+				if (loading) return (<Dropdown fluid search selection options={[]} loading />);
 
 				if (error){
 					console.log(error.message);
@@ -38,9 +38,9 @@ const Lists = (props) => {
 				}
 
 				return (
-					<Dropdown placeholder='Lists' search selection 
+					<Dropdown fluid search selection placeholder='Lists' 
 						options={formatListOptions(data.lists)} 
-						defaultValue={props.listId} 
+						value={props.listId} 
 						onChange={props.setList} 
 					/>
 				);

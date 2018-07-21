@@ -1,28 +1,40 @@
 import React from 'react';
-import { Menu, Icon } from 'semantic-ui-react';
+import { Segment, Grid, Button, Icon } from 'semantic-ui-react';
 import Lists from './Lists';
 
 const Header = (props) => {
 	return (
-		<Menu stackable icon='labeled' size='huge'>
-			<Menu.Item header>
-				<Lists setList={props.setList} listId={props.listId} />
-			</Menu.Item>
-			<Menu.Menu position='right'>
-				<Menu.Item link onClick={props.newTask}>
-					<Icon color='blue' name='plus' />
-					New Task
-				</Menu.Item>
-				<Menu.Item link onClick={props.newList}>
-					<Icon color='teal' name='plus' />
-					New List
-				</Menu.Item>
-				<Menu.Item link onClick={props.deleteList}>
-					<Icon color='orange' name='delete' />
-					Delete List
-				</Menu.Item>
-			</Menu.Menu>
-		</Menu>
+		<Segment size='large'>
+			<Grid stackable verticalAlign='middle'>
+				<Grid.Row columns={2}>
+					<Grid.Column width='6'>
+						<Lists {...props} />
+					</Grid.Column>
+					<Grid.Column width='10'>
+						<Button.Group labeled icon size='large' widths='3' className='auto-height'>
+							<Button animated='fade' basic color='blue' onClick={() => props.openModal('new_task')}>
+								<Button.Content visible>
+									<Icon name='plus' />
+								</Button.Content>
+								<Button.Content hidden>New Task</Button.Content>
+							</Button>
+							<Button animated='fade' basic color='teal' onClick={() => props.openModal('new_list')}>
+								<Button.Content visible>
+									<Icon name='plus' />
+								</Button.Content>
+								<Button.Content hidden>New List</Button.Content>
+							</Button>
+							<Button animated='fade' basic color='orange' onClick={props.deleteList}>
+								<Button.Content visible>
+									<Icon name='delete' />
+								</Button.Content>
+								<Button.Content hidden>Delete List</Button.Content>
+							</Button>
+						</Button.Group>
+					</Grid.Column>
+				</Grid.Row>
+			</Grid>
+		</Segment>
 	);
 };
 

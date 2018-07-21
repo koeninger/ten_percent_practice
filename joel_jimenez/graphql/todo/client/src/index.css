@@ -15,3 +15,7 @@ body {
 .small-padding-children > * {
 	padding: 1rem !important;
 }
+
+.auto-height {
+	height: auto !important;
+}
