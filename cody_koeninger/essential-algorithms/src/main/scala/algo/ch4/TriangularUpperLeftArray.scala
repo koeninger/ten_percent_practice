@@ -8,9 +8,7 @@ class TriangularUpperLeftArray[T: ClassTag](val rows: Int) {
   private val a = new Array[T](numCells(rows))
 
   private def index(x: Int, y: Int): Int = {
-    val r = a.size - 1 - numCells(rows - 1 - y) - ((rows - 1 - y) - x)
-    println(s"index for ($x, $y) is $r")
-    r
+    a.size - 1 - numCells(rows - 1 - y) - ((rows - 1 - y) - x)
   }
 
   def apply(x: Int, y: Int): T = {
