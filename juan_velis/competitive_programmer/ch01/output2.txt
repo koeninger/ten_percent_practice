@@ -1,0 +1,4 @@
+ This line comes from a text file
+ This line comes from a text file too
+ This is the third line
+ OK

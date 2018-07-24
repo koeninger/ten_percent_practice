@@ -45,14 +45,56 @@ matrix_b.matrix = [
 	[11,14,4,8]
 ]
 
-
 # print matrix_a.add(matrix_b)
-
-
-
-print matrix_a.multiply(matrix_b)
+# print matrix_a.multiply(matrix_b)
 
 # *************************************************** #
+
+# P-5.34 Write a program that can perform the Caesar cipher for English messages that include both upper- and lowercase characters.
+
+def caesar_cypher_decode(message, offset):
+	result = ''
+	offset = offset % 26
+	
+	for char in message:
+		char_num = ord(char)
+		if char_num in range(65,91):
+			if char_num + offset >= 90:
+				# print char, ': 65 + (char_num + offset - 90): ', (65 + (char_num + offset - 90))
+				result += chr(65 + (char_num + offset - 90))
+			else:
+				# print char, ': char_num + offset: ', char_num + offset 
+				result += chr(char_num + offset)
+	return result
+
+# print caesar_cypher_decode('ABCDEFGHIJKLMNOPQRSTUVWXYZ', 13)
+
+
+# *************************************************** #
+
+# P-5.35 Implement a class, SubstitutionCipher, with a constructor that takes a string with the 26 uppercase letters
+# in an arbitrary order and uses that for the forward mapping for encryption
+# You should derive the backward mapping from the forward version.
+
+class SubCipher():
+	cipher = ''
+	def __init__(self, mapping):
+		self.cipher = mapping
+	def encrypt(self, message):
+		message = message.upper()
+		for char in message:
+			
+			alpha_index = ord(char) - 65
+			if alpha_index < 0:
+				print char # For special characters just print them normally
+				continue
+			print self.cipher[alpha_index]
+	def decrypt(self, message):
+		pass 
+substitution_cipher = SubCipher('QAZWSXEDCRFVTGBYHNUJMIKOLP')
+print substitution_cipher.encrypt('THIS IS MY MESSAGE');
+
+
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
@@ -61,5 +103,4 @@ print matrix_a.multiply(matrix_b)
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #
-# *************************************************** #
-# *************************************************** #
+# *************************************************** 

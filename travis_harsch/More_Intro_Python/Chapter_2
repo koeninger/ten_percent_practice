@@ -29,3 +29,82 @@ def fahrenheit2kelvin(fahrenheit):
 k1 = fahrenheit2kelvin(32)
 k2 = fahrenheit2kelvin(212)
 print k1, k2
+
+#better to use existing functions instead of recalculating - fix one error instead of several
+
+# prints hello, world!
+def hello():
+    print "Hello, world!"
+#function without a return value
+#python - value of none - shows up when there's no return statement
+
+
+# test!!!
+hello()      # call to hello prints "Hello, world!"
+h = hello()  # call to hello prints "Hello, world!" a second time
+print h      # prints None since there was no return value
+
+#problem - get the tens and ones digit of a numbers
+num = 49
+tens = num // 10
+ones = num % 10
+print tens, ones
+
+# Remainder - modular arithmetic
+
+# systematically restrict computation to a range
+# long division - divide by a number, we get a quotient plus a remainder
+# quotient is integer division //, the remainder is % (Docs)
+
+
+#problem - get the tens and ones digit of a numbers
+num = 49
+tens = num // 10
+ones = num % 10
+print tens, ones
+print 10 * tens + ones
+
+#application - 24 hour clock
+
+hour = 20
+shift = 8
+print (hour + shift) % 24
+
+#application - screen wraparound
+
+width = 800
+position = 797
+move = 5
+position = (position + move) % width
+print position
+
+width = 800
+position = 2
+move = -5
+position = (position + move) % width
+print position
+
+
+#data conversions
+#convert an integer into string
+#convert hour into 24-hour format "3:00" always print
+
+hour = 3
+ones = hour % 10
+tens = hour // 10
+print tens, ones
+print tens, ones, ":00"
+print str(tens), str(ones), ":00"
+#string format - converts something into a string
+print str(tens) + str(ones) + ":00"
+
+# convert a string into numbers with int and float
+
+
+#modules - import and module name
+
+import simplegui #drawing
+
+import math #math
+
+import random #functions for random numbers

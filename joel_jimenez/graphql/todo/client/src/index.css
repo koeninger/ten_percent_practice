@@ -1,0 +1,21 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+}
+
+.no-margin-children > * {
+	margin: 0px !important;
+}
+
+.no-padding {
+	padding: 0px !important;
+}
+
+.small-padding-children > * {
+	padding: 1rem !important;
+}
+
+.auto-height {
+	height: auto !important;
+}
