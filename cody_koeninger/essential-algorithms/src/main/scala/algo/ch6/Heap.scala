@@ -2,7 +2,7 @@ package algo.ch6
 
 import scala.math.Ordering
 
-object Sort {
+object Heap {
   def parent(i: Int): Int = math.floor((i - 1) / 2.0).toInt
 
   def leftChild(i: Int): Int = (2 * i) + 1
@@ -39,30 +39,35 @@ object Sort {
     }
   }
 
+  /* assumes top / leftmost item is only one out of place, push it down to correct place */
+  def fixHeap[T](a: Array[T], rightmost: Int)(implicit ord: Ordering[T]): Unit = {
+    var p = 0
+    var done = false
+    while (!done) {
+      val lc = {
+        val x = leftChild(p)
+        if (rightmost <= x) p else x
+      }
+      val rc = {
+        val x = rightChild(p)
+        if (rightmost <= x) p else x
+      }
+      if (rightmost <= p ||
+        (ord.gteq(a(p), a(lc)) && ord.gteq(a(p), a(rc)))) {
+        done = true
+      } else {
+        val c = if (ord.gteq(a(lc), a(rc))) lc else rc
+        swap(a, p, c)
+        p = c
+      }
+    }
+  }
+
   def heapSort[T](a: Array[T])(implicit ord: Ordering[T]): Unit = {
     makeHeap(a)
     (a.size - 1 until 0 by -1).foreach { rightmost =>
       swap(a, 0, rightmost)
-      var p = 0
-      var done = false
-      while (!done) {
-        val lc = {
-          val x = leftChild(p)
-          if (rightmost <= x) p else x
-        }
-        val rc = {
-          val x = rightChild(p)
-          if (rightmost <= x) p else x
-        }
-        if (rightmost <= p ||
-          (ord.gteq(a(p), a(lc)) && ord.gteq(a(p), a(rc)))) {
-          done = true
-        } else {
-          val c = if (ord.gteq(a(lc), a(rc))) lc else rc
-          swap(a, p, c)
-          p = c
-        }
-      }
+      fixHeap(a, rightmost)
     }
   }
 
