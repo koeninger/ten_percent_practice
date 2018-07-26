@@ -10,7 +10,7 @@ class NaryHeap[T](val n: Int, a: Array[T])(implicit ord: Ordering[T]) {
 
   private def children(i: Int): IndexedSeq[Int] = {
     val m = i * n
-    (1 until n).map(x => m + x).filter(_ <= rightmost)
+    (1 to n).map(x => m + x).filter(_ <= rightmost)
   }
 
   def isHeap: Boolean = {

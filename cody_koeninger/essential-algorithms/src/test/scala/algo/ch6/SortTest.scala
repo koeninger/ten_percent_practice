@@ -5,7 +5,7 @@ import org.scalatest.FunSuite
 import scala.util.Random
 
 class SortTest extends FunSuite {
-  val maxSize = math.pow(2, 3).toInt
+  val maxSize = math.pow(2, 13).toInt
   // upper bound with a little fudge factor
   val nLogN = maxSize * 1.5 * (math.log(maxSize) / math.log(2))
 
