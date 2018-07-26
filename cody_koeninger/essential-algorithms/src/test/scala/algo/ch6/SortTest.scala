@@ -5,7 +5,11 @@ import org.scalatest.FunSuite
 import scala.util.Random
 
 class SortTest extends FunSuite {
-  def randArray = Array.fill(100)(Random.nextInt)
+  val maxSize = math.pow(2, 3).toInt
+  // upper bound with a little fudge factor
+  val nLogN = maxSize * 1.5 * (math.log(maxSize) / math.log(2))
+
+  def randArray = Array.fill(maxSize)(Random.nextInt)
   test("makeheap") {
     val a = randArray
     Heap.makeHeap(a)
@@ -36,8 +40,36 @@ class SortTest extends FunSuite {
   test("quicksort") {
     val a = randArray
     val b = a.clone
-    QuickSort.sort(a)
+    assert(QuickSort.sort(a) < nLogN)
     assert(a === b.sorted)
   }
 
+  test("quicksort already sorted") {
+    val a = randArray.sorted
+    assert(QuickSort.sort(a) < nLogN)
+  }
+
+  test("quicksort reverse sorted") {
+    val a = randArray.sorted.reverse
+    assert(QuickSort.sort(a) < nLogN)
+  }
+
+  test("quicksort duplicates") {
+    val a = randArray.map(x => 23)
+    assert(QuickSort.sort(a) < nLogN)
+  }
+
+  test("countingsort") {
+    val a = randArray.map(x => Random.nextInt(256))
+    val b = a.clone
+    CountingSort.sort(a, 0, 256)
+    assert(a === b.sorted)
+  }
+
+  test("selectionsort") {
+    val a = randArray
+    val b = a.clone
+    SelectionSort.sort(a)
+    assert(a === b.sorted)
+  }
 }
