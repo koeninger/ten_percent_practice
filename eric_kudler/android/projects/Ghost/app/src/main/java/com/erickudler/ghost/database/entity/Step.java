@@ -1,9 +1,11 @@
-package com.erickudler.ghost.database;
+package com.erickudler.ghost.database.entity;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
 import android.arch.persistence.room.ForeignKey;
 import android.arch.persistence.room.PrimaryKey;
+
+import com.erickudler.ghost.database.entity.Timer;
 
 @Entity(tableName = "steps", foreignKeys = @ForeignKey(entity = Timer.class, parentColumns = "id", childColumns = "timer_id"))
 public class Step {

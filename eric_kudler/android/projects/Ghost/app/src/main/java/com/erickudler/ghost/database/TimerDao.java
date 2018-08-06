@@ -8,6 +8,8 @@ import android.arch.persistence.room.OnConflictStrategy;
 import android.arch.persistence.room.Query;
 import android.arch.persistence.room.Update;
 
+import com.erickudler.ghost.database.entity.Step;
+import com.erickudler.ghost.database.entity.Timer;
 import java.util.List;
 
 /**

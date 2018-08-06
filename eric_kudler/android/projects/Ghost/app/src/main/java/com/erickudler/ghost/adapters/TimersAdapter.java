@@ -1,12 +1,8 @@
 package com.erickudler.ghost.adapters;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.database.Cursor;
-import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,10 +10,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.erickudler.ghost.EditTimerActivity;
-import com.erickudler.ghost.MainActivity;
 import com.erickudler.ghost.R;
 import com.erickudler.ghost.datasets.Duration;
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.entity.Timer;
 
 import java.util.List;
 

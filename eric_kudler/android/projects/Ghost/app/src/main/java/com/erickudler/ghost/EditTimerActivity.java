@@ -11,7 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 
 import com.erickudler.ghost.database.accessors.AppDatabase;
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.entity.Timer;
 import com.erickudler.ghost.database.viewmodels.EditTimerViewModel;
 import com.erickudler.ghost.database.viewmodels.EditTimerViewModelFactory;
 

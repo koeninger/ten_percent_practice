@@ -6,21 +6,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.AsyncTaskLoader;
-import android.support.v4.content.Loader;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.erickudler.ghost.adapters.TimersAdapter;
+import com.erickudler.ghost.database.TimerDao;
 import com.erickudler.ghost.database.accessors.AppDatabase;
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.entity.Timer;
 import com.erickudler.ghost.database.viewmodels.MainViewModel;
 
 import java.util.List;

@@ -3,7 +3,7 @@ package com.erickudler.ghost.database.viewmodels;
 import android.arch.lifecycle.LiveData;
 import android.arch.lifecycle.ViewModel;
 
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.entity.Timer;
 import com.erickudler.ghost.database.accessors.AppDatabase;
 
 /**

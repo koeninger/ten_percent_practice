@@ -8,8 +8,8 @@ import android.content.Context;
 import android.util.Log;
 
 import com.erickudler.ghost.database.DateConverter;
-import com.erickudler.ghost.database.Step;
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.entity.Step;
+import com.erickudler.ghost.database.entity.Timer;
 import com.erickudler.ghost.database.TimerDao;
 
 /**
