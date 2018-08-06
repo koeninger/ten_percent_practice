@@ -13,16 +13,16 @@ import com.erickudler.ghost.database.accessors.AppDatabase;
 public class EditTimerViewModel extends ViewModel {
 
     // COMPLETED (6) Add a task member variable for the TaskEntry object wrapped in a LiveData
-    private LiveData<Timer> task;
+    private LiveData<Timer> timer;
 
     // COMPLETED (8) Create a constructor where you call loadTaskById of the taskDao to initialize the tasks variable
     // Note: The constructor should receive the database and the taskId
     public EditTimerViewModel(AppDatabase database, int taskId) {
-        task = database.timerDao().loadTimerById(taskId);
+        timer = database.timerDao().loadTimerById(taskId);
     }
 
     // COMPLETED (7) Create a getter for the task variable
     public LiveData<Timer> getTimer() {
-        return task;
+        return timer;
     }
 }
