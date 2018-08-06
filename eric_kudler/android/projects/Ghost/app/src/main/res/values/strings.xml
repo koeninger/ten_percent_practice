@@ -6,4 +6,6 @@
 
     <string name="dialog_description">Enter the step below.</string>
     <string name="dialog_hint">Step Name</string>
+    <string name="dialog_positive">Ok</string>
+    <string name="dialog_negative">Cancel</string>
 </resources>
