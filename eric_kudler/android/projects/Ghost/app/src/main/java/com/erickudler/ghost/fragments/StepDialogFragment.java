@@ -39,9 +39,6 @@ public class StepDialogFragment extends DialogFragment {
         builder.setPositiveButton(R.string.dialog_positive, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         mListener.onDialogPositiveClick(StepDialogFragment.this);
-                        //String stepName = stepNameEditText.getText().toString();
-                        //Step step = new Step(stepName);
-                        //mDb.stepDao().insertStep(step);
                     }
                 })
                 .setNegativeButton(R.string.dialog_negative, new DialogInterface.OnClickListener() {
