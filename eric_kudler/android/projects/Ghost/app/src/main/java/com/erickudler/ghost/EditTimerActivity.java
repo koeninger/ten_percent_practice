@@ -12,6 +12,7 @@ import android.widget.EditText;
 
 import com.erickudler.ghost.database.accessors.AppDatabase;
 import com.erickudler.ghost.database.entity.Timer;
+import com.erickudler.ghost.database.relation.TimerWithSteps;
 import com.erickudler.ghost.database.viewmodels.EditTimerViewModel;
 import com.erickudler.ghost.database.viewmodels.EditTimerViewModelFactory;
 
@@ -53,9 +54,9 @@ public class EditTimerActivity extends AppCompatActivity {
             EditTimerViewModelFactory factory = new EditTimerViewModelFactory(mDb, mTimerId);
             final EditTimerViewModel viewModel = ViewModelProviders.of(this, factory).get(EditTimerViewModel.class);
 
-            viewModel.getTimer().observe(this, new Observer<Timer>() {
+            viewModel.getTimer().observe(this, new Observer<TimerWithSteps>() {
                 @Override
-                public void onChanged(@Nullable Timer timer) {
+                public void onChanged(@Nullable TimerWithSteps timer) {
                     viewModel.getTimer().removeObserver(this);
                     populateUI(timer);
                 }
@@ -63,8 +64,8 @@ public class EditTimerActivity extends AppCompatActivity {
         }
     }
 
-    public void populateUI(Timer timer) {
-        mTimerName.setText(timer.getName());
+    public void populateUI(TimerWithSteps timer) {
+        mTimerName.setText(timer.getTimer().getName());
     }
 
     public void onClickAddTime(View view) {
