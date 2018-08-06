@@ -1,0 +1,119 @@
+
+# example of vector class
+>>> from vector2d import Vector2d
+>>> v1 = Vector2d(3, 4)
+>>> print(v1.x, v1.y)
+3.0 4.0
+>>> x, y = v1
+>>> x, y
+(3.0, 4.0)
+>>> v1
+Vector2d(3.0, 4.0)
+>>> v1_clone = eval(repr(v1))
+>>> v1 == v1_clone
+True
+>>> print(v1)
+(3.0, 4.0)
+>>> octets = bytes(v1)
+>>> octets
+b'd\x00\x00\x00\x00\x00\x00\x08@\x00\x00\x00\x00\x00\x00\x10@'
+>>> abs(v1)
+5.0
+>>> bool(v1), bool(Vector2d(0, 0))
+(True, False)
+
+
+
+# class vs static methods
+# classmethod always receives class as arg
+# staticmethod is just a function
+>>> class Demo:
+...     @classmethod
+...     def klassmeth(*args):
+...         return args
+...     @staticmethod
+...     def statmeth(*args):
+...         return args
+>>> Demo.klassmeth()
+(<class '__main__.Demo'>,)
+>>> Demo.klassmeth('spam')
+(<class '__main__.Demo'>, 'spam')
+>>> Demo.statmeth()
+()
+>>> Demo.statmeth('spam')
+('spam',)
+
+
+
+#formatting
+>>> brl = 1/2.43
+>>> brl
+0.4115226337448559
+>>> format(brl, '0.4f')
+'0.4115'
+>>> '1 BRL = {rate:0.2f} USD'.format(rate=brl)
+'1 BRL = 0.41 USD'
+
+
+
+>>> format(52, 'b')
+>>> format(52, 'b')
+'110100'
+>>> format(2/3, '.1%')
+'66.7%'
+
+
+>>> from datetime import datetime
+>>> now = datetime.now()
+>>> format(now, ':%H:%M:%S')
+':08:57:50'
+>>> "it's {:%I:%M %p}".format(now)
+"it's 08:57 AM"
+
+
+>>> from vector2d_v1 import Vector2d
+>>> v1 = Vector2d(3,4)
+>>> format(v1)
+'(3.0, 4.0)'
+
+
+
+>>> format(v1, '.3f')
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unsupported format string passed to Vector2d.__format__
+unsupported format string passed to Vector2d.__format__
+
+
+#implementing polar coords formatting
+>>> from vector2d_v2 import Vector2d
+>>> format(Vector2d(1, 1), 'p')
+'<1.4142135623730951, 0.7853981633974483>'
+>>> format(Vector2d(1, 1), '.3ep')
+'<1.414e+00, 7.854e-01>'
+>>> format(Vector2d(1, 1), '0.5fp')
+'<1.41421, 0.78540>'
+
+
+#not hashable
+>>> v1 = Vector2d(3,4)
+>>> hash(v1)
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unhashable type: 'Vector2d'
+unhashable type: 'Vector2d'
+>>> set([v1])
+Traceback (most recent call last):
+  File "<stdin>", line 1, in <module>
+TypeError: unhashable type: 'Vector2d'
+unhashable type: 'Vector2d'
+
+
+#implement hashing
+>>> from vector2d_v3 import Vector2d
+>>> v1 = Vector2d(3,4)
+>>> v2 = Vector2d(3.1, 4.2)
+>>> hash(v1), hash(v2)
+(7, 384307168202284039)
+>>> set ([v1, v2])
+{Vector2d(3.1, 4.2), Vector2d(3.0, 4.0)}

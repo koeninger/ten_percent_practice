@@ -28,3 +28,53 @@ def test(hours, minutes, seconds):
 test(7, 21, 37)
 test(10, 1, 7)
 test(1, 0, 1)
+
+#3 rectangle perimeter
+def rectangle_perimeter(width, height):
+    return width * 2 + height * 2
+
+    def test(width, height):
+        print "A rectangle " + str(width) + " inches wide and " + str(height),
+        print "inches high has a perimeter of",
+        print str(rectangle_perimeter(width, height)) + " inches."
+
+    test(4, 7)
+    test(7, 4)
+    test(10, 10)
+
+#4 - rectangle_area
+def rectangle_area(width, height):
+    return width * height
+    def rectangle_area(width, height):
+        return width * height
+
+    ###################################################
+    # Tests
+    # Student should not change this code.
+
+    def test(width, height):
+        print "A rectangle " + str(width) + " inches wide and " + str(height),
+        print "inches high has an area of",
+        print str(rectangle_area(width, height)) + " square inches."
+
+    test(4, 7)
+    test(7, 4)
+    test(10, 10)
+    
+    #5 - circle circumference
+def circle_circumference (radius):
+    return radius * 2 * 3.14
+
+# Tests
+# Student should not change this code.
+
+def test(radius):
+	"""Tests the circle_circumference function."""
+
+	print "A circle with a radius of " + str(radius),
+	print "inches has a circumference of",
+	print str(circle_circumference(radius)) + " inches."
+
+test(8)
+test(3)
+test(12.9)

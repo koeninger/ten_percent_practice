@@ -76,16 +76,25 @@ def caesar_cypher_decode(message, offset):
 # in an arbitrary order and uses that for the forward mapping for encryption
 # You should derive the backward mapping from the forward version.
 
-
-
 class SubCipher():
 	cipher = ''
 	def __init__(self, mapping):
-		for i in range(65,91):
-			print i, chr(i)
+		self.cipher = mapping
+	def encrypt(self, message):
+		message = message.upper()
+		for char in message:
+			
+			alpha_index = ord(char) - 65
+			if alpha_index < 0:
+				print char # For special characters just print them normally
+				continue
+			print self.cipher[alpha_index]
+	def decrypt(self, message):
+		pass 
+substitution_cipher = SubCipher('QAZWSXEDCRFVTGBYHNUJMIKOLP')
+print substitution_cipher.encrypt('THIS IS MY MESSAGE');
 
 
-test = SubCipher('QAZWSXEDCRFVTGBYHNUJMIKOLP')
 # *************************************************** #
 # *************************************************** #
 # *************************************************** #

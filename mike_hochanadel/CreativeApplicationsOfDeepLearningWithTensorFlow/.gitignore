@@ -11,6 +11,12 @@ session-2/.ipynb_checkpoints/
 session-2/img_align_celeba/
 session-2/bonsai/
 session-3/.ipynb_checkpoints/
+session-3/gtzan_music_speech/
+session-3/music_speech.tar.gz
+session-3/manifold_*
+session-3/reconstruction_*
+session-3/vae*
+session-3/checkpoint
 session-3/bonsai/
 session-4/
 session-5/
