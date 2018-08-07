@@ -8,6 +8,7 @@ import android.content.Context;
 import android.util.Log;
 
 import com.erickudler.ghost.database.DateConverter;
+import com.erickudler.ghost.database.StepDao;
 import com.erickudler.ghost.database.entity.Step;
 import com.erickudler.ghost.database.entity.Timer;
 import com.erickudler.ghost.database.TimerDao;
@@ -42,5 +43,6 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract TimerDao timerDao();
+    public abstract StepDao stepDao();
 
 }
