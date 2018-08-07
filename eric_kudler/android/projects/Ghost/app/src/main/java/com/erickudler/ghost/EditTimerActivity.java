@@ -4,23 +4,28 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 
 import com.erickudler.ghost.database.accessors.AppDatabase;
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.entity.Timer;
+import com.erickudler.ghost.database.relation.TimerWithSteps;
 import com.erickudler.ghost.database.viewmodels.EditTimerViewModel;
 import com.erickudler.ghost.database.viewmodels.EditTimerViewModelFactory;
+import com.erickudler.ghost.fragments.StepDialogFragment;
 
 import java.util.Date;
 
-public class EditTimerActivity extends AppCompatActivity {
+public class EditTimerActivity extends AppCompatActivity implements StepDialogFragment.StepDialogListener {
 
     public static final String EXTRA_TIMER_ID = "id";
     public static final int DEFAULT_TIMER_ID = 0;
+    public static final String STEP_DIALOG_TAG = "step-dialog-tag";
 
     private AppDatabase mDb;
     private int mTimerId;
@@ -53,9 +58,9 @@ public class EditTimerActivity extends AppCompatActivity {
             EditTimerViewModelFactory factory = new EditTimerViewModelFactory(mDb, mTimerId);
             final EditTimerViewModel viewModel = ViewModelProviders.of(this, factory).get(EditTimerViewModel.class);
 
-            viewModel.getTimer().observe(this, new Observer<Timer>() {
+            viewModel.getTimer().observe(this, new Observer<TimerWithSteps>() {
                 @Override
-                public void onChanged(@Nullable Timer timer) {
+                public void onChanged(@Nullable TimerWithSteps timer) {
                     viewModel.getTimer().removeObserver(this);
                     populateUI(timer);
                 }
@@ -63,8 +68,8 @@ public class EditTimerActivity extends AppCompatActivity {
         }
     }
 
-    public void populateUI(Timer timer) {
-        mTimerName.setText(timer.getName());
+    public void populateUI(TimerWithSteps timer) {
+        mTimerName.setText(timer.getTimer().getName());
     }
 
     public void onClickAddTime(View view) {
@@ -77,5 +82,21 @@ public class EditTimerActivity extends AppCompatActivity {
         mDb.timerDao().insertTimer(timer);
 
         finish();
+    }
+
+    public void onClickAddStep(View view) {
+        StepDialogFragment stepDialogFragment = new StepDialogFragment();
+        stepDialogFragment.show(getSupportFragmentManager(), STEP_DIALOG_TAG);
+    }
+
+    @Override
+    public void onDialogPositiveClick(DialogFragment dialog) {
+        Log.d("kudler", "positive clicked");
+    }
+
+    @Override
+    public void onDialogNegativeClick(DialogFragment dialog) {
+        Log.d("kudler", "negative clicked");
+        dialog.dismiss();
     }
 }

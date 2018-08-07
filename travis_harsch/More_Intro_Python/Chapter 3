@@ -60,3 +60,21 @@ def rectangle_area(width, height):
     test(4, 7)
     test(7, 4)
     test(10, 10)
+    
+    #5 - circle circumference
+def circle_circumference (radius):
+    return radius * 2 * 3.14
+
+# Tests
+# Student should not change this code.
+
+def test(radius):
+	"""Tests the circle_circumference function."""
+
+	print "A circle with a radius of " + str(radius),
+	print "inches has a circumference of",
+	print str(circle_circumference(radius)) + " inches."
+
+test(8)
+test(3)
+test(12.9)

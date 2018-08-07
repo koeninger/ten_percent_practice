@@ -8,14 +8,16 @@ import android.content.Context;
 import android.util.Log;
 
 import com.erickudler.ghost.database.DateConverter;
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.StepDao;
+import com.erickudler.ghost.database.entity.Step;
+import com.erickudler.ghost.database.entity.Timer;
 import com.erickudler.ghost.database.TimerDao;
 
 /**
  * Created by ekudler on 5/14/18.
  */
 
-@Database(entities = {Timer.class}, version = 8, exportSchema = false)
+@Database(entities = {Timer.class, Step.class}, version = 9, exportSchema = false)
 @TypeConverters(DateConverter.class)
 public abstract class AppDatabase extends RoomDatabase {
 
@@ -41,5 +43,6 @@ public abstract class AppDatabase extends RoomDatabase {
     }
 
     public abstract TimerDao timerDao();
+    public abstract StepDao stepDao();
 
 }
