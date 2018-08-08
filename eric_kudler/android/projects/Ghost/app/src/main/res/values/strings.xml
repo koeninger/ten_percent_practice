@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">Ghost</string>
     <string name="action_settings">Settings</string>
+
+    <string name="tv_steps_label">Steps(in order)</string>
+
+    <string name="dialog_description">Enter the step below.</string>
+    <string name="dialog_hint">Step Name</string>
+    <string name="dialog_positive">Ok</string>
+    <string name="dialog_negative">Cancel</string>
 </resources>

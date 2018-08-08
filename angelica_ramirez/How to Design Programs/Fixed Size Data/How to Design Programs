@@ -512,7 +512,7 @@ Answer: the original program WS represented pixels between the left border and t
 	this program WS represents the number of ticks sinces the program began, translation is in the render function
 	
 	
-	Use the data definition to deisgn a program that moves the car according to a sine wave. 
+	Use the data definition to design a program that moves the car according to a sine wave. 
   
   3.7 Virtual Pet Worlds
   (define cat1 )
@@ -543,11 +543,14 @@ Exercise 45 design a "virtual cat" world program that continuously moves the cat
 
 ;WorldState -> WorldState
 ; moves the CAT1 by 3 pixels for every clock tick
+; moves CAT1 by endless left to right loop
 (check-expect (tock 20) 23)
 (check-expect (tock 78) 81)
 
 (define (tock ws)
-  (+ ws 3))
+  (if (< ws (+ (image-width BACKGROUND) (/ (image-width CAT1) 2)))
+  (+ ws 3)
+  0))
 
 ; WorldState -> Image
 ; places the CAT1 into the BACKGROUND scene,
@@ -567,3 +570,15 @@ Exercise 45 design a "virtual cat" world program that continuously moves the cat
     (on-tick tock)
     (to-draw render)
     ))
+
+Exercise 46
+Improve the cat animation with a slightly different image. Adjust the redering function from Exercise 45 so that it uses
+one cat image or the other based on whehter the x-coordinate is odd. Read up on odd? and use a cond expression to select 
+cat images. 
+	(odd? x) -> boolean? 
+	x: integer
+	determins if some integer is odd or not
+	(odd? 2)
+	#false
+	(odd? 1)
+	#true 

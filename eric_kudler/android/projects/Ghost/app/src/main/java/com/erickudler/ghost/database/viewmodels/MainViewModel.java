@@ -3,9 +3,8 @@ package com.erickudler.ghost.database.viewmodels;
 import android.app.Application;
 import android.arch.lifecycle.AndroidViewModel;
 import android.arch.lifecycle.LiveData;
-import android.util.Log;
 
-import com.erickudler.ghost.database.Timer;
+import com.erickudler.ghost.database.entity.Timer;
 import com.erickudler.ghost.database.accessors.AppDatabase;
 
 import java.util.List;
