@@ -1,0 +1,67 @@
+;Excercise 31
+
+(define (letter fst lst signature-name)
+  (string-append
+    (opening fst)
+    "\n\n"
+    (body fst lst)
+    "\n\n"
+    (closing signature-name)))
+ 
+(define (opening fst)
+  (string-append "Dear " fst ","))
+ 
+(define (body fst lst)
+  (string-append
+   "We have discovered that all people with the" "\n"
+   "last name " lst " have won our lottery. So, " "\n"
+   fst ", " "hurry and pick up your prize."))
+ 
+(define (closing signature-name)
+  (string-append
+   "Sincerely,"
+   "\n\n"
+   signature-name
+   "\n"))
+
+(define (main in-fst in-lst in-signature out)
+  (write-file out
+              (letter (read-file in-fst)
+                      (read-file in-lst)
+                      (read-file in-signature))))
+
+;The function consumes four strings: the first three are the names of input files and the last one serves as an output file. It uses the first three to read one string each from the three named files, hands these strings to letter, and eventually writes the result of this function call into the file named by out, the fourth argument to main.
+Create appropriate files, launch main, and check whether it delivers the expected letter in a given file.
+
+===
+
+> (write-file "in-fst" "Michelle")
+"in-fst"
+> (write-file "in-lst" "Sky")
+"in-lst"
+> (write-file "in-signature" "Ken")
+"in-signature"
+> (main "in-fst" "in-fst" "in-signature" 'stdout)
+Dear Michelle,
+
+We have discovered that all people with the
+last name Michelle have won our lottery. So, 
+Michelle, hurry and pick up your prize.
+
+Sincerely,
+
+Ken
+'stdout
+
+; Exercise 32. Most people no longer use desktop computers just to run applications but also employ cell phones, tablets, and their cars’ information control screen. Soon people will use wearable computers in the form of intelligent glasses, clothes, and sports gear. In the somewhat more distant future, people may come with built-in bio computers that directly interact with body functions. Think of ten different forms of events that software applications on such computers will have to deal with.
+
+1. body temperature
+2. motion
+3. consumption of food/fluids
+4. visual data from the eyes
+5. muscle movement
+6. heart rate
+7. tactile feedback (touch)
+8. scents via the nasal cavity
+9. taste
+10. sounds
