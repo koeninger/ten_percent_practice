@@ -35,17 +35,11 @@ Create appropriate files, launch main, and check whether it delivers the expecte
 
 ===
 
-> (write-file "in-fst" "Michelle")
-"in-fst"
-> (write-file "in-lst" "Sky")
-"in-lst"
-> (write-file "in-signature" "Ken")
-"in-signature"
-> (main "in-fst" "in-fst" "in-signature" 'stdout)
+(main "in-fst" "in-lst" "in-signature" 'stdout)
 Dear Michelle,
 
 We have discovered that all people with the
-last name Michelle have won our lottery. So, 
+last name Sky have won our lottery. So, 
 Michelle, hurry and pick up your prize.
 
 Sincerely,
@@ -65,3 +59,5 @@ Ken
 8. scents via the nasal cavity
 9. taste
 10. sounds
+
+
