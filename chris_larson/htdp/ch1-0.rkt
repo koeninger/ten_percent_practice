@@ -26,3 +26,4 @@
 (string-length "hello world")
 (+ (string-length "hello world") 20)
 (string-append (substring str 0 i) "_" (substring str (+ i 1) (string-length str)))
+(string-append (substring str 0 i) (substring str (+ i 1) (string-length str)))
