@@ -536,7 +536,7 @@ Exercise 45 design a "virtual cat" world program that continuously moves the cat
 (define CAT1 .)
 
 (define Y-CAT1
-	(- HEIGHT-OF-WORLD (image-width CAT1)))
+  (- HEIGHT-OF-WORLD (/ (image-height CAT1) 2)))
 
 (define BACKGROUND
   (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
@@ -573,7 +573,7 @@ Exercise 45 design a "virtual cat" world program that continuously moves the cat
 
 Exercise 46
 Improve the cat animation with a slightly different image. Adjust the redering function from Exercise 45 so that it uses
-one cat image or the other based on whehter the x-coordinate is odd. Read up on odd? and use a cond expression to select 
+one cat image or the other based on whether the x-coordinate is odd. Read up on odd? and use a cond expression to select 
 cat images. 
 	(odd? x) -> boolean? 
 	x: integer
@@ -582,3 +582,53 @@ cat images.
 	#false
 	(odd? 1)
 	#true 
+
+; Physical Constants
+(define WIDTH-OF-WORLD 400)
+(define HEIGHT-OF-WORLD 200)
+
+; Graphical Constants
+(define CAT1 .)
+(define CAT2 .)
+
+(define Y-CAT
+  (- HEIGHT-OF-WORLD (/ (image-height CAT1) 2)))
+
+(define X-CAT 0) 
+
+(define BACKGROUND
+  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
+
+;WorldState -> WorldState
+; moves the CAT1 by 3 pixels for every clock tick
+; moves CAT1 by endless left to right loop
+(check-expect (tock 20) 23)
+(check-expect (tock 78) 81)
+
+(define (tock ws)
+  (if (< ws (+ (image-width BACKGROUND) (/ 75 2)))
+  (+ ws 3)
+  0))
+
+; WorldState -> Image
+; places the CAT1 into the BACKGROUND scene,
+; according to the given world state 
+(check-expect (render 51) (place-image CAT2 51 Y-CAT BACKGROUND))
+(check-expect (render 100) (place-image CAT1 100 Y-CAT BACKGROUND))
+(check-expect (render 151) (place-image CAT2 150 Y-CAT BACKGROUND))
+(check-expect (render 200) (place-image CAT1 200 Y-CAT BACKGROUND))
+(define (render ws) 
+  (place-image
+   (if (odd? ws) CAT1 CAT2)
+   (+ X-CAT ws)
+   Y-CAT
+   BACKGROUND))
+  
+; main: WorldState -> WorldState
+; launch the program from some initial state
+; run: (main 0)
+(define (main ws)
+  (big-bang ws
+    (on-tick tock)
+    (to-draw render)
+    ))
