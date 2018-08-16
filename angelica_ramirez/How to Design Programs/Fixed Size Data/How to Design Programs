@@ -632,3 +632,18 @@ cat images.
     (on-tick tock)
     (to-draw render)
     ))
+
+Exercise 47
+Happiness gague, gauge-prog
+
+;physical constants
+(define MAXIMUM-SCORE 100)
+(define MINIMUM-SCORE 0)
+(define TOCK-DECREASE 0.1)
+(define UP-ARROW 1/5)
+(define WORLD-WIDTH 110)
+(define WORLD-HEIGHT 25)
+(define GAUGE-HEIGHT 15)
+
+
+;graphical constants
