@@ -32,5 +32,5 @@
 (distance 1 1)
 (cvolume 4)
 (csurface 4)
-(string-first "abcdefghijklmno")
-(string-last "abcdefghijklmno")
+(string-first "\tabcdefghijklmno")
+(string-last "abcdefghijklmno\\")
