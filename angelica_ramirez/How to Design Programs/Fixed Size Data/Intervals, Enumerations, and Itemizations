@@ -1,0 +1,90 @@
+Learn to design programs with restrictions on built-in collections:
+  one way to restrict is to enumerate a bunch of elements from a collection and to say that these are the only ones that are 
+  going to be used for some problem
+  enumeration only works when there is a finite number of them
+  for inifinite elements, introduce intervals 
+  intervals: collections of elements that satisfy a specific property
+  enumberations lists every single piece of data that belongs to it
+  intervals specifies a range of data
+  itemizations mixes the two and specifies ranges in one clause of its definition and specific pieces of data in another
+  
+  4.1 Programming with Conditionals
+  (cond 
+    [ConditionExpression1 Result Expression1]
+    [ConditionExpression2 Result Expression2]
+    ...
+    [ConditionExressionN ResultExressionN])
+    
+   a cond line is also known as a cond clause
+   
+   Example of a function definition that uses a conditional expression: 
+   (define (next traffic-light-state)
+    (cond
+      [(string=? "red" traffic-light-state) "green"]
+      [(string=? "green" traffic-light-state) "yellow"]
+      [(string=? "yellow" traffic-light-state) "red"]))
+      
+ cond vs if
+  if expressions are less suited for multi situation contexts and better when wish to say "one or othe other"
+  always use cond for situations when we wish to remind the reader of our code that some distinct situations come directly
+  from data definitons 
+  
+cond expressions permit the use of the else in the very last line when occassionally wish to say something like 'in all other cases'
+example:
+  (cond 
+    [ConditionExpression1 ResultExpression1]
+    [ConditionExpression2 ResultExpression2]
+    ...
+    [else DefaultResultExpression])
+
+4.2 Computing Conditionally 
+
+Exercise 48
+(define (reward s)
+  (cond 
+    [(<= 0 s 10) "bronze"]
+    [(and (< 10 s) (<= s 20)) "silver"]
+    [else "gold"]))
+    
+ (reward 18)
+ 
+ ;; find out how DrRacket evalues using the stepper 
+ ;; (cond 
+      (<= 0 18 10) "bronze")
+      ((and (<10 18) (<= 18 20)) "silver")
+      (else "gold"))
+ ;; (cond 
+      (#false "bronze")
+      ((and (< 10 18) (<= 18 20)) "silver")
+      (else "gold"))
+ ;; (cond 
+      ((and (<10 18) (<= 18 20)) "silver")
+      (else "gold"))
+ ;; (cond
+      ((and #true (<= 18 20)) "silver")
+      (else "gold"))
+ ;; (cond
+      ((and #true #true) "silver")
+      (else "gold"))
+ ;; (cond
+      (#true "silver")
+      (else "gold")
+ ;; "silver"
+
+Exercise 49
+ (- 200 (cond [(> y 200) 0] [else y])) 
+ Use the stepper to evaluate the expression for y as 100 and 210
+ 
+ ;; y as 100
+ ;; (- 200 (cond [(> 100 200) 0] [else y]))
+ ;; (- 200 (cond (#false 0) (else y)))
+ ;; (- 200 (cond (else y)))
+ ;; (- 200 y)
+ ;; (- 200 100)
+ ;; 100 
+ 
+ ;; y as 210
+ ;; (- 200 (cond [(> 210 200) 0] [else y]))
+ ;; (- 200 (cond (#true 0) [else y]))
+ ;; (- 200 0)
+ ;; 200
