@@ -14,7 +14,8 @@
   (substring s 0 1))
 (define (string-last s)
   (substring s (- (string-length s) 1)))
-
+(define (==> sunny friday)
+  (or (not sunny) friday))
 ; scratch
 (define (f x) 1)
 (define (g x y) (+ 1 1))
@@ -34,3 +35,7 @@
 (csurface 4)
 (string-first "\tabcdefghijklmno")
 (string-last "abcdefghijklmno\\")
+(==> #false #false)
+(==> #true #true)
+(==> #true #false)
+(==> #false #true)
