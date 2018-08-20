@@ -81,3 +81,23 @@
 //Exercise 20
 (define (string-delete str i)
   (string-append (substring str 0 (- i 1)) (substring str i (string-length str))))
+
+//Exercise 21
+No, it recalculates each time
+
+
+//Exercise 22
+Yes, it goes from the inside to the outside
+
+//Exercise 23
+By evaluating the string, then finding the 0th and 1st position
+
+//Exercise 24
+#false
+
+//Exercise 25
+tall and wide shouldn't be equal, it won't fall to the correct places that way
+
+//Exercise 26
+"hellow_orld"
+
