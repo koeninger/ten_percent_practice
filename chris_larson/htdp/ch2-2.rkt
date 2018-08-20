@@ -5,8 +5,8 @@
 
 ; definitions
 (define ticket-price 5)
-(define cost-per-attendee 0.04)
-(define fixed-cost 180)
+(define cost-per-attendee 1.5)
+(define fixed-cost 0)
 (define base-attendance 120)
 (define base-ticket-price 5.0)
 (define slope (/ 15 0.1))
@@ -30,8 +30,8 @@
            (* (/ 15 0.1)
               (- 5.0 price)))
         price)
-     (+ 180
-        (* 0.04
+     (+ 0
+        (* 1.5
            (+ 120
               (* (/ 15 0.1)
                  (- 5.0 price)))))))
