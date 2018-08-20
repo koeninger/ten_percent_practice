@@ -1,0 +1,38 @@
+enumeration: is a data representation in which every possibility is listed in data definitions 
+
+Exercise 50 Add enough tests to make DrRacket happy (given only has the first check-expect)
+; TrafficLight -> TrafficLight
+; yields the next state given current state s
+(check-expect (traffic-light-next "red") "green")
+(check-expect (traffic-light-next "green") "yellow")
+(check-expect (traffic-light-next "yellow") "red")
+
+(define (traffic-light-next s)
+  (cond
+    [(string=? "red" s) "green"]
+    [(string=? "green" s) "yellow"]
+    [(string=? "yellow" s) "red"]))
+
+Exercise 51 Design a big-bang that simulates a traffic light for a given duration, renders the state of a traffice light 
+as a solid circle of the appropriate color, changes state on every clock tick. What is the most appropriate initial state?
+
+;A TrafficLight is one of the following Strings:
+; - "red"
+; - "green"
+; - "yellow"
+; interpretation the three strings represent the three 
+; possible states that a traffic light may assume 
+
+; Physical Constants
+(define W-WIDTH 100)
+(define W-HEIGHT 80)
+
+; Graphical Constants
+; TrafficLight -> Image
+; given state s, return color light
+; Traffic-Light -> TrafficLight
+; produce the next traffic light state
+; TrafficLight -> Image
+; render the traffic light 
+; TrafficLight -> TrafficLight
+; start the world with (main "yellow") to start red. 
