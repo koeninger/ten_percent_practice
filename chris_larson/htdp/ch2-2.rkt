@@ -5,21 +5,25 @@
 
 ; definitions
 (define ticket-price 5)
-(define cost-per-attendee 1.5)
-(define fixed-cost 0)
-(define base-attendance 120)
-(define base-ticket-price 5.0)
-(define slope (/ 15 0.1))
+(define COST-PER-ATTENDEE 1.5)
+(define FIXED-COST 0)
+(define BASE-ATTENDANCE 120)
+(define BASE-TICKET-PRICE 5.0)
+(define SLOPE (/ 15 0.1))
+(define CURRENT-PRICE 5)
+(define ALMOST-PI 3.14)
+(define NL "\n")
+(define MT (empty-scene 100 100))
 
 ; functions
 (define (attendees ticket-price)
-  (- base-attendance (* (- ticket-price base-ticket-price) slope)))
+  (- BASE-ATTENDANCE (* (- ticket-price BASE-TICKET-PRICE) SLOPE)))
 
 (define (revenue ticket-price)
   (* ticket-price (attendees ticket-price)))
 
 (define (cost ticket-price)
-  (+ fixed-cost (* cost-per-attendee (attendees ticket-price))))
+  (+ FIXED-COST (* COST-PER-ATTENDEE (attendees ticket-price))))
 
 (define (profit ticket-price)
   (- (revenue ticket-price)
@@ -47,5 +51,4 @@
 (profit-v2 4)
 (profit 5)
 (profit-v2 5)
-(profit 2.9)
 
