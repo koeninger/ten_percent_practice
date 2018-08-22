@@ -13,7 +13,7 @@ Exercise 50 Add enough tests to make DrRacket happy (given only has the first ch
     [(string=? "green" s) "yellow"]
     [(string=? "yellow" s) "red"]))
 
-Exercise 51 Design a big-bang that simulates a traffic light for a given duration, renders the state of a traffice light 
+Exercise 51 Design a big-bang that simulates a traffic light for a given duration, renders the state of a traffic light 
 as a solid circle of the appropriate color, changes state on every clock tick. What is the most appropriate initial state?
 
 ;A TrafficLight is one of the following Strings:
@@ -26,13 +26,56 @@ as a solid circle of the appropriate color, changes state on every clock tick. W
 ; Physical Constants
 (define W-WIDTH 100)
 (define W-HEIGHT 80)
+(define BACKGROUND 
+  (empty-scene W-WIDTH W-HEIGHT))
+(define BACKGROUND-X
+  (/ W-WIDTH 2))
+(define BACKGROUND-Y
+  (/ W-HEIGHT 2))
 
 ; Graphical Constants
-; TrafficLight -> Image
-; given state s, return color light
+
 ; Traffic-Light -> TrafficLight
 ; produce the next traffic light state
-; TrafficLight -> Image
-; render the traffic light 
-; TrafficLight -> TrafficLight
-; start the world with (main "yellow") to start red. 
+(check-expect (traffic-light-next "red") "green")
+(check-expect (traffic-light-next "green") "yellow")
+(check-expect (traffic-light-next "yellow") "red")
+
+(define (traffic-light-next string)
+  (cond 
+    [(string=? "red" string) "green"]
+    [(string=? "green" string) "yellow"]
+    [(string=? "yellow" string) "red"]))
+
+;Traffic-Light -> Image
+; given state s, return circle with colore of light
+(check-expect (display-light "red") (circle 30 "solid" "red"))
+(check-expect (display-light "green") (circle 30 "solid" "green"))
+(check-expect (display-light "yellow") (circle 30 "solid" "yellow"))
+
+(define (display-light s)
+  (circle 30 "solid" s))
+
+;Traffic-Light -> Image
+; render the traffic light
+(check-expect (render "red") (place-image (display-light "red") BACKGROUND-X BACKGROUND-Y BACKGROUND))
+(check-expect (render "green") (place-image (display-light "green") BACKGROUND-X BACKGROUND-Y BACKGROUND))
+(check-expect (render "yellow") (place-image (display-light "yellow") BACKGROUND-X BACKGROUND-Y BACKGROUND))
+(define (render ws)
+  (place-image (display-light ws) BACKGROUND-X BACKGROUND-Y BACKGROUND))
+
+;TrafficLight -> TrafficLight
+;produce the next traffic light state on every clock tock
+(define (tock ws)
+  (traffic-light-next ws))
+
+;TrafficLight -> TrafficLight
+; launch the program from some initial statee
+
+(define (main ws)
+  (big-bang ws
+    [on-tick tock 3] ; every 3 seconds
+    [to-draw render]))
+
+;launch the program to start red
+(main "yellow")
