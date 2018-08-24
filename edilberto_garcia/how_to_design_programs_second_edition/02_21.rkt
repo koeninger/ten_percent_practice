@@ -9,4 +9,6 @@
 (ff (ff 1) )
 (+ (ff 1) (ff 1))
 
-; I believe no, DrRacket does not reuse the results 
+; I believe no, DrRacket does not reuse the results,
+; because the stepper still evaluates each expression,
+; even if repeated

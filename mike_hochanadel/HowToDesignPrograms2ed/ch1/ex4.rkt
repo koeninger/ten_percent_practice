@@ -6,5 +6,5 @@
 
 (define (delete_hello s ith)
   (string-append
-   ((substring s 0 (- ith 1))
-  (delete (substring s ith (string-length str))))
+   (substring s 0 (- ith 1))
+ (substring s ith (string-length str))))
