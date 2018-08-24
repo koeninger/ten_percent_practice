@@ -6,13 +6,13 @@
 (define BASE-TICKET-PRICE 5)
 (define AVG-ATTENDANCE-VARIATION 15.0)
 (define AVG-PRICE-VARIATION 0.1)
-(define PRICE-SENSITIVITY (/ AVG-ATTENDANCE-VARIATION AVG-PRICE-VARIATION))
+(define PRICE-SENSITIVITY
 (define FIXED-COST 0)
 (define COST-PER-ATTENDEE 1.5)
 
 
 (define (attendees ticket-price)
-  (- BASE-ATTENDANCE (* (- ticket-price BASE-TICKET-PRICE) PRICE-SENSITIVITY)))
+  (- BASE-ATTENDANCE (* (- ticket-price BASE-TICKET-PRICE) (/ AVG-ATTENDANCE-VARIATION AVG-PRICE-VARIATION))))
 
 (define (revenue ticket-price)
   (* ticket-price (attendees ticket-price)))
