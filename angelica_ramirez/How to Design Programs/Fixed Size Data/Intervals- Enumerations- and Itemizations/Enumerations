@@ -79,3 +79,32 @@ as a solid circle of the appropriate color, changes state on every clock tick. W
 
 ;launch the program to start red
 (main "yellow")
+
+Sample Problem: Design a key-event handler that moves a red dot left or right on a 
+horizontal line in response to pressing the left and right arrow keys
+; A position is a Number
+; interpretation distance between the left margin and the ball
+; Position KeyEvent -> Position
+; computes the next location of the ball
+(check-expect (keh 13 "left") 8)
+(check-expect (keh 13 "right") 18)
+(check-expect (keh 13 "a") 13)
+
+(define (keh p k) ;; organized to th basic idea of using one cond clause per line of the data definition of input
+  (cond
+    [(= (string-length k) 1)
+      p]
+    [(string=? "left" k)
+      (- p 5)[
+    [(string-? "right" k)
+      (+ p 5)]
+    9else p]))
+    
+ OR
+ (define (keh p k) ;; uses three lines, 2 for the keys that matter and 1 for everything else
+  (cond
+    [(string-? "left" k)
+      (- p 5)]
+    [(string=? "right" k)
+      (= p 5)]
+    [else p])) 
