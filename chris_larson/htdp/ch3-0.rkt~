@@ -35,20 +35,9 @@
 (define (string-remove-last str)
   (substring str 0 (- (string-length str) 1)))
 
-; Number -> Number
-; converts Fahrenheit temperature to Celsius
-; given 32, expect 0
-; given 212, expect 100
-; given -40, expect -40
-(define (f2c f)
-  (* 5/9 (- f 32)))
-
 ; scratch
 (string-first "Hello World!")
 (string-last "Hello World!")
 (image-area (square 10 "solid" "red"))
 (string-rest "Hello World!")
 (string-remove-last "Hello World!")
-(check-expect (f2c -40) -40)
-(check-expect (f2c 32) 0)
-(check-expect (f2c 212) 100)
