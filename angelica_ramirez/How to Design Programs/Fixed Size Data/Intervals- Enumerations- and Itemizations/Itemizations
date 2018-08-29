@@ -39,7 +39,7 @@ of the canvas. Once launched, it moves upward at three pixels per clock tick
 ; intepretation "resting" represets a ground rocket 
 ; a number denotes the height of a rocket in flight
 --- interpretation of numbers is ambiguous in its notion of height:
-  1. height could refer to the distance between the gorund and the rocket's point of reference
+  1. height could refer to the distance between the ground and the rocket's point of reference
   2. the distance between the top of the canvas and the reference point 
   
 Exercise 53 solve the exercises using the first interpretation of height
@@ -55,7 +55,9 @@ HEIGHT and 0 as examples
 ; graphical constants
 (define BACKG (empty-scene WIDTH HEIGHT))
 (define ROCKET (rectangle 5 30 "solid" "red")) 
-(define CENTER (- HEIGHT (/ (image-height ROCKET) 2))) 
+(define CENTER (/ (image-height ROCKET) 2)) 
+(define (place-rocket x)
+  (place-image ROCKET 10 (- x CENTER) BACKG))
 
 ; A LR (short for launching rocket) is one of: 
 ; - "resting"
@@ -63,7 +65,7 @@ HEIGHT and 0 as examples
 ; intepretation "resting" represets a ground rocket 
 ; a number denotes the height of a rocket in flight 
 
-; An LRCD (for luanching rocket countdown) is one of: 
+; An LRCD (for launching rocket countdown) is one of: 
 ; - "resting" 
 ; - a Number between -3 and -1
 ; - a NonnegativeNumber
@@ -74,14 +76,25 @@ HEIGHT and 0 as examples
 
 ; LRCD -> Image
 ; renders the state as a resting or flying rocket 
-(check-expect (show "resting") (place-image ROCKET 10 HEIGHT BACKG))
+(check-expect (show "resting") (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
 (check-expect (show -2) 
                 (place-image (text "-2" 20 "red") 
                   10 (* 3/4 WIDTH) 
-                  (place-image ROCKET 10 HEIGHT BACKG)))
-(check-expect (show 53) (place-image ROCKET 10 53 BACKG))
-(define (show x) 
-  BACKG)
+                  (place-image ROCKET 10 (- HEIGHT CENTER) BACKG)))
+(check-expect (show 53) (place-image ROCKET 10 (- 53 CENTER) BACKG))
+(check-expect (show HEIGHT) (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+
+
+(define (show x)
+  (cond
+    [(and (string? x) (string=? "resting" x))
+     (place-rocket HEIGHT)]
+    [(<= -3 x -1)
+     (place-image (text (number->string x) 20 "red")
+                  10 (* 3/4 WIDTH)
+                  (place-rocket HEIGHT))]
+    [(>= x 0)
+     (place-rocket x)]))
 
 ; LRCD KeyEvent -> LRCD
 ; starts the countdown when space bar is pressed,
@@ -95,3 +108,218 @@ HEIGHT and 0 as examples
 (define (fly x) 
   x)
 
+Exercise 54 Why is (string=? "resting" x) incorrect as the first condition in show? 
+formulate a completely accurate condition, that is, a Boolean expression that evaluates to #true precisely when x belongs
+to the first sub-class of LRCD
+
+(string=? "resting" x) is inaccurate because any string can be considered a resting state
+better to be (and (string? x) (string=? "resting" x)
+
+Combining the examles and the above show function yields a complete definition: 
+(define (show x)
+  (cond 
+    [(string? x)
+      (place-image ROCKET 10 (- HEIGHT CENTER) BACKG)]
+     [(<= -3 x -1
+      (place-image (text (number->string x) 20 "red")
+                    20 (* 3/4 WIDTH)
+                    (place-image ROCKET
+                                 10 (- HEIGHT CENTER)
+                                 BACKG))]
+     [(>= x 0)
+      (place-image ROCKET 10 (- x CENTER) BACKG)])) 
+
+Exercise 55 take another look at show. It contains three instances of an expression with the approximate shape: 
+  (place-image ROCKET 10 (- ... CENTER) BACKG)
+  Define an auxilary function that performs the work and thus shorten show. Why is this a good idea? 
+  
+  Add as an auxilary function before (define show ...)  
+      (define (place-rocket x)
+        (place-image ROCKET 10 (- x CENTER) BACKG)) 
+  Also complete LRCD KeyEvent -> KRCD and LRCD -> LRCD, and add a function for running the program 
+  
+; physical constants
+(define HEIGHT 300)
+(define WIDTH 100)
+(define YDELTA 3) 
+
+; graphical constants
+(define BACKG (empty-scene WIDTH HEIGHT))
+(define ROCKET (rectangle 5 30 "solid" "red")) 
+(define CENTER (/ (image-height ROCKET) 2)) 
+
+; A LR (short for launching rocket) is one of: 
+; - "resting"
+; - nonnegative number
+; intepretation "resting" represets a ground rocket 
+; a number denotes the height of a rocket in flight 
+
+; An LRCD (for launching rocket countdown) is one of: 
+; - "resting" 
+; - a Number between -3 and -1
+; - a NonnegativeNumber
+; intepretation a grounded rocket, in countdown mode,
+; a number denotes the number of pixels between the 
+; top of the canvas and rocket (its height) 
+
+
+; LRCD -> Image
+; renders the state as a resting or flying rocket 
+(check-expect (show "resting") (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+(check-expect (show -2) 
+                (place-image (text "-2" 20 "red") 
+                  10 (* 3/4 WIDTH) 
+                  (place-image ROCKET 10 (- HEIGHT CENTER) BACKG)))
+(check-expect (show 53) (place-image ROCKET 10 (- 53 CENTER) BACKG))
+(check-expect (show HEIGHT) (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+
+
+(define (place-rocket x)
+  (place-image ROCKET 10 (- x CENTER) BACKG))
+(define (show x)
+  (cond
+    [(and (string? x) (string=? x "resting"))
+     (place-rocket HEIGHT)]
+    [(<= -3 x -1)
+     (place-image (text (number->string x) 20 "red")
+                  10 (* 3/4 WIDTH)
+                  (place-rocket HEIGHT))]
+    [(>= x 0)
+     (place-rocket x)]))
+
+; LRCD KeyEvent -> LRCD
+; starts the countdown when space bar is pressed,
+; if the rocket is still resting
+(check-expect (launch "resting" " ") -3)
+(check-expect (launch "resting" "a") "resting")
+(check-expect (launch -3 " ") -3)
+(check-expect (launch -1 " ") -1)
+(check-expect (launch 33 " ") 33)
+(check-expect (launch 33 "a") 33)
+
+(define (launch x ke)
+  (cond
+    [(string? x) (if (string=? " " ke) -3 x)] ;; when the state of the world is "resting" and the user preses the space bar, the function starts the countdown with -3
+    [(<= -3 x -1) x]
+    [(>= x 0) x]))
+
+; LRCD -> LRCD
+; raises the rocket by YDELTA, 
+; if it is moving already
+(check-expect (fly "resting") "resting")
+(check-expect (fly -3) -2)
+(check-expect (fly -2) -1)
+(check-expect (fly -1) HEIGHT)
+(check-expect (fly 10) (- 10 YDELTA))
+(check-expect (fly 22) (- 22 YDELTA))
+
+(define (fly x)
+  (cond
+    [(string? x) x]
+    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
+    [(>= x 0) (- x YDELTA)]))
+
+; LRCD -> LRCD
+(define (main1 s)
+  (big-bang s
+    [to-draw show]
+    [on-key launch]))
+
+Example 56 Define main2 so that you can launch the rocket and watch it lift off. Read u on the on-tick clause to determine the length of 
+one tick and how to change it
+Add a stop-when clause to main2 so that the simulation of the liftoff stos gracefully when the rocket is out of sight
+
+; physical constants
+(define HEIGHT 300)
+(define WIDTH 100)
+(define YDELTA 3) 
+
+; graphical constants
+(define BACKG (empty-scene WIDTH HEIGHT))
+(define ROCKET (rectangle 5 30 "solid" "red")) 
+(define CENTER (/ (image-height ROCKET) 2)) 
+
+; A LR (short for launching rocket) is one of: 
+; - "resting"
+; - nonnegative number
+; intepretation "resting" represets a ground rocket 
+; a number denotes the height of a rocket in flight 
+
+; An LRCD (for launching rocket countdown) is one of: 
+; - "resting" 
+; - a Number between -3 and -1
+; - a NonnegativeNumber
+; intepretation a grounded rocket, in countdown mode,
+; a number denotes the number of pixels between the 
+; top of the canvas and rocket (its height) 
+
+
+; LRCD -> Image
+; renders the state as a resting or flying rocket 
+(check-expect (show "resting") (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+(check-expect (show -2) 
+                (place-image (text "-2" 20 "red") 
+                  10 (* 3/4 WIDTH) 
+                  (place-image ROCKET 10 (- HEIGHT CENTER) BACKG)))
+(check-expect (show 53) (place-image ROCKET 10 (- 53 CENTER) BACKG))
+(check-expect (show HEIGHT) (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+
+
+(define (place-rocket x)
+  (place-image ROCKET 10 (- x CENTER) BACKG))
+(define (show x)
+  (cond
+    [(and (string? x) (string=? x "resting"))
+     (place-rocket HEIGHT)]
+    [(<= -3 x -1)
+     (place-image (text (number->string x) 20 "red")
+                  10 (* 3/4 WIDTH)
+                  (place-rocket HEIGHT))]
+    [(>= x 0)
+     (place-rocket x)]))
+
+; LRCD KeyEvent -> LRCD
+; starts the countdown when space bar is pressed,
+; if the rocket is still resting
+(check-expect (launch "resting" " ") -3)
+(check-expect (launch "resting" "a") "resting")
+(check-expect (launch -3 " ") -3)
+(check-expect (launch -1 " ") -1)
+(check-expect (launch 33 " ") 33)
+(check-expect (launch 33 "a") 33)
+
+(define (launch x ke)
+  (cond
+    [(string? x) (if (string=? " " ke) -3 x)] ;; when the state of the world is "resting" and the user preses the space bar, the function starts the countdown with -3
+    [(<= -3 x -1) x]
+    [(>= x 0) x]))
+
+; LRCD -> LRCD
+; raises the rocket by YDELTA, 
+; if it is moving already
+(check-expect (fly "resting") "resting")
+(check-expect (fly -3) -2)
+(check-expect (fly -2) -1)
+(check-expect (fly -1) HEIGHT)
+(check-expect (fly 10) (- 10 YDELTA))
+(check-expect (fly 22) (- 22 YDELTA))
+
+(define (fly x)
+  (cond
+    [(string? x) x]
+    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
+    [(>= x 0) (- x YDELTA)]))
+
+(define (stop? s)
+  (and (number? s) (= s 0)))
+
+; LRCD -> LRCD
+(define (main2 s)
+  (big-bang s
+    [to-draw show]
+    [on-key launch]
+    [on-tick fly .3]
+    [stop-when stop?]))
+        
+Exercise 57 Recall that the word "height" forced us to choose one of two possible intepretations. Now that you have solved
+the exercises in this section, solve them again using the first intepretation of the word. 
