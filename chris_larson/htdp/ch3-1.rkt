@@ -4,10 +4,10 @@
 ; definitions
 (define WHEEL-RADIUS 10)
 (define WHEEL-DISTANCE (* WHEEL-RADIUS 2))
-(define BUMPER-DISTANCE (* WHEEL-RADIUS 6))
+(define BUMPER-DISTANCE (* WHEEL-RADIUS 8))
 (define TRUNK-HEIGHT (* WHEEL-RADIUS 2))
 (define ROOF-HEIGHT (* WHEEL-RADIUS 2))
-(define ROOF-WIDTH (* WHEEL-RADIUS 2))
+(define ROOF-WIDTH (* WHEEL-RADIUS 4))
 
 (define WHEEL
   (circle WHEEL-RADIUS "solid" "black"))
