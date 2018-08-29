@@ -1,0 +1,32 @@
+Exercise 59: finish the design of a world program that simulates the traffic light FSA
+
+; A TrafficLight is one of the following Strings;
+; - "red"
+; - "green"
+; - "yellow"
+; intepretation the three strings represent the three 
+; possible state that a traffic light may assume
+
+; TrafficLight -> TrafficLight
+; yields the next state, given current state cs
+(check-expect (tl-next "red") "green")
+
+(define (tl-next cs)
+  (cond 
+    [(string=? "red" s) "green"]
+    [(string=? "green" s) "yellow"]
+    [(string=? "yellow" s) "red"]))
+
+; TrafficLight -> Image
+; renders the current state cs as an image
+
+(define (tl-render current-state)
+  (empty-scene 90 30)) 
+  
+; TrafficLight -> TrafficLight
+; simulates a clock-based American traffic light
+
+(define (traffic-light-simulation initial-state)
+  (big-bang initial-state
+    [to-draw tl-render]
+    [on-tick tl-next 1])) 
