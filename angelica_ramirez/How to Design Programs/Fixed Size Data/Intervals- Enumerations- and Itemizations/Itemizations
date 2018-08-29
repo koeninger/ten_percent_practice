@@ -52,7 +52,7 @@ HEIGHT and 0 as examples
 (define WIDTH 100)
 (define YDELTA 3) 
 
-; grahpical constants
+; graphical constants
 (define BACKG (empty-scene WIDTH HEIGHT))
 (define ROCKET (rectangle 5 30 "solid" "red")) 
 (define CENTER (- HEIGHT (/ (image-height ROCKET) 2))) 
@@ -70,15 +70,16 @@ HEIGHT and 0 as examples
 ; intepretation a grounded rocket, in countdown mode,
 ; a number denotes the number of pixels between the 
 ; top of the canvas and rocket (its height) 
+
+
+; LRCD -> Image
+; renders the state as a resting or flying rocket 
 (check-expect (show "resting") (place-image ROCKET 10 HEIGHT BACKG))
 (check-expect (show -2) 
                 (place-image (text "-2" 20 "red") 
                   10 (* 3/4 WIDTH) 
                   (place-image ROCKET 10 HEIGHT BACKG)))
 (check-expect (show 53) (place-image ROCKET 10 53 BACKG))
-
-; LRCD -> Image
-; redners the state as a resting or flying rocket 
 (define (show x) 
   BACKG)
 
