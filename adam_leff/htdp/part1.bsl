@@ -101,3 +101,66 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 //Exercise 26
 "hellow_orld"
 
+
+//Exercise 27
+(define FIXED-COST 180)
+(define ORIGINAL-PRICE 5.0)
+(define VARIABLE-COST 0.04)
+(define ORIGINAL-ATTENDENCE 120)
+(define DIFFERENCE-IN-ATTENDENCE 15)
+(define CHANGE-IN-PRICE 0.10)
+
+(define (attendees ticket-price)
+  (- ORIGINAL-ATTENDENCE (* (- ticket-price ORIGINAL-PRICE) (/ DIFFERENCE-IN-ATTENDENCE CHANGE-IN-PRICE))))
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+(define (cost ticket-price)
+  (+ FIXED-COST (* VARIABLE-COST (attendees ticket-price))))
+(define (profit ticket-price)
+  (- (revenue ticket-price)
+     (cost ticket-price)))
+     
+//Exercise 28
+> (profit 1)
+511.2
+> (profit 2)
+937.2
+> (profit 3)
+1063.2
+> (profit 4)
+889.2
+> (profit 5)
+415.2
+
+> (profit 2.9)
+1064.1
+> (profit 2.8)
+1062
+
+//Exercise 29
+(define PER-PERSON-COST 1.5)
+(define ORIGINAL-PRICE 5.0)
+(define VARIABLE-COST 0.04)
+(define ORIGINAL-ATTENDENCE 120)
+(define DIFFERENCE-IN-ATTENDENCE 15)
+(define CHANGE-IN-PRICE 0.10)
+
+(define (fixed-cost attendees)
+  (* PER-PERSON-COST attendees))
+(define (attendees ticket-price)
+  (- ORIGINAL-ATTENDENCE (* (- ticket-price ORIGINAL-PRICE) (/ DIFFERENCE-IN-ATTENDENCE CHANGE-IN-PRICE))))
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+(define (cost ticket-price)
+  (+ (fixed-cost (attendees ticket-price)) (* VARIABLE-COST (attendees ticket-price))))
+(define (profit ticket-price)
+  (- (revenue ticket-price)
+     (cost ticket-price)))
+
+> (profit 3)
+613.2
+> (profit 4)
+664.2
+> (profit 5)
+415.2
+> 
