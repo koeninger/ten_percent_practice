@@ -6,7 +6,7 @@
 (define WHEEL-DISTANCE (* WHEEL-RADIUS 2))
 (define BUMPER-DISTANCE (* WHEEL-RADIUS 8))
 (define TRUNK-HEIGHT (* WHEEL-RADIUS 2))
-(define ROOF-HEIGHT (* WHEEL-RADIUS 2))
+(define ROOF-HEIGHT WHEEL-RADIUS)
 (define ROOF-WIDTH (* WHEEL-RADIUS 4))
 
 (define WHEEL
@@ -24,9 +24,9 @@
 (define CAR
   (underlay/offset
    BODY
-   0 (* WHEEL-RADIUS 2)
+   0 (* WHEEL-RADIUS 3/2)
    BOTH-WHEELS))
-  
+CAR
 ; WorldState: data that represents the state of the world (cw)
 
 ; WorldState -> Image
