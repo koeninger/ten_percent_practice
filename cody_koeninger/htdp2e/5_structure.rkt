@@ -272,3 +272,97 @@
 (check-expect (compare-letter "a" "b") #false)
 (define (compare-letter x y)
   (if (string=? x y) x #false))
+
+
+(define-struct editor [pre post])
+; An Editor is a structure:
+;   (make-editor String String)
+; interpretation (make-editor s t) describes an editor
+; whose visible text is (string-append s t) with 
+; the cursor displayed between s and t
+
+(define cursor (rectangle 1 20 "solid" "red"))
+(define editor-font-size 16)
+(define background (empty-scene 200 20))
+(define (editor-text s) (text s editor-font-size "black"))
+
+; editor -> image
+; render editor
+(check-expect (render (make-editor "qui" "ck"))
+              (place-image/align (beside (editor-text "qui") cursor (editor-text "ck")) 0 0 "left" "top" background))
+(define (render e)
+  (place-image/align (beside (editor-text (editor-pre e)) cursor (editor-text (editor-post e))) 0 0 "left" "top" background))
+
+; editor keyevent -> editor
+; effect of keyevent on new state of editor
+(check-expect (edit (make-editor "" "a") "\t") (make-editor "" "a"))
+(check-expect (edit (make-editor "" "a") "\r") (make-editor "" "a"))
+(check-expect (edit (make-editor "" "a") "\b") (make-editor "" "a"))
+(check-expect (edit (make-editor "ab" "cd") "\b") (make-editor "a" "cd"))
+(check-expect (edit (make-editor "" "a") "left") (make-editor "" "a"))
+(check-expect (edit (make-editor "a" "") "left") (make-editor "" "a"))
+(check-expect (edit (make-editor "" "a") "right") (make-editor "a" ""))
+(check-expect (edit (make-editor "a" "") "right") (make-editor "a" ""))
+(check-expect (edit (make-editor "" "") "x") (make-editor "x" ""))
+(check-expect (edit (make-editor "a" "b") "x") (make-editor "ax" "b"))
+(define (edit e k)
+  (cond
+    [(or (key=? k "\t") (key=? k "\r") (key=? k "\r") (key=? k "shift") (key=? k "rshift"))
+     e]
+    [(key=? k "\b")
+     (make-editor (string-remove-last (editor-pre e)) (editor-post e))]
+    [(key=? k "left")
+     (make-editor (string-remove-last (editor-pre e)) (string-append (string-last (editor-pre e)) (editor-post e)))]
+    [(key=? k "right")
+     (make-editor (string-append (editor-pre e) (string-first (editor-post e))) (string-remove-first (editor-post e)))]
+    [else
+     (if (editor-full? e)
+         e
+         (make-editor (string-append (editor-pre e) k) (editor-post e)))]))
+
+; editor -> boolean
+; whether the amount of text in the editor completely fills background
+(check-expect (editor-full? (make-editor "" "")) #false)
+(check-expect (editor-full? (make-editor "1234567890" "123456789012")) #true)
+(define (editor-full? e)
+  (>= (image-width (editor-text (string-append " " (editor-pre e) (editor-post e))))
+     (image-width background)))
+
+; string -> string
+(check-expect (string-remove-last "") "")
+(check-expect (string-remove-last "ab") "a")
+(define (string-remove-last s)
+  (if (< (string-length s) 1)
+      ""
+      (substring s 0 (sub1 (string-length s)))))
+
+; string -> string
+(check-expect (string-last "") "")
+(check-expect (string-last "ab") "b")
+(define (string-last s)
+  (if (< (string-length s) 1)
+      ""
+      (string-ith s (sub1 (string-length s)))))
+
+; string -> string
+(check-expect (string-remove-first "") "")
+(check-expect (string-remove-first "ab") "b")
+(define (string-remove-first s)
+  (if (< (string-length s) 1)
+      ""
+      (substring s 1)))
+
+; string -> string
+(check-expect (string-first "") "")
+(check-expect (string-first "ab") "a")
+(define (string-first s)
+  (if (< (string-length s) 1)
+      ""
+      (string-ith s 0)))
+
+
+; given a starting pre field for editor, runs interactive editor
+(define (run pre)
+  (big-bang (make-editor pre "")
+    [to-draw render]
+    [on-key edit]))
