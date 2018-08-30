@@ -1,5 +1,17 @@
 Exercise 59: finish the design of a world program that simulates the traffic light FSA
 
+; physical constants
+(define RADIUS 50)
+(define WHOLE (rectangle (* 10 RADIUS) (* 3.5 RADIUS) "solid" "black"))
+(define RED-LIGHT (circle RADIUS "outline" "red"))
+(define YELLOW-LIGHT (circle RADIUS "outline" "yellow"))
+(define GREEN-LIGHT (circle RADIUS "outline" "green"))
+(define SPACE (rectangle RADIUS RADIUS "solid" "black"))
+
+; graphical constants
+(define BACKG (overlay
+               (beside RED-LIGHT SPACE YELLOW-LIGHT SPACE GREEN-LIGHT) WHOLE))
+
 ; A TrafficLight is one of the following Strings;
 ; - "red"
 ; - "green"
@@ -7,21 +19,36 @@ Exercise 59: finish the design of a world program that simulates the traffic lig
 ; intepretation the three strings represent the three 
 ; possible state that a traffic light may assume
 
+; TrafficLight -> Image
+; renders a light bulb according to the TrafficLight tl
+(define (draw/bulb tl)
+  (circle RADIUS "solid" tl))
+
+; TrafficLight -> Image
+; renders the current state cs as an image
+(check-expect (tl-render "red") (place-image (draw/bulb "red")
+                                             (* RADIUS 2) (/ (image-height BACKG) 2) BACKG))
+
+(define (tl-render cs)
+  (place-image (draw/bulb cs)
+               (* RADIUS
+                  (cond
+                    [(string=? "red" cs) 2]
+                    [(string=? "yellow" cs) 5]
+                    [(string=? "green" cs) 8]))
+               (/ (image-height BACKG) 2)
+               BACKG))
+
 ; TrafficLight -> TrafficLight
 ; yields the next state, given current state cs
 (check-expect (tl-next "red") "green")
 
 (define (tl-next cs)
   (cond 
-    [(string=? "red" s) "green"]
-    [(string=? "green" s) "yellow"]
-    [(string=? "yellow" s) "red"]))
+    [(string=? "red" cs) "green"]
+    [(string=? "green" cs) "yellow"]
+    [(string=? "yellow" cs) "red"]))
 
-; TrafficLight -> Image
-; renders the current state cs as an image
-
-(define (tl-render current-state)
-  (empty-scene 90 30)) 
   
 ; TrafficLight -> TrafficLight
 ; simulates a clock-based American traffic light
