@@ -38,4 +38,12 @@
       (read-file in-lst)
       (read-file in-signature))))
 
-(main "first-name.dat" "last-name.dat" "signature-name.dat" "letter.dat")
+(define relative-path (path-only (find-system-path 'run-file)))
+(define (getFilePath filename)
+  (path->string (build-path relative-path filename)))
+
+(main
+  (getFilePath "first-name.dat")
+  (getFilePath "last-name.dat")
+  (getFilePath "signature-name.dat")
+  (getFilePath "letter.dat"))
