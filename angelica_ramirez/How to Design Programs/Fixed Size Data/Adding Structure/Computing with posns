@@ -1,0 +1,15 @@
+(define p (make-posn 31 26))
+> (posn-x p)
+31
+> (posn-y p)
+26
+defining p is like marking the point in a Cartesian plane
+
+(posn-x (make-posn x0 y0)) == x0
+(posn-y (make-posn x0 y0)) == y0
+
+(posn-x p)
+; DrRacket replaces p with (make-posn 31 26)
+; (posn-x (make-posn 31 26))
+; DrRacket uses the law for posn-x
+31
