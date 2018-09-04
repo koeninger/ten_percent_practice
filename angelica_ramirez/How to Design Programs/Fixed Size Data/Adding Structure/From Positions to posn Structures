@@ -1,0 +1,10 @@
+working with compound data
+
+posn sturctures combine two numbers into a single value.
+create a posn strucutre with make-posn, consumes two numbers and makes a posn
+
+(make-posn 3 4);; creates a posn structure who's x-coordinate is 3 and y-coordinate is 4
+
+same status as a number or a Boolean or a string
+
+(define one-posn (make-posn 8 6)) ;; one-posn has x-coordinate of 8 and y-coordinate of 6
