@@ -145,5 +145,184 @@ Exercise 60: An Alternative data representation for a traffic light program may 
     [to-draw tl-render]
     [on-tick tl-next-numeric 1]))
   
-Exercise 61
+Exercise 61: traffic lights must use constants too 
 
+ ; physical constants
+(define RADIUS 50)
+(define WHOLE (rectangle
+               (* 10 RADIUS) (* 3.5 RADIUS) "solid" "black"))
+(define RED-LIGHT (circle RADIUS "outline" "red"))
+(define YELLOW-LIGHT (circle RADIUS "outline" "yellow"))
+(define GREEN-LIGHT (circle RADIUS "outline" "green"))
+(define SPACE (rectangle RADIUS RADIUS "solid" "black"))
+(define RED 0)
+(define GREEN 1)
+(define YELLOW 2)
+
+; graphical constants
+(define BACKG (overlay
+               (beside RED-LIGHT SPACE YELLOW-LIGHT SPACE GREEN-LIGHT) WHOLE))
+
+; An S-TrafficLight is one of:
+; - Red
+; - Green
+; - Yellow
+
+; N-TrafficLight -> Image
+; renders a light bulb according to the TrafficLight tl
+
+(define (draw/bulb tl)
+  (circle RADIUS "solid" (cond
+                           [(equal? tl RED) "red"]
+                           [(equal? tl GREEN) "green"]
+                           [(equal? tl YELLOW) "yellow"])))
+
+; N-TrafficLight -> Image
+; renders the current state cs as an image
+(define (tl-render cs)
+  (place-image (draw/bulb cs)
+               (* RADIUS
+                  (cond
+                    [(equal? cs RED) 2]
+                    [(equal? cs GREEN) 8]
+                    [(equal? cs YELLOW) 5]))
+               (/ (image-height BACKG) 2) BACKG))
+
+; S-TrafficLight -> S-TrafficLight
+; yields the next state, given current state cs
+(check-expect (tl-next-symbolic RED) GREEN)
+(check-expect (tl-next-symbolic YELLOW) RED)
+(check-expect (tl-next-symbolic GREEN) YELLOW)
+
+(define (tl-next-symbolic cs)
+  (cond
+    [(equal? cs RED) GREEN]
+    [(equal? cs GREEN) YELLOW]
+    [(equal? cs YELLOW) RED]))
+
+
+; N-TrafficLight -> N-TrafficLight
+; simulates a clock-based American traffic Light
+
+(define (tls initial-state)
+  (big-bang initial-state
+    [to-draw tl-render]
+    [on-tick tl-next-symbolic 1]))
+
+; physical constants
+(define RADIUS 50)
+(define WHOLE (rectangle (* 10 RADIUS) (* 3.5 RADIUS) "solid" "black"))
+(define RED-LIGHT (circle RADIUS "outline" "red"))
+(define YELLOW-LIGHT (circle RADIUS "outline" "yellow"))
+(define GREEN-LIGHT (circle RADIUS "outline" "green"))
+(define SPACE (rectangle RADIUS RADIUS "solid" "black"))
+(define RED "red")
+(define GREEN "green")
+(define YELLOW "yellow")
+
+; graphical constants
+(define BACKG (overlay
+               (beside RED-LIGHT SPACE YELLOW-LIGHT SPACE GREEN-LIGHT) WHOLE))
+
+; A TrafficLight is one of the following Strings;
+; - RED
+; - GREEN
+; - YELLOW
+
+; TrafficLight -> Image
+; renders a light bulb according to the TrafficLight tl
+(define (draw/bulb tl)
+  (circle RADIUS "solid" tl))
+
+; TrafficLight -> Image
+; renders the current state cs as an image
+(check-expect (tl-render RED) (place-image (draw/bulb RED)
+                                             (* RADIUS 2) (/ (image-height BACKG) 2) BACKG))
+
+(define (tl-render cs)
+  (place-image (draw/bulb cs)
+               (* RADIUS
+                  (cond
+                    [(string=? RED cs) 2]
+                    [(string=? YELLOW cs) 5]
+                    [(string=? GREEN cs) 8]))
+               (/ (image-height BACKG) 2)
+               BACKG))
+
+; TrafficLight -> TrafficLight
+; yields the next state, given current state cs
+(check-expect (tl-next RED) GREEN)
+
+(define (tl-next cs)
+  (cond 
+    [(string=? RED cs) GREEN]
+    [(string=? GREEN cs) YELLOW]
+    [(string=? YELLOW cs) RED]))
+
+  
+; TrafficLight -> TrafficLight
+; simulates a clock-based American traffic light
+
+(define (traffic-light-simulation initial-state)
+  (big-bang initial-state
+    [to-draw tl-render]
+    [on-tick tl-next 1])) 
+
+Exercise 62: Door closer 
+
+;phyiscal constants
+(define LOCKED "locked")
+(define CLOSED "closed")
+(define OPEN "open")
+
+; A DoorStatee is one of:
+; - Locked
+; - Closed
+; - Open 
+
+; DoorState -> DoorState
+; closes an open door over the period of one tick
+(check-expect (door-closer LOCKED) LOCKED)
+(check-expect (door-closer CLOSED) CLOSED)
+(check-expect (door-closer OPEN) CLOSED)
+
+(define (door-closer state-of-door)
+  (cond
+    [(string=? LOCKED state-of-door) LOCKED]
+    [(string=? CLOSED state-of-door) CLOSED]
+    [(string=? OPEN state-of-door) CLOSED]))
+
+; DoorState KeyEvent -> DoorState
+; turns key event k into an action on state s
+(check-expect (door-action LOCKED "u") CLOSED)
+(check-expect (door-action CLOSED "l") LOCKED)
+(check-expect (door-action CLOSED " ") OPEN)
+(check-expect (door-action OPEN "a") OPEN)
+(check-expect (door-action CLOSED "a") CLOSED)
+
+(define (door-action s k)
+  (cond
+    [(and (string=? LOCKED s) (string=? "u" k))
+     CLOSED]
+    [(and (string=? CLOSED s) (string=? "l" k))
+     LOCKED]
+    [(and (string=? CLOSED s) (string=? " " k))
+     OPEN]
+    [else s]))
+
+; DoorState -> Image
+; translates the state s into a large text image
+(check-expect (door-render CLOSED)
+              (text CLOSED 40 "red"))
+
+(define (door-render s)
+  (text s 40 "red"))
+
+; DoorState -> DoorState
+; simulates a door with an automatic door closer
+
+(define (door-simulation initial-state)
+  (big-bang initial-state
+    [on-tick door-closer 3] ;; modified so that the clock ticks once every 3 seconds
+    [on-key door-action]
+    [to-draw door-render]))
