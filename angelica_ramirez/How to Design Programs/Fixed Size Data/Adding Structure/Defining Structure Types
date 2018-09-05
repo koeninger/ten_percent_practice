@@ -1,0 +1,42 @@
+a strucutre type definition defines many functions simultaneiously, it defines three kinds of functions: 
+ - a constructor, function that creates structure instances 
+ - selector, extracts the value of the field from a structure instance
+ - structure predicates, distinguishes instances from all other kinds of values 
+ 
+ Exercise 65: writes down the names of the functions (constructors, selectors, and predicates) that each introduces 
+ 
+ (define-struct movie [title producer year])
+ ; make-movie
+ ; movie?
+ ; movie-title
+ ; movie-producer
+ ; movie-year
+
+ 
+ (define-struct person [name hair eyes phone])
+ ; make-person
+ ; person?
+ ; person-name
+ ; person-hair
+ ; person-eyes
+ ; person-phone
+ 
+ (define-struct pet [name number])
+ ; make-pet
+ ; pet?
+ ; pet-name
+ ; pet-number
+ 
+ (define-struct CD [artist title price])
+ ; make-CD
+ ; CD?
+ ; CD-artist
+ ; CD-title
+ ; CD-price
+ 
+ (define-struct sweater [material size producer]) 
+ ; make-sweater
+ ; sweater?
+ ; sweater-material
+ ; sweater-size
+ ; sweater-producer 
