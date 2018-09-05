@@ -1,7 +1,0 @@
-; Exercise 33. Research the "year 2000" problem.
-
-; The year 2000 (y2k) problem arose for two primary reasons. The first was that storage space on systems was initially sparse, and as a result engineers opted to store year information with two bytes instead of four ("00" instead of "2000"). This practice continued as storage space increased because, at the time, the year 2000 was so far away that there was no point in changing the custom.
-
-; Of course, the Year 2000 neared, and as a result, for the first time, the year was going to roll over from "99" to "00" (and then "01", "02", etc.) in their code. Handling this situation was nonstandard. Most code would interpret this as "1900". Some would interpret it as "19100" (rolling over to 100 instead of 0). Some code would attempt invalid math with division by 0 errors and the like, and so on. As a result, and with so much old code out there, there was grave concern that things would break in strange and mysterious ways as these old programs encountered the year 2000.
-
-; Interestingly, this is due to happen again. Modern unix systems count time as the number of seconds since Jan 1, 1970 in a 32-bit value, giving them until the early 2030's before that value overflows. One hopes we will do better with that impending event over the next 15 years or so.
