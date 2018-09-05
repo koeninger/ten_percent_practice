@@ -164,3 +164,22 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 > (profit 5)
 415.2
 > 
+
+//Exercise 30
+(define FIXED-COST 180)
+(define ORIGINAL-PRICE 5.0)
+(define VARIABLE-COST 0.04)
+(define ORIGINAL-ATTENDENCE 120)
+(define DIFFERENCE-IN-ATTENDENCE 15)
+(define CHANGE-IN-PRICE 0.10)
+(define CHANGE-PER-PERSON (/ DIFFERENCE-IN-ATTENDENCE CHANGE-IN-PRICE))
+
+(define (attendees ticket-price)
+  (- ORIGINAL-ATTENDENCE (* (- ticket-price ORIGINAL-PRICE) CHANGE-PER-PERSON)))
+(define (revenue ticket-price)
+  (* ticket-price (attendees ticket-price)))
+(define (cost ticket-price)
+  (+ FIXED-COST (* VARIABLE-COST (attendees ticket-price))))
+(define (profit ticket-price)
+  (- (revenue ticket-price)
+     (cost ticket-price)))
