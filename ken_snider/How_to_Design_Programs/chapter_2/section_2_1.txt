@@ -10,11 +10,11 @@
 
 ;Exercise 13 Define the function string-first, which extracts the first 1String from a non-empty string.
 
-(define (string-first x) (string-ith x 1))
+(define (string-first x) (string-ith x 0))
 
 ;Exercise 14. Define the function string-last, which extracts the last 1String from a non-empty string. 
 
-(define (string-first x) (string-ith x (- (string-length x) 1)))
+(define (string-last x) (string-ith x (- (string-length x) 1)))
 
 ;Exercise 15. Define ==>. The function consumes two Boolean values, call them sunny and friday. Its answer is #true if sunny is false or friday is true.
 
