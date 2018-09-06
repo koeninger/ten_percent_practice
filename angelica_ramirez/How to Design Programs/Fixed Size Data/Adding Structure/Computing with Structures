@@ -1,0 +1,52 @@
+Structure tyes generalize Cartesian points in two ways: 
+  1. a structure type may specify an arbitrary number of fields: zero, one, two..
+  2. structure types name fields, they don't number them 
+  
+(define pl (make-entry "Al Abe" "666-7771" "lee@x.me"))
+(make-entry "Tara Harp" "666-7770" "th@smlu.edu")
+
+Exercise 69 Draw box representations for the solution to 65
+
+(define-struct movie [title producer year])
+
+(define-struct person [name hair eyes phone])
+
+(define-struct pet [name number])
+
+(define-struct CD [artist title price])
+
+(define-struct sweater [material size producer])
+
+; When DrRacket encounters a structure type definition with two fields
+(define-struct ball [location velocity])
+; it introduces two laws, one per selector
+(ball-location (make-ball l0 v0)) == l0
+(ball-velocity (make-ball l0 v0)) == v0
+
+; for different structure types it intoduces analogous laws
+(define-struct vel [deltax deltay])
+; laws
+(vel-deltax (make-vel dx0 dy0) == dx0
+(vel-deltay (make-vel dx0 dy0) == dy0
+
+(vel-deltax (ball-velocity ball1))
+== ; DrRacket replaces ball1 with its value
+(vel-deltax
+  (ball-velocity
+    (make-ball (make-posn 30 40) (make-vel -10 5)))) 
+== ; DrRacket uses the law for ball-velocity
+(vel-deltax (make-vel -10 5))
+== ; DrRacket uses the law for vel-deltax
+-10 
+
+Exercise 70 Spell out the laws for these structure type definitions 
+
+(define-struct centry [name home office cell])
+(centry-name (make-centry n0 h0 o0 c0)) == n0
+(centry-home (make-centry n0 h0 o0 c0)) == h0
+(centry-office (make-centry n0 h0 o0 c0)) == o0
+(centry-cell (make-centry n0 h0 o0 c0)) == c0 
+
+(define-struct phone [area number]) 
+(phone-area (make-phone a0 nb0)) == a0
+(phone-number (make-phone a0 nb0)) == nb0
