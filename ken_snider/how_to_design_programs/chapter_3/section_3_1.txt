@@ -1,0 +1,40 @@
+; Exercise 34. Design the function string-first, which extracts the first character from a non-empty string. Don’t worry about empty strings.
+
+; Use a string to represent text, and a number to represent string position
+; String -> String
+; Outputs character in position 0 within string s
+; given "hello" for s, expect "h"
+(define (string-first s) (string-ith s 0)) 
+
+; Exercise 35. Design the function string-last, which extracts the last character from a non-empty string.
+
+; Use a string to represent text, and a number to represent string position
+; String -> String
+; Outputs the last character within string s
+; given "hello" for s, expect "o"
+(define (string-last s (string-ith s (- (string-length s) 1))))
+
+; Exercise 36. Design the function image-area, which counts the number of pixels in a given image.
+
+; Use img to represent an image, a number to represent an image's area
+; Image -> Number
+; Outputs the area of image img
+; given (empty-scene 10 10) for img
+; expect 100
+(define (image-area img) (* (image-width img) (image-height img)))
+
+; Exercise 37. Design the function string-rest, which produces a string like the given one with the first character removed.
+
+; Use a string to represent text, and a number to represent string position
+; String -> String
+; Outputs string s, minus the first character
+; given "hello" for s, espect "ello"
+(define (string-rest s) (substring s 1))
+
+;Exercise 38. Design the function string-remove-last, which produces a string like the given one with the last character removed.
+
+; Use a string to represent text, and numbers to represent string position
+; String -> String
+; Outputs string s, minus the last character
+; given "hello" for s, expect "hell"
+(define (string-remove-last s) (substring s 0 (- (string-length s) 1)))
