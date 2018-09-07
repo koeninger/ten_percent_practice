@@ -69,6 +69,8 @@
 ; WorldState -> Boolean
 ; after each event, big-bang evaluates (end? cw)
 (define (end? cw) (> cw (+ WIDTH-OF-WORLD BUMPER-DISTANCE)))
+(check-expect (end? 1) #false)
+(check-expect (end? (+ WIDTH-OF-WORLD BUMPER-DISTANCE 1)) #true)
 
 ; WorldState -> WorldState
 ; launches the program form some initial state
@@ -79,4 +81,4 @@
     [stop-when end?]))
 
 ; scratch
-(main 50)
+; (main 50)
