@@ -9,7 +9,7 @@
 (define TRUNK-HEIGHT (* WHEEL-RADIUS 2))
 (define ROOF-HEIGHT WHEEL-RADIUS)
 (define ROOF-WIDTH (* WHEEL-RADIUS 4))
-(define BACKGROUND (empty-scene WIDTH-OF-WORLD 30))
+(define BACKGROUND (empty-scene WIDTH-OF-WORLD 50))
 (define Y-CAR 15)
 
 (define WHEEL
@@ -29,6 +29,10 @@
    BODY
    0 (* WHEEL-RADIUS 3/2)
    BOTH-WHEELS))
+(define TREE
+  (underlay/xy (circle 10 "solid" "green")
+               9 15
+               (rectangle 2 20 "solid" "brown")))
 
 ; WorldState: data that represents the state of the world (cw)
 ; A WorldState is a Number.
@@ -39,7 +43,7 @@
 ; when needed, big-bang obtains the image of the current
 ; state of the world by evaluating (render cw)
 (define (render ws)
-  (place-image CAR ws Y-CAR BACKGROUND))
+  (place-image CAR ws Y-CAR (overlay/align "left" "center" TREE BACKGROUND)))
 
 ; World State -> WorldState
 ; for each tick of the clock, big-bang obtains the next
@@ -64,11 +68,15 @@
 
 ; WorldState -> Boolean
 ; after each event, big-bang evaluates (end? cw)
-(define (end? cw) ...)
+(define (end? cw) (> cw (+ WIDTH-OF-WORLD BUMPER-DISTANCE)))
 
 ; WorldState -> WorldState
 ; launches the program form some initial state
 (define (main ws)
   (big-bang ws
     [on-tick tock]
-    [to-draw render]))
+    [to-draw render]
+    [stop-when end?]))
+
+; scratch
+(main 50)
