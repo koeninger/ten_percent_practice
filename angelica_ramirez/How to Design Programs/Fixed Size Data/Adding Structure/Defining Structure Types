@@ -7,7 +7,7 @@ a strucutre type definition defines many functions simultaneiously, it defines t
  
  (define-struct movie [title producer year])
  ; make-movie
- ; movie?
+ ; movie? ;; predicate 
  ; movie-title
  ; movie-producer
  ; movie-year
@@ -40,3 +40,86 @@ a strucutre type definition defines many functions simultaneiously, it defines t
  ; sweater-material
  ; sweater-size
  ; sweater-producer 
+ 
+ Example 66 Revisit structure type definitions in Exercise 65 and create at least one instance per structure type definition
+ 
+ (define-struct movie [title producer year])
+ ; title: string
+ ; producer: string
+ ; year: PositiveNumber
+ (make-movie "The Meg" "Lorenzo di Bonaventura" 2018)
+
+ 
+ (define-struct person [name hair eyes phone])
+ ; name: String
+ ; hair: String
+ ; eyes: String 
+ ; phone: String
+ (make-person "Angelica" "brown" "brown" "512-555-5555")
+ 
+ (define-struct pet [name number])
+ ; name: String
+ ; number: PositiveNumber
+ (make-pet "Athena" "1")
+ 
+ (define-struct CD [artist title price])
+ ; artist: String
+ ; title: String
+ ; price: PositiveNumber
+ (make-CD "Lenny Kravitz" "Raise Vibration" 4)
+ 
+ (define-struct sweater [material size producer]) 
+ ; material: string
+ ; size: PositiveNumber
+ ; producer: string
+ (make-sweater "cotton" "M" "Company Name")
+ 
+Sample Problem: Develop a structure type definition for a program that deals with "bouncing balls" 
+; a positive number means the ball moves down
+; a negative number means the ball moves up
+; location is a single number, the distance of pixels from the top
+; speed, is the number of pixels it moves per clock tick
+; velocity is the speed plus the direction in which it moves
+
+(define-struct ball [location velocity]) 
+
+Exercise 67 
+(define SPEED 3)
+(define-struct balld [location direction])
+(make-balld 10 "up")
+
+; create other instances of balld 
+(make-balld 50 "down")
+(make-balld 20 "up")
+(make-balld (+ 10 SPEED) "down")
+
+; a ball moving across a 2-d world canvas 
+; define vel structure type 
+; delta used to speak of change when it comes to simulations of physical activities,
+; and the x and y parts indicate which axis is concerned
+(define-struct vel [deltax deltay])
+
+; use instances of ball to combine a posn structure with a vel structure to represent
+; balls that move in straigh lines but not necessarily along only vertical or horizontal lines
+; interpretation: a ball that is 30 pixels from the left and 40 pixels from the top 
+; interpretation: the ball moves 10 pixels toward the left per clock tick
+; interpretation: the ball drops at 5 pixels per clock tock
+ 
+(define ball1
+ (make-ball (make-pson 30 40) (make-vel -10 5))) 
+ 
+Exercise 68 An alternative to the nested data represenation of balls uses four fields to keep track of the four properties
+(define-struct ballf [x y deltax deltay]) ;; called a flat reresentation 
+
+Create an instance of ballf that has the same interpretation as ball1 
+
+(define ballf 
+ (make-ballf 30 40 -10 5))
+ 
+Second example of nested structures for contact lists in cell phones
+(define-struct centry [name home office cell])
+(define-struct phone [area number])
+(make-centry "Shriram Fisler"
+ (make-phone 207 "363-2421")
+ (make-phone 101 "776-1099")
+ (make-phone 208 "112-9981"))
