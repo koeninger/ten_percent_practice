@@ -43,7 +43,7 @@
 ; when needed, big-bang obtains the image of the current
 ; state of the world by evaluating (render cw)
 (define (render ws)
-  (place-image CAR ws Y-CAR (overlay/align "left" "center" TREE BACKGROUND)))
+  (place-image CAR (- ws (/ BUMPER-DISTANCE 2)) Y-CAR (overlay/align "left" "center" TREE BACKGROUND)))
 
 ; World State -> WorldState
 ; for each tick of the clock, big-bang obtains the next
@@ -81,4 +81,4 @@
     [stop-when end?]))
 
 ; scratch
-; (main 50)
+(main 50)
