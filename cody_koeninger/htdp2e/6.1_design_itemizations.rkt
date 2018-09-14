@@ -214,3 +214,50 @@
     (on-key si-control)
     (to-draw si-render)
     (stop-when si-game-over? si-render-final)))
+
+(check-expect (missle-render.v2 #false BACKGROUND) BACKGROUND)
+(check-expect (missle-render.v2 (make-posn 20 40) BACKGROUND) (place-image MISSLE 20 40 BACKGROUND))
+(define (missle-render.v2 m image)
+  (cond
+    [(boolean? m) image]
+    [(posn? m) (place-image MISSLE (posn-x m) (posn-y m) image)]))
+
+;; I'm not interested in 102
+
+(define-struct spider [legs space])
+(define-struct elephant [space])
+(define-struct boa [length girth])
+(define-struct armadillo [disease space])
+(define-struct cage [space])
+
+(define (cylinder-volume r h)
+  (* pi (expt r 2) h))
+
+; animal -> cage -> boolean
+(check-expect (fits? (make-spider 23 42) (make-cage 41)) #false)
+(check-expect (fits? (make-spider 23 42) (make-cage 42)) #true)
+(define (fits? a c)
+  (cond
+    [(spider? a) (<= (spider-space a) (cage-space c))]
+    [(elephant? a) (<= (elephant-space a) (cage-space c))]
+    [(boa? a) (<= (cylinder-volume (/ (boa-girth a) 2) (boa-length a)) (cage-space c))]
+    [(armadillo? a) (<= (armadillo-space a) (cage-space c))]))
+
+(define-struct vehicle [passengers license-plate mpg])
+; (define (consume-vehicle v) (vehicle-passengers v) ... (vehicle-license-plate v) ... (vehicle-mpg v))
+
+; A Coordinate is one of: 
+; – a NegativeNumber 
+; interpretation on the y axis, distance from top
+; – a PositiveNumber 
+; interpretation on the x axis, distance from left
+; – a Posn
+; interpretation an ordinary Cartesian point
+
+; -20
+(place-image MISSLE 0 20 BACKGROUND)
+; +20
+(place-image MISSLE 20 0 BACKGROUND)
+; (make-posn 20 20)
+(place-image MISSLE 20 20 BACKGROUND)
+
