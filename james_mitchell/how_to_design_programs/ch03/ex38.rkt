@@ -11,6 +11,8 @@
 (define (string-remove-last string)
   (if (string? string)
       (substring string 0 (- (string-length string) 1))
-   "Not an string"))
+   "Not a string"))
 
-  
+(check-expect (string-remove-last "hello world") "hello worl")
+(check-expect (string-remove-last "h") "")
+(check-expect (string-remove-last 42) "Not a string")
