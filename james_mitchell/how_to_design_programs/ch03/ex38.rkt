@@ -5,7 +5,7 @@
 ; Given a string, remove the last character
 ; Given: "h"            expected: ""
 ; Given: "hello world"  expected: "hello worl"
-; Given 42              expected: not a string
+; Given 42              expected: "Not a string"
 ; (define (string-remove-last string) ... )
 
 (define (string-remove-last string)
