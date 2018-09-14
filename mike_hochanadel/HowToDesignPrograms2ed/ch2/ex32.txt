@@ -1,0 +1,10 @@
+heart rate
+touch
+breath
+sound
+air pressure
+motion in space
+light
+fingerprint
+radio signal
+position on earth
