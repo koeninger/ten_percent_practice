@@ -96,3 +96,12 @@ A point in time consists of three numbers: hours, minutes, and seconds
 Exercise 78 Provide a structure type and a data definition for representing three-letter words. A word consists of lowercase
 letters, represented with the 1Strings "a" through "z" plus #false. Note this is part of exercise 396 
 
+; A Lower Case Letter (or LCL) is one of:
+; 1String [a,z]
+; #false
+; interpretation lower case letters, a through z, or no letter 
+
+(define-struct 3L-WORD [letter1 letter2 letter3]
+; 3L-WORD is a (make-3L-WORD LCL LCL LCL) 
+; interpretation 3L-WORD consists of three lower case letters 
+
