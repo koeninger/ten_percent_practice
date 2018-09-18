@@ -50,3 +50,68 @@
 (check-expect (missile-or-not2? empty-image) #false)
 (define (missile-or-not2? m)
   (or (false? m) (posn? m)))
+
+; A SIGS is one of: 
+; – (make-aim UFO Tank)
+; – (make-fired UFO Tank Missile)
+; interpretation represents the complete state of a 
+; space invader game
+
+(define-struct aim [ufo tank])
+(define-struct fired [ufo tank missile])
+(define (sigs? s)
+  (or (aim? s) (fired? s)))
+
+; A Coordinate is one of: 
+; – a NegativeNumber 
+; interpretation on the y axis, distance from top
+; – a PositiveNumber 
+; interpretation on the x axis, distance from left
+; – a Posn
+; interpretation an ordinary Cartesian point
+
+(define (coordinate? c)
+  (or (number? c) (posn? c)))
+
+; A VAnimal is either
+; – a VCat
+; – a VCham
+
+(define-struct vcat [x-coord happiness velocity])
+(define-struct vcham [x-coord happiness color])
+
+(define (vanimal? v)
+  (or (vcat? v) (vcham? v)))
+
+
+; Any -> Boolean
+; is the given value an element of TrafficLight
+(define (light? x)
+  (cond
+    [(string? x) (or (string=? "red" x)
+                     (string=? "green" x)
+                     (string=? "yellow" x))]
+    [else #false]))
+
+(define MESSAGE
+  "traffic light expected, given some other value")
+ 
+; Any Any -> Boolean
+; are the two values elements of TrafficLight and, 
+; if so, are they equal
+ 
+(check-expect (light=? "red" "red") #true)
+(check-expect (light=? "red" "green") #false)
+(check-expect (light=? "green" "green") #true)
+(check-expect (light=? "yellow" "yellow") #true)
+ 
+(define (light=? a-value another-value)
+  (cond
+    [(and (not (light? a-value)) (not (light? another-value)))
+     (error "neither a-value nor another-value are lights")]
+    [(not (light? a-value))
+     (error "a-value is not a light")]
+    [(not (light? another-value))
+     (error "another-value is not a light")]
+    [else
+     (string=? a-value another-value)]))

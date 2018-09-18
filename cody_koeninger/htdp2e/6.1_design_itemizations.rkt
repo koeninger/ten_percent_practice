@@ -207,12 +207,15 @@
      (make-fired (fired-ufo s) (make-tank (tank-loc (fired-tank s)) MOVE-PER-TICK) (fired-missile s))]
     [else s]))
 
+(define (sigs? s)
+  (or (aim? s) (fired? s)))
 
 (define (si-main s)
   (big-bang s
     (on-tick si-move 0.1)
     (on-key si-control)
     (to-draw si-render)
+    (check-with sigs?)
     (stop-when si-game-over? si-render-final)))
 
 (check-expect (missle-render.v2 #false BACKGROUND) BACKGROUND)
