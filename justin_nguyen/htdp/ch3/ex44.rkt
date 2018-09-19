@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex41) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex44) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/universe)
 (require 2htdp/image)
 
@@ -8,6 +8,9 @@
 ; big-bang creates image of current state by evaluating (render cw)
 (define (render ws)
   (place-image CAR ws Y-CAR BACKGROUND))
+
+; alternative solution:
+;  (place-image CAR (- ws (/ (image-width CAR) 2)) Y-CAR BACKGROUND))
 
 ; WorldState -> WorldState
 ; for each tick, big-bang gets next state of world from (clock-tick-handler cw)
@@ -19,9 +22,19 @@
 ; (define (keystroke-handler cw ke) ...)
 
 ; WorldState Number Number String -> WorldState
-; for reach mouse movement, big-bang obtains next state of world from (mouse-event-handler cw x y me)
-; wgere x and y are coords of the event and me is the description
-; (define (mouse-event handler cw x y me) ...)
+; place car at x-mouse if given me is "button-down"
+; given: 21 10 20 "enter"
+; expected 2
+; given: 42 10 20 "button-down"
+; expected 10
+; given: 42 10 20 "move"
+; expected 42
+(define (hyper x-position-of-car x-mouse y-mouse me)
+  (cond
+    [(string=? "button-down" me) x-mouse]
+    [else x-position-of-car]))
+
+; WorldState Number Number String -> Worldstate
 
 ; WorldState -> Boolean
 ; after each event, big-bang evaluates (end? cw)
@@ -57,11 +70,16 @@
     0 (- 0 WHEEL-RADIUS)
     (rectangle (* WHEEL-RADIUS 4) (* WHEEL-RADIUS 4) "solid" "red")))
   
-(define CAR
+(define RAW-CAR
   (underlay/offset
    CAR-BODY
    0 (* WHEEL-RADIUS 2)
    BOTH-WHEELS))
+
+; contains transparent pixels to center image on car's right edge
+(define CAR
+  (beside RAW-CAR
+          (rectangle (image-width RAW-CAR) 1 "solid" "transparent")))
 
 ; testing
 (check-expect (render 50)
@@ -73,11 +91,16 @@
 (check-expect (render 200)
               (place-image CAR 200 Y-CAR BACKGROUND))
 
-
-
+(check-expect (hyper 21 10 20 "enter")
+              21)
+(check-expect (hyper 42 10 20 "button-down")
+              10)
+(check-expect (hyper 42 10 20 "move")
+              42)
 
 (define (main ws)
   (big-bang ws
     [on-tick tock]
     [to-draw render]
+    [on-mouse hyper]
     [stop-when end?]))
