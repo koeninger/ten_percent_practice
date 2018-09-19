@@ -1,0 +1,28 @@
+; Exercise 35. Design the function 'string-last', which extracts the last
+; character from an non-empty string
+1.
+We need a non-empty string that is a string in BSL as well as a character which is a
+1String in BSL.  So say 'String' is a string and 'g' is a 1String.  We will use
+Dr. Racket
+2.
+; string-last will take in a non-empty string and return the last character of
+;the string
+(define (string-last s))
+3.
+; 'String' => 'g'
+; '42' => '2'
+; '(#SDLKF23lksdg)' => ')'
+; 'B' => 'B'
+4.
+(define (last-string s)
+  1String)
+5.
+; string-last will take in a non-empty string and return the last character of
+;the string
+; 'String' => 'g'
+; '42' => '2'
+; '(#SDLKF23lksdg)' => ')'
+; 'B' => 'B'
+(define (last-string s)
+  (string-ith s (- (string-length s) 1)))
+6. See 35.rkt and 35_interactions.rkt

@@ -1,0 +1,25 @@
+; Exercise 34. Design the function 'string-first', which extracts the first character
+; from a non-empty string.  Don't worry about empty strings
+Recipe steps:
+1.
+We need a string that is a string in BSL as well as a character which is a
+1String in BSL.  so say 'String' is a string and 'S' is a 1String. We will use
+Dr. Racket
+2.
+; string-first will take in a string and return the first character of the string
+(define (string-first s))
+3.
+; 'String' => 'S'
+; '42' => '4'
+; '(#SDLKF23lksdg)' => '('
+4.
+(define (string-first s)
+  1String)
+5.
+; string-first will take in a string and return the first character of the string
+; 'String' => 'S'
+; '42' => '4'
+; '(#SDLKF23lksdg)' => '('
+(define (string-first s)
+  (string-ith s 0))
+6. See 34.rkt and 34_interactions.rkt
