@@ -5,7 +5,7 @@
 (require 2htdp/universe)
 
 (define WIDTH-OF-WORLD 200)
-(define Y-CAR 40)
+(define Y-CAR 10)
  
 (define WHEEL-RADIUS 5)
 (define WHEEL-DISTANCE (* WHEEL-RADIUS 5))
@@ -34,23 +34,23 @@
                (rectangle 2 20 "solid" "brown")))
 
 (define BACKGROUND
-  (overlay/xy TREE
-   -120 35
+  ;(overlay/xy TREE
+  ; -120 35
   (rectangle WIDTH-OF-WORLD (* 4 WHEEL-RADIUS) "solid" "gray")
-  )
+  ;)
 )
 
 (check-expect (tock 20) 23)
 (check-expect (limit 250) #true)
 
-; WorldState -> Image
+; AnimationState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
-(define (render ws)
-  (place-image CAR ws Y-CAR BACKGROUND)
+(define (render as)
+  (place-image CAR as Y-CAR BACKGROUND)
 )
  
-; WorldState -> WorldState
+; AnimationState -> AnimationState
 ; adds 3 to x to move the car right
 ;   given: 20, expect 23
 ;   given: 78, expect 81
@@ -58,16 +58,16 @@
   (+ x 3)
 )
 
-; WorldState -> Boolean
+; AnimationState -> Boolean
 ; Returns true if x is greater than the width of the background considering car width
 (define (limit x)
   (>= x (+ WIDTH-OF-WORLD (image-width CAR)))
 )
 
-; WorldState -> WorldState
+; AnimationState -> AnimationState
 ; launches the program from some initial state 
-(define (main ws)
-   (big-bang ws
+(define (main as)
+   (big-bang as
      [on-tick tock]
      [to-draw render]
      [stop-when limit]
