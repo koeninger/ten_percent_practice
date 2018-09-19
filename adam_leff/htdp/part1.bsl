@@ -183,3 +183,19 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 (define (profit ticket-price)
   (- (revenue ticket-price)
      (cost ticket-price)))
+     
+//Exercise 34
+1) We use string1 to represent characters
+2) Consume a string and produce a string1
+3) given: hello, expect h; given h, expect h; (define (string-first s) 'h')
+4) (define (string-first s) ... s ...)
+5) (define (string-first s) (substring s 0 1))
+6) (string-first 'hello')
+
+//Exercise 35
+1) We use string1 to represent characters
+2) Consume a string and produce a string1
+3) given: hello, expect o; given h, expect h; (define (string-first s) 'o')
+4) (define (string-last s) ... s ...)
+5) (define (string-last s) (substring s (- (string-length s) 1)))
+6) (string-first 'hello')
