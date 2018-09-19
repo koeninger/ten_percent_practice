@@ -7,4 +7,5 @@
     [(<= 0 s 10) "bronze"]
     [(and (< 10 s) (<= s 20)) "silver"]
     [else "gold"]))
-(reward 18)
+(define y 210)
+(- 200 (cond [(> y 200) 0] [else y]))
