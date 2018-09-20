@@ -47,7 +47,7 @@
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
 (define (render as)
-  (place-image CAR as Y-CAR BACKGROUND)
+  (place-image CAR as (ypos as) BACKGROUND)
 )
  
 ; AnimationState -> AnimationState
@@ -64,14 +64,45 @@
   (>= x (+ WIDTH-OF-WORLD (image-width CAR)))
 )
 
+; AnimationState -> Number
+(define (ypos as)
+ (+ 0 (* 20 (deg2rad as)))
+)
+
+(define (deg2rad d)
+  (sin (* d (/ pi 180)))
+)
+
+; WorldState Number Number String -> WorldState
+; places the car at x-mouse
+; if the given me is "button-down" 
+; given: 21 10 20 "enter"
+; wanted: 21
+; given: 42 10 20 "button-down"
+; wanted: 10
+; given: 42 10 20 "move"
+; wanted: 42
+
+; These tests fail as expected
+;(check-expect (hyper 21 10 20 "enter") 21)
+;(check-expect (hyper 42 10 20 "button-down") 10)
+;(check-expect (hyper 42 10 20 "move") 42)
+
+(define (hyper x-position-of-car x-mouse y-mouse me)
+  x-position-of-car)
+
 ; AnimationState -> AnimationState
 ; launches the program from some initial state 
 (define (main as)
    (big-bang as
      [on-tick tock]
      [to-draw render]
+     [on-mouse hyper]
      [stop-when limit]
   )
 )
 
 (main 0)
+
+;(deg2rad 360)
+
