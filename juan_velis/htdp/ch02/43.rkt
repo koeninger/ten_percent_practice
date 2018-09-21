@@ -5,7 +5,7 @@
 (require 2htdp/universe)
 
 (define WIDTH-OF-WORLD 200)
-(define Y-CAR 40)
+(define Y-CAR 10)
  
 (define WHEEL-RADIUS 5)
 (define WHEEL-DISTANCE (* WHEEL-RADIUS 5))
@@ -34,23 +34,23 @@
                (rectangle 2 20 "solid" "brown")))
 
 (define BACKGROUND
-  (overlay/xy TREE
-   -120 35
+  ;(overlay/xy TREE
+  ; -120 35
   (rectangle WIDTH-OF-WORLD (* 4 WHEEL-RADIUS) "solid" "gray")
-  )
+  ;)
 )
 
 (check-expect (tock 20) 23)
 (check-expect (limit 250) #true)
 
-; WorldState -> Image
+; AnimationState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
-(define (render ws)
-  (place-image CAR ws Y-CAR BACKGROUND)
+(define (render as)
+  (place-image CAR as (ypos as) BACKGROUND)
 )
  
-; WorldState -> WorldState
+; AnimationState -> AnimationState
 ; adds 3 to x to move the car right
 ;   given: 20, expect 23
 ;   given: 78, expect 81
@@ -58,20 +58,51 @@
   (+ x 3)
 )
 
-; WorldState -> Boolean
+; AnimationState -> Boolean
 ; Returns true if x is greater than the width of the background considering car width
 (define (limit x)
   (>= x (+ WIDTH-OF-WORLD (image-width CAR)))
 )
 
-; WorldState -> WorldState
+; AnimationState -> Number
+(define (ypos as)
+ (+ 0 (* 20 (deg2rad as)))
+)
+
+(define (deg2rad d)
+  (sin (* d (/ pi 180)))
+)
+
+; WorldState Number Number String -> WorldState
+; places the car at x-mouse
+; if the given me is "button-down" 
+; given: 21 10 20 "enter"
+; wanted: 21
+; given: 42 10 20 "button-down"
+; wanted: 10
+; given: 42 10 20 "move"
+; wanted: 42
+
+; These tests fail as expected
+;(check-expect (hyper 21 10 20 "enter") 21)
+;(check-expect (hyper 42 10 20 "button-down") 10)
+;(check-expect (hyper 42 10 20 "move") 42)
+
+(define (hyper x-position-of-car x-mouse y-mouse me)
+  x-position-of-car)
+
+; AnimationState -> AnimationState
 ; launches the program from some initial state 
-(define (main ws)
-   (big-bang ws
+(define (main as)
+   (big-bang as
      [on-tick tock]
      [to-draw render]
+     [on-mouse hyper]
      [stop-when limit]
   )
 )
 
 (main 0)
+
+;(deg2rad 360)
+

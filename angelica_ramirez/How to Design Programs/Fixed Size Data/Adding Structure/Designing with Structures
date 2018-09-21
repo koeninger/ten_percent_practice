@@ -1,0 +1,92 @@
+It is now clear that programmers must create data definitions for all but the simplest problems
+
+Sample Problem: Design a function that computes the distance of objects in a 3-dimensional space to the origin. 
+1. When a problem calls for the representation of pieces of information that belong together
+or describe a natural whole, you need a structure type definition. A data definition for st
+a structure type intoduces a name for the collection of instances that are legitimate.
+Use only names of built-in data collections or previously defined data definitions.
+Data definitions should come with data examples: 
+
+(define-struct r3 [x y z])
+; An R3 is a structure: 
+;     (make-r3 Number Number Number)
+(define ex1 (make-r3 1 2 13)) 
+(define ex2 (make-r3 -1 0 3)) 
+
+2. need a signature, purpose statement, and a function header but they remain the same
+
+;R3 -> Number
+; produces the distance from p to origin
+(define (r3-distance-to-0 p) 0) 
+
+3. Use examples to create functional examples 
+(check-within (inexact->exact (r3-distance-to-0 ex1)) 13.19 0.01)
+(check-within (inexact->exact (r3-distance-to-0 ex2)) 3.162 0.01)
+(check-within (inexact->exact (r3-distance-to-0 (make-r3 1 1 5))) 5.196 0.01)  
+
+4. add a selector for each field to the templates for such function 
+
+(define (r3-distance-to-0 p)
+  (... (r3-x p) ... (r3-y p) ... (r3-z p) ...)) 
+  
+5. use the selector expressions from the template to define the functions 
+(define (r3-distance-to-0 p)
+  (sqrt
+   (+
+    (sqr (r3-x p))
+    (sqr (r3-y p))
+    (sqr (r3-z p)))))
+6. Test. 
+(define-struct r3 [x y z])
+; An R3 is a structure:
+; (make-r3 Number Number Number)
+(define ex1 (make-r3 1 2 13))
+(define ex2 (make-r3 -1 0 3))
+
+;R3 -> Number
+; produces the distance from p to origin
+(check-within (inexact->exact (r3-distance-to-0 ex1)) 13.19 0.01)
+(check-within (inexact->exact (r3-distance-to-0 ex2)) 3.162 0.01)
+(check-within (inexact->exact (r3-distance-to-0 (make-r3 1 1 5))) 5.196 0.01)
+(define (r3-distance-to-0 p)
+  (sqrt
+   (+
+    (sqr (r3-x p))
+    (sqr (r3-y p))
+    (sqr (r3-z p)))))
+    
+Exercise 80 create templates for functions for functions that consume instances 
+of the following structure types, do not need data definitions for this task 
+
+(define-struct movie [title director year])
+
+(define (fn-for-movie m)
+  (... (... (movie-title m))
+       (... (movie-director m))
+       (... (movie-year m)))) 
+(define-struct pet [name number])
+
+(define (fn-for-pet p) 
+  (... (... (pet-name p))
+       (... (pet-number p)))) 
+       
+(define-struct CD [artist title price])
+
+(define (fn-for-CD c) 
+  (... (... (CD-artist c))
+       (... (CD-title c)) 
+       (... (CD-price c)))) 
+       
+(define-struct sweater [material size color])
+
+(define (fn-for-sweater s)
+  (... (... (sweater-material s)) 
+       (... (sweater-size s)) 
+       (... (sweater-color s)))) 
+
+Exercise 81 Design the function time->seconds, which consumers instances of time structures
+and produces the number of seconds that have passed since midnight. 
+example: representing 12 hours, 30 minutes, and 2 seconds with one of these structures and 
+if you then apply time-> seconds to this instance, the correct result is 45002
+
+Exercise 82
