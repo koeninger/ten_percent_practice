@@ -1,0 +1,24 @@
+; Exercise 36. Design the function 'image-area', which counts the number of
+; pixels in a given image
+Recipe steps:
+1.
+We need the total area of an image given the image itself and a way to figure
+out its dimensions. In BSL it will be a number using image-width and image-height.
+2.
+; image-area takes in an image and will determine its area based on its dimensions
+(define (image-area img))
+3.
+; Image(height: 1, width: 1) => 1
+; Image(height: 52, width: 103) => 5356
+; Image(height: 0, width: 1 ) => 0
+4.
+(define (image-area img)
+  number)
+5.
+; image-area takes in an image and will determine its area based on its dimensions
+; Image(height: 1, width: 1) => 1
+; Image(height: 52, width: 103) => 5356
+; Image(height: 0, width: 1 ) => 0
+(define (image-area img)
+  (* (image-width img) (image-height img)))
+6. See 36.rkt and 36_interactions.rkt

@@ -1,0 +1,27 @@
+; Exercise 38. Design the function string-remove-last, which produces a string
+; like the given one with the last character removed.
+Recipe steps:
+1.
+We need a string that is a string in BSL that is like the given string but with
+the last 1String  character removed.
+2.
+; string-remove-last will take in a string and return a string with the last
+; character removed
+3.
+; 'String' => 'Strin'
+; '42' => '4'
+; '' => ''
+4.
+(define (string-remove-last)
+  string)
+5.
+; string-remove-last will take in a string and return a string with the last
+; character removed
+; 'String' => 'Strin'
+; '42' => '4'
+; '' => ''
+(define (string-remove-last str)
+    (if (> (string-length str) 0)
+      (substring str 0 (- (string-length str) 1))
+      ""
+    ))
