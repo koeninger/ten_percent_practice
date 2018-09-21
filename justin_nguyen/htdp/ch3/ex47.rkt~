@@ -17,7 +17,6 @@
 ; given: 6, expect: 9
 (define (tock happy)
   (cond
-    [(> happy 100) 100]
     [(> happy 0) (- happy 0.1)]
     [(<= happy 0) 0]))
 
@@ -43,6 +42,6 @@
 
 (define (main happy)
   (big-bang happy
-    [to-draw render]
     [on-tick tock]
-    [on-key key-handler]))
+    [on-key key-handler]
+    [to-draw render]))
