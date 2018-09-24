@@ -105,3 +105,71 @@ letters, represented with the 1Strings "a" through "z" plus #false. Note this is
 ; 3L-WORD is a (make-3L-WORD LCL LCL LCL) 
 ; interpretation 3L-WORD consists of three lower case letters 
 
+(define WORD (make-word "a" "c" "t"))
+(define WORD1 (make-word "c" "a" "t"))
+
+Data definitions play such a central and important role in the design process,
+it's best to illustrate data definitions with examples just like we illustrate
+behavior of functions with examples.
+Creating data examples from a data definition is straighforward:
+ - for a built-in collection of data (number, string, Boolean, images) choose your favorite examples;
+      on occasion, people use decriptive names to qualify built-in data collections such as NegativeNumber or OneLetterString
+      they are no replacement for a well-written data definition
+ - for an enumeration, use several of the items of the enumeration
+ - for intervals, use the end points (if included) and at least one interior point
+ - for itemizations, deal with each part separately 
+ - for data definitions for structures, follow the natural language description, use the constructor and pick an example 
+    from the data collection named for each field 
+    
+Exercise 79 create examples for the following data definitions 
+1. 
+; a Color is one of: 
+; - "white"
+; - "yellow" 
+; - "orange"
+; - "green"
+; - "red"
+; - "blue"
+; - "black"
+
+(define RED "red")
+(define ORANGE "orange")
+(define WHITE "white")
+
+2. 
+; H is a Number between 0 and 100 
+; interpretation represents a happiness value
+
+(define HAPPY 100)
+(define OK 50)
+(define SAD 0)
+
+3. 
+(define-struct person [fstname lstname male?])
+; A Person is a structure:
+:   (make-person String String Boolean)
+
+(define JOE (make-person "Joe" "Jones" #true))
+(define JANE (make-person "Jane" "January" #false)) 
+
+4. Is it a good idea to use a field name that looks like the name of a predicate? 
+not if they are just used for documentation and still tested 
+
+5. 
+(define-struct dog [owner name age happiness])
+; A Dog is a structure: 
+;   (make-dog Person String PositiveInteger H)
+
+(define SCOUT (make-dog JOE "Scout" 4 HAPPY))
+(define SPIKE (make-dog JANE "Spike" 2 HAPPY))
+(define JAM (make-dog (make-person "Sally" "Smith" #false) "Jam" 5 OK))
+
+6. 
+; A Weapon is one of: 
+; - #false
+; - Posn
+; interpretation #false means the missle hasn't
+; been fired yet; a Posn means it is in flight 
+
+(define WEAPON1 #false)
+(define WEAPON2 (make-posn 75 20))

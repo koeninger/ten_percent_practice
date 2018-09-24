@@ -199,3 +199,10 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 4) (define (string-last s) ... s ...)
 5) (define (string-last s) (substring s (- (string-length s) 1)))
 6) (string-first 'hello')
+
+//Exercise 36
+1) We use ints for length and width of the image
+2) Consume an image and return an int
+3) given: (image 10 10) return 100
+4) (define (image-area img) ... img ...)
+5) (define (image-area) (* (height img) (width img)))

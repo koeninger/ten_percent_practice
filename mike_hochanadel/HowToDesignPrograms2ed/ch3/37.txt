@@ -1,0 +1,28 @@
+;Exercise 37. Design the function string-rest , which produces a string like the
+; given one with the first character removed.
+Recipe steps:
+1.
+We need a string that is a string in BSL that is like the given string but with
+the first 1String  character removed.
+2.
+; string-rest will take in a string and return a string with the 1st character
+; removed
+3.
+; 'String' => 'tring'
+; '42' => '2'
+; '' => ''
+4.
+(define (string-rest str)
+  string)
+5.
+; string-rest will take in a string and return a string with the 1st character
+; removed
+; 'String' => 'tring'
+; '42' => '2'
+; '' => ''
+(define (string-rest str)
+    (if (> (string-length str) 0)
+      (substring str 1 (string-length str))
+      ""
+    ))
+6. See 37.rkt and 37_interactions.rkt
