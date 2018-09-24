@@ -47,10 +47,11 @@
 ; places the image of the car x pixels from
 ; the left margin of the BACKGROUND image
 (define (render ws)
-  (place-image CAR OFFSET Y-CAR BACKGROUND))
-(check-expect (render 50) (place-image CAR OFFSET Y-CAR BACKGROUND))
-(check-expect (render 200) (place-image CAR OFFSET Y-CAR BACKGROUND))
-(check-expect (render 450) (place-image CAR OFFSET Y-CAR BACKGROUND))
+  (place-image/align CAR ws Y-CAR "right" "center" BACKGROUND))
+
+(check-expect (render 50) (place-image/align CAR 50 Y-CAR "right" "center" BACKGROUND))
+(check-expect (render 200) (place-image/align CAR 200 Y-CAR "right" "center" BACKGROUND))
+(check-expect (render 450) (place-image/align CAR 450 Y-CAR "right" "center" BACKGROUND))
 
 ; WorldState -> WorldState
 ; adds 3 to x to move the car right
@@ -61,10 +62,9 @@
 (check-expect (tock 20) 23)
 (check-expect (tock 78) 81)
 
-(define OFFSET (- tock RIGHTCAR))
 
 ; WorldState -> Boolean
-; Returns true if x is greater than the width of the background+car
+; Returns true if x is greater than the width of the world+car
 (define (limit x)
   (>= x (+ WIDTH-OF-WORLD (image-width CAR)))
 )
