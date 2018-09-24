@@ -136,3 +136,105 @@
 
 ; 144
 ; sum and how-many will work for NELs, because NEL is a subcategory of all lists, and they work for all numeric lists
+
+
+; An NEList-of-temperatures is one of: 
+; – (cons CTemperature '())
+; – (cons CTemperature NEList-of-temperatures)
+; interpretation non-empty lists of Celsius temperatures 
+
+
+; true if temperatures are sorted in descending order
+; NEList-of-temperatures -> boolean
+(check-expect (sorted>? (cons 1 '())) #t)
+(check-expect (sorted>? (cons 2 (cons 1 '()))) #t)
+(check-expect (sorted>? (cons 1 (cons 2 '()))) #f)
+(define (sorted>? ts)
+  (cond
+    [(empty? (rest ts)) #t]
+    [else (and (> (first ts) (second ts))
+               (sorted>? (rest ts)))]))
+
+; count of temperatures
+; NEList-of-temperatures -> number
+(check-expect (how-many2 (cons 1 '())) 1)
+(check-expect (how-many2 (cons 2 (cons 1 '()))) 2)
+(define (how-many2 ts)
+  (cond
+    [(empty? (rest ts)) 1]
+    [else (+ 1 (how-many2 (rest ts)))]))
+
+
+; are all of the NEList of booleans true
+; NEList-of-booleans -> boolean
+(check-expect (all-true2 (cons #t '())) #t)
+(check-expect (all-true2 (cons #f '())) #f)
+(check-expect (all-true2 (cons #t (cons #t '()))) #t)
+(check-expect (all-true2 (cons #t (cons #f '()))) #f)
+(define (all-true2 bs)
+  (cond
+    [(empty? (rest bs)) (first bs)]
+    [else
+     (and (first bs) (all-true2 (rest bs)))]))
+
+; is one of the list of booleans true
+; NEList-of-booleans -> boolean
+(check-expect (one-true2 (cons #f '())) #f)
+(check-expect (one-true2 (cons #t '())) #t)
+(check-expect (one-true2 (cons #t (cons #f '()))) #t)
+(check-expect (one-true2 (cons #f (cons #f '()))) #f)
+(define (one-true2 bs)
+  (cond
+    [(empty? (rest bs)) (first bs)]
+    [else
+     (or (first bs) (one-true2 (rest bs)))]))
+
+; 148 without enforcement of types, it's better to have definitions that can return a sensible answer for empty lists, rather than a runtime error
+
+
+; N String -> List-of-strings 
+; creates a list of n copies of s
+ 
+(check-expect (copier 0 "hello") '())
+(check-expect (copier 2 "hello")
+              (cons "hello" (cons "hello" '())))
+ 
+(define (copier n s)
+  (cond
+    [(zero? n) '()]
+    [(positive? n) (cons s (copier (sub1 n) s))]))
+
+; 149 yes copier returns a sensible answer even if the second argument isn't a string
+
+(define (copier.v2 n s)
+  (cond
+    [(zero? n) '()]
+    [else (cons s (copier.v2 (sub1 n) s))]))
+
+; copier.v2 can recurse infinitely on anything other than a non-negative integer
+
+; N -> Number
+; computes (+ n pi) without using +
+(check-within (add-to-pi 3) (+ 3 pi) 0.001)
+(define (add-to-pi n)
+  (cond
+    [(zero? n) pi]
+    [(positive? n) (add1 (add-to-pi (sub1 n)))]))
+
+; N Number -> Number
+; computes (+ n x without using +
+(check-within (add 3 pi) (+ 3 pi) 0.001)
+(check-within (add 4 6.66) (+ 4 6.66) 0.001)
+(define (add n x)
+  (cond
+    [(zero? n) x]
+    [(positive? n) (add1 (add (sub1 n) x))]))
+
+; N Number -> Number
+; computes (* n x without using *
+(check-within (multiply 3 pi) (* 3 pi) 0.001)
+(check-within (multiply 4 6.66) (* 4 6.66) 0.001)
+(define (multiply n x)
+  (cond
+    [(zero? n) 0]
+    [(positive? n) (+ x (multiply (sub1 n) x))]))
