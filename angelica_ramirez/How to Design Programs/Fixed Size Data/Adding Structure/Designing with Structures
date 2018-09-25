@@ -89,10 +89,42 @@ Exercise 81 Design the function time->seconds, which consumers instances of time
 example: representing 12 hours, 30 minutes, and 2 seconds with one of these structures and 
 if you then apply time->seconds to this instance, the correct result is 45002
 
-(define-struct point-time [hours minutes seconds])
-; point-time is (make-pt-time Number Number Number)
+(define-struct TIME [hours minutes seconds])
+; TIME is (make-TIME Number Number Number)
+; uses a 24 hour clock 
 ; interpretation a point in time containing an hour, minute and seconds 
 
-(define TIME1 (make-pt-time 3 30 30))
+(define TIME1 (make-TIME 3 30 30)) ; 3:30:30 am
+(define TIME2 (make-TIME 13 30 0)) ; 1:30:00 pm
 
-Exercise 82
+(define SECONDS-HOUR 3600)
+(define SECONDS-MINUTE 60)
+
+; Time -> Number
+; consumes a time structure and produces the number of seconds that have passed since midnight 
+(check-expect (TIME->SECONDS (make-TIME 0 0 0)) 0)
+(check-expect (TIME->SECONDS TIME1) 12630)
+(check-expect (TIME->SECONDS TIME2) 48600)
+
+(define (TIME->SECONDS t)
+  (+ 
+    (* SECONDS-HOUR (TIME-hours t))
+    (* SECONDS-MINUTE (TIME-minutes t))
+    (TIME-seconds t))) 
+    
+Exercise 82 Design the function compare-word. The functions consumes two three-letter words (exercise 78). Produces a word that 
+indicates where the given ones agree and disagree. The function retains the content of the structure fields if the two agree
+otherwise it places #false in the field of the resulting word. Hint The exercise mentions two tasks: 
+the comparison of words and the comarison of "letters"
+
+; A Lower Case Letter (or LCL) is one of:
+; 1String [a,z]
+; #false
+; interpretation lower case letters, a through z, or no letter 
+
+(define-struct 3L-WORD [letter1 letter2 letter3]
+; 3L-WORD is a (make-3L-WORD LCL LCL LCL) 
+; interpretation 3L-WORD consists of three lower case letters 
+
+(define WORD (make-word "a" "c" "t"))
+(define WORD1 (make-word "c" "a" "t"))
