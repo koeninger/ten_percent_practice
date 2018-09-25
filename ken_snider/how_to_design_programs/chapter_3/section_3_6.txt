@@ -1,0 +1,21 @@
+;Exercise 39. Good programmers ensure that an image such as CAR can be enlarged or reduced via a single change to a constant definition.Good programmers establish a single point of control for all aspects of their programs, not just the graphical constants. Several chapters deal with this issue. We started the development of our car image with a single plain definition:
+;
+;(define WHEEL-RADIUS 5)
+;
+;The definition of WHEEL-DISTANCE is based on the wheel’s radius. Hence, changing WHEEL-RADIUS from 5 to 10 doubles the size of the car image. This kind of program organization is dubbed single point of control, and good design employs this idea as much as possible.
+;Develop your favorite image of an automobile so that WHEEL-RADIUS remains the single point of control. 
+
+(define WHEEL-RADIUS 5)
+(define WHEEL-DISTANCE
+  (* WHEEL-RADIUS 5))
+(define WHEEL 
+  (circle WHEEL-RADIUS "solid" "black"))
+(define SPACE 
+  (rectangle WHEEL-DISTANCE WHEEL-RADIUS "solid" "white"))
+(define BOTH-WHEELS
+  (beside WHEEL SPACE WHEEL))
+(define CAR-LENGTH 
+  (+ WHEEL-DISTANCE 
+    (* 5 WHEEL-RADIUS)))
+(define CAR-HEIGHT
+  (* WHEEL-RADIUS 3))

@@ -206,3 +206,17 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 3) given: (image 10 10) return 100
 4) (define (image-area img) ... img ...)
 5) (define (image-area) (* (height img) (width img)))
+
+//Exercise 37
+1) We use strings here
+2) Consume and return a string
+3) given "hello" return "ello", given "hello world" return "ello world"
+4) (define (string-rest s) ... s ...)
+5) (define (string-rest s) (substring s 1))
+
+//Exercise 38
+1) Strings are represented by strings
+2) Consume and return a string
+3) given "hello" return "hell", given "hello world" return "hello worl"
+4) (define (string-remove-last s) ... s ...)
+5) (define (string-remove-last s) (substring s 0 (- (string-length s) 1)))

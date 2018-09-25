@@ -85,8 +85,14 @@ of the following structure types, do not need data definitions for this task
        (... (sweater-color s)))) 
 
 Exercise 81 Design the function time->seconds, which consumers instances of time structures
-and produces the number of seconds that have passed since midnight. 
+(exercise 77) and produces the number of seconds that have passed since midnight. 
 example: representing 12 hours, 30 minutes, and 2 seconds with one of these structures and 
-if you then apply time-> seconds to this instance, the correct result is 45002
+if you then apply time->seconds to this instance, the correct result is 45002
+
+(define-struct point-time [hours minutes seconds])
+; point-time is (make-pt-time Number Number Number)
+; interpretation a point in time containing an hour, minute and seconds 
+
+(define TIME1 (make-pt-time 3 30 30))
 
 Exercise 82
