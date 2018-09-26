@@ -10,5 +10,6 @@
     <Compile Include="Program.fs" />
     <None Include="Introduction.fsx" />
     <None Include="Introduction2.fsx" />
+    <None Include="InterpretersCompilers.fsx" />
   </ItemGroup>
 </Project>
