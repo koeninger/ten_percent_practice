@@ -115,16 +115,45 @@ if you then apply time->seconds to this instance, the correct result is 45002
 Exercise 82 Design the function compare-word. The functions consumes two three-letter words (exercise 78). Produces a word that 
 indicates where the given ones agree and disagree. The function retains the content of the structure fields if the two agree
 otherwise it places #false in the field of the resulting word. Hint The exercise mentions two tasks: 
-the comparison of words and the comarison of "letters"
+the comparison of words and the comparison of "letters"
 
 ; A Lower Case Letter (or LCL) is one of:
 ; 1String [a,z]
 ; #false
 ; interpretation lower case letters, a through z, or no letter 
 
-(define-struct 3L-WORD [letter1 letter2 letter3]
+(define l1 "a")
+(define l2 "c")
+(define l3 "t")
+(define l4 #false)
+
+(define-struct 3L-WORD [letter1 letter2 letter3])
 ; 3L-WORD is a (make-3L-WORD LCL LCL LCL) 
 ; interpretation 3L-WORD consists of three lower case letters 
 
-(define WORD (make-word "a" "c" "t"))
-(define WORD1 (make-word "c" "a" "t"))
+(define WORD1 (make-3L-WORD "a" "c" "t"))
+(define WORD2 (make-3L-WORD "c" "a" "t"))
+(define WORD3 (make-3L-WORD "a" "c" #false))
+(define WORD4 (make-3L-WORD l1 l2 l4))
+(define WORD5 (make-3L-WORD l1 l2 l3))
+(define WORD6 (make-3L-WORD l2 l1 l3))
+
+; letters letters -> letter
+; compares two letters, if they're the same yield the letter
+; else #false
+(check-expect (compare-letter "a" l1) "a")
+(check-expect (compare-letter "z" l2) #false)
+(check-expect (compare-letter "c" l2) "c")
+(check-expect (compare-letter (3L-WORD-letter1 WORD1) l1) "a")
+
+(define (compare-letter l1 l2)
+  (cond
+    ((and (string? l1) (string<=? "a" l1 "z")
+          (string? l2) (string<=? "a" l2 "z"))
+     (cond [(string=? l1 l2) l1]
+           [else #false]))
+    [else #false]))
+
+; word word -> word
+; compares two words, if they agree yield the word
+; else #false 
