@@ -1,0 +1,8 @@
+If the domain of the world contains more than two independent pieces of information, the structure type definition must specify
+as many fields as there are distince pieces of information
+
+For a UFO that descends in a vertical line, and a tank that moves horizontally, both move at constant speeds 
+
+(define-struct space-game [ufo tank])
+; space-game is a (make-space-game Number Number)
+; interpretation a game state with ufo at y pos and a tank at x pos
