@@ -155,5 +155,13 @@ the comparison of words and the comparison of "letters"
     [else #false]))
 
 ; word word -> word
-; compares two words, if they agree yield the word
-; else #false 
+; compares two words, yields a word with the letters that match
+; and #false when the letters do not match 
+(check-expect (compare-word WORD1 WORD2) (make-3L-WORD #false #false "t"))
+(check-expect (compare-word WORD1 WORD5) WORD1)
+(check-expect (compare-word WORD3 (make-3L-WORD "a" "c" #false)) WORD3)
+
+(define (compare-word w1 w2)
+  (make-3L-WORD (compare-letter (3L-WORD-letter1 w1) (3L-WORD-letter1 w2))
+                (compare-letter (3L-WORD-letter2 w1) (3L-WORD-letter2 w2))
+                (compare-letter (3L-WORD-letter3 w1) (3L-WORD-letter3 w2))))
