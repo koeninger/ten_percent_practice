@@ -6,3 +6,11 @@ For a UFO that descends in a vertical line, and a tank that moves horizontally, 
 (define-struct space-game [ufo tank])
 ; space-game is a (make-space-game Number Number)
 ; interpretation a game state with ufo at y pos and a tank at x pos
+
+(define GAMESTATE1 (make-space-game 0 100)
+
+;A SpaceGame is a structure:
+; (make-space-game Posn Number)
+; interpretation (make-space-game (make-posn ux uy) tx)
+; describes a configuration where the UFO is 
+; at (ux,uy) and the tanks's x-coordinate is tx 
