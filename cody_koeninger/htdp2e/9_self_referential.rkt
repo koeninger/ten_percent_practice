@@ -238,3 +238,14 @@
   (cond
     [(zero? n) 0]
     [(positive? n) (+ x (multiply (sub1 n) x))]))
+
+; N img -> img
+; vertical column of n copies of img
+(check-expect (col 1 (rectangle 10 10 "solid" "blue")) (rectangle 10 10 "solid" "blue") )
+(check-expect (col 2 (rectangle 10 10 "solid" "blue")) (above (rectangle 10 10 "solid" "blue")
+                                                              (rectangle 10 10 "solid" "blue")))
+(define (col n img)
+  (cond
+    [(zero? n) (empty-scene 0 0)]
+    [(positive? n) (above img (col (sub1 n) img))]))
+              
