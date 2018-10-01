@@ -210,3 +210,7 @@ let assemble : sinstr list -> int list =
     )
 
 let exc2_4 = (assemble [SCstI 17; SVar 0; SVar 1; SAdd; SSwap; SPop] = [0; 17; 1; 0; 1; 1; 2; 6; 5])
+
+let intsToFile (inss : int list) (fname : string) =
+    let text = String.concat " " (List.map string inss)
+    System.IO.File.WriteAllText(fname, text)
