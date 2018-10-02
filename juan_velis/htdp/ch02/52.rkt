@@ -9,7 +9,7 @@
 ; interpretation number of pixels between the top and the UFO
  
 (define WIDTH 300) ; distances in terms of pixels 
-(define HEIGHT 100)
+(define HEIGHT 300)
 (define CLOSE (/ HEIGHT 3))
 (define MTSCN (empty-scene WIDTH HEIGHT))
 (define UFO (overlay (circle 10 "solid" "green") (ellipse 40 8 "solid" "green")))
@@ -38,13 +38,29 @@
    )                  
 )
 
+; Number -> String
+(define (message y)
+  (cond
+    [(>= (/ (* HEIGHT 2) 3) y) "descending"]
+    [else "closing in"]
+    )
+)
+
 ; WorldState -> Image
 ; places UFO at given height into the center of MTSCN
 (check-expect (render 11) (place-image UFO ... 11 MTSCN))
 (define (render y)
-  
-  (place-image UFO (/ WIDTH 2) y MTSCN))
-
+  (place-image
+   UFO
+   (/ WIDTH 2) y
+   (place-image 
+    (overlay/align "center" "center"
+                   (text (message y) 13 "orange")
+                   (rectangle WIDTH 20 "solid" "black"))
+    (/ WIDTH 2)
+    (- HEIGHT 10)
+   MTSCN
+   )))
 (main 0)
 
 ;(status "descending")
