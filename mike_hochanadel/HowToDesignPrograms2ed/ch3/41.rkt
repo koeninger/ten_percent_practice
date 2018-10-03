@@ -50,4 +50,8 @@
 ; places the car into the BACKGROUND scene,
 ; according to the given world state
 (define (render ws)
-  (place-image CAR ws (+ (* WHEEL-RADIUS 2) (/ Y-CAR 2)) BACKGROUND))
+  (place-image
+   CAR
+   (+ ws (/ (image-width CAR) 2))
+   (+ (* WHEEL-RADIUS 2) (/ Y-CAR 2))
+   BACKGROUND))
