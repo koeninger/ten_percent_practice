@@ -210,3 +210,29 @@ let assemble : sinstr list -> int list =
     )
 
 let exc2_4 = (assemble [SCstI 17; SVar 0; SVar 1; SAdd; SSwap; SPop] = [0; 17; 1; 0; 1; 1; 2; 6; 5])
+
+let intsToFile (inss : int list) (fname : string) =
+    let text = String.concat " " (List.map string inss)
+    System.IO.File.WriteAllText(fname, text)
+
+
+// exercise 2.6, simultaneous let bindings
+
+let rec seval (e : expr) (env : (string * int) list) : int =
+    match e with
+    | CstI i -> i
+    | Var x -> lookup env x
+    | Let(binds, body) ->
+        let binds1 = List.map (fun (x,r) -> (x, seval r env)) binds
+        let env1 = List.append binds1 env
+        seval body env1
+    | Add(e1, e2) -> seval e1 env + seval e2 env
+    | Mul(e1, e2) -> seval e1 env * seval e2 env
+    | Sub(e1, e2) -> seval e1 env - seval e2 env
+    | Eql(e1, e2) -> if (seval e1 env) = (seval e2 env) then 1 else 0
+    | If(prd, thn, els) ->
+        if (seval prd env) <> 0 then seval thn env else seval els env
+
+let exc2_6 = seval (Let([("x", CstI 11)], Let([("x", CstI 22); ("y", Add(Var "x", CstI 1) )], Add(Var "x", Var "y")))) emptyenv
+
+
