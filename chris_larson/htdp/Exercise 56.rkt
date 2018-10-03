@@ -9,22 +9,6 @@
 (define ROCKET (rectangle 5 30 "solid" "red"))
 (define CENTER (/ (image-height ROCKET) 2))
 
-; An LRCD (for launching rocket countdown) is one of:
-; – "resting"
-; – a Number between -3 and -1
-; – a NonnegativeNumber 
-; interpretation a grounded rocket, in countdown mode,
-; a number denotes the number of pixels between the
-; top of the canvas and the rocket (its height)
-
-; An LR (short for launching rocket) is one of:
-; – "resting"
-; – NonnegativeNumber
-; interpretation "resting" represents a grounded rocket
-; a number denotes the height of a rocket in flight
-(define (LR height)
-  (place-image ROCKET (/ WIDTH 2) (- HEIGHT height CENTER) BACKG))
-
 ; LRCD -> Image
 ; renders the state as a resting or flying rocket
 (define (show x)
@@ -37,6 +21,7 @@
                   (place-rocket HEIGHT))]
     [(>= x 0)
      (place-rocket x)]))
+
 (define (place-rocket x)
   (place-image ROCKET 10 (- x CENTER) BACKG))
 (check-expect
@@ -66,30 +51,30 @@
 
 ; LRCD -> LRCD
 ; raises the rocket by YDELTA if it is moving already 
- 
+(define (fly x)
+  (cond
+    [(string? x) x]
+    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
+    [(>= x 0) (- x YDELTA)]))
 (check-expect (fly "resting") "resting")
 (check-expect (fly -3) -2)
 (check-expect (fly -2) -1)
 (check-expect (fly -1) HEIGHT)
 (check-expect (fly 10) (- 10 YDELTA))
 (check-expect (fly 22) (- 22 YDELTA))
- 
-(define (fly x)
-  (cond
-    [(string? x) x]
-    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
-    [(>= x 0) (- x YDELTA)]))
 
-(define (tock state)
+(define (end? state)
   (cond
-    [(string? state) "resting"]
-    [(<= -3 state -1) (+ state 1)]
-    [(>= state 0) (+ state 1)]))
-
+    [(string? state) false]
+    [(< state 0) false]
+    [(> state 0) false]
+    [(= state 0) true]))
+  
 ; LRCD -> LRCD
-(define (main1 s)
+(define (main s)
   (big-bang s 
-    [on-tick tock]
+    [on-tick fly]
     [to-draw show]
-    [on-key launch]))
+    [on-key launch]
+    [stop-when end?]))
 
