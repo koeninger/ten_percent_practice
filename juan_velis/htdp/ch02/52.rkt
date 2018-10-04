@@ -24,26 +24,19 @@
 ; computes next location of UFO 
 (check-expect (nxt 11) 14)
 (define (nxt y)
-   (+ y 3)
-)
-; String -> Image
-(define (status msg) 
-  (place-image 
-   (overlay/align "center" "center"
-                  (text msg 13 "orange")
-                  (rectangle WIDTH 20 "solid" "black"))
-   (/ WIDTH 2)
-   (- HEIGHT 10)
-   MTSCN
-   )                  
+  (cond
+    [(> y (- HEIGHT 30)) y]
+    [else (+ y 3)]
+  )
 )
 
 ; Number -> String
 (define (message y)
   (cond
-    [(>= (/ (* HEIGHT 2) 3) y) "descending"]
-    [else "closing in"]
-    )
+    [(<= 0 y CLOSE) (text "descending" 13 "orange")]
+    [(and (< CLOSE y) (<= y (- HEIGHT 40))) (text "closing" 13 "yellow")]
+    [(> y (- HEIGHT 40)) (text "landed" 13 "green")]
+   )
 )
 
 ; WorldState -> Image
@@ -55,12 +48,10 @@
    (/ WIDTH 2) y
    (place-image 
     (overlay/align "center" "center"
-                   (text (message y) 13 "orange")
+                   (message y); (text (message y) 13 "orange")
                    (rectangle WIDTH 20 "solid" "black"))
     (/ WIDTH 2)
     (- HEIGHT 10)
    MTSCN
    )))
 (main 0)
-
-;(status "descending")
