@@ -1,15 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>sestoft_plc</RootNamespace>
   </PropertyGroup>
-
   <ItemGroup>
+    <Compile Include="Absyn.fs" />
     <Compile Include="Program.fs" />
     <None Include="Introduction.fsx" />
     <None Include="Introduction2.fsx" />
     <None Include="InterpretersCompilers.fsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FsLexYacc" Version="7.0.6" />
   </ItemGroup>
 </Project>
