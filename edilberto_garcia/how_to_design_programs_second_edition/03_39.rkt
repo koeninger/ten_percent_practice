@@ -18,10 +18,18 @@
 
 (require 2htdp/image)
 
-(define CAR_BASE (rectangle 100 30 "solid" "silver"))
- 
+(define CAR_BASE (rectangle (* WHEEL-RADIUS 10) (* WHEEL-RADIUS 3) "solid" "gold"))
 (define CAR_WHEEL (circle WHEEL-RADIUS "solid" "black"))
+(define CAR_WINDOW
+  (rectangle WHEEL-RADIUS WHEEL-RADIUS "solid" "silver")
+)
 
-(define WHEELS (pl
-   
-(place-image CAR_WHEEL 15  20 CAR_BASE)
+(define CAR
+  (place-image CAR_WHEEL (* WHEEL-RADIUS 1.8) (* WHEEL-RADIUS 2.5)
+  (place-image CAR_WHEEL  (* WHEEL-RADIUS 7.8) (* WHEEL-RADIUS 2.5)
+  (place-image CAR_WINDOW (* WHEEL-RADIUS 6.2) (* WHEEL-RADIUS .8) CAR_BASE)))
+)
+
+(define ROAD (rectangle (* WHEEL-RADIUS 70) (* WHEEL-RADIUS 10)  "solid" "gray"))
+
+(place-image CAR (* WHEEL-RADIUS 10) (* WHEEL-RADIUS 3) ROAD)
