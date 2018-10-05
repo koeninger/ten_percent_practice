@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex56) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex57) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -22,20 +22,20 @@
  
 (define CENTER (/ (image-height ROCKET) 2))
 (define (render y)
-  (place-image ROCKET 10 y BACKG))
+  (place-image ROCKET 10 (- HEIGHT y) BACKG))
 
 ; LRCD -> Image
 ; renders the state as a resting or flying rocket 
 (define (show x)
   (cond
     [(string? x)
-     (render (- HEIGHT CENTER))]
+     (render CENTER)]
     [(<= -3 x -1)
      (place-image (text (number->string x) 20 "red")
                   10 (* 3/4 WIDTH)
-                  (render (- HEIGHT CENTER)))]
+                  (render CENTER))]
     [(>= x 0)
-     (render (- x CENTER))]))
+     (render (+ x CENTER))]))
 
 ; LCRD -> LCRD
 ; check for launch conditions ("space bar" input) and count down if launching
@@ -50,13 +50,13 @@
 (define (fly x)
   (cond
     [(string? x) x]
-    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
-    [(>= x 0) (- x YDELTA)]))
+    [(<= -3 x -1) (if (= x -1) CENTER (+ x 1))]
+    [(>= x 0) (+ x YDELTA)]))
 
 (define (end x)
   (cond
     [(string? x) #false]
-    [(= x 0) #true]
+    [(= x HEIGHT) #true]
     [else #false]))
 
 
@@ -72,7 +72,7 @@
  
 (check-expect
  (show 53)
- (place-image ROCKET 10 (- 53 CENTER) BACKG))
+ (place-image ROCKET 10 (- HEIGHT (+ 53 CENTER)) BACKG))
 
 (check-expect (launch "resting" " ") -3)
 (check-expect (launch "resting" "a") "resting")
@@ -85,14 +85,14 @@
 (check-expect (fly "resting") "resting")
 (check-expect (fly -3) -2)
 (check-expect (fly -2) -1)
-(check-expect (fly -1) HEIGHT)
-(check-expect (fly 10) (- 10 YDELTA))
-(check-expect (fly 22) (- 22 YDELTA))
+(check-expect (fly -1) CENTER)
+(check-expect (fly 10) (+ 10 YDELTA))
+(check-expect (fly 22) (+ 22 YDELTA))
 
 (check-expect (end "resting") #false)
 (check-expect (end -3) #false)
 (check-expect (end -2) #false)
-(check-expect (end 0) #true)
+(check-expect (end 300) #true)
 (check-expect (end 1) #false)
 (check-expect (end 10) #false)
 (check-expect (end 200) #false)
