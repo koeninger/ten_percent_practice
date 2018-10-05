@@ -7,15 +7,23 @@
 
 (define WHEEL-RADIUS 5)
 (define WHEEL-DISTANCE
-  (* WHEEL-RADIUS 5))
-(define WHEEL 
-  (circle WHEEL-RADIUS "solid" "black"))
-(define SPACE 
+  (* WHEEL-RADIUS 4))
+(define WHEEL
+  (circle (* 2 WHEEL-RADIUS) "solid" "black"))
+(define SPACE
   (rectangle WHEEL-DISTANCE WHEEL-RADIUS "solid" "white"))
 (define BOTH-WHEELS
   (beside WHEEL SPACE WHEEL))
-(define CAR-LENGTH 
-  (+ WHEEL-DISTANCE 
+(define CAR-LENGTH
+  (+ WHEEL-DISTANCE
     (* 5 WHEEL-RADIUS)))
 (define CAR-HEIGHT
   (* WHEEL-RADIUS 3))
+
+
+(define CAR
+  (above
+    (rectangle CAR-LENGTH CAR-HEIGHT "solid" "red")
+      (underlay/offset (rectangle (* 2 CAR-LENGTH) CAR-HEIGHT "solid" "red") 0 (* .5 CAR-HEIGHT) BOTH-WHEELS)
+  )
+)

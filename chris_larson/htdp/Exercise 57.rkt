@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 56|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 57|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
 (define HEIGHT 300) ; distances in pixels 
 (define WIDTH  100)
 (define YDELTA 3)
@@ -14,25 +14,22 @@
 (define (show x)
   (cond
     [(string? x)
-     (place-rocket HEIGHT)]
+     (place-rocket 0)]
     [(<= -3 x -1)
      (place-image (text (number->string x) 20 "red")
                   10 (* 3/4 WIDTH)
-                  (place-rocket HEIGHT))]
+                  (place-rocket 0))]
     [(>= x 0)
      (place-rocket x)]))
 
 (define (place-rocket x)
-  (place-image ROCKET 10 (- x CENTER) BACKG))
+  (place-image ROCKET 10 (- HEIGHT (+ x CENTER)) BACKG))
 (check-expect
  (show HEIGHT)
- (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
-(check-expect
- (show HEIGHT)
- (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+ (place-image ROCKET 10 (- HEIGHT (+ HEIGHT CENTER)) BACKG))
 (check-expect
  (show 53)
- (place-image ROCKET 10 (- 53 CENTER) BACKG))
+ (place-image ROCKET 10 (- HEIGHT (+ 53 CENTER)) BACKG))
 
 ; LRCD KeyEvent -> LRCD
 ; starts the countdown when space bar is pressed, 
@@ -54,21 +51,21 @@
 (define (fly x)
   (cond
     [(string? x) x]
-    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
-    [(>= x 0) (- x YDELTA)]))
+    [(<= -3 x -1) (if (= x -1) 0 (+ x 1))]
+    [(>= x 0) (+ x YDELTA)]))
 (check-expect (fly "resting") "resting")
 (check-expect (fly -3) -2)
 (check-expect (fly -2) -1)
-(check-expect (fly -1) HEIGHT)
-(check-expect (fly 10) (- 10 YDELTA))
-(check-expect (fly 22) (- 22 YDELTA))
+(check-expect (fly -1) 0)
+(check-expect (fly 10) (+ 10 YDELTA))
+(check-expect (fly 22) (+ 22 YDELTA))
 
 (define (end? state)
   (cond
     [(string? state) false]
     [(< state 0) false]
-    [(> state 0) false]
-    [(= state 0) true]))
+    [(< state HEIGHT) false]
+    [(= state HEIGHT) true]))
   
 ; LRCD -> LRCD
 (define (main s)
