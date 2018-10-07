@@ -27,3 +27,34 @@
       (underlay/offset (rectangle (* 2 CAR-LENGTH) CAR-HEIGHT "solid" "red") 0 (* .5 CAR-HEIGHT) BOTH-WHEELS)
   )
 )
+
+; ===
+
+; Exercise 40. Formulate the examples as BSL tests, that is, using the check-expect form. Introduce a mistake. Re-run the tests.
+
+; WorldState -> WorldState 
+; moves the car by 3 pixels for every clock tick
+; examples: 
+;   given: 20, expect 23
+(check-expect (ws 20) 23)
+;   given: 78, expect 81
+(check-expect (ws 78) 81)
+(define (tock ws)
+  (+ ws 3))
+
+; Successful result:
+; Both tests passed!
+; >
+
+; Error Result (+ ws 4):
+; Ran 2 tests.
+;0 tests passed.
+;No signature violations.
+;
+;Check failures:
+;	Actual value 24 differs from 23, the expected value.
+;at line 5, column 0 
+;	Actual value 82 differs from 81, the expected value.
+;at line 7, column 0 
+
+
