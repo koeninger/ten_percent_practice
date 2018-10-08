@@ -1,6 +1,8 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname 9_self_referential) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+(require 2htdp/universe)
+
 ; 137
 ; both contains-flatt and how-many have the empty list as the base case, and recur on the rest of the list as the other case
 
@@ -249,3 +251,202 @@
     [(zero? n) (empty-scene 0 0)]
     [(positive? n) (above img (col (sub1 n) img))]))
               
+; N img -> img
+; horizontal row of n copies of img
+(check-expect (row 1 (rectangle 10 10 "solid" "blue")) (rectangle 10 10 "solid" "blue") )
+(check-expect (row 2 (rectangle 10 10 "solid" "blue")) (beside (rectangle 10 10 "solid" "blue")
+                                                              (rectangle 10 10 "solid" "blue")))
+(define (row n img)
+  (cond
+    [(zero? n) (empty-scene 0 0)]
+    [(positive? n) (beside img (row (sub1 n) img))]))
+
+(define lecture-hall (row 8 (col 18 (rectangle 10 10 "outline" "black"))))
+
+; list of posn -> img
+; image of lecture hall with red dots at posns
+(check-expect (add-balloons '()) lecture-hall)
+(check-expect (add-balloons (list (make-posn 23 42))) (place-image (circle 3 "solid" "red") 23 42 lecture-hall))
+(define (add-balloons posns)
+  (cond
+    [(empty? posns) lecture-hall]
+    [else (place-image (circle 3 "solid" "red") (posn-x (first posns)) (posn-y (first posns)) (add-balloons (rest posns)))]))
+
+
+(define-struct layer [color doll])
+
+; An RD (short for Russian doll) is one of: 
+; – String 
+; – (make-layer String RD)
+
+; RD -> string
+; string describing all colors in russian doll
+(check-expect (colors "blue") "blue")
+(check-expect (colors (make-layer "blue" "green")) "blue, green")
+(check-expect (colors (make-layer "red" (make-layer "blue" "green"))) "red, blue, green")
+(define (colors rd)
+  (cond
+    [(string? rd) rd]
+    [(layer? rd)
+     (string-append (layer-color rd) ", " (colors (layer-doll rd)))]))
+
+; RD -> string
+; color of innermost doll
+(check-expect (inner "red") "red")
+(check-expect (inner (make-layer "blue" "red")) "red")
+(check-expect (inner (make-layer "green" (make-layer "blue" "red"))) "red")
+(define (inner rd)
+  (cond
+    [(string? rd) rd]
+    [(layer? rd) (inner (layer-doll rd))]))
+
+; ex 156
+
+(define HEIGHT 220) ; distances in terms of pixels 
+(define WIDTH 30)
+(define XSHOTS (- (/ WIDTH 2) 5))
+ 
+; graphical constants 
+(define BACKGROUND (overlay (rectangle WIDTH HEIGHT "solid" "green") (empty-scene WIDTH HEIGHT)))
+(define SHOT (rectangle 7 3 "solid" "black"))
+
+; ShotWorld -> ShotWorld 
+(define (main w0)
+  (big-bang w0
+    [on-tick tock]
+    [on-key keyh]
+    [to-draw to-image]))
+ 
+; ShotWorld -> ShotWorld 
+; moves each shot up by one pixel
+(check-expect (tock '()) '())
+(check-expect (tock (cons 1 '())) (cons 0 '()))
+(define (tock w)
+  (cond
+    [(empty? w) '()]
+    [(negative? (first w)) (tock (rest w))]
+    [else (cons (sub1 (first w)) (tock (rest w)))]))
+ 
+; ShotWorld KeyEvent -> ShotWorld 
+; adds a shot to the world if the space bar is hit 
+(define (keyh w ke)
+  (if (key=? ke " ") (cons HEIGHT w) w))
+ 
+; ShotWorld -> Image 
+; adds each shot y on w at (XSHOTS,y} to BACKGROUND
+(check-expect (to-image '()) BACKGROUND)
+(check-expect (to-image (cons 1 '())) (place-image SHOT XSHOTS 1 BACKGROUND))
+(define (to-image w)
+  (cond
+    [(empty? w) BACKGROUND]
+    [else (place-image SHOT XSHOTS (first w)
+                       (to-image (rest w)))]))
+
+; ex 159
+
+(define-struct pair [balloon# lob])
+; A Pair is a structure (make-pair N List-of-posns)
+; A List-of-posns is one of: 
+; – '()
+; – (cons Posn List-of-posns)
+; interpretation (make-pair n lob) means n balloons 
+; must yet be thrown and added to lob
+
+; pair -> image
+; draw balloons in pair
+(check-expect (draw-balloons (make-pair 4 '())) (add-balloons '()))
+(check-expect (draw-balloons (make-pair 3 (list (make-posn 23 42)))) (add-balloons (list (make-posn 23 42))))
+(define (draw-balloons p)
+  (add-balloons (pair-lob p)))
+
+; pair -> pair
+; randomly throw (add to list of posns) 1 balloon per tick
+(check-random (throw-balloons (make-pair 0 '())) (make-pair 0 '()))
+(check-random (throw-balloons (make-pair 1 '())) (make-pair 0 (list (random-posn (image-width lecture-hall) (image-height lecture-hall)))))
+(define (throw-balloons p)
+  (if (<= (pair-balloon# p) 0)
+      p
+      (make-pair (sub1 (pair-balloon# p)) (cons (random-posn (image-width lecture-hall) (image-height lecture-hall)) (pair-lob p)))))
+
+; n n -> posn
+; random posn between 0,0 and xmax,ymax
+(define (random-posn xmax ymax)
+  (make-posn (random xmax) (random ymax)))
+
+(define (riot n)
+  (big-bang (make-pair n '())
+    [on-tick throw-balloons]
+    [to-draw draw-balloons]))
+
+; List-of-string String -> N
+; determines how often s occurs in los
+(check-expect (count (list "a" "b" "c" "b") "z") 0)
+(check-expect (count (list "a" "b" "c" "b") "b") 2)
+(define (count los s)
+  (cond
+    [(empty? los) 0]
+    [(cons? los)
+     (if (eq? (first los) s)
+         (add1 (count (rest los) s))
+         (count (rest los) s))]))
+
+
+; A Son.L is one of: 
+; – empty 
+; – (cons Number Son.L)
+; 
+; Son is used when it 
+; applies to Son.L and Son.R
+  
+
+; A Son.R is one of: 
+; – empty 
+; – (cons Number Son.R)
+; 
+; Constraint If s is a Son.R, 
+; no number occurs twice in s
+
+; Son
+(define es '())
+ 
+; Number Son -> Boolean
+; is x in s
+(define (in? x s)
+  (member? x s))
+
+; Number Son.L -> Son.L
+; removes x from s 
+(define s1.L
+  (cons 1 (cons 1 '())))
+ 
+(check-expect
+  (set-.L 1 s1.L) es)
+(define (set-.L x s)
+  (remove-all x s))
+  
+
+; Number Son.R -> Son.R
+; removes x from s
+(define s1.R
+  (cons 1 '()))
+ 
+(check-expect
+  (set-.R 1 s1.R) es)
+(define (set-.R x s)
+  (remove x s))
+
+; Number Son.L -> Son.L
+; adds x to s
+(check-expect (set+.L 1 es) (cons 1 es))
+(check-expect (set+.L 1 s1.L) (cons 1 s1.L))
+(define (set+.L x s)
+  (cons x s))
+
+; Number Son.R -> Son.R
+; adds x to s
+(check-expect (set+.R 1 es) (cons 1 es))
+(check-expect (set+.R 1 s1.R) s1.R)
+(define (set+.R x s)
+  (if (in? x s)
+      s
+      (cons x s)))
