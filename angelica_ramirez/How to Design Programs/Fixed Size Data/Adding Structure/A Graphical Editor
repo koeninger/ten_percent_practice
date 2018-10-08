@@ -10,18 +10,23 @@
 ;; the purpose of the function is to render the text within an empty scene of 200 x 20 pixels
 ;; for the cursor, use 1 x 20 red rectangle and for the strings, black text of size 16
 
+(define-struct editor [pre post])
+; An Editor is a structure:
+; (make-editor String String)
+; interpretation (make-editor s t) describes an editor
+; whose visible text is (string-append s t) with
+; the cursor displayed between s and t
+
+; Editor -> Image
+; render the text within an empty scene
+
 ; graphical constants
 (define SCENE (empty-scene 200 20))
 (define CURSOR (rectangle 1 20 "solid" "red"))
 (define TEXT-SIZE 16)
 (define TEXT-COLOR "black")
 
-(define-struct editor [pre post])
-; (make-editor String1 String2)
-; interpretation the text in editor has the curser displayed between String1 and String2
 
-; Editor -> Image
-; render the text within an empty scene
 (check-expect (render (make-editor " " " ")) (overlay/align "left" "center"
                                                             (beside (text (editor-pre (make-editor " " " ")) TEXT-SIZE TEXT-COLOR)
                                                                     CURSOR
@@ -46,9 +51,10 @@
                        (text (editor-post ed) TEXT-SIZE TEXT-COLOR))
                        SCENE))
 
+
 Exercise 84 Design edit. Consumes two inputs, an editor ed and a KeyEvent ke, produces
 another editor. Task is to add a single-character KeyEvent ke to the end of pre field of ed,
-unless ke denots the backspace "\b" key. In that ase, it deletes the character immediately
+unless ke denotes the backspace "\b" key. In that case, it deletes the character immediately
 to the left of the cursor (if there are any). The function ignores the tab key "\t" and 
 return key "\r". Pays attention to only two KeyEvents longer than one letter: "left" 
 and "right" Left arrow moves the cursor one character to the left if any, and the right
@@ -56,3 +62,57 @@ arrow moves it one character to the right if any. All other KeyEvents are ignore
 
 Auxilary functions needed string-first, string-rest, string-last, string-remove-last 
 
+(define-struct editor [pre post])
+; An Editor is a structure:
+; (make-editor String String)
+; interpretation (make-editor s t) describes an editor
+; whose visible text is (string-append s t) with
+; the cursor displayed between s and t
+
+; Editor -> Image
+; render the text within an empty scene
+
+; graphical constants
+(define SCENE (empty-scene 200 20))
+(define CURSOR (rectangle 1 20 "solid" "red"))
+(define TEXT-SIZE 16)
+(define TEXT-COLOR "black")
+
+
+(check-expect (render (make-editor " " " ")) (overlay/align "left" "center"
+                                                            (beside (text (editor-pre (make-editor " " " ")) TEXT-SIZE TEXT-COLOR)
+                                                                    CURSOR
+                                                                    (text (editor-post (make-editor " " " ")) TEXT-SIZE TEXT-COLOR))
+                                                            SCENE))
+(check-expect (render (make-editor "red" "crayon")) (overlay/align "left" "center"
+                                                                   (beside (text (editor-pre (make-editor "red" "crayon")) TEXT-SIZE TEXT-COLOR)
+                                                                           CURSOR
+                                                                           (text (editor-post (make-editor "red" "crayon")) TEXT-SIZE TEXT-COLOR))
+                                                                   SCENE))
+(check-expect (render (make-editor "hel" "lo world"))   (overlay/align "left" "center"
+                                                                       (beside (text (editor-pre (make-editor "hel" "lo world")) TEXT-SIZE TEXT-COLOR)
+                                                                               CURSOR
+                                                                               (text (editor-post (make-editor "hel" "lo world")) TEXT-SIZE TEXT-COLOR))
+                                                                       SCENE))
+
+
+(define (render ed)
+  (overlay/align "left" "center"
+               (beside (text (editor-pre ed) TEXT-SIZE TEXT-COLOR)
+                       CURSOR
+                       (text (editor-post ed) TEXT-SIZE TEXT-COLOR))
+                       SCENE))
+
+; Edit 
+; Editor KeyEvent -> Editor
+; adds or deletes characters or moves the cursor around
+(check-expect (edit (make-editor "hel" "lo") "left") (make-editor "he" "llo"))
+(check-expect (edit (make-editor "" "hello") "left") (make-editor " " "hello"))
+(check-expect (edit (make-editor "hel" "lo") "right") (make-editor "hell" "o"))
+(check-expect (edit (make-editor "hello" "") "right") (make-editor "hello" ""))
+(check-expect (edit (make-editor "hel" "lo") "a") (make-editor "hela" "lo"))
+(check-expect (edit (make-editor "hello" "") "b") (make-editor "hellob" ""))
+(check-expect (edit (make-editor "hel" "lo") "\b") (make-editor "he" "lo"))
+(check-expect (edit (make-editor "" "hello") "\b") (make-editor "" "hello"))
+(check-expect (edit (make-editor "hel" "lo") "\t") (make-editor "hel" "lo"))
+(check-expect (edit (make-editor "hel" "lo") "\r") (make-editor "hel" "lo"))
