@@ -16,23 +16,35 @@
 (define TEXT-SIZE 16)
 (define TEXT-COLOR "black")
 
+(define-struct editor [pre post])
+; (make-editor String1 String2)
+; interpretation the text in editor has the curser displayed between String1 and String2
+
 ; Editor -> Image
 ; render the text within an empty scene
+(check-expect (render (make-editor " " " ")) (overlay/align "left" "center"
+                                                            (beside (text (editor-pre (make-editor " " " ")) TEXT-SIZE TEXT-COLOR)
+                                                                    CURSOR
+                                                                    (text (editor-post (make-editor " " " ")) TEXT-SIZE TEXT-COLOR))
+                                                            SCENE))
+(check-expect (render (make-editor "red" "crayon")) (overlay/align "left" "center"
+                                                                   (beside (text (editor-pre (make-editor "red" "crayon")) TEXT-SIZE TEXT-COLOR)
+                                                                           CURSOR
+                                                                           (text (editor-post (make-editor "red" "crayon")) TEXT-SIZE TEXT-COLOR))
+                                                                   SCENE))
+(check-expect (render (make-editor "hel" "lo world"))   (overlay/align "left" "center"
+                                                                       (beside (text (editor-pre (make-editor "hel" "lo world")) TEXT-SIZE TEXT-COLOR)
+                                                                               CURSOR
+                                                                               (text (editor-post (make-editor "hel" "lo world")) TEXT-SIZE TEXT-COLOR))
+                                                                       SCENE))
 
-(check-expect (render "hello world") (overlay/align "left" "center"
-               (text "hello world" TEXT-SIZE TEXT-COLOR)
-               SCENE))
 
-(define (render s)
+(define (render ed)
   (overlay/align "left" "center"
-                 (text s TEXT-SIZE TEXT-COLOR)
-                 SCENE))
-
-(overlay/align "left" "center"
-               (beside (text "hel" TEXT-SIZE TEXT-COLOR)
+               (beside (text (editor-pre ed) TEXT-SIZE TEXT-COLOR)
                        CURSOR
-                       (text "lo world" TEXT-SIZE TEXT-COLOR))
-                       SCENE)
+                       (text (editor-post ed) TEXT-SIZE TEXT-COLOR))
+                       SCENE))
 
 Exercise 84 Design edit. Consumes two inputs, an editor ed and a KeyEvent ke, produces
 another editor. Task is to add a single-character KeyEvent ke to the end of pre field of ed,
