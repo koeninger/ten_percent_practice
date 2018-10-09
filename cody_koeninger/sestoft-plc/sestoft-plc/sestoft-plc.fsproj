@@ -10,6 +10,9 @@
     <None Include="Introduction.fsx" />
     <None Include="Introduction2.fsx" />
     <None Include="InterpretersCompilers.fsx" />
+    <Compile Include="ExprPar.fs" />
+    <Compile Include="ExprLex.fs" />
+    <Compile Include="Parse.fs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FsLexYacc" Version="7.0.6" />
