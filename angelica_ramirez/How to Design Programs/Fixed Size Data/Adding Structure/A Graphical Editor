@@ -61,7 +61,6 @@ and "right" Left arrow moves the cursor one character to the left if any, and th
 arrow moves it one character to the right if any. All other KeyEvents are ignored. 
 
 Auxilary functions needed string-first, string-rest, string-last, string-remove-last 
-
 (define-struct editor [pre post])
 ; An Editor is a structure:
 ; (make-editor String String)
@@ -95,7 +94,6 @@ Auxilary functions needed string-first, string-rest, string-last, string-remove-
                                                                                (text (editor-post (make-editor "hel" "lo world")) TEXT-SIZE TEXT-COLOR))
                                                                        SCENE))
 
-
 (define (render ed)
   (overlay/align "left" "center"
                (beside (text (editor-pre ed) TEXT-SIZE TEXT-COLOR)
@@ -116,3 +114,59 @@ Auxilary functions needed string-first, string-rest, string-last, string-remove-
 (check-expect (edit (make-editor "" "hello") "\b") (make-editor "" "hello"))
 (check-expect (edit (make-editor "hel" "lo") "\t") (make-editor "hel" "lo"))
 (check-expect (edit (make-editor "hel" "lo") "\r") (make-editor "hel" "lo"))
+
+(define (edit ed ke)
+  (cond
+    [
+    [
+    [
+    [
+
+;; Auxiliary functions for Edit
+
+; Editor -> Editor
+; moves cursor left
+
+
+; Editor -> Editor
+; moves cursor right
+
+; Editor -> editor
+; deletes 1String to the left of the cursor
+
+; Editor -> Editor
+; add 1String to the right of the cursor
+
+;; Substring functions for edit auxiliary functions
+
+; String -> 1String
+; extracts the first 1String from a non-empty string
+(check-expect (string-first "hello") "h")
+(check-expect (string-first " ") " ")
+
+(define (string-first s)
+  (substring s 0 1))
+
+; String -> String
+; extracts all but the first 1String from a string
+(check-expect (string-rest "hello") "ello")
+(check-expect (string-rest "hi") "i")
+
+(define (string-rest s)
+  (substring s 1 (string-length s)))
+
+; String -> 1String
+; extracts the last 1String from a non-empty string
+(check-expect (string-last "hello") "o")
+(check-expect (string-last "g") "g")
+
+(define (string-last s)
+  (string-ith s (- (string-length s) 1)))
+
+; String -> String
+; removes the last 1String in a non-empty string
+(check-expect (string-remove-last "hello") "hell")
+(check-expect (string-remove-last "hi ") "hi")
+
+(define (string-remove-last s)
+  (... s ...))

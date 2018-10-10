@@ -220,3 +220,14 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 3) given "hello" return "hell", given "hello world" return "hello worl"
 4) (define (string-remove-last s) ... s ...)
 5) (define (string-remove-last s) (substring s 0 (- (string-length s) 1)))
+
+//Exercise 39
+(require 2htdp/image)
+(define WHEEL-RADIUS 10)
+(define WHEEL (circle WHEEL-RADIUS "solid" "black"))
+(define SPACE (rectangle (* 2 WHEEL-RADIUS) WHEEL-RADIUS 0 "white"))
+(define BOTH-WHEELS (beside WHEEL SPACE WHEEL))
+(define CAR-BOTTOM (rectangle (* 6 WHEEL-RADIUS) (* 2 WHEEL-RADIUS) "solid" "red"))
+(define CAR-TOP (rectangle (* 3 WHEEL-RADIUS) (* 2 WHEEL-RADIUS) "solid" "red"))
+(define CAR-BODY (above CAR-TOP CAR-BOTTOM))
+(define CAR (overlay/xy BOTH-WHEELS 0 (* -3 WHEEL-RADIUS) CAR-BODY))
