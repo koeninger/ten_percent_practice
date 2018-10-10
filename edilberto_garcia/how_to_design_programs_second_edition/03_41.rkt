@@ -48,12 +48,7 @@
 ; mouse-event-handler
 ; end?
 
-; WorldState -> WorldState
-; launches the program from some initial state 
-(define (main ws)
-   (big-bang ws
-     [on-tick tock]
-     [to-draw render]))
+
 
 
 
@@ -72,4 +67,13 @@
 ; to create a tree-like shape.
 ; Also add a clause to the big-bang expression that stops the
 ; animation when the car has disappeared on the right side.
-... 
+
+(define (stop_check x)
+ (>= x WIDTH-OF-THE-WORLD)  
+)
+
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]
+     [stop-when stop_check]))
