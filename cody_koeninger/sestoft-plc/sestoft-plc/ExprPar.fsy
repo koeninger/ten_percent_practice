@@ -9,12 +9,16 @@
 %token <int> CSTINT
 %token <string> NAME
 %token PLUS MINUS TIMES DIVIDE EQ
-%token END IN LET
+%token END IN LET IF THEN ELSE
 %token LPAR RPAR
 %token EOF
 
-%left MINUS PLUS /* lowest precedence */
-%left TIMES /* highest precedence */
+/* lowest precedence */
+%nonassoc THEN
+%nonassoc ELSE
+%left MINUS PLUS
+%left TIMES
+/* highest precedence */
 
 %start Main
 %type <Absyn.expr> Main 
@@ -33,5 +37,6 @@ Expr:
   | LET NAME EQ Expr IN Expr END        { Let($2, $4, $6)   }
   | Expr TIMES Expr                     { Prim("*", $1, $3) }
   | Expr PLUS  Expr                     { Prim("+", $1, $3) }  
-  | Expr MINUS Expr                     { Prim("-", $1, $3) } 
+  | Expr MINUS Expr                     { Prim("-", $1, $3) }
+  | IF Expr THEN Expr ELSE Expr         { If($2, $4, $6) }
 ;
