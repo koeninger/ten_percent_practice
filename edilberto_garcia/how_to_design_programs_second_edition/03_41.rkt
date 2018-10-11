@@ -14,8 +14,30 @@
 (define SPACE  (rectangle (* WHEEL-RADIUS 6) (* WHEEL-RADIUS 3) "solid" "red"))
 (define BOTH-WHEELS (beside WHEEL SPACE WHEEL))
 
+
+; Exercise 41. Finish the sample problem and get the program to run.
+; That is, assuming that you have solved exercise 39,
+; define the constants BACKGROUND and Y-CAR.
+; Then assemble all the function definitions, including their tests.
+; When your program runs to your satisfaction, add a tree to the scenery. We used
+
+(define tree
+  (underlay/xy (circle 10 "solid" "green")
+               9 15
+               (rectangle 2 20 "solid" "brown")))
+
+(define TREE_X (/ WIDTH-OF-THE-WORLD 1.5))
+(define TREE_Y (/ WIDTH-OF-THE-WORLD 8))
+
+; to create a tree-like shape.
+; Also add a clause to the big-bang expression that stops the
+; animation when the car has disappeared on the right side.
+
+
 (define BACKGROUND
+  (place-image tree TREE_X TREE_Y
   (rectangle WIDTH-OF-THE-WORLD (* WHEEL-RADIUS 10)  "solid" "gray")
+  )
 )
 
 (define CAR_BASE (rectangle (* WHEEL-RADIUS 10) (* WHEEL-RADIUS 3) "solid" "gold"))
@@ -29,13 +51,6 @@
 )
 
 (define CAR_Y (* WHEEL-RADIUS 6))
-
-; render
-; WorldState -> Image
-; places the image of the car x pixels from 
-; the left margin of the BACKGROUND image 
-(define (render x) (place-image CAR x CAR_Y BACKGROUND ))
-
 
 
 ; clock-tick-handler
@@ -51,26 +66,17 @@
 
 
 
-
-; Exercise 41. Finish the sample problem and get the program to run.
-; That is, assuming that you have solved exercise 39,
-; define the constants BACKGROUND and Y-CAR.
-; Then assemble all the function definitions, including their tests.
-; When your program runs to your satisfaction, add a tree to the scenery. We used
-
-(define tree
-  (underlay/xy (circle 10 "solid" "green")
-               9 15
-               (rectangle 2 20 "solid" "brown")))
-
-
-; to create a tree-like shape.
-; Also add a clause to the big-bang expression that stops the
-; animation when the car has disappeared on the right side.
-
 (define (stop_check x)
- (>= x WIDTH-OF-THE-WORLD)  
+ (>= x (+ WIDTH-OF-THE-WORLD (image-width CAR)) ) 
 )
+
+; render
+; WorldState -> Image
+; places the image of the car x pixels from 
+; the left margin of the BACKGROUND image 
+(define (render x) (place-image CAR x CAR_Y BACKGROUND ))
+
+
 
 (define (main ws)
    (big-bang ws
