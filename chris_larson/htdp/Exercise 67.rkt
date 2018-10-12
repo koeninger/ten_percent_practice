@@ -36,3 +36,24 @@
 (phone-number (centry-office this))
 (phone-number (centry-cell this))
 (centry-name this)
+
+; distances in terms of pixels:
+(define HEIGHT 200)
+(define MIDDLE (quotient HEIGHT 2))
+(define WIDTH  400)
+(define CENTER (quotient WIDTH 2))
+ 
+(define-struct game [left-player right-player ball])
+ 
+(define game0
+  (make-game MIDDLE MIDDLE (make-posn CENTER CENTER)))
+
+; (game-ball game0)
+;   (make-posn CENTER CENTER)
+;      (quotient WIDTH 2)
+;      (quotient 400 2)
+;                200
+; (posn? (game-ball game0))
+; is (make-posn CENTER CENTER) a position?
+; (game-left-player game0)
+;  (quotient 200 2) = 100
