@@ -33,7 +33,7 @@ let rec eval (e : expr) (env : value env) : int =
     | Var x  ->
       match lookup env x with
       | Int i -> i 
-      | _     -> failwith "eval Var"
+      | _     -> failwith ("eval Var " + (string x))
     | Prim(ope, e1, e2) -> 
       let i1 = eval e1 env
       let i2 = eval e2 env

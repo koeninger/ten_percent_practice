@@ -1,5 +1,17 @@
 see ./lexyacc.sh
 
+then e.g.
+
+open Parse
+open ParseAndRun
+run(fromFile("Examples.fun"));;
+
+or
+
+#load "Examples.fs"
+open Examples
+run e4_2_2
+
 Compiling and loading the micro-ML evaluator and parser (Fun/README.TXT)
 ------------------------------------------------------------------------
 
