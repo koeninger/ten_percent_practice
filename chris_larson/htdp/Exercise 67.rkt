@@ -17,3 +17,22 @@
 
 (define-struct ballf [x y deltax deltay])
 (make-ballf 30 40 -10 5)
+
+(define-struct centry [name home office cell])
+(define-struct phone [area number])
+(define this (make-centry "Shriram Fisler"
+             (make-phone 207 "363-2421")
+             (make-phone 101 "766-1099")
+             (make-phone 208 "112-9981")))
+(define-struct entry [name phone email])
+(define pl (make-entry "Al Abe" "666-7771" "lee@x.me"))
+(entry-name pl)
+(vel-deltax (ball-velocity ball1))
+
+(phone-area (centry-home this))
+(phone-area (centry-office this))
+(phone-area (centry-cell this))
+(phone-number (centry-home this))
+(phone-number (centry-office this))
+(phone-number (centry-cell this))
+(centry-name this)
