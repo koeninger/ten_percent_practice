@@ -25,3 +25,9 @@
 ; function make-sweater
 ; selectors sweater-material, sweater-size, sweater-producer
 ; predicates sweater?
+
+(make-movie "Hot Fuzz" "Edgar Wright" 2007)
+(make-person "Joe" "Brown" "Green" 5551234567)
+(make-pet "Frodo" 1)
+(make-CD "Artist" "Album" 20.15)
+(make-sweater "yarn" "L" "Factory#1")
