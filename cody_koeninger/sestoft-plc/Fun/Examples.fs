@@ -35,3 +35,24 @@ let f x =
     end
   end
 """
+
+let e4_4_1 = fromString """
+let pow x n = if n=0 then 1 else x * pow x (n-1)
+  in pow 3 8
+  end
+"""
+
+let e4_4_2 = fromString """
+let max2 a b = if a<b then b else a
+  in let max3 a b c = max2 a (max2 b c)
+    in max3 25 6 62
+    end
+  end
+"""
+
+let e4_5 = fromString """
+let x = 3
+  in if (0 < x) && (x < 3) || (x + 1 = 4) then 23 else 42
+  end
+"""
+
