@@ -24,34 +24,46 @@ let rec lookup env x =
 
 type value = 
   | Int of int
+  | TupV of value list
   | Closure of string * string list * expr * value env       (* (f, x y z, fBody, fDeclEnv) *)
 
-let rec eval (e : expr) (env : value env) : int =
+let rec eval (e : expr) (env : value env) : value =
     match e with 
-    | CstI i -> i
-    | CstB b -> if b then 1 else 0
+    | CstI i -> Int i
+    | CstB b -> Int (if b then 1 else 0)
     | Var x  ->
       match lookup env x with
-      | Int i -> i 
-      | _     -> failwith ("eval Var " + (string x))
+      | Int i -> Int i
+      | TupV xs -> TupV xs
+      | _     -> failwith (sprintf "eval Var doesn't allow closures %A" x)
     | Prim(ope, e1, e2) -> 
-      let i1 = eval e1 env
-      let i2 = eval e2 env
+      let i1 =
+          match eval e1 env with
+          | Int i -> i
+          | _ -> failwith (sprintf "eval not an int Prim(%A %A %A)" ope e1 e2)
+      let i2 =
+          match eval e2 env with
+          | Int i -> i
+          | _ -> failwith (sprintf "eval not an int Prim(%A %A %A)" ope e1 e2)
       match ope with
       | "*" -> i1 * i2
       | "+" -> i1 + i2
       | "-" -> i1 - i2
       | "=" -> if i1 = i2 then 1 else 0
       | "<" -> if i1 < i2 then 1 else 0
+      | "<=" -> if i1 <= i2 then 1 else 0
+      | ">" -> if i1 > i2 then 1 else 0
+      | ">=" -> if i1 >= i2 then 1 else 0
       | _   -> failwith ("unknown primitive " + ope)
+      |> Int
     | Let(x, eRhs, letBody) -> 
-      let xVal = Int(eval eRhs env)
+      let xVal = eval eRhs env
       let bodyEnv = (x, xVal) :: env
       eval letBody bodyEnv
     | If(e1, e2, e3) -> 
-      let b = eval e1 env
-      if b<>0 then eval e2 env
-      else eval e3 env
+      match eval e1 env with
+      | Int b -> if b<>0 then eval e2 env else eval e3 env
+      | x -> failwith (sprintf "First argument to if was not a bool / int: %A" x)
     | Letfun(f, xs, fBody, letBody) -> 
       let bodyEnv = (f, Closure(f, xs, fBody, env)) :: env 
       eval letBody bodyEnv
@@ -59,11 +71,16 @@ let rec eval (e : expr) (env : value env) : int =
       let fClosure = lookup env f
       match fClosure with
       | Closure (f, xs, fBody, fDeclEnv) ->
-        let xVals = List.zip xs eArgs |> List.map (function | (x, e) -> (x, Int(eval e env)))
+        let xVals = List.zip xs eArgs |> List.map (function | (x, e) -> (x, eval e env))
         let fBodyEnv = xVals @ (f, fClosure) :: fDeclEnv
         eval fBody fBodyEnv
       | _ -> failwith "eval Call: not a function"
     | Call _ -> failwith "eval Call: not first-order function"
+    | Tup xs -> List.map (fun x -> eval x env) xs |> TupV
+    | Sel(i, v) ->
+        match eval v env with
+        | TupV xs -> List.item (i - 1) xs 
+        | e -> failwith (sprintf "eval Sel: expected a tuple, got %A" e)
 
 (* Evaluate in empty environment: program must have no free variables: *)
 

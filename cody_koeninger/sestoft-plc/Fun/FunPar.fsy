@@ -13,15 +13,16 @@
 
 %token ELSE END FALSE IF IN LET NOT THEN TRUE AND OR
 %token PLUS MINUS TIMES DIV MOD
-%token EQ NE GT LT GE LE
-%token LPAR RPAR 
+%token EQ NE GT LT GE LE COMMA HASH
+%token LPAR RPAR
 %token EOF
 
 %left ELSE              /* lowest precedence  */
+%left AND OR
 %left EQ NE 
 %nonassoc GT LT GE LE
 %left PLUS MINUS
-%left TIMES DIV MOD 
+%left TIMES DIV MOD
 %nonassoc NOT           /* highest precedence  */
 
 %start Main
@@ -54,14 +55,21 @@ Expr:
   | Expr LT    Expr                     { Prim("<",  $1, $3)     }
   | Expr GE    Expr                     { Prim(">=", $1, $3)     }
   | Expr LE    Expr                     { Prim("<=", $1, $3)     }
+  | HASH CSTINT LPAR Expr RPAR                    { Sel( $2, $4) }
 ;
 
 AtExpr:
     Const                               { $1                     }
   | NAME                                { Var $1                 }
   | LET NAME EQ Expr IN Expr END        { Let($2, $4, $6)        }
-  | LET NAME Params EQ Expr IN Expr END   { Letfun($2, $3, $5, $7) }
+  | LET NAME Params EQ Expr IN Expr END { Letfun($2, $3, $5, $7) }
+  | LPAR Expr Tuples RPAR               { Tup ($2 :: $3) }
   | LPAR Expr RPAR                      { $2                     }
+;
+
+Tuples:
+    COMMA Expr                          { [$2] }
+  | COMMA Expr Tuples                   { $2 :: $3 }
 ;
 
 Params:

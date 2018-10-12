@@ -11,3 +11,6 @@ type expr =
   | If of expr * expr * expr
   | Letfun of string * string list * expr * expr    (* (f, x y z, fBody, letBody) *)
   | Call of expr * expr list
+  | Tup of expr list
+  | Sel of int * expr
+  
