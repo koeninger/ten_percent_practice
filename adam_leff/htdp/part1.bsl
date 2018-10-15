@@ -271,4 +271,47 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 (define (render ws)
   (place-image CAR (+ ws (/ (image-width CAR) 2)) Y-CAR BACKGROUND))
   
- 
+ //Exercise 43
+; AnimationState -> Image
+; renders the x-th frame of animation
+; on top of the BACKGROUND image 
+
+; AnimationState -> AnimationState
+; add 1 to x to get the next frame
+
+(define (tock as)
+    (+ as 1))
+
+(define (render as)
+  (place-image CAR (+ (* 3 as) (/ (image-width CAR) 2)) Y-CAR BACKGROUND))
+  
+  (require 2htdp/image)
+(require 2htdp/universe)
+(define WHEEL-RADIUS 5)
+(define WHEEL (circle WHEEL-RADIUS "solid" "black"))
+(define SPACE (rectangle (* 2 WHEEL-RADIUS) WHEEL-RADIUS 0 "white"))
+(define BOTH-WHEELS (beside WHEEL SPACE WHEEL))
+(define CAR-BOTTOM (rectangle (* 6 WHEEL-RADIUS) (* 2 WHEEL-RADIUS) "solid" "red"))
+(define CAR-TOP (rectangle (* 3 WHEEL-RADIUS) (* 2 WHEEL-RADIUS) "solid" "red"))
+(define CAR-BODY (above CAR-TOP CAR-BOTTOM))
+(define CAR (overlay/xy BOTH-WHEELS 0 (* -3 WHEEL-RADIUS) CAR-BODY))
+(define WIDTH-OF-WORLD 200)
+(define TREE
+  (underlay/xy (circle 10 "solid" "green")
+               9 15
+               (rectangle 2 20 "solid" "brown")))
+
+(define BACKGROUND (place-image TREE 50 30 (empty-scene WIDTH-OF-WORLD 50)))
+(define Y-CAR (- 50 (* 2 WHEEL-RADIUS)))
+(define SINE-MULTIPLIER (/ (image-height CAR) 2))
+ (define (render as)
+   (place-image CAR (+ (* as 3) (/ (image-width CAR) 2)) (+ (* (sin as) SINE-MULTIPLIER) 15) BACKGROUND))
+ (define (tock as)
+  (+ as 1))
+ (define (end? as)
+   (> as 66))
+ (define (main as)
+   (big-bang as
+     [on-tick tock]
+     [to-draw render]
+     [stop-when end?]))
