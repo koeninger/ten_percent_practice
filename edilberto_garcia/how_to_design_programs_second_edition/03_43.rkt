@@ -81,4 +81,17 @@
 ; AnimationState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
-(define (render x) (place-image CAR x CAR_Y BACKGROUND ))
+(define (render x) (place-image CAR x (+ (sin x) (* WHEEL-RADIUS 3)) BACKGROUND ))
+
+
+; clock-tick-handler
+; AnimationState -> AnimationState
+; Moves the car in a sine wave 
+(define (tock x)(+ 3 x))
+
+
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]
+     [stop-when stop_check]))
