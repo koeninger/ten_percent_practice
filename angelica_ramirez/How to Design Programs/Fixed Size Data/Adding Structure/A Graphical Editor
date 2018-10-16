@@ -391,5 +391,179 @@ Exercise 86 Notice that if you type a lot, the editor program does not display a
 right margin. Modify the edit from exercise 84 so that it ignores a keystroke if adding it to the end of the pre field would
 mean the rendered text is too wide for your canvas
 
+(define-struct editor [pre post])
+; An Editor is a structure:
+; (make-editor String String)
+; interpretation (make-editor s t) describes an editor
+; whose visible text is (string-append s t) with
+; the cursor displayed between s and t
+
+; Editor -> Image
+; render the text within an empty scene
+
+; graphical constants
+(define SCENE-HEIGHT 20)
+(define SCENE-LENGTH 200)
+(define SCENE (empty-scene SCENE-LENGTH SCENE-HEIGHT))
+(define CURSOR (rectangle 1 20 "solid" "red"))
+(define TEXT-SIZE 16)
+(define TEXT-COLOR "black")
+
+
+(check-expect (render (make-editor " " " ")) (overlay/align "left" "center"
+                                                            (beside (text (editor-pre (make-editor " " " ")) TEXT-SIZE TEXT-COLOR)
+                                                                    CURSOR
+                                                                    (text (editor-post (make-editor " " " ")) TEXT-SIZE TEXT-COLOR))
+                                                            SCENE))
+(check-expect (render (make-editor "red" "crayon")) (overlay/align "left" "center"
+                                                                   (beside (text (editor-pre (make-editor "red" "crayon")) TEXT-SIZE TEXT-COLOR)
+                                                                           CURSOR
+                                                                           (text (editor-post (make-editor "red" "crayon")) TEXT-SIZE TEXT-COLOR))
+                                                                   SCENE))
+(check-expect (render (make-editor "hel" "lo world"))   (overlay/align "left" "center"
+                                                                       (beside (text (editor-pre (make-editor "hel" "lo world")) TEXT-SIZE TEXT-COLOR)
+                                                                               CURSOR
+                                                                               (text (editor-post (make-editor "hel" "lo world")) TEXT-SIZE TEXT-COLOR))
+                                                                       SCENE))
+
+(define (render ed)
+  (overlay/align "left" "center"
+               (beside (text (editor-pre ed) TEXT-SIZE TEXT-COLOR)
+                       CURSOR
+                       (text (editor-post ed) TEXT-SIZE TEXT-COLOR))
+                       SCENE))
+
+; Edit 
+; Editor KeyEvent -> Editor
+; adds or deletes characters or moves the cursor around
+(check-expect (edit (make-editor "hel" "lo") "left") (make-editor "he" "llo"))
+(check-expect (edit (make-editor "" "hello") "left") (make-editor "" "hello"))
+(check-expect (edit (make-editor "hel" "lo") "right") (make-editor "hell" "o"))
+(check-expect (edit (make-editor "hello" "") "right") (make-editor "hello" ""))
+(check-expect (edit (make-editor "hel" "lo") "\b") (make-editor "he" "lo"))
+(check-expect (edit (make-editor "" "hello") "\b") (make-editor "" "hello"))
+(check-expect (edit (make-editor "hel" "lo") "\t") (make-editor "hel" "lo"))
+(check-expect (edit (make-editor "hel" "lo") "\r") (make-editor "hel" "lo"))
+(check-expect (edit (make-editor "hel" "lo") "a") (make-editor "hela" "lo"))
+(check-expect (edit (make-editor "hello" "") "b") (make-editor "hellob" ""))
+
+(define (edit ed ke)
+  (cond
+    [(key=? ke "left") (cursor-left ed)]
+    [(key=? ke "right") (cursor-right ed)]
+    [(key=? ke "\b") (backspace-left ed)]
+    [(key=? ke "\t") ed]
+    [(key=? ke "\r") ed]
+    [(equal? (string-length ke) 1)
+     (add-edit-limit ed ke)]
+    [else ed]))
+
+
+
+;; Auxiliary functions for Edit
+
+; Editor 1String -> Editor
+; add 1String to String until buffer limit
+
+(define (add-edit-limit ed c)
+  (cond
+    [(> (image-width (render (add-left ed c))) SCENE-LENGTH) ed]
+    [else (add-left ed c)]))
+
+; Editor -> Editor
+; moves cursor left 
+(check-expect (cursor-left (make-editor "red" "crayon")) (make-editor "re" "dcrayon"))
+(check-expect (cursor-left (make-editor " " "hello")) (make-editor "" " hello"))
+(check-expect (cursor-left (make-editor "" "bye")) (make-editor "" "bye"))
+
+(define (cursor-left ed)
+  (cond
+    [(string=? (editor-pre ed) "") ed]
+    [else (make-editor
+             (string-remove-last (editor-pre ed))
+             (string-append (string-last (editor-pre ed)) (editor-post ed)))]))
+
+; Editor -> Editor
+; moves cursor right
+(check-expect (cursor-right (make-editor "red" "crayon")) (make-editor "redc" "rayon"))
+(check-expect (cursor-right (make-editor " " "hello")) (make-editor " h" "ello"))
+(check-expect (cursor-right (make-editor "bye" "")) (make-editor "bye" ""))
+
+(define (cursor-right ed)
+  (cond
+    [(string=? (editor-post ed) "") ed]
+    [else (make-editor
+           (string-append (editor-pre ed) (string-first (editor-post ed)))
+           (string-rest (editor-post ed)))]))
+
+; Editor -> editor
+; deletes 1String to the left of the cursor
+(check-expect (backspace-left (make-editor "red" "crayon")) (make-editor "re" "crayon"))
+(check-expect (backspace-left (make-editor " " "hello")) (make-editor "" "hello"))
+(check-expect (backspace-left (make-editor "" "bye")) (make-editor "" "bye"))
+
+(define (backspace-left ed)
+  (cond
+    [(string=? (editor-pre ed) "") ed]
+    [else (make-editor
+           (string-remove-last (editor-pre ed))
+           (editor-post ed))]))
+
+; Editor -> Editor
+; add 1String to the right of the cursor
+(check-expect (add-left (make-editor "red" "crayon") "s") (make-editor "reds" "crayon"))
+(check-expect (add-left (make-editor "" "hello") "!") (make-editor "!" "hello"))
+(check-expect (add-left (make-editor "bye" " ") "n") (make-editor "byen" " "))
+
+(define (add-left ed ke)
+  (make-editor
+   (string-append (editor-pre ed) ke)
+   (editor-post ed)))
+
+;; Substring functions for edit auxiliary functions
+
+; String -> 1String
+; extracts the first 1String from a non-empty string
+(check-expect (string-first "hello") "h")
+(check-expect (string-first " ") " ")
+
+(define (string-first s)
+  (substring s 0 1))
+
+; String -> String
+; extracts all but the first 1String from a string
+(check-expect (string-rest "hello") "ello")
+(check-expect (string-rest "hi") "i")
+
+(define (string-rest s)
+  (substring s 1 (string-length s)))
+
+; String -> 1String
+; extracts the last 1String from a non-empty string
+(check-expect (string-last "hello") "o")
+(check-expect (string-last "g") "g")
+
+(define (string-last s)
+  (string-ith s (- (string-length s) 1)))
+
+; String -> String
+; removes the last 1String in a non-empty string
+(check-expect (string-remove-last "hello") "hell")
+(check-expect (string-remove-last "hi ") "hi")
+
+(define (string-remove-last s)
+  (substring s 0 (sub1 (string-length s))))
+
+; String -> Editor
+; interpretation consumes string and renders new editor with the string as pre
+; expect (run "hello") -> render an editor with "hello" and cursor after
+
+(define (run s)
+  (big-bang (make-editor s "")
+      [to-draw render]
+      [on-key edit]))
+
+(run "hello")
+
 Exercise 87 Develop a data representation for an editor based on our first idea, using a string and an index. Then solve the
 preceding exercises again. Retrace the design recipe. Hint. If haven't already solve the exercises in Functions 
