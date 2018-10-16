@@ -25,6 +25,7 @@ let rec lookup env x =
 type value = 
   | Int of int
   | TupV of value list
+  | ListV of value list
   | Closure of string * string list * expr * value env       (* (f, x y z, fBody, fDeclEnv) *)
 
 let rec eval (e : expr) (env : value env) : value =
@@ -35,6 +36,7 @@ let rec eval (e : expr) (env : value env) : value =
       match lookup env x with
       | Int i -> Int i
       | TupV xs -> TupV xs
+      | ListV xs -> ListV xs
       | _     -> failwith (sprintf "eval Var doesn't allow closures %A" x)
     | Prim(ope, e1, e2) -> 
       let i1 =
@@ -81,6 +83,20 @@ let rec eval (e : expr) (env : value env) : value =
         match eval v env with
         | TupV xs -> List.item (i - 1) xs 
         | e -> failwith (sprintf "eval Sel: expected a tuple, got %A" e)
+    | CstN -> ListV []
+    | ConC(e1, e2) ->
+        let e1val = eval e1 env
+        let e2val = eval e2 env
+        match e2val with
+            | ListV xs -> ListV (e1val :: xs)
+            | e -> failwith (sprintf "eval ConC: expected a list, got %A" e)
+    | Match(e0, e1, (h, t, e2)) ->
+        match eval e0 env with
+            | ListV [] -> eval e1 env
+            | ListV (hx::tx) ->
+                let newEnv = (h, hx) :: (t, ListV tx) :: env
+                eval e2 newEnv
+            | e -> failwith (sprintf "eval Match: expected a list, got %A" e)
 
 (* Evaluate in empty environment: program must have no free variables: *)
 
@@ -130,4 +146,7 @@ let ex5 =
                           Call(Var "fib", [Prim("-", Var "n", CstI 1)]),
                           Call(Var "fib", [Prim("-", Var "n", CstI 2)])),
                      CstI 1), Call(Var "fib", [CstI 25])));;
-                     
+
+let ex6 =
+    Letfun("sum", ["xs"], Match(Var "xs", CstI 0, ("hd", "tl", (Prim("+", Var "hd", Call(Var "sum", [Var "tl"]))))),
+           Call(Var "sum", [ConC(CstI 1, ConC(CstI 2, CstN))]));;

@@ -13,4 +13,6 @@ type expr =
   | Call of expr * expr list
   | Tup of expr list
   | Sel of int * expr
-  
+  | CstN
+  | ConC of expr * expr
+  | Match of expr * expr * (string * string * expr)
