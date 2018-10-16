@@ -1,17 +1,22 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex40) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex43) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
  
 (define WHEEL-RADIUS 5)
+
+
 (define WHEEL
   (circle WHEEL-RADIUS "solid" "black"))
+
 (define SPACE
-  (rectangle WHEEL-RADIUS WHEEL-RADIUS "solid" "white"))
+  (rectangle (* 2 WHEEL-RADIUS) WHEEL-RADIUS "solid" "white"))
+
 (define BOTH-WHEELS
   (beside WHEEL SPACE WHEEL))
+
 (define CAR-BODY
   (overlay/offset (rectangle (* WHEEL-RADIUS 4) (* WHEEL-RADIUS 2) "solid" "red")
                   0 (* WHEEL-RADIUS 1.5)
@@ -28,19 +33,28 @@
 
 (define WIDTH-OF-WORLD (* WHEEL-RADIUS 50))
 
-(define BACKGROUND (empty-scene WIDTH-OF-WORLD (*  WIDTH-OF-WORLD .2)))
-(define Y-CAR (- (image-height BACKGROUND) (* .5 (image-height CAR)) ))
 
 (define tree
   (underlay/xy (circle 10 "solid" "green")
                9 15
                (rectangle 2 20 "solid" "brown")))
 
+(define BACKGROUND
+  (place-image/align tree
+      (* .5 WIDTH-OF-WORLD) (*  WIDTH-OF-WORLD .2) "left" "bottom"
+   (empty-scene WIDTH-OF-WORLD (*  WIDTH-OF-WORLD .2)))
+  )
+
+
+(define Y-CAR (- (image-height BACKGROUND) (image-height CAR)))
+
+
+
 ; WorldState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
 (define (render x)
-  (place-image CAR x Y-CAR BACKGROUND))
+  (place-image/align CAR x Y-CAR "right" "top" BACKGROUND))
 
 
 
@@ -53,7 +67,7 @@
   (+ ws 3))
 
 (define (end val)
-  (> val (image-width BACKGROUND))
+  (> val (+ (image-width CAR) (image-width BACKGROUND)))
   )
 
 ; WorldState -> WorldState
@@ -66,5 +80,4 @@
 
 
 
-(check-expect (tock 20) 23)
-(check-expect (tock 78) 81)
+

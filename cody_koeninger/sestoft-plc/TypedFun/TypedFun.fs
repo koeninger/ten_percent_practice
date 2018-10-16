@@ -36,7 +36,7 @@ let rec lookup env x =
 type typ =
   | TypI                                (* int                         *)
   | TypB                                (* bool                        *)
-  | TypF of typ * typ                   (* (argumenttype, resulttype)  *)
+  | TypF of typ list * typ                   (* (argumenttype, resulttype)  *)
 
 (* New abstract syntax with explicit types, instead of Absyn.expr: *)
 
@@ -47,15 +47,17 @@ type tyexpr =
   | Let of string * tyexpr * tyexpr
   | Prim of string * tyexpr * tyexpr
   | If of tyexpr * tyexpr * tyexpr
-  | Letfun of string * string * typ * tyexpr * typ * tyexpr
+  | Letfun of string * (string * typ) list * tyexpr * typ * tyexpr
           (* (f,       x,       xTyp, fBody,  rTyp, letBody *)
-  | Call of tyexpr * tyexpr
+  | Call of tyexpr * tyexpr list
 
 (* A runtime value is an integer or a function closure *)
 
 type value = 
   | Int of int
-  | Closure of string * string * tyexpr * value env       (* (f, x, fBody, fDeclEnv) *)
+  | Closure of string * string list * tyexpr * value env       (* (f, x, fBody, fDeclEnv) *)
+
+(*
 
 let rec eval (e : tyexpr) (env : value env) : int =
     match e with
@@ -95,6 +97,8 @@ let rec eval (e : tyexpr) (env : value env) : int =
       | _ -> failwith "eval Call: not a function"
     | Call _ -> failwith "illegal function in Call"
 
+*)
+
 (* Type checking for the first-order functional language: *)
 
 let rec typ (e : tyexpr) (env : typ env) : typ =
@@ -124,17 +128,18 @@ let rec typ (e : tyexpr) (env : typ env) : typ =
                 if t2 = t3 then t2
                 else failwith "If: branch types differ"
       | _    -> failwith "If: condition not boolean"
-    | Letfun(f, x, xTyp, fBody, rTyp, letBody) -> 
-      let fTyp = TypF(xTyp, rTyp) 
-      let fBodyEnv = (x, xTyp) :: (f, fTyp) :: env
+    | Letfun(f, xs, fBody, rTyp, letBody) -> 
+      let fTyp = TypF(List.map snd xs, rTyp) 
+      let fBodyEnv = xs @ (f, fTyp) :: env
       let letBodyEnv = (f, fTyp) :: env
       if typ fBody fBodyEnv = rTyp
       then typ letBody letBodyEnv
       else failwith ("Letfun: return type in " + f)
-    | Call(Var f, eArg) -> 
+    | Call(Var f, eArgs) -> 
       match lookup env f with
-      | TypF(xTyp, rTyp) ->
-        if typ eArg env = xTyp then rTyp
+      | TypF(xTyps, rTyp) ->
+        if List.forall (function (eArg, xTyp) -> typ eArg env = xTyp) (List.zip eArgs xTyps)
+        then rTyp
         else failwith "Call: wrong argument type"
       | _ -> failwith "Call: unknown function"
     | Call(_, eArg) -> failwith "Call: illegal function in call"
@@ -144,21 +149,21 @@ let typeCheck e = typ e [];;
 
 (* Examples of successful type checking *)
 
-let ex1 = Letfun("f1", "x", TypI, Prim("+", Var "x", CstI 1), TypI,
-                 Call(Var "f1", CstI 12));;
+let ex1 = Letfun("f1", [("x", TypI)], Prim("+", Var "x", CstI 1), TypI,
+                 Call(Var "f1", [CstI 12]));;
 
 (* Factorial *)
 
-let ex2 = Letfun("fac", "x", TypI,
+let ex2 = Letfun("fac", [("x", TypI)],
                  If(Prim("=", Var "x", CstI 0),
                     CstI 1,
                     Prim("*", Var "x", 
                               Call(Var "fac", 
-                                   Prim("-", Var "x", CstI 1)))),
+                                   [Prim("-", Var "x", CstI 1)]))),
                  TypI,
-                 Let("n", CstI 7, Call(Var "fac", Var "n")));;
+                 Let("n", CstI 7, Call(Var "fac", [Var "n"])));;
 
-let fac10 = eval ex2 [];;
+//let fac10 = eval ex2 [];;
 
 let ex3 = Let("b", Prim("=", CstI 1, CstI 2),
               If(Var "b", CstI 3, CstI 4));;
@@ -168,8 +173,8 @@ let ex4 = Let("b", Prim("=", CstI 1, CstI 2),
 
 let ex5 = If(Prim("=", CstI 11, CstI 12), CstI 111, CstI 666);;
 
-let ex6 = Letfun("inf", "x", TypI, Call(Var "inf", Var "x"), TypI,
-                 Call(Var "inf", CstI 0));;
+let ex6 = Letfun("inf", [("x", TypI)], Call(Var "inf", [Var "x"]), TypI,
+                 Call(Var "inf", [CstI 0]));;
 
 let types = List.map typeCheck [ex1; ex2; ex3; ex4; ex5; ex6];;
 
@@ -178,11 +183,11 @@ let types = List.map typeCheck [ex1; ex2; ex3; ex4; ex5; ex6];;
 let exErr1 = Let("b", Prim("=", CstI 1, CstI 2),
                  If(Var "b", Var "b", CstI 6));;
 
-let exErr2 = Letfun("f", "x", TypB, If(Var "x", CstI 11, CstI 22), TypI,
-                    Call(Var "f", CstI 0));;
+let exErr2 = Letfun("f", [("x", TypB)], If(Var "x", CstI 11, CstI 22), TypI,
+                    Call(Var "f", [CstI 0]));;
 
-let exErr3 = Letfun("f", "x", TypB, Call(Var "f", CstI 22), TypI,
-                    Call(Var "f", CstB true));;
+let exErr3 = Letfun("f", [("x", TypB)], Call(Var "f", [CstI 22]), TypI,
+                    Call(Var "f", [CstB true]));;
 
-let exErr4 = Letfun("f", "x", TypB, If(Var "x", CstI 11, CstI 22), TypB,
-                    Call(Var "f", CstB true));;
+let exErr4 = Letfun("f", [("x", TypB)], If(Var "x", CstI 11, CstI 22), TypB,
+                    Call(Var "f", [CstB true]));;

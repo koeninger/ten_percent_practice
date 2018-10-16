@@ -1,45 +1,12 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname 03_43) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
-; Exercise 43. Let’s work through the same problem statement
-;    with a time-based data definition:
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname 03_45.5_hyperspace) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+; Sample Problem Design a program that moves a car across the world canvas,
+;    from left to right, at the rate of three pixels per clock tick.
+;    *If the mouse is clicked anywhere on the canvas,
+;    the car is placed at the x-coordinate of that click.*
 
 
-; An AnimationState is a Number.
-; interpretation the number of clock ticks 
-; since the animation started
-
-
-
-
-; Design the functions tock and render.
-; Then develop a big-bang expression so that once again you get an
-; animation of a car traveling from left to right across the world’s canvas.
-
-
-
-; AnimationState -> AnimationState
-; moves the car by 3 pixels for every clock tick
-; examples: 
-;   given: 20, expect 23
-;   given: 78, expect 81
-;(define (clock-tick-handler cw) ...)
-
-; AnimationState -> Image
-; places the car into the BACKGROUND scene,
-; according to the given animation state 
-;(define (render ws) ...)
-
-
-;How do you think this program relates to animate from Prologue: How to Program?
-
-; These are very similar,
-;    it seems this car program using big-bang is a more crude animate function
-
-
-
-; Use the data definition to design a program that moves
-;    the car according to a sine wave. (Don’t try to drive like that.)
 
 
 (require 2htdp/image)
@@ -81,7 +48,7 @@
 ; AnimationState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
-(define (render x) (place-image CAR x (+ (sin x) (* WHEEL-RADIUS 3)) BACKGROUND ))
+(define (render x) (place-image CAR x CAR_Y BACKGROUND ))
 
 
 ; clock-tick-handler
@@ -90,8 +57,23 @@
 (define (tock x)(+ 3 x))
 
 
+
+; WorldState Number Number String -> WorldState
+; places the car at x-mouse
+; if the given me is "button-down" 
+; given: 21 10 20 "enter"
+; wanted: 21
+; given: 42 10 20 "button-down"
+; wanted: 10
+; given: 42 10 20 "move"
+; wanted: 42
+(define (hyper x-position-of-car x-mouse y-mouse me)
+  x-position-of-car)
+
+
 (define (main ws)
    (big-bang ws
      [on-tick tock]
+     [on-mouse hyper]
      [to-draw render]
      [stop-when stop_check]))
