@@ -6,12 +6,17 @@
 
  
 (define WHEEL-RADIUS 5)
+
+
 (define WHEEL
   (circle WHEEL-RADIUS "solid" "black"))
+
 (define SPACE
-  (rectangle WHEEL-RADIUS WHEEL-RADIUS "solid" "white"))
+  (rectangle (* 2 WHEEL-RADIUS) WHEEL-RADIUS "solid" "white"))
+
 (define BOTH-WHEELS
   (beside WHEEL SPACE WHEEL))
+
 (define CAR-BODY
   (overlay/offset (rectangle (* WHEEL-RADIUS 4) (* WHEEL-RADIUS 2) "solid" "red")
                   0 (* WHEEL-RADIUS 1.5)
@@ -41,7 +46,7 @@
   )
 
 
-(define Y-CAR (- (image-height BACKGROUND) (* .5 (image-height CAR)) ))
+(define Y-CAR (- (image-height BACKGROUND) (* .5 (image-height CAR))))
 
 
 
@@ -62,7 +67,7 @@
   (+ ws 3))
 
 (define (end val)
-  (> val (image-width BACKGROUND))
+  (> val (+ (image-width CAR) (image-width BACKGROUND)))
   )
 
 ; WorldState -> WorldState
@@ -74,4 +79,5 @@
      [stop-when end]))
 
 
-(main 10)
+
+
