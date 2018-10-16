@@ -315,3 +315,11 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
      [on-tick tock]
      [to-draw render]
      [stop-when end?]))
+     
+//Exercise 44
+> (check-expect (hyper 21 10 20 "enter") 20)
+> (check-expect (hyper 21 10 20 "enter") 21)
+> (check-expect (hyper 42 10 20 "button-down") 10)
+> (check-expect (hyper 42 10 20 "move") 42)
+> 
+
