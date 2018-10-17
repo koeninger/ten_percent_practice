@@ -48,27 +48,38 @@
 
 (define Y-CAR (- (image-height BACKGROUND) (image-height CAR)))
 
-
+(define (sinY val)
+ (+ (* 18 (sin (* .25 val) ))  Y-CAR)
+  )
 
 ; WorldState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
 (define (render x)
-  (place-image/align CAR x Y-CAR "right" "top" BACKGROUND))
+  (place-image/align CAR x (sinY x) "right" "top" BACKGROUND))
 
 
 
 ; WorldState -> WorldState 
 ; moves the car by 3 pixels for every clock tick
 ; examples: 
-;   given: 20, expect 23
-;   given: 78, expect 81
+;   given: 20, expect 21
+;   given: 78, expect 79
 (define (tock ws)
-  (+ ws 3))
+  (+ ws 1))
 
+
+
+
+;number->boolean
+; returns false if val is greater then the background size + car
+;
 (define (end val)
   (> val (+ (image-width CAR) (image-width BACKGROUND)))
   )
+
+
+;a sin (bx+c)
 
 ; WorldState -> WorldState
 ; launches the program from some initial state 
@@ -79,5 +90,5 @@
      [stop-when end]))
 
 
-
+(main 0)
 
