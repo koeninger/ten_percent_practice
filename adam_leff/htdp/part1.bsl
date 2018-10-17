@@ -323,3 +323,33 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 > (check-expect (hyper 42 10 20 "move") 42)
 > 
 
+//Exercise 45
+(require 2htdp/image)
+(require 2htdp/universe)
+(define cat1 .)
+(define BACKGROUND (empty-scene 400 (image-height cat1)))
+(define (render ws)
+  (place-image cat1 ws (/ (image-height cat1) 2) BACKGROUND))
+(define (tock ws) (modulo (+ ws 3) 400))
+(define (cat-prog ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]))
+
+//Exercise 46
+(require 2htdp/image)
+(require 2htdp/universe)
+(define cat1 .)
+(define cat2 .)
+(define BACKGROUND (empty-scene 400 (image-height cat1)))
+(define (pick-cat ws)
+  (if (odd? ws) cat1 cat2))
+(define (render ws)
+  (place-image (pick-cat ws) ws (/ (image-height cat1) 2) BACKGROUND))
+(define (tock ws) (modulo (+ ws 3) 400))
+(define (cat-prog ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]))
+
+  
