@@ -57,4 +57,77 @@
 ;	Actual value 82 differs from 81, the expected value.
 ;at line 7, column 0 
 
+; Exercise 41. Finish the sample problem and get the program to run. That is, assuming that you have solved exercise 39, define the constants BACKGROUND and Y-CAR. Then assemble all the function definitions, including their tests. When your program runs to your satisfaction, add a tree to the scenery. We used
+;(define tree
+;  (underlay/xy (circle 10 "solid" "green")
+;               9 15
+;               (rectangle 2 20 "solid" "brown")))
+;to create a tree-like shape. Also add a clause to the big-bang expression that stops the animation when the car has disappeared on the right side.
 
+(define WIDTH-OF-WORLD 1000)
+ 
+(define WHEEL-RADIUS 5)
+(define WHEEL-DISTANCE
+  (* WHEEL-RADIUS 4))
+(define WHEEL
+  (circle (* 2 WHEEL-RADIUS) "solid" "black"))
+(define SPACE
+  (rectangle WHEEL-DISTANCE WHEEL-RADIUS "solid" "white"))
+(define BOTH-WHEELS
+  (beside WHEEL SPACE WHEEL))
+(define CAR-LENGTH
+  (+ WHEEL-DISTANCE
+    (* 5 WHEEL-RADIUS)))
+(define CAR-HEIGHT
+  (* WHEEL-RADIUS 3))
+
+
+(define CAR
+  (above
+    (rectangle CAR-LENGTH CAR-HEIGHT "solid" "red")
+      (underlay/offset (rectangle (* 2 CAR-LENGTH) CAR-HEIGHT "solid" "red") 0 (* .5 CAR-HEIGHT) BOTH-WHEELS)
+  )
+)
+
+(define TREE
+  (underlay/xy (circle 10 "solid" "green")
+               9 15
+               (rectangle 2 20 "solid" "brown")))
+
+
+(define Y-CAR CAR-HEIGHT)
+(define BACKGROUND (empty-scene WIDTH-OF-WORLD (* 2.5 CAR-HEIGHT)))
+ 
+; WorldState -> WorldState
+; moves the car by 3 pixels for every clock tick
+; examples:
+(check-expect (tock 20) 23)
+(check-expect (tock 78) 81)
+(define (tock ws)
+  (+ ws 3))
+
+; WorldState -> Image
+; places the car into the BACKGROUND scene,
+; according to the given world state 
+; eamples:
+(check-expect (render 50)
+              (place-image CAR 50 Y-CAR BACKGROUND))
+(check-expect (render 200)
+              (place-image CAR 200 Y-CAR BACKGROUND))
+(define (render ws)
+   (place-image CAR ws Y-CAR BACKGROUND))
+
+; WorldState -> Boolean
+; Stops the program when we reach a given state
+(check-expect (end? 0) #false)
+(check-expect (end? (+ WIDTH-OF-WORLD CAR-LENGTH)) #true)
+(define (end? ws)
+  (>= ws (+ WIDTH-OF-WORLD CAR-LENGTH)))
+
+; WorldState -> WorldState
+; launches the program from some initial state 
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]
+     [stop-when end?]))
