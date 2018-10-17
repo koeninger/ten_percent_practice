@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex43) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex44) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -63,12 +63,29 @@
 ; WorldState -> WorldState 
 ; moves the car by 3 pixels for every clock tick
 ; examples: 
-;   given: 20, expect 21
-;   given: 78, expect 79
+;   given: 20, expect 23
+;   given: 78, expect 81
 (define (tock ws)
-  (+ ws 1))
+  (+ ws 3))
 
 
+; WorldState Number Number String -> WorldState
+; places the car at x-mouse
+; if the given me is "button-down"
+; given: 21 10 20 "enter"
+; wanted: 21
+; given: 42 10 20 "button-down"
+; wanted: 10
+; given: 42 10 20 "move"
+; wanted: 42
+(define (hyper x-position-of-car x-mouse y-mouse me)
+  (cond
+    [(string=? "button-down" me) x-mouse]
+    [else x-position-of-car]))
+
+(check-expect (hyper 21 10 20 "enter") 21)
+(check-expect (hyper 42 10 20 "button-down") 10)
+(check-expect (hyper 42 10 20 "move") 42)
 
 
 ;number->boolean
@@ -87,8 +104,8 @@
    (big-bang ws
      [on-tick tock]
      [to-draw render]
+     [on-mouse hyper]
      [stop-when end]))
 
 
-(main 0)
-
+    (main 1)
