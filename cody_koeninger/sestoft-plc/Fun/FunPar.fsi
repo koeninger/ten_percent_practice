@@ -4,6 +4,8 @@ type token =
   | EOF
   | LPAR
   | RPAR
+  | LCURLY
+  | RCURLY
   | EQ
   | NE
   | GT
@@ -35,6 +37,8 @@ type tokenId =
     | TOKEN_EOF
     | TOKEN_LPAR
     | TOKEN_RPAR
+    | TOKEN_LCURLY
+    | TOKEN_RCURLY
     | TOKEN_EQ
     | TOKEN_NE
     | TOKEN_GT
@@ -69,6 +73,7 @@ type nonTerminalId =
     | NONTERM_Main
     | NONTERM_Expr
     | NONTERM_AtExpr
+    | NONTERM_Fundefs
     | NONTERM_Tuples
     | NONTERM_Params
     | NONTERM_AppExpr

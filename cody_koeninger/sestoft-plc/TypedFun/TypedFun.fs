@@ -37,6 +37,7 @@ type typ =
   | TypI                                (* int                         *)
   | TypB                                (* bool                        *)
   | TypF of typ list * typ                   (* (argumenttype, resulttype)  *)
+  | TypL of typ  (* list of typ *)
 
 (* New abstract syntax with explicit types, instead of Absyn.expr: *)
 
@@ -50,6 +51,8 @@ type tyexpr =
   | Letfun of string * (string * typ) list * tyexpr * typ * tyexpr
           (* (f,       x,       xTyp, fBody,  rTyp, letBody *)
   | Call of tyexpr * tyexpr list
+  | Cons of tyexpr * tyexpr
+  | Nil
 
 (* A runtime value is an integer or a function closure *)
 
@@ -143,6 +146,16 @@ let rec typ (e : tyexpr) (env : typ env) : typ =
         else failwith "Call: wrong argument type"
       | _ -> failwith "Call: unknown function"
     | Call(_, eArg) -> failwith "Call: illegal function in call"
+    | Cons(x, Nil) -> TypL (typ x env)
+    | Cons(x, xs) ->
+        let typX = typ x env
+        match typ xs env with
+            | TypL t ->
+                if (t = typX)
+                then TypL typX
+                else failwith (sprintf "All elements of a list must be the same type, saw %A and %A" typX t)
+            | e -> failwith (sprintf "Expected a list, got %A" e)
+    | Nil -> failwith "Don't know how to type a standalone empty list"
 
 let typeCheck e = typ e [];;
 
@@ -191,3 +204,7 @@ let exErr3 = Letfun("f", [("x", TypB)], Call(Var "f", [CstI 22]), TypI,
 
 let exErr4 = Letfun("f", [("x", TypB)], If(Var "x", CstI 11, CstI 22), TypB,
                     Call(Var "f", [CstB true]));;
+
+let exList = Cons(CstI 13, Cons(CstI 11, Cons(CstI 12, Nil)));;
+
+let exListErr = Cons(CstI 12, Cons(CstI 11, Cons(CstB true, Nil)));;

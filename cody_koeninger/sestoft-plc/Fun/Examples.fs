@@ -3,6 +3,8 @@ module Examples
 open Parse
 open ParseAndRun
 
+let itworks = fromString "1"
+
 let e4_2_2 = fromString """
 let pow3 n = if n < 1 then 1 else 3 * pow3 (n - 1)
 in pow3 8 end
@@ -59,4 +61,18 @@ let x = 3
 let e4_6 = fromString """
 let max xy = if #1(xy) > #2(xy) then #1(xy) else #2(xy)
 in max (3, 88) end
+"""
+
+let e4_10 = fromString """
+let pow3 n = if n < 1 then 1 else 3 * pow3 (n - 1),
+    sumPow3 x = if x < 1 then 0 else pow3 x + sumPow3 (x - 1)
+  in sumPow3 11
+  end
+"""
+
+let e4_10_2 = fromString """
+let f x = if x = 0 then 0 else (if x > 0 then f (0 - (x - 1)) else g (x - 1)),
+    g x = if x = 0 then 0 else (if x < 0 then g (0 - (x + 1)) else f (x - 1))
+    in f 23
+end
 """
