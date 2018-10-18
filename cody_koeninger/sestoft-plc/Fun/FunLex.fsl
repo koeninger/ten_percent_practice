@@ -55,6 +55,8 @@ rule Token = parse
   | '%'             { MOD }
   | '('             { LPAR }
   | ')'             { RPAR }
+  | '{'             { LCURLY }
+  | '}'             { RCURLY }
   | "&&"            { AND }
   | "||"            { OR }
   | ','             { COMMA }

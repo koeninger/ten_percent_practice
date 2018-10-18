@@ -352,4 +352,20 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
      [on-tick tock]
      [to-draw render]))
 
-  
+//Exercise 47
+(require 2htdp/image)
+(require 2htdp/universe)
+(define BACKGROUND (empty-scene 50 20))
+(define (render happiness)
+  (place-image (rectangle (if (< happiness 100) happiness 100) 20 "solid" "red") 0 10 BACKGROUND))
+(define (keypress happiness ke)
+  (cond
+    [(key=? ke "up") (+ happiness 33)]
+    [(key=? ke "down") (+ happiness 20)]
+    [else happiness]))
+(define (tock happiness) (modulo (- happiness 1) 100))
+(define (gague-prog happiness)
+  (big-bang happiness
+    [on-tick tock]
+    [to-draw render]
+    [on-key keypress]))
