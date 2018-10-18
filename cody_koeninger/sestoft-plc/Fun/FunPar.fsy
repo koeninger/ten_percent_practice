@@ -14,7 +14,7 @@
 %token ELSE END FALSE IF IN LET NOT THEN TRUE AND OR
 %token PLUS MINUS TIMES DIV MOD
 %token EQ NE GT LT GE LE COMMA HASH
-%token LPAR RPAR
+%token LPAR RPAR LCURLY RCURLY
 %token EOF
 
 %left ELSE              /* lowest precedence  */
@@ -62,9 +62,14 @@ AtExpr:
     Const                               { $1                     }
   | NAME                                { Var $1                 }
   | LET NAME EQ Expr IN Expr END        { Let($2, $4, $6)        }
-  | LET NAME Params EQ Expr IN Expr END { Letfun($2, $3, $5, $7) }
+  | LET Fundefs IN Expr END             { Letfun($2, $4) }
   | LPAR Expr Tuples RPAR               { Tup ($2 :: $3) }
   | LPAR Expr RPAR                      { $2                     }
+;
+
+Fundefs:
+    NAME Params EQ Expr          { [($1, $2, $4)] }
+  | NAME Params EQ Expr COMMA Fundefs  { ($1, $2, $4) :: $6 }
 ;
 
 Tuples:

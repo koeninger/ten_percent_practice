@@ -16,8 +16,8 @@ let fromString (str : string) : expr =
       FunPar.Main FunLex.Token lexbuf
     with 
       | exn -> let pos = lexbuf.EndPos 
-               failwithf "%s near line %d, column %d\n" 
-                  (exn.Message) (pos.Line+1) pos.Column
+               failwithf "when parsing:\n\n%s\n\n%s near line %d, column %d %s\n" 
+                  str (exn.Message) (pos.Line+1) pos.Column (new System.String(lexbuf.Lexeme))
              
 (* Parsing from a file *)
 

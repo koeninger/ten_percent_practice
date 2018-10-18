@@ -13,12 +13,12 @@ open Absyn
 
 (* Environment operations *)
 
-type 'v env = (string * 'v) list
+type 'v env = (string * 'v ref) list
 
 let rec lookup env x =
     match env with 
     | []        -> failwith (x + " not found")
-    | (y, v)::r -> if x=y then v else lookup r x;;
+    | (y, v)::r -> if x=y then !v else lookup r x;;
 
 (* A runtime value is an integer or a function closure *)
 
@@ -60,21 +60,27 @@ let rec eval (e : expr) (env : value env) : value =
       |> Int
     | Let(x, eRhs, letBody) -> 
       let xVal = eval eRhs env
-      let bodyEnv = (x, xVal) :: env
+      let bodyEnv = (x, ref xVal) :: env
       eval letBody bodyEnv
     | If(e1, e2, e3) -> 
       match eval e1 env with
       | Int b -> if b<>0 then eval e2 env else eval e3 env
       | x -> failwith (sprintf "First argument to if was not a bool / int: %A" x)
-    | Letfun(f, xs, fBody, letBody) -> 
-      let bodyEnv = (f, Closure(f, xs, fBody, env)) :: env 
+    | Letfun(defs, letBody) ->
+      let newEnv = List.map (function | (f, xs, fBody) -> (f, ref (Closure(f, xs, fBody, env)))) defs
+      let bodyEnv = newEnv @ env
+      for (_, r) in newEnv do
+          match !r with
+              | Closure(f, xs, fBody, env) ->
+                  r := Closure(f, xs, fBody, bodyEnv)
+              | _ -> failwith "Shouldn't be reached, newEnv only contains refs to Closure"
       eval letBody bodyEnv
     | Call(Var f, eArgs) -> 
       let fClosure = lookup env f
       match fClosure with
       | Closure (f, xs, fBody, fDeclEnv) ->
-        let xVals = List.zip xs eArgs |> List.map (function | (x, e) -> (x, eval e env))
-        let fBodyEnv = xVals @ (f, fClosure) :: fDeclEnv
+        let xVals = List.zip xs eArgs |> List.map (function | (x, e) -> (x, ref (eval e env)))
+        let fBodyEnv = xVals @ (f, ref fClosure) :: fDeclEnv
         eval fBody fBodyEnv
       | _ -> failwith "eval Call: not a function"
     | Call _ -> failwith "eval Call: not first-order function"
@@ -94,7 +100,7 @@ let rec eval (e : expr) (env : value env) : value =
         match eval e0 env with
             | ListV [] -> eval e1 env
             | ListV (hx::tx) ->
-                let newEnv = (h, hx) :: (t, ListV tx) :: env
+                let newEnv = (h, ref hx) :: (t, ref (ListV tx)) :: env
                 eval e2 newEnv
             | e -> failwith (sprintf "eval Match: expected a list, got %A" e)
 
@@ -104,49 +110,52 @@ let run e = eval e [];;
 
 (* Examples in abstract syntax *)
 
-let ex1 = Letfun("f1", ["x"], Prim("+", Var "x", CstI 1), 
+let ex1 = Letfun([("f1", ["x"], Prim("+", Var "x", CstI 1))], 
                  Call(Var "f1", [CstI 12]));;
 
 (* Example: factorial *)
 
-let ex2 = Letfun("fac", ["x"],
-                 If(Prim("=", Var "x", CstI 0),
-                    CstI 1,
-                    Prim("*", Var "x", 
-                              Call(Var "fac", 
-                                   [Prim("-", Var "x", CstI 1)]))),
+let ex2 = Letfun([
+                   ("fac",
+                    ["x"],
+                    If(Prim("=", Var "x", CstI 0),
+                      CstI 1,
+                      Prim("*", Var "x", 
+                          Call(Var "fac", 
+                              [Prim("-", Var "x", CstI 1)]))))
+                 ],
                  Call(Var "fac", [Var "n"]));;
 
 (* let fac10 = eval ex2 [("n", Int 10)];; *)
 
 (* Example: deep recursion to check for constant-space tail recursion *)
 
-let ex3 = Letfun("deep", ["x"], 
-                 If(Prim("=", Var "x", CstI 0),
-                    CstI 1,
-                    Call(Var "deep", [Prim("-", Var "x", CstI 1)])),
+let ex3 = Letfun([("deep", ["x"], 
+                   If(Prim("=", Var "x", CstI 0),
+                      CstI 1,
+                      Call(Var "deep", [Prim("-", Var "x", CstI 1)])))],
                  Call(Var "deep", [Var "count"]));;
     
-let rundeep n = eval ex3 [("count", Int n)];;
+let rundeep n = eval ex3 [("count", ref (Int n))];;
 
 (* Example: static scope (result 14) or dynamic scope (result 25) *)
 
 let ex4 =
     Let("y", CstI 11,
-        Letfun("f", ["x"], Prim("+", Var "x", Var "y"),
+        Letfun([("f", ["x"], Prim("+", Var "x", Var "y"))],
                Let("y", CstI 22, Call(Var "f", [CstI 3]))));;
 
 (* Example: two function definitions: a comparison and Fibonacci *)
 
+let ge2 : fundef = ("ge2", ["x"], Prim("<", CstI 1, Var "x"))
+let fib : fundef = ("fib", ["n"], If(Call(Var "ge2", [Var "n"]),
+                                     Prim("+",
+                                          Call(Var "fib", [Prim("-", Var "n", CstI 1)]),
+                                          Call(Var "fib", [Prim("-", Var "n", CstI 2)])),
+                                     CstI 1))
 let ex5 = 
-    Letfun("ge2", ["x"], Prim("<", CstI 1, Var "x"),
-           Letfun("fib", ["n"],
-                  If(Call(Var "ge2", [Var "n"]),
-                     Prim("+",
-                          Call(Var "fib", [Prim("-", Var "n", CstI 1)]),
-                          Call(Var "fib", [Prim("-", Var "n", CstI 2)])),
-                     CstI 1), Call(Var "fib", [CstI 25])));;
+    Letfun([ge2; fib], Call(Var "fib", [CstI 25]));;
 
 let ex6 =
-    Letfun("sum", ["xs"], Match(Var "xs", CstI 0, ("hd", "tl", (Prim("+", Var "hd", Call(Var "sum", [Var "tl"]))))),
+    Letfun([("sum", ["xs"], Match(Var "xs", CstI 0, ("hd", "tl", (Prim("+", Var "hd", Call(Var "sum", [Var "tl"]))))))],
            Call(Var "sum", [ConC(CstI 1, ConC(CstI 2, CstN))]));;
