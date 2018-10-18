@@ -21,5 +21,6 @@
 ; interpretation hours, minutes and seconds since midnight
 (define-struct point-in-time [hours minutes seconds])
 
-; ThreeLetterWord is (make-three-letter-word 1String 1String 1String)
+; ThreeLetterWord is (make-three-letter-word 1StringOrFalse 1StringOrFalse 1StringOrFalse)
+; interpretation can be a 1String or #false
 (define-struct three-letter-word [first second third])
