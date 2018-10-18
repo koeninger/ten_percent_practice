@@ -4,12 +4,13 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 
-(define WIDTH-OF-WORLD 200)
+(define WIDTH-OF-WORLD 400)
  
 (define WHEEL-RADIUS 5)
+(define Y-CAR 25)
 (define WHEEL-DISTANCE (* WHEEL-RADIUS 5))
 
-(define BACKGROUND (empty-scene 250 50))
+(define BACKGROUND (empty-scene WIDTH-OF-WORLD 50))
 (define WHEEL
   (circle WHEEL-RADIUS "solid" "black"))
 (define BODY
@@ -22,12 +23,17 @@
   (beside WHEEL SPACE WHEEL))
 (define CAR
   (above HEAD BODY BOTH-WHEELS))
+(define tree
+  (underlay/xy (circle 10 "solid" "green")
+               9 15
+               (rectangle 2 20 "solid" "brown")))
+
 
 ; WorldState -> Image
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
 (define (render x)
-  (overlay/offset CAR x 0 BACKGROUND ))
+  (place-image CAR x Y-CAR (place-image tree 30 Y-CAR BACKGROUND)))
 
 ; WorldState -> WorldState
 ; adds 3 to x to move the car right 
@@ -41,4 +47,4 @@
      [on-tick tock]
      [to-draw render]))
 
-(main 100)
+(main 0)
