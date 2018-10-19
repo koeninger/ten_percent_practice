@@ -48,11 +48,13 @@ type tyexpr =
   | Let of string * tyexpr * tyexpr
   | Prim of string * tyexpr * tyexpr
   | If of tyexpr * tyexpr * tyexpr
-  | Letfun of string * (string * typ) list * tyexpr * typ * tyexpr
-          (* (f,       x,       xTyp, fBody,  rTyp, letBody *)
+  | Letfun of fundef list * tyexpr
+          (* function defs, letBody *)
   | Call of tyexpr * tyexpr list
   | Cons of tyexpr * tyexpr
   | Nil
+and fundef = string * (string * typ) list * tyexpr * typ
+            (* f,       x,       xTyp, fBody,  rTyp *)
 
 (* A runtime value is an integer or a function closure *)
 
@@ -131,13 +133,16 @@ let rec typ (e : tyexpr) (env : typ env) : typ =
                 if t2 = t3 then t2
                 else failwith "If: branch types differ"
       | _    -> failwith "If: condition not boolean"
-    | Letfun(f, xs, fBody, rTyp, letBody) -> 
-      let fTyp = TypF(List.map snd xs, rTyp) 
-      let fBodyEnv = xs @ (f, fTyp) :: env
-      let letBodyEnv = (f, fTyp) :: env
-      if typ fBody fBodyEnv = rTyp
+    | Letfun(fundefs, letBody) ->
+      let fTyps = List.map (function (f, xs, fBody, rTyp) -> (f, TypF(List.map snd xs, rTyp))) fundefs
+      let letBodyEnv = fTyps @ env
+      if List.forall (function
+                      | (f, xs, fBody, rTyp) -> 
+                        let fBodyEnv = xs @ letBodyEnv
+                        typ fBody fBodyEnv = rTyp
+                     ) fundefs 
       then typ letBody letBodyEnv
-      else failwith ("Letfun: return type in " + f)
+      else failwith (sprintf "Letfun: return type in %A" fundefs)
     | Call(Var f, eArgs) -> 
       match lookup env f with
       | TypF(xTyps, rTyp) ->
@@ -162,18 +167,19 @@ let typeCheck e = typ e [];;
 
 (* Examples of successful type checking *)
 
-let ex1 = Letfun("f1", [("x", TypI)], Prim("+", Var "x", CstI 1), TypI,
+let ex1 = Letfun([("f1", [("x", TypI)], Prim("+", Var "x", CstI 1), TypI)],
                  Call(Var "f1", [CstI 12]));;
 
 (* Factorial *)
 
-let ex2 = Letfun("fac", [("x", TypI)],
-                 If(Prim("=", Var "x", CstI 0),
-                    CstI 1,
-                    Prim("*", Var "x", 
-                              Call(Var "fac", 
-                                   [Prim("-", Var "x", CstI 1)]))),
-                 TypI,
+let ex2 = Letfun([("fac", [("x", TypI)],
+                   If(Prim("=", Var "x", CstI 0),
+                      CstI 1,
+                      Prim("*", Var "x", 
+                           Call(Var "fac", 
+                                [Prim("-", Var "x", CstI 1)]))),
+                   TypI)
+                 ],
                  Let("n", CstI 7, Call(Var "fac", [Var "n"])));;
 
 //let fac10 = eval ex2 [];;
@@ -186,7 +192,7 @@ let ex4 = Let("b", Prim("=", CstI 1, CstI 2),
 
 let ex5 = If(Prim("=", CstI 11, CstI 12), CstI 111, CstI 666);;
 
-let ex6 = Letfun("inf", [("x", TypI)], Call(Var "inf", [Var "x"]), TypI,
+let ex6 = Letfun([("inf", [("x", TypI)], Call(Var "inf", [Var "x"]), TypI)],
                  Call(Var "inf", [CstI 0]));;
 
 let types = List.map typeCheck [ex1; ex2; ex3; ex4; ex5; ex6];;
@@ -196,15 +202,25 @@ let types = List.map typeCheck [ex1; ex2; ex3; ex4; ex5; ex6];;
 let exErr1 = Let("b", Prim("=", CstI 1, CstI 2),
                  If(Var "b", Var "b", CstI 6));;
 
-let exErr2 = Letfun("f", [("x", TypB)], If(Var "x", CstI 11, CstI 22), TypI,
+let exErr2 = Letfun([("f", [("x", TypB)], If(Var "x", CstI 11, CstI 22), TypI)],
                     Call(Var "f", [CstI 0]));;
 
-let exErr3 = Letfun("f", [("x", TypB)], Call(Var "f", [CstI 22]), TypI,
+let exErr3 = Letfun([("f", [("x", TypB)], Call(Var "f", [CstI 22]), TypI)],
                     Call(Var "f", [CstB true]));;
 
-let exErr4 = Letfun("f", [("x", TypB)], If(Var "x", CstI 11, CstI 22), TypB,
+let exErr4 = Letfun([("f", [("x", TypB)], If(Var "x", CstI 11, CstI 22), TypB)],
                     Call(Var "f", [CstB true]));;
 
 let exList = Cons(CstI 13, Cons(CstI 11, Cons(CstI 12, Nil)));;
 
 let exListErr = Cons(CstI 12, Cons(CstI 11, Cons(CstB true, Nil)));;
+
+let recur = Letfun([("f", [("x", TypI)], Call(Var "g", [Var "x"]), TypI);
+                    ("g", [("x", TypI)], Call(Var "f", [Var "x"]), TypI)
+                   ],
+                   Call(Var "f", [CstI 23]));;
+
+let recurBad = Letfun([("f", [("x", TypI)], Call(Var "g", [Var "x"]), TypI);
+                       ("g", [("x", TypB)], Call(Var "f", [Var "x"]), TypB)
+                      ],
+                      Call(Var "f", [CstI 23]));;
