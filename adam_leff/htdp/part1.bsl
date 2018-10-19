@@ -369,3 +369,69 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
     [on-tick tock]
     [to-draw render]
     [on-key keypress]))
+
+//Exercise 48
+(cond
+ ((<= 0 18 10) "bronze")
+ ((and (< 10 18) (<= 18 20))
+  "silver")
+ (else "gold"))
+ 
+ (cond
+ (#false "bronze")
+ ((and (< 10 18) (<= 18 20))
+  "silver")
+ (else "gold"))
+ 
+ (cond
+ ((and (< 10 18) (<= 18 20))
+  "silver")
+ (else "gold"))
+ 
+ (cond
+ ((and #true (<= 18 20)) "silver")
+ (else "gold"))
+ 
+ (cond
+ ((and #true #true) "silver")
+ (else "gold"))
+ 
+ (cond (#true "silver") (else "gold"))
+ 
+ "silver"
+ 
+ //Exercise 49
+ (define (create-rocket-scene.v5 h)
+  (place-image ROCKET 50 (cond [(<= h ROCKET-CENTER-TO-TOP) h] [else ROCKET-CENTER-TO-TOP]) MTSCN))
+  
+//Exercise 50
+; TrafficLight -> TrafficLight
+; yields the next state given current state s
+(check-expect (traffic-light-next "red") "green")
+(check-expect (traffic-light-next "green") "yellow")
+(check-expect (traffic-light-next "yellow") "red")
+(define (traffic-light-next s)
+  (cond
+    [(string=? "red" s) "green"]
+    [(string=? "green" s) "yellow"]
+    [(string=? "yellow" s) "red"]))
+    
+//Exercise 51
+(require 2htdp/image)
+(require 2htdp/universe)
+; TrafficLight -> TrafficLight
+; yields the next state given current state s
+(check-expect (traffic-light-next "red") "green")
+(check-expect (traffic-light-next "green") "yellow")
+(check-expect (traffic-light-next "yellow") "red")
+(define (traffic-light-next s)
+  (cond
+    [(string=? "red" s) "green"]
+    [(string=? "green" s) "yellow"]
+    [(string=? "yellow" s) "red"]))
+(define (render s)
+  (place-image (circle 5 "solid" s) 10 10 (empty-scene 20 20)))
+(define (tl s)
+  (big-bang s
+    [on-tick traffic-light-next]
+    [to-draw render]))
