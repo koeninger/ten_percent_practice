@@ -24,3 +24,39 @@
 ; ThreeLetterWord is (make-three-letter-word 1StringOrFalse 1StringOrFalse 1StringOrFalse)
 ; interpretation can be a 1String or #false
 (define-struct three-letter-word [first second third])
+
+; A Color is one of:
+; — "white"
+; — "yellow"
+; — "orange"
+; — "green"
+; — "red"
+; — "blue"
+; — "black"
+
+; H is a Number between 0 and 100.
+; interpretation represents a happiness value
+; - 0
+; - 100
+; - 36
+
+(define-struct person [fstname lstname male?])
+; A Person is a structure:
+;   (make-person String String Boolean)
+; (make-person "First" "Last" #False)
+; (make-person "George" "Martin" #True)
+
+(define-struct dog [owner name age happiness])
+; A Dog is a structure:
+;  (make-dog Person String PositiveInteger H)
+;  (make-dog (make-person "George" "Martin" #True) "Frodo" 98)
+
+; A Weapon is one of:
+; — #false
+; — Posn
+; interpretation #false means the missile hasn't
+; been fired yet; a Posn means it is in flight
+; (make-weapon (make-posn 10 23))
+; (make-weapon #False
+
+
