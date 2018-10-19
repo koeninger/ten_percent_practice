@@ -25,7 +25,7 @@
 
 ; --------------------------------------
 
-; We use numbers to represent happiness
+; We use numbers to represent cat happiness
 ; 
 
 ;tock 
@@ -34,14 +34,28 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 
-(define border (rectangle 500 60 "outline" "black"))
+(define border (rectangle 100 60 "outline" "black"))
 ;(define meter (rectangle 490 56  "solid" "red"))
 
+
+
 (define (get-meter x)(rectangle x 56 "solid" "red"))
-(define (tick x) (- x .1 ))
+(define (tick x)
+  (cond [(= x 0) 0] [else (- x .1 )])
+)
+
+(define (adjust-happines x a-key)
+
+  (cond
+      [(key=? a-key "up")  (+ x (* x 1/3))]
+      [(key=? a-key "down") (+ x (* x 1/5))]
+      [else x]
+  )
+)
 (define (render x) (overlay/align "left" "center" (get-meter x) border))
 
   (define (main ws)
    (big-bang ws
      [on-tick tick]
-     [to-draw render]))
+     [to-draw render]
+     [on-key adjust-happines]))
