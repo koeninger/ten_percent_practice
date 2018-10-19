@@ -613,9 +613,17 @@ preceding exercises again. Retrace the design recipe. Hint. If haven't already s
                        (text (substring (editor-str ed) (editor-idx ed)) TEXT-SIZE TEXT-COLOR))
                        SCENE))
 
-; Edit 
+; Edit
 ; Editor KeyEvent -> Editor
 ; adds or deletes characters or moves the cursor around
+(check-expect (edit (make-editor "hello" 4) "o") (make-editor "helloo" 5))
+(check-expect (edit (make-editor "hell" 4) "o") (make-editor "hello" 5))
+(check-expect (edit (make-editor "ello" 0) "h") (make-editor "hello" 1))
+(check-expect (edit (make-editor "hello world" 4) "\t") (make-editor "hello world" 4))
+(check-expect (edit (make-editor "hello world" 4) "\r") (make-editor "hello world" 4))
+(check-expect (edit (make-editor "helloworld" 5) "left") (make-editor "helloworld" 4))
+(check-expect (edit (make-editor "helloworld" 5) "right") (make-editor "helloworld" 6))
+
 
 (define (edit ed ke)
   (cond
@@ -625,58 +633,49 @@ preceding exercises again. Retrace the design recipe. Hint. If haven't already s
     [(key=? ke "\t") ed]
     [(key=? ke "\r") ed]
     [(equal? (string-length ke) 1)
-     (add-left ed ke)]
+     (add-edit-limit ed ke)]
     [else ed]))
-
-
 
 ;; Auxiliary functions for Edit
 
+;Editor 1String -> Editor
+; add 1String to String until buffer limit
+(define (add-edit-limit ed c)
+  (cond
+    [(> (image-width (render (add-left ed c))) SCENE-LENGTH) ed]
+    [else (add-left ed c)]))
 
 ; Editor -> Editor
-; moves cursor left 
-(check-expect (cursor-left (make-editor "red" "crayon")) (make-editor "re" "dcrayon"))
-(check-expect (cursor-left (make-editor " " "hello")) (make-editor "" " hello"))
-(check-expect (cursor-left (make-editor "" "bye")) (make-editor "" "bye"))
+; move cursor left
 
 (define (cursor-left ed)
   (cond
-    [(string=? (editor-str ed) "") ed]
-    [else (make-editor
-             (string-remove-last (editor-str ed))
-             (string-append (string-last (editor-str ed)) (editor-idx ed)))]))
+    [(zero? (editor-idx ed)) ed]
+    [else (make-editor (editor-str ed) (sub1 (editor-idx ed)))]))
 
 ; Editor -> Editor
 ; moves cursor right
-(check-expect (cursor-right (make-editor "red" "crayon")) (make-editor "redc" "rayon"))
-(check-expect (cursor-right (make-editor " " "hello")) (make-editor " h" "ello"))
-(check-expect (cursor-right (make-editor "bye" "")) (make-editor "bye" ""))
 
 (define (cursor-right ed)
   (cond
-    [(string=? (editor-idx ed) "") ed]
-    [else (make-editor
-           (string-append (editor-str ed) (string-first (editor-idx ed)))
-           (string-rest (editor-idx ed)))]))
+    [(= (editor-idx ed) (string-length (editor-str ed))) ed]
+    [else (make-editor (editor-str ed) (add1 (editor-idx ed)))]))
 
-; Editor -> editor
+;Editor -> Editor
 ; deletes 1String to the left of the cursor
-(check-expect (backspace-left (make-editor "red" "crayon")) (make-editor "re" "crayon"))
-(check-expect (backspace-left (make-editor " " "hello")) (make-editor "" "hello"))
-(check-expect (backspace-left (make-editor "" "bye")) (make-editor "" "bye"))
+(check-expect (backspace-left (make-editor "helloworld" 5)) (make-editor "hellworld" 4))
+(check-expect (backspace-left (make-editor "hello" 5)) (make-editor "hell" 4))
+(check-expect (backspace-left (make-editor "" 0)) (make-editor "" 0))
 
 (define (backspace-left ed)
   (cond
-    [(string=? (editor-str ed) "") ed]
-    [else (make-editor
-           (string-remove-last (editor-str ed))
-           (editor-idx ed))]))
+    [(zero? (editor-idx ed)) ed]
+    [else (make-editor (string-append (string-remove-last (editor-str ed))
+                                      (editor-idx ed))
+                       (sub1 (editor-idx ed)))]))
 
 ; Editor -> Editor
 ; add 1String to the right of the cursor
-(check-expect (add-left (make-editor "red" "crayon") "s") (make-editor "reds" "crayon"))
-(check-expect (add-left (make-editor "" "hello") "!") (make-editor "!" "hello"))
-(check-expect (add-left (make-editor "bye" " ") "n") (make-editor "byen" " "))
 
 (define (add-left ed ke)
   (make-editor
@@ -695,6 +694,7 @@ preceding exercises again. Retrace the design recipe. Hint. If haven't already s
 
 ; String -> String
 ; extracts all but the first 1String from a string
+
 (check-expect (string-rest "hello") "ello")
 (check-expect (string-rest "hi") "i")
 
@@ -710,9 +710,9 @@ preceding exercises again. Retrace the design recipe. Hint. If haven't already s
   (string-ith s (- (string-length s) 1)))
 
 ; String -> String
-; removes the last 1String in a non-empty string
+;removes the last 1String in a non-empty string
 (check-expect (string-remove-last "hello") "hell")
-(check-expect (string-remove-last "hi ") "hi")
+(check-expect (string-remove-last "hi") "hi")
 
 (define (string-remove-last s)
   (substring s 0 (sub1 (string-length s))))
@@ -722,8 +722,8 @@ preceding exercises again. Retrace the design recipe. Hint. If haven't already s
 ; expect (run "hello") -> render an editor with "hello" and cursor after
 
 (define (run s)
-  (big-bang (make-editor s "")
-      [to-draw render]
-      [on-key edit]))
+  (big-bang (make-editor s (string-length s))
+    [to-draw render]
+    [on-key edit]))
 
 (run "hello")
