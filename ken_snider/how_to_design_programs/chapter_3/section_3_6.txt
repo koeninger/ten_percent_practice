@@ -134,7 +134,7 @@
      [to-draw render]
      [stop-when end?]))
 
-Exercise 42. Modify the interpretation of the sample data definition so that a state denotes the x-coordinate of the right-most edge of the car.
+;Exercise 42. Modify the interpretation of the sample data definition so that a state denotes the x-coordinate of the right-most edge of the car.
 
 (define WIDTH-OF-WORLD 500)
  
@@ -152,7 +152,6 @@ Exercise 42. Modify the interpretation of the sample data definition so that a s
     (* 5 WHEEL-RADIUS)))
 (define CAR-HEIGHT
   (* WHEEL-RADIUS 3))
-
 
 (define CAR
   (above
@@ -206,4 +205,75 @@ Exercise 42. Modify the interpretation of the sample data definition so that a s
      [to-draw render]
      [stop-when end?]))
 
-; Exercise 42
+; Exercise 43. Design the functions tock and render. Then develop a big-bang expression so that once again you get an animation of a car traveling from left to right across the world’s canvas.
+
+(define WIDTH-OF-WORLD 500)
+
+(define WHEEL-RADIUS 5)
+(define WHEEL-DISTANCE
+  (* WHEEL-RADIUS 4))
+(define WHEEL
+  (circle (* 2 WHEEL-RADIUS) "solid" "black"))
+(define SPACE
+  (rectangle WHEEL-DISTANCE WHEEL-RADIUS "solid" "white"))
+(define BOTH-WHEELS
+  (beside WHEEL SPACE WHEEL))
+(define CAR-LENGTH
+  (+ WHEEL-DISTANCE
+    (* 5 WHEEL-RADIUS)))
+(define CAR-HEIGHT
+  (* WHEEL-RADIUS 3))
+
+(define CAR
+  (above
+    (rectangle CAR-LENGTH CAR-HEIGHT "solid" "red")
+      (underlay/offset (rectangle (* 2 CAR-LENGTH) CAR-HEIGHT "solid" "red") 0 (* .5 CAR-HEIGHT) BOTH-WHEELS)
+  )
+)
+
+(define TREE
+  (underlay/xy (circle 10 "solid" "green")
+               9 15
+               (rectangle 2 20 "solid" "brown")))
+
+
+(define Y-CAR CAR-HEIGHT)
+(define BACKGROUND
+  (place-image TREE (* WIDTH-OF-WORLD .5) 20
+               (empty-scene WIDTH-OF-WORLD (* 2.5 CAR-HEIGHT))))
+
+; WorldState -> WorldState
+; moves the car by 3 pixels for every clock tick
+; examples:
+(check-expect (tock 20) 23)
+(check-expect (tock 78) 81)
+(define (tock ws)
+  (+ ws 3))
+
+; WorldState -> Image
+; places the car into the BACKGROUND scene,
+; according to the given world state
+; eamples:
+(check-expect (render 50)
+              (place-image CAR (+ 50 CAR-LENGTH) Y-CAR BACKGROUND))
+(check-expect (render 200)
+              (place-image CAR (+ 200 CAR-LENGTH) Y-CAR BACKGROUND))
+(define (render ws)
+   (place-image CAR (+ ws CAR-LENGTH) Y-CAR BACKGROUND))
+
+; WorldState -> Boolean
+; Stops the program when we reach a given state
+(check-expect (end? 0) #false)
+(check-expect (end? (+ WIDTH-OF-WORLD CAR-LENGTH)) #true)
+(define (end? ws)
+  (>= ws (+ WIDTH-OF-WORLD CAR-LENGTH)))
+
+; WorldState -> WorldState
+; launches the program from some initial state
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]
+     [stop-when end?]))
+
+

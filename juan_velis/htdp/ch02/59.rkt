@@ -40,9 +40,9 @@
 ; Draws 3 color traffic light
 (define (light color)
   (overlay/align "center" "center"                 
-   (beside (circle 10 (if (string=? color "yellow") "solid" "outline") "yellow") SPACER
-           (circle 10 (if (string=? color "green") "solid" "outline") "green") SPACER
-           (circle 10 (if (string=? color "red") "solid" "outline") "red"))
+   (beside (circle 10 (if (string=? color "red") "solid" "outline") "red") SPACER
+           (circle 10 (if (string=? color "yellow") "solid" "outline") "yellow") SPACER
+           (circle 10 (if (string=? color "green") "solid" "outline") "green"))
    BACKGROUND
    )
 )
