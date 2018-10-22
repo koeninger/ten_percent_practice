@@ -1,0 +1,38 @@
+; Exercise 45. Design a “virtual cat” world program that continuously moves the cat from left to right. Let’s call it cat-prog and let’s assume it consumes the starting position of the cat. Furthermore, make the cat move three pixels per clock tick. Whenever the cat disappears on the right, it reappears on the left.
+
+(define cat1 .)
+
+(define cat2 .)
+
+(define WIDTH-OF-WORLD 200)
+
+(define CAT-HEIGHT (image-height cat1))
+(define CAT-WIDTH (image-width cat1))
+
+(define BACKGROUND (empty-scene WIDTH-OF-WORLD CAT-HEIGHT))
+
+; WorldState -> WorldState
+; moves the cat by 3 pixels for every clock tick
+; examples:
+;   given: 20, expect 23
+(check-expect (ws 20) 23)
+;   given: 78, expect 81
+(check-expect (ws 78) 81)
+(define (tock ws)
+  (+ ws 3))
+
+(define (render ws)
+   (place-image cat1 ws BACKGROUND))
+
+; WorldState -> Boolean
+; Stops the program when we reach a given state
+(check-expect (end? 0) #false)
+(check-expect (end? (+ WIDTH-OF-WORLD CAT-WIDTH)) #true)
+(define (end? ws)
+  (>= ws (+ WIDTH-OF-WORLD CAT-WIDTH)))
+
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]
+     [stop-when end?]))
