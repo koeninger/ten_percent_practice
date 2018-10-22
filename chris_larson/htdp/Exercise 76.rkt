@@ -73,3 +73,23 @@
   (sqrt (+ (* (r3-x p) (r3-x p)) (* (r3-y p) (r3-y p)) (* (r3-z p) (r3-z p)))))
 
 (check-within (r3-distance-to-0 (make-r3 1 2 13)) (sqrt (+ (* 1 1) (* 2 2) (* 13 13))) 0.01)
+
+; Movie -> Something
+; computes something about a Movie
+(define (something-about-movie m)
+  (... (movie-title m) ... (movie-director m) ... (movie-year m) ...))
+
+; Pet -> Something
+; computes something about a Pet
+(define (something-about-pet p)
+  (... (pet-name p) ... (pet-number p) ...))
+
+; CD -> Something
+; computes something about a CD
+(define (something-about-CD c)
+  (... (CD-artist c) ... (CD-title c) ... (CD-price) ...))
+
+; Sweater -> Something
+; computes something about a sweater
+(define (somthing-about-sweater s)
+  (... (sweater-material s) ... (sweater-size s) ... (sweater-color s) ...))
