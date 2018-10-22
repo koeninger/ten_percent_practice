@@ -1,0 +1,65 @@
+Exercise 88 Define a strucutre type that keeps track of the cat's x-coordinate and its happiness. 
+Then formulate a data definition for cats, dubbed VCat, including an interpretation 
+
+(define-struct vcat [x-pos happy])
+; A cat-status is a structure
+;      (make-vcat Number Number)
+; interpretation (make-vcat n k) describes a cat's
+; x-coordinate and its happiness level
+
+(define CAT1 (make-vcat 0 100) ; happy cat at origin
+(define CAT2 (make-vcat 100 0) ; unhappy cat at x-coordinate 100
+(define CAT3 (make-vcat 50 50)
+
+Exercise 89 Design the happy-cat world program, which manages a walking cat and its happiness level. 
+Let's assume that the cat starts out with perfect happiness
+Hint1 Reuse the functions from the world programs in Virtual Pet Worlds
+Hint2 Use structure type from the preceding exercise to represent the state of the world 
+
+(define-struct vcat [x-pos happy])
+; A cat-status is a structure
+; (make-vcat Number Number)
+; interpretation (make-vcat n k) describes a cat's
+; x-coordinate and its happiness level
+
+(define CAT1 (make-vcat 0 100))
+  
+(define CAT2 (make-vcat 100 0))
+  
+(define CAT3 (make-vcat 50 50))
+
+; physical constants
+(define WIDTH-OF-WORLD 200)
+(define HEIGHT-OF-WORLD 200)
+(define MAXIMUM-HAPPINESS-SCORE 100)
+(define MINIMUM-HAPPINESS-SCORE 0)
+(define TOCK-DECREASE -0.1)
+(define DOWN-CHANGE 1/5)
+(define UP-CHANGE 1/3)
+(define GAUGE-WIDTH 100)
+(define GAUGE-HEIGHT 25)
+
+; graphical constants
+(define CAT .)
+  
+(define Y-CAT
+  (- HEIGHT-OF-WORLD (/ (image-height CAT) 2)))
+  
+(define BACKGROUND
+  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
+
+(define GAUGE
+  (overlay/xy
+   (rectangle GAUGE-WIDTH GAUGE-HEIGHT "solid" "black")
+   0 0
+   (empty-scene GAUGE-WIDTH GAUGE-HEIGHT)))
+
+; VCAT -> Image
+; places the cat in the world, using vcat-x-pos as the x position
+; renders the happiness guage using the value of vcat-happy
+
+(define (render vc)
+  (place-image/align
+   (rectangle (* 3 (vcat-happy vc)) GAUGE-HEIGHT "solid" "black")
+   5 10 "left" "top"
+   (place-image CAT (vcat-x-pos vc) Y-CAT BACKGROUND)))
