@@ -40,7 +40,7 @@
 ; - 100
 ; - 36
 
-(define-struct person [fstname lstname male?])
+(define-struct person1 [fstname lstname male?])
 ; A Person is a structure:
 ;   (make-person String String Boolean)
 ; (make-person "First" "Last" #False)
@@ -60,3 +60,16 @@
 ; (make-weapon #False
 
 
+(define-struct r3 [x y z])
+; An R3 is a structure:
+;  (make-r3 Number Number Number)
+
+(define ex1 (make-r3 1 2 13))
+(define ex2 (make-r3 -1 0 3))
+
+; R3 -> Number
+; computes the distance of objects in 3-D space to origin
+(define (r3-distance-to-0 p)
+  (sqrt (+ (* (r3-x p) (r3-x p)) (* (r3-y p) (r3-y p)) (* (r3-z p) (r3-z p)))))
+
+(check-within (r3-distance-to-0 (make-r3 1 2 13)) (sqrt (+ (* 1 1) (* 2 2) (* 13 13))) 0.01)
