@@ -19,7 +19,7 @@
 
 ; PointInTime is (make-point-in-tim Number Number Number)
 ; interpretation hours, minutes and seconds since midnight
-(define-struct point-in-time [hours minutes seconds])
+(define-struct time [hours minutes seconds])
 
 ; ThreeLetterWord is (make-three-letter-word 1StringOrFalse 1StringOrFalse 1StringOrFalse)
 ; interpretation can be a 1String or #false
@@ -93,3 +93,12 @@
 ; computes something about a sweater
 (define (somthing-about-sweater s)
   (... (sweater-material s) ... (sweater-size s) ... (sweater-color s) ...))
+
+; Time -> Seconds
+; converts Time to seconds since midnight
+(define (time->seconds t)
+  (+ (* (* 60 60)(time-hours t)) (* 60 (time-minutes t)) (time-seconds t)))
+
+(check-expect (time->seconds (make-time 1 0 0)) (* 1 (* 60 60)))
+(check-expect (time->seconds (make-time 5 15 0)) (+ (* 5 (* 60 60)) (* 15 60)))
+(check-expect (time->seconds (make-time 1 15 45)) (+ (* 1 (* 60 60)) (* 15 60) 45))
