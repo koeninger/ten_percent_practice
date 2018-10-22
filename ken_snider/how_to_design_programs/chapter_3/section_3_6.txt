@@ -57,6 +57,8 @@
 ;	Actual value 82 differs from 81, the expected value.
 ;at line 7, column 0 
 
+; ===
+
 ; Exercise 41. Finish the sample problem and get the program to run. That is, assuming that you have solved exercise 39, define the constants BACKGROUND and Y-CAR. Then assemble all the function definitions, including their tests. When your program runs to your satisfaction, add a tree to the scenery. We used
 ;(define tree
 ;  (underlay/xy (circle 10 "solid" "green")
@@ -134,6 +136,8 @@
      [to-draw render]
      [stop-when end?]))
 
+; ===
+
 ;Exercise 42. Modify the interpretation of the sample data definition so that a state denotes the x-coordinate of the right-most edge of the car.
 
 (define WIDTH-OF-WORLD 500)
@@ -204,6 +208,8 @@
      [on-tick tock]
      [to-draw render]
      [stop-when end?]))
+
+; ===
 
 ; Exercise 43. Design the functions tock and render. Then develop a big-bang expression so that once again you get an animation of a car traveling from left to right across the world’s canvas.
 
@@ -276,4 +282,29 @@
      [to-draw render]
      [stop-when end?]))
 
+; (Skipping 43 to get more direction)
+
+; ===
+
+; Exercise 44. Formulate the examples as BSL tests. Click RUN and watch them fail.
+
+; WorldState Number Number String -> WorldState
+; places the car at x-mouse
+; if the given me is "button-down"
+; given: 21 10 20 "enter"  
+; wanted: 21
+(check-expect (hyper 21 10 20 "enter")
+              21)
+; given: 42 10 20 "button-down"
+; wanted: 10
+(check-expect (hyper 42 10 20 "button-down")
+              10)
+; given: 42 10 20 "move"
+; wanted: 42
+(check-expect (hyper 42 10 20 "move")
+              42)
+(define (hyper x-position-of-car x-mouse y-mouse me)
+  (cond
+    [(string=? "button-down" me) x-mouse]
+    [else x-position-of-car]))
 
