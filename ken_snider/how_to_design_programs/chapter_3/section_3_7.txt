@@ -15,9 +15,9 @@
 ; moves the cat by 3 pixels for every clock tick
 ; examples:
 ;   given: 20, expect 23
-(check-expect (ws 20) 23)
+(check-expect (tock 20) 23)
 ;   given: 78, expect 81
-(check-expect (ws 78) 81)
+(check-expect (tock 78) 81)
 (define (tock ws)
   (+ ws 3))
 
