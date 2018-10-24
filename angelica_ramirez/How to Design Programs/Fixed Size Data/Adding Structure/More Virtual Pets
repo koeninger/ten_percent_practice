@@ -29,7 +29,7 @@ Hint2 Use structure type from the preceding exercise to represent the state of t
 (define CAT3 (make-vcat 50 50))
 
 ; physical constants
-(define WIDTH-OF-WORLD 200)
+(define WIDTH-OF-WORLD 400)
 (define HEIGHT-OF-WORLD 200)
 (define MAXIMUM-HAPPINESS-SCORE 100)
 (define MINIMUM-HAPPINESS-SCORE 0)
@@ -58,8 +58,51 @@ Hint2 Use structure type from the preceding exercise to represent the state of t
 ; places the cat in the world, using vcat-x-pos as the x position
 ; renders the happiness guage using the value of vcat-happy
 
-(define (render vc)
+(define (render vcat)
   (place-image/align
-   (rectangle (* 3 (vcat-happy vc)) GAUGE-HEIGHT "solid" "black")
+   (rectangle (* 3 (vcat-happy vcat)) GAUGE-HEIGHT "solid" "black")
    5 10 "left" "top"
-   (place-image CAT (vcat-x-pos vc) Y-CAT BACKGROUND)))
+   (place-image CAT (vcat-x-pos vcat) Y-CAT BACKGROUND)))
+
+; VCAT KeyEvent -> VCat
+; handle CAT feeding and petting
+; up arrow pets CAT, down arrow feeds CAT
+
+(define (change-cat vcat ke)
+  (cond
+    [(key=? ke "up") (pet vcat)]
+    [(key=? ke "down") (feed vcat)]
+    [else vcat]))
+
+; Auxiliary functions for change-cat
+; VCAT -> VCAT
+; pet the cat
+
+(define (pet vcat)
+  (make-vcat (vcat-x-pos vcat) (* (vcat-happy vcat) UP-CHANGE)))
+
+; VCAT -> VCAT
+; feed the cat 
+
+(define (feed vcat)
+  (make-vcat (vcat-x-pos vcat) (* (vcat-happy vcat) DOWN-CHANGE)))
+
+; WorldState -> WorldState
+; moves the CAT by 3 pixel for every clock tick
+; moves CAT by endless left to right loop
+
+(define (tock vcat)
+  (make-vcat
+   (+ (vcat-x-pos vcat) 1)
+   (cond
+     [(< (vcat-happy vcat) 1) 0]
+     [else (min (- (vcat-happy vcat) TOCK-DECREASE) HEIGHT-OF-WORLD)])))
+
+; WorldState -> WorldState
+; launch the program from some initial state
+; run (main CAT1)
+
+(define (main vcat)
+  (big-bang vcat
+    (on-tick tock)
+    (to-draw render)))

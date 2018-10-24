@@ -12,27 +12,27 @@
 (define BACKGROUND (empty-scene WIDTH-OF-WORLD CAT-HEIGHT))
 
 ; WorldState -> WorldState
-; moves the cat by 3 pixels for every clock tick
+; moves the cat by 3 pixels for every clock tick.
+; If the cat leaves the world, reset ws to 9.
 ; examples:
-;   given: 20, expect 23
-(check-expect (tock 20) 23)
-;   given: 78, expect 81
-(check-expect (tock 78) 81)
+(check-expect (tock (/ WIDTH-OF-WORLD 2)) (+ (/ WIDTH-OF-WORLD 2) 3))
+(check-expect (tock (+ WIDTH-OF-WORLD (+ CAT-WIDTH 1))) 0)
 (define (tock ws)
-  (+ ws 3))
+  (cond
+    [(< ws (+ WIDTH-OF-WORLD CAT-WIDTH)) (+ ws 3)]
+    [else 0]))
 
+; WorldState -> Image
+; Renders the cat at the point specified on the background
+; by the position of the WorldState (in pixels)
+(check-expect (render 20)
+              (place-image cat1 20 (* CAT-HEIGHT .5) BACKGROUND))
+(check-expect (render 42)
+              (place-image cat1 42 (* CAT-HEIGHT .5) BACKGROUND))
 (define (render ws)
-   (place-image cat1 ws BACKGROUND))
-
-; WorldState -> Boolean
-; Stops the program when we reach a given state
-(check-expect (end? 0) #false)
-(check-expect (end? (+ WIDTH-OF-WORLD CAT-WIDTH)) #true)
-(define (end? ws)
-  (>= ws (+ WIDTH-OF-WORLD CAT-WIDTH)))
+   (place-image cat1 ws (* CAT-HEIGHT .5) BACKGROUND))
 
 (define (main ws)
    (big-bang ws
      [on-tick tock]
-     [to-draw render]
-     [stop-when end?]))
+     [to-draw render]))
