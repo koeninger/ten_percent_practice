@@ -23,7 +23,7 @@
 
 ; ThreeLetterWord is (make-three-letter-word 1StringOrFalse 1StringOrFalse 1StringOrFalse)
 ; interpretation can be a 1String or #false
-(define-struct three-letter-word [first second third])
+(define-struct 3word [first second third])
 
 ; A Color is one of:
 ; — "white"
@@ -102,3 +102,16 @@
 (check-expect (time->seconds (make-time 1 0 0)) (* 1 (* 60 60)))
 (check-expect (time->seconds (make-time 5 15 0)) (+ (* 5 (* 60 60)) (* 15 60)))
 (check-expect (time->seconds (make-time 1 15 45)) (+ (* 1 (* 60 60)) (* 15 60) 45))
+
+; Letter Letter -> Letter
+(define (compare-letter a b)
+  (cond
+    [(eq? a b) a]
+    [else #false]))
+
+; 3Word 3Word -> 3Word
+; compares two three letter words and returns false if the are not the same and the word if they are
+(define (compare-word a b)
+  (make-3word (compare-letter (3word-first a) (3word-first b)) (compare-letter (3word-second a) (3word-second b)) (compare-letter (3word-third a) (3word-third b))))
+(check-expect (compare-word (make-3word "a" "b" "c") (make-3word "a" "b" "c")) (make-3word "a" "b" "c"))
+(check-expect (compare-word (make-3word "a" "a" "c") (make-3word "a" "b" "c")) (make-3word "a" #false "c"))
