@@ -435,3 +435,10 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
   (big-bang s
     [on-tick traffic-light-next]
     [to-draw render]))
+    
+//Exercise 52
+3,4,5
+4,5
+3,4
+4
+
