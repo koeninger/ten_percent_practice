@@ -7,6 +7,7 @@
 (define WIDTH-OF-WORLD 400)
  
 (define WHEEL-RADIUS 5)
+(define Y-CAR 25)
 (define WHEEL-DISTANCE (* WHEEL-RADIUS 5))
 
 (define BACKGROUND (empty-scene WIDTH-OF-WORLD 50))
@@ -32,18 +33,22 @@
 ; places the image of the car x pixels from 
 ; the left margin of the BACKGROUND image 
 (define (render x)
-  (overlay/offset CAR x 0 (overlay/offset tree 30 0 BACKGROUND)))
+  (place-image CAR x Y-CAR (place-image tree 30 Y-CAR BACKGROUND)))
 
 ; WorldState -> WorldState
 ; adds 3 to x to move the car right 
 (define (tock x)
   (+ x 3))
 
+(define (end? x)
+  (> x WIDTH-OF-WORLD))
+
 ; WorldState -> WorldState
 ; launches the program from some initial state 
 (define (main ws)
    (big-bang ws
      [on-tick tock]
-     [to-draw render]))
+     [to-draw render]
+     [stop-when end?]))
 
 (main 0)
