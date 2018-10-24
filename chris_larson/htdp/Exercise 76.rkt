@@ -67,6 +67,12 @@
 (define ex1 (make-r3 1 2 13))
 (define ex2 (make-r3 -1 0 3))
 
+; A SpaceGame is a structure:
+;   (make-space-game Posn Number). 
+; interpretation (make-space-game (make-posn ux uy) tx)
+; describes a configuration where the UFO is 
+; at (ux,uy) and the tank's x-coordinate is tx
+
 ; R3 -> Number
 ; computes the distance of objects in 3-D space to origin
 (define (r3-distance-to-0 p)
