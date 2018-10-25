@@ -36,3 +36,45 @@
    (big-bang ws
      [on-tick tock]
      [to-draw render]))
+
+; Exercise 46. Adjust the rendering function from exercise 45 so that it uses one cat image or the other based on whether the x-coordinate is odd. Read up on odd? in the HelpDesk, and use a cond expression to select cat images.
+
+(define cat1 .)
+
+(define cat2 .)
+
+(define WIDTH-OF-WORLD 200)
+
+(define CAT-HEIGHT (image-height cat1))
+(define CAT-WIDTH (image-width cat1))
+
+(define BACKGROUND (empty-scene WIDTH-OF-WORLD CAT-HEIGHT))
+
+; WorldState -> WorldState
+; moves the cat by 3 pixels for every clock tick.
+; If the cat leaves the world, reset ws to 9.
+; examples:
+(check-expect (tock (/ WIDTH-OF-WORLD 2)) (+ (/ WIDTH-OF-WORLD 2) 3))
+(check-expect (tock (+ WIDTH-OF-WORLD (+ CAT-WIDTH 1))) 0)
+(define (tock ws)
+  (cond
+    [(< ws (+ WIDTH-OF-WORLD CAT-WIDTH)) (+ ws 3)]
+    [else 0]))
+
+; WorldState -> Image
+; Renders the cat at the point specified on the background
+; by the position of the WorldState (in pixels)
+; Uses a different image for even and odd steps
+(check-expect (render 21)
+              (place-image cat1 21 (* CAT-HEIGHT .5) BACKGROUND))
+(check-expect (render 42)
+              (place-image cat2 42 (* CAT-HEIGHT .5) BACKGROUND))
+(define (render ws)
+  (cond
+    [(odd? ws) (place-image cat1 ws (* CAT-HEIGHT .5) BACKGROUND)]
+    [else (place-image cat2 ws (* CAT-HEIGHT .5) BACKGROUND)]))
+
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]))
