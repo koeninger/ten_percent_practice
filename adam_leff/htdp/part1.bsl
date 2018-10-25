@@ -443,6 +443,7 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 4
 
 /Exercise 53
+(require 2htdp/image)
 (define HEIGHT 300) ; distances in pixels 
 (define WIDTH  100)
 (define YD 3)
