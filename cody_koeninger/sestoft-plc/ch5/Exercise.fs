@@ -78,3 +78,16 @@ let postorder1 t = treeFold (fun x y z -> y @ z @ [x]) t []
 let mapTree f t = treeFold (fun x y z -> Br(f x, y, z)) t Lf
 
 let exampleT = Br(1, Br(2, Br(4, Lf, Lf), Br(5, Lf, Lf)), Br(3, Lf, Lf))
+
+let htmlrow (cellCount : int) (f : int -> string) : string =
+    [0 .. (cellCount - 1)]
+    |> List.map f
+    |> List.map (sprintf "<td align=right>%s</td>")
+    |> String.concat ""
+
+let htmltable (rowCount : int) (f : int -> string) : string =
+    [0 .. (rowCount - 1)]
+    |> List.map f
+    |> List.map (sprintf "<tr>%s</tr>")
+    |> String.concat "\n"
+    |> sprintf "<table>\n%s\n</table>"
