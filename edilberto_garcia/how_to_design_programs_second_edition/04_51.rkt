@@ -12,10 +12,35 @@
 (require 2htdp/image)
 
 
+
+(define background (rectangle 50 100 "outline" "grey"))
+
+;(define light (
+
+
+
 ; tock
 ; render
 
 
 ; AnimationState -> Image
 ; renders the traffic light
-(define (render state) (place-image CAR x (+ (sin x) (* WHEEL-RADIUS 3)) BACKGROUND ))
+(define (render current_state)
+ (circle 50 "solid" current_state)
+)
+
+
+
+(define (tock current_state)
+    (cond
+        [(string=? "green"  current_state) "yellow"]
+        [(string=? "yellow" current_state) "red"]
+        [(string=? "red"    current_state) "green"]
+))
+
+
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]
+))
