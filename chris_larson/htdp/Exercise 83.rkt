@@ -25,9 +25,11 @@
 ; if key is backspace then it deletes the last char of pre
 (define (edit ed ke)
   (cond
-  [(eq? ke "\b") (make-editor (string-remove-last (editor-pre ed)) (editor-post ed))]
-  [(eq? ke "left") (make-editor (string-remove-last (editor-pre ed)) (string-append (string-last (editor-pre ed)) (editor-post ed))) ]
-  [(eq? ke "right") (make-editor (string-append (editor-pre ed) (string-first (editor-post ed))) (string-remove-first (editor-post ed)))]
+  [(string=? ke "\b") (make-editor (string-remove-last (editor-pre ed)) (editor-post ed))]
+  [(string=? ke "left") (make-editor (string-remove-last (editor-pre ed)) (string-append (string-last (editor-pre ed)) (editor-post ed))) ]
+  [(string=? ke "right") (make-editor (string-append (editor-pre ed) (string-first (editor-post ed))) (string-remove-first (editor-post ed)))]
+  [(string=? ke "\t") ed]
+  [(string=? ke "\r") ed]
   [else (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]))
 
 (check-expect (edit (make-editor "hello" "world") "right") (make-editor "hellow" "orld"))
@@ -35,25 +37,36 @@
 (check-expect (edit (make-editor "hello" "world") "\b") (make-editor "hell" "world"))
 (check-expect (edit (make-editor "hello" "world") " ") (make-editor "hello " "world"))
 
+; String -> 1String
+; returns the first 1String from a String
 (define (string-first s)
   (substring s 0 1))
+(check-expect (string-first "Hello World!") "H")
+(check-expect (string-first "\bHello World!") "\b")
 
+; String -> 1String
+; returns the last 1String from a String
 (define (string-last s)
   (substring s (- (string-length s) 1)))
+(check-expect (string-last "Hello World!") "!")
+(check-expect (string-last "Hello World!\b") "\b")
 
-(define (string-insert str i)
-  (string-append (substring str 0 i) "_" (substring str (+ i 0) (string-length str))))
-
-(define (string-delete str i)
-  (string-append (substring str 0 i) (substring str (+ i 1) (string-length str))))
-
+; String -> String
+; removes the last 1String from a String
 (define (string-remove-last str)
   (substring str 0 (- (string-length str) 1)))
+(check-expect (string-remove-last "Hello World!") "Hello World")
+(check-expect (string-remove-last "Hello World!\b") "Hello World!")
 
+; String -> String
+; removes the first 1String from a String
 (define (string-remove-first str)
   (substring str 1 (string-length str)))
+(check-expect (string-remove-first "Hello World!") "ello World!")
+(check-expect (string-remove-first "\bHello World!") "Hello World!")
 
-(render (make-editor "hello" "world"))
-
-(edit (make-editor "hello" "world") "left")
-(edit (make-editor "hello" "world") "right")
+;
+(define (run pre)
+  (big-bang (make-editor pre "")
+    [to-draw render]
+    [on-key edit]))
