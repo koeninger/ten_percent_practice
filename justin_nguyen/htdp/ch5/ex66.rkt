@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex65) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex66) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (define-struct movie [title producer year])
 ;make-movie
 ;movie-title
@@ -36,3 +36,8 @@
 ;sweater-size
 ;sweater-producer
 ;sweater?
+
+(make-movie "The Matrix" "Joel Silver" 1999)
+(make-person "Bob" "black" "brown" "123-456-7890")
+(make-pet "Fluffy" "11")
+(make-sweater "wool" "m" "Old Navy")
