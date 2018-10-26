@@ -2,6 +2,8 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 83|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
 
+; definitions
+(define WIDTH 200)
 
 (define-struct editor [pre post])
 ; An Editor is a structure:
@@ -18,24 +20,38 @@
                              (text (editor-pre e) 11 "black")
                              (rectangle 1 20 "solid" "red")
                              (text (editor-post e) 11 "black"))
-               (empty-scene 200 20)))
+               (empty-scene WIDTH 20)))
 
 ; Editor KeyEvent -> Editor
 ; adds a single char to end of pre
 ; if key is backspace then it deletes the last char of pre
 (define (edit ed ke)
   (cond
-  [(string=? ke "\b") (make-editor (string-remove-last (editor-pre ed)) (editor-post ed))]
-  [(string=? ke "left") (make-editor (string-remove-last (editor-pre ed)) (string-append (string-last (editor-pre ed)) (editor-post ed))) ]
-  [(string=? ke "right") (make-editor (string-append (editor-pre ed) (string-first (editor-post ed))) (string-remove-first (editor-post ed)))]
-  [(string=? ke "\t") ed]
-  [(string=? ke "\r") ed]
-  [else (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]))
+    [(string=? ke "\b") (make-editor (string-remove-last (editor-pre ed)) (editor-post ed))]
+    [(string=? ke "left") (make-editor (string-remove-last (editor-pre ed)) (string-append (string-last (editor-pre ed)) (editor-post ed))) ]
+    [(string=? ke "right") (move-right ed)]
+    [(string=? ke "\t") ed]
+    [(string=? ke "\r") ed]
+    [(> (image-width (render ed)) WIDTH) ed]
+    [else (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]))
 
 (check-expect (edit (make-editor "hello" "world") "right") (make-editor "hellow" "orld"))
 (check-expect (edit (make-editor "hello" "world") "left") (make-editor "hell" "oworld"))
 (check-expect (edit (make-editor "hello" "world") "\b") (make-editor "hell" "world"))
 (check-expect (edit (make-editor "hello" "world") " ") (make-editor "hello " "world"))
+(check-expect (edit (make-editor "hello" "world") "\t") (make-editor "hello" "world"))
+(check-expect (edit (make-editor "hello" "world") "\r") (make-editor "hello" "world"))
+(check-expect (edit (make-editor "hello" "worldrealyrealyrealyrealyrealyrealyrealyrealyrealyrealylonglonglonglonglonglonglong") " ") (make-editor "hello" "worldrealyrealyrealyrealyrealyrealyrealyrealyrealyrealylonglonglonglonglonglonglong"))
+
+; Editor -> Editor
+; Move right if post is not empty-string
+(define (move-right ed)
+  (cond
+  [(string=?(editor-post ed) "") ed]
+  [else (make-editor (string-append (editor-pre ed) (string-first (editor-post ed))) (string-remove-first (editor-post ed)))]))
+
+(check-expect (move-right (make-editor "hello" "world")) (make-editor "hellow" "orld"))
+(check-expect (move-right (make-editor "hello world" "")) (make-editor "hello world" ""))
 
 ; String -> 1String
 ; returns the first 1String from a String
