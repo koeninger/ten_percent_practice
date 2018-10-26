@@ -78,3 +78,40 @@
    (big-bang ws
      [on-tick tock]
      [to-draw render]))
+
+; Exercise 47. Design a world program that maintains and displays a “happiness gauge.” Let’s call it gauge-prog, and let’s agree that the program consumes the maximum level of happiness. The gauge display starts with the maximum score, and with each clock tick, happiness decreases by -0.1; it never falls below 0, the minimum happiness score. Every time the down arrow key is pressed, happiness increases by 1/5; every time the up arrow is pressed, happiness jumps by 1/3.
+
+; To show the level of happiness, we use a scene with a solid, red rectangle with a black frame. For a happiness level of 0, the red bar should be gone; for the maximum happiness level of 100, the bar should go all the way across the scene.
+
+(define WIDTH-OF-WORLD 100)
+
+(define BACKGROUND (empty-scene WIDTH-OF-WORLD 40))
+
+; HappyState -> HappyState
+; Decrements by 0.1 for every clock tick.
+; If the HappyState reaches 0, do not decrement.
+; examples:
+(check-expect (tock (/ WIDTH-OF-WORLD 2)) (- (/ WIDTH-OF-WORLD 2) 0.1))
+(check-expect (tock 0 0)
+(define (tock hs)
+  (cond
+    [(> hs 0.1) (- hs 0.1)]
+    [else 0]))
+
+; HappyState -> Image
+; Renders the Happiness at the point specified on the background
+; by the position of the HappyState (in percent)
+
+(check-expect (render 21)
+              (place-image cat1 21 (* CAT-HEIGHT .5) BACKGROUND))
+(check-expect (render 42)
+              (place-image cat2 42 (* CAT-HEIGHT .5) BACKGROUND))
+(define (render hs)
+  (cond
+    [(odd? ws) (place-image cat1 ws (* CAT-HEIGHT .5) BACKGROUND)]
+    [else (place-image cat2 ws (* CAT-HEIGHT .5) BACKGROUND)]))
+
+(define (main ws)
+   (big-bang ws
+     [on-tick tock]
+     [to-draw render]))
