@@ -1,6 +1,8 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname 10_more_lists) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+(require 2htdp/batch-io)
+
 ; List-of-numbers -> List-of-numbers
 ; computes the weekly wages for all given weekly hours
 (check-expect (wage* '()) '())
@@ -180,3 +182,73 @@
                        (phone-switch (first ps))
                        (phone-four (first ps)))
            (replace (rest ps)))]))
+
+; ex 173
+
+; a list-of-strings is either '() or (cons "somestring" a-list-of-strings)
+
+(check-expect (read-lines "ttt.txt")
+              (list
+               ""
+               "TTT"
+               ""
+               "Put up in a place"
+               "where it's easy to see"
+               "the cryptic admonishment"
+               "T.T.T."
+               ""
+               "When you feel how depressingly"
+               "slowly you climb,"
+               "it's well to remember that"
+               "Things Take Time."
+               ""
+               "Piet Hein"))
+
+(check-expect (read-words "ttt.txt")
+(list
+ "TTT"
+
+"Put" "up" "in" "a" "place"
+"where" "it's" "easy" "to" "see"
+"the" "cryptic" "admonishment"
+"T.T.T."
+
+"When" "you" "feel" "how" "depressingly"
+"slowly" "you" "climb,"
+"it's" "well" "to" "remember" "that"
+"Things" "Take" "Time."
+
+"Piet" "Hein"))
+
+; a list-of-list-of-strings is either '() or (cons a-list-of-string a-list-of-list-of-strings
+
+(check-expect (read-words/line "ttt.txt")
+      (list
+       '()
+       (list "TTT")
+       '()
+       (list "Put" "up" "in" "a" "place")
+       (list "where" "it's" "easy" "to" "see")
+       (list "the" "cryptic" "admonishment")
+       (list "T.T.T.")
+       '()
+       (list "When" "you" "feel" "how" "depressingly")
+       (list "slowly" "you" "climb,")
+       (list "it's" "well" "to" "remember" "that")
+       (list "Things" "Take" "Time.")
+       '()
+       (list "Piet" "Hein")))
+
+
+; ex 172
+
+; list-of-lines -> string
+; converts lines into single string, each line separated by spaces
+
+(check-expect (collapse (list "a" "quick" "brown" "fox"))
+              "a quick brown fox")
+(define (collapse xs)
+  (cond
+    [(empty? xs) ""]
+    [(eq? (rest xs) '()) (first xs)]
+    [(cons? xs) (string-append (first xs) " " (collapse (rest xs)))]))
