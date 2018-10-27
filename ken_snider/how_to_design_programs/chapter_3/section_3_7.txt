@@ -111,8 +111,8 @@
 (check-expect (key-event 30 "w") 30)
 (define (key-event hs key)
   (cond
-    [(string=? "up" key) (+ hs (* hs 1/3))]
-    [(string=? "down" key) (+ hs (* hs 1/5))]
+    [(key=? "up" key) (+ hs (* hs 1/3))]
+    [(key=? "down" key) (+ hs (* hs 1/5))]
     [else hs]))
 
 ; HappyState -> Image
