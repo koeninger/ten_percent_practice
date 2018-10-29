@@ -11,33 +11,28 @@
 (require 2htdp/universe)
 (require 2htdp/image)
 
+; We use strings to represent the traffic color
+; A TrafficColorState is a string  that represents the current traffic light color
 
 
-(define background (rectangle 50 100 "outline" "grey"))
-
-;(define light (
-
-
-
-; tock
-; render
-
-
-; AnimationState -> Image
-; renders the traffic light
+; TrafficColorState -> Image
+; Renders the traffic light
+; given: "red",   expect: red circle image
+; given: "green", expect: green circle image
 (define (render current_state)
  (circle 50 "solid" current_state)
 )
 
-
-
+; TrafficColorState -> TrafficColorState
+; Computes the next color based on the given one
+; given: "red",    expect: "green"
+; given: "yellow", expect: "red"
 (define (tock current_state)
     (cond
         [(string=? "green"  current_state) "yellow"]
         [(string=? "yellow" current_state) "red"]
         [(string=? "red"    current_state) "green"]
 ))
-
 
 (define (main ws)
    (big-bang ws
