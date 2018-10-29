@@ -38,4 +38,36 @@ Evaluate the first condition. 18 is greater than 0, but less than 10, so #false
 
 ; ===
 
+; Exercise 49. Reformulate create-rocket-scene.v5 to use a nested expression; the resulting function mentions place-image only once. 
+
+; Original
+
+(define WIDTH  100)
+(define HEIGHT  60)
+(define MTSCN  (empty-scene WIDTH HEIGHT))
+(define ROCKET )
+(define ROCKET-CENTER-TO-TOP
+  (- HEIGHT (/ (image-height ROCKET) 2)))
  
+(define (create-rocket-scene.v5 h)
+  (cond
+    [(<= h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET 50 h MTSCN)]
+    [(> h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET 50 ROCKET-CENTER-TO-TOP MTSCN)]))
+
+; Replacement:
+
+; Number -> Image
+; Function takes a Number as a y coodinate on the canvas, and renders the canvas
+; If the Number would place the rocket below the ground, then place the rocket on the ground instead.
+(check-expect (create-rocket-scene.v5 0) (place-image ROCKET 50 0 MTSCN))
+(check-expect (create-rocket-scene.v5 (+ 1 ROCKET-CENTER-TO-TOP)) (place-image ROCKET 50 ROCKET-CENTER-TO-TOP MTSCN))
+(define (create-rocket-scene.v5 h)
+  (place-image ROCKET 50
+               (cond
+                 [(<= h ROCKET-CENTER-TO-TOP) h]
+                 [(> h ROCKET-CENTER-TO-TOP) ROCKET-CENTER-TO-TOP])
+               MTSCN))
+
+; ===
