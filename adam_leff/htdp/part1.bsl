@@ -453,3 +453,6 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 
 (define (LR height)
   (place-image ROCKET (/ WIDTH 2) (- HEIGHT height 5) BACKGROUND))
+  
+//Exercise 54
+Why is this not right?
