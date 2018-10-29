@@ -455,4 +455,19 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
   (place-image ROCKET (/ WIDTH 2) (- HEIGHT height 5) BACKGROUND))
   
 //Exercise 54
-Why is this not right?
+(and (string? x) (string=? "resting" x))
+
+//Exercise 55
+(define (place x)
+    (place-image ROCKET 10 (- x CENTER) BACKG))
+    
+    (define (show x)
+      (cond
+        [(string? x)
+         (place HEIGHT]
+        [(<= -3 x -1)
+         (place-image (text (number->string x) 20 "red")
+                      10 (* 3/4 WIDTH)
+                      (place HEIGHT)]
+        [(>= x 0)
+         (place x)]))
