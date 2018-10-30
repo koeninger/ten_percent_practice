@@ -8,7 +8,7 @@
 (define HEIGHT 100)
 (define CLOSE (/ HEIGHT 3))
 (define MTSCN (empty-scene WIDTH HEIGHT))
-(define UFO (overlay (circle 10 "solid" "green") ...))
+(define UFO (overlay (circle 10 "solid" "green") (rectangle 30 10 "solid" "black")))
  
 ; WorldState -> WorldState
 (define (main y0)
@@ -24,9 +24,9 @@
  
 ; WorldState -> Image
 ; places UFO at given height into the center of MTSCN
-(check-expect (render 11) (place-image UFO ... 11 MTSCN))
+; (check-expect (render 11) (place-image UFO ... 11 MTSCN))
 (define (render y)
-  (place-image UFO ... y MTSCN))
+  (place-image UFO (/ WIDTH 2) y MTSCN))
 
 ; WorldState -> Image
 ; adds a status line to the scene created by render  

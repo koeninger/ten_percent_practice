@@ -1,0 +1,73 @@
+; Exercise 48. Enter the definition of reward followed by (reward 18) into the definitions area of DrRacket and use the stepper to find out how DrRacket evaluates applications of the function.
+
+(define (reward s)
+  (cond
+    [(<= 0 s 10) "bronze"]
+    [(and (< 10 s) (<= s 20)) "silver"]
+    [else "gold"]))
+
+(reward 18)
+
+; First step:
+
+(cond
+ ((<= 0 18 10) "bronze")
+
+Evaluate the first condition. 18 is greater than 0, but less than 10, so #false
+
+(cond
+ (#false "bronze")
+
+; Second step
+
+(cond
+ ((and (< 10 18) (<= 18 20))
+  "silver")
+
+18 is greater than 10, but less than 20, so #true
+
+(cond
+ ((and #true (<= 18 20)) "silver")
+
+(cond
+ ((and #true #true) "silver")
+
+(cond (#true "silver")
+
+; Condition evaluates to "silver", and returns that.
+
+; ===
+
+; Exercise 49. Reformulate create-rocket-scene.v5 to use a nested expression; the resulting function mentions place-image only once. 
+
+; Original
+
+(define WIDTH  100)
+(define HEIGHT  60)
+(define MTSCN  (empty-scene WIDTH HEIGHT))
+(define ROCKET )
+(define ROCKET-CENTER-TO-TOP
+  (- HEIGHT (/ (image-height ROCKET) 2)))
+ 
+(define (create-rocket-scene.v5 h)
+  (cond
+    [(<= h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET 50 h MTSCN)]
+    [(> h ROCKET-CENTER-TO-TOP)
+     (place-image ROCKET 50 ROCKET-CENTER-TO-TOP MTSCN)]))
+
+; Replacement:
+
+; Number -> Image
+; Function takes a Number as a y coodinate on the canvas, and renders the canvas
+; If the Number would place the rocket below the ground, then place the rocket on the ground instead.
+(check-expect (create-rocket-scene.v5 0) (place-image ROCKET 50 0 MTSCN))
+(check-expect (create-rocket-scene.v5 (+ 1 ROCKET-CENTER-TO-TOP)) (place-image ROCKET 50 ROCKET-CENTER-TO-TOP MTSCN))
+(define (create-rocket-scene.v5 h)
+  (place-image ROCKET 50
+               (cond
+                 [(<= h ROCKET-CENTER-TO-TOP) h]
+                 [(> h ROCKET-CENTER-TO-TOP) ROCKET-CENTER-TO-TOP])
+               MTSCN))
+
+; ===

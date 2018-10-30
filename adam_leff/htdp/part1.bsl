@@ -442,3 +442,32 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 3,4
 4
 
+/Exercise 53
+(require 2htdp/image)
+(define HEIGHT 300) ; distances in pixels 
+(define WIDTH  100)
+(define YD 3)
+ 
+(define BACKGROUND  (empty-scene WIDTH HEIGHT))
+(define ROCKET (rectangle 5 20 "solid" "red"))
+
+(define (LR height)
+  (place-image ROCKET (/ WIDTH 2) (- HEIGHT height 5) BACKGROUND))
+  
+//Exercise 54
+(and (string? x) (string=? "resting" x))
+
+//Exercise 55
+(define (place x)
+    (place-image ROCKET 10 (- x CENTER) BACKG))
+    
+    (define (show x)
+      (cond
+        [(string? x)
+         (place HEIGHT]
+        [(<= -3 x -1)
+         (place-image (text (number->string x) 20 "red")
+                      10 (* 3/4 WIDTH)
+                      (place HEIGHT)]
+        [(>= x 0)
+         (place x)]))

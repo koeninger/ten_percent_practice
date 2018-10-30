@@ -1,6 +1,8 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname 10_more_lists) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+(require 2htdp/batch-io)
+
 ; List-of-numbers -> List-of-numbers
 ; computes the weekly wages for all given weekly hours
 (check-expect (wage* '()) '())
@@ -180,3 +182,183 @@
                        (phone-switch (first ps))
                        (phone-four (first ps)))
            (replace (rest ps)))]))
+
+; ex 173
+
+; a list-of-strings is either '() or (cons "somestring" a-list-of-strings)
+
+(check-expect (read-lines "ttt.txt")
+              (list
+               ""
+               "TTT"
+               ""
+               "Put up in a place"
+               "where it's easy to see"
+               "the cryptic admonishment"
+               "T.T.T."
+               ""
+               "When you feel how depressingly"
+               "slowly you climb,"
+               "it's well to remember that"
+               "Things Take Time."
+               ""
+               "Piet Hein"))
+
+(check-expect (read-words "ttt.txt")
+(list
+ "TTT"
+
+"Put" "up" "in" "a" "place"
+"where" "it's" "easy" "to" "see"
+"the" "cryptic" "admonishment"
+"T.T.T."
+
+"When" "you" "feel" "how" "depressingly"
+"slowly" "you" "climb,"
+"it's" "well" "to" "remember" "that"
+"Things" "Take" "Time."
+
+"Piet" "Hein"))
+
+; a list-of-list-of-strings is either '() or (cons a-list-of-string a-list-of-list-of-strings
+
+(define PIET-LOL
+  (list
+       '()
+       (list "TTT")
+       '()
+       (list "Put" "up" "in" "a" "place")
+       (list "where" "it's" "easy" "to" "see")
+       (list "the" "cryptic" "admonishment")
+       (list "T.T.T.")
+       '()
+       (list "When" "you" "feel" "how" "depressingly")
+       (list "slowly" "you" "climb,")
+       (list "it's" "well" "to" "remember" "that")
+       (list "Things" "Take" "Time.")
+       '()
+       (list "Piet" "Hein")))
+
+(check-expect (read-words/line "ttt.txt") PIET-LOL)
+      
+
+
+; ex 172
+
+; list-of-lines -> string
+; converts lines into single string, each line separated by spaces
+
+(check-expect (collapse (list (list "a" "quick" "brown" "fox")
+                              (list "jumped over")))
+              "a quick brown fox\njumped over")
+(define (collapse xs)
+  (cond
+    [(empty? xs) ""]
+    [(eq? (rest xs) '()) (collapse-line (first xs))]
+    [(cons? xs) (string-append (collapse-line (first xs)) "\n" (collapse (rest xs)))]))
+(define (collapse-line xs)
+  (cond
+    [(empty? xs) ""]
+    [(eq? (rest xs) '()) (first xs)]
+    [(cons? xs) (string-append (first xs) " " (collapse-line (rest xs)))]))
+
+(define ARTICLES (list "a" "an" "the"))
+
+; filename -> new filename + side effect of writing
+; remove any word in ARTICLES from text in filename from, write it out to filename prepended with "no-articles-"
+(define (remove-articles-file from)
+  (write-file (string-append "no-articles-" from)
+              (collapse (remove-articles (read-words/line from)))))
+
+; list-of-lines -> list-of-lines
+; remove any word in ARTICLES from list-of-lines in
+(check-expect (remove-articles PIET-LOL)
+              (list
+               '()
+               (list "TTT")
+               '()
+               (list "Put" "up" "in" "place")
+               (list "where" "it's" "easy" "to" "see")
+               (list "cryptic" "admonishment")
+               (list "T.T.T.")
+               '()
+               (list "When" "you" "feel" "how" "depressingly")
+               (list "slowly" "you" "climb,")
+               (list "it's" "well" "to" "remember" "that")
+               (list "Things" "Take" "Time.")
+               '()
+               (list "Piet" "Hein")))
+(define (remove-articles in)
+  (cond
+    [(empty? in) '()]
+    [(cons? in) (cons (remove* ARTICLES (first in)) (remove-articles (rest in)))]))
+
+; list list -> list
+; remove from in any item in set
+(check-expect (remove* (list 1 2 3) (list 1 4 2 3 5)) (list 4 5))
+(define (remove* set in)
+  (cond
+    [(empty? in) '()]
+    [(cons? in) (if (member (first in) set)
+                    (remove* set (rest in))
+                    (cons (first in) (remove* set (rest in))))]))
+
+
+; ex 174
+
+; 1String -> String
+; converts the given 1String to a 3-letter numeric String
+ 
+(check-expect (encode-letter "z") (code1 "z"))
+(check-expect (encode-letter "\t")
+              (string-append "00" (code1 "\t")))
+(check-expect (encode-letter "a")
+              (string-append "0" (code1 "a")))
+
+; handle whether the ascii value of a character has 1, 2 or 3 digits
+(define (encode-letter s)
+  (cond
+    [(>= (string->int s) 100) (code1 s)]
+    [(< (string->int s) 10)
+     (string-append "00" (code1 s))]
+    [(< (string->int s) 100)
+     (string-append "0" (code1 s))]))
+ 
+; 1String -> String
+; converts the given 1String into a String
+ 
+(check-expect (code1 "z") "122")
+
+; the ascii value of character c
+(define (code1 c)
+  (number->string (string->int c)))
+
+; filename -> new filename + side effect of writing
+; numerically encode file from to new file with name prefixed "encoded-" 
+(define (encode-file from)
+  (write-file (string-append "encoded-" from)
+              (collapse (encode-lines (read-words/line from)))))
+
+; list-of-lines -> list-of-lines
+; encode characters in lol
+(check-expect (encode-lines (list (list "a" "foo")
+                                (list "bar")))
+              (list (list "097" "032" "102" "111" "111" )
+                    (list "098" "097" "114")))
+(define (encode-lines lol)
+  (cond
+    [(empty? lol) '()]
+    [(cons? lol) (cons (encode-l (explode* (first lol))) (encode-lines (rest lol)))]))
+; list-of-string -> list-of-char
+; convert list of string to list of char, re-includes spaces
+(define (explode* xs)
+  (cond
+    [(empty? xs) '()]
+    [(empty? (rest xs)) (explode (first xs))]
+    [(cons? xs) (append (explode (first xs)) (list " ") (explode* (rest xs)))]))
+; list-of-char -> list-of-string
+; encode each char in cs
+(define (encode-l cs)
+  (cond
+    [(empty? cs) '()]
+    [(cons? cs) (cons (encode-letter (first cs)) (encode-l (rest cs)))]))

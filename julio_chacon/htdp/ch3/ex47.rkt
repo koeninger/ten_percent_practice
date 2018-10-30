@@ -4,50 +4,37 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 
-
-; WS is a Number representing seconds that have passed in the world
-
-; WS -> Image
-; ads image to WS
-(define (render per)
-  (place-image/align
-   (rectangle (* per BG-WIDTH) BG-HEIGHT "solid" "red")
-      0 0  "left" "top"
-   BACKGROUND))
-
-; WS -> WS
-; modifies WS and returns it
-(define tock 
-   (if (>= ws (+ BG-WIDTH (image-width cat1)))
-        0
-        (+ ws 3))
-)
-
-(define BG-HEIGHT 50)
-(define BG-WIDTH 200)
+(define BG-HEIGHT 10)
+(define BG-WIDTH 100)
 
 (define BACKGROUND
   (empty-scene BG-WIDTH BG-HEIGHT))
 
-(define (LEVEL size)
-  (rectangle (* size BG-WIDTH) BG-HEIGHT "solid" "red")
+(define (render wd)
+  (place-image/align
+   (rectangle wd BG-HEIGHT "solid" "red")
+      0 0  "left" "top"
+   BACKGROUND))
+
+
+(define (tock wd) 
+   (cond
+    [(> wd BG-WIDTH) BG-WIDTH]
+    [(<= wd 0) 0.1]
+    [else (- wd 0.1)]
   )
+)
 
+(define (alter wd k)
+  (cond
+    [(key=? k "up")   (+ wd (*  BG-WIDTH .34))]
+    [(key=? k "down")  (+ wd (* BG-WIDTH .2))]
+  )
+)
 
-; WS -> WS
-; launches the program from some initial state 
-;(define (main ws)
- ; (big-bang ws
-  ;  [on-tick tock]
-   ; [to-draw render]))
+(define main 
+  (big-bang BG-WIDTH
+    [on-tick tock]
+    [on-key alter]
+    [to-draw render]))
 
-
-;(main 0)
-
-;level
-
-(render .10)
-
-(render .50)
-
-(render 1)
