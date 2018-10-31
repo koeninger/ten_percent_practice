@@ -129,8 +129,8 @@
 ; Stops the program when we reach a given state
 (check-expect (end? 0) #true)
 (check-expect (end? 50) #false)
-(define (end? ws)
-  (= ws 0))
+(define (end? hs)
+  (= hs 0))
 
 (define (main hs)
    (big-bang hs

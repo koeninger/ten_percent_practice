@@ -307,4 +307,3 @@
   (cond
     [(string=? "button-down" me) x-mouse]
     [else x-position-of-car]))
-
