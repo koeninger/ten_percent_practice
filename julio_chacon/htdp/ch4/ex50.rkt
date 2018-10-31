@@ -16,26 +16,3 @@
     [(string=? "yellow" s) "red"]))
 
 
-
-; String -> Image
-; ads image to WS
-(define (render s) 
-  (place-images/align
-   (list (circle 7 (if (string=? s "green") "solid" "outline") "green")
-         (circle 7 (if (string=? s "yellow") "solid" "outline") "yellow")
-         (circle 7 (if (string=? s "red") "solid" "outline") "red"))
-   (list (make-posn 8 8)
-         (make-posn 8 24)
-         (make-posn 8 40)
-         )
-   "center" "center"
-   (rectangle 18 50 "outline" "black")))
-
-
-(define (main color)
-   (big-bang color
-     [on-tick traffic-light-next]
-     [to-draw render]))
-
-
-(main "red")
