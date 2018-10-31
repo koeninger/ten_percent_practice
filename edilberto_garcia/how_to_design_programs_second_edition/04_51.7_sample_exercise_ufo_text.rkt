@@ -1,7 +1,13 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname 04_51.6_sample_exercise_ufo) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
-; Sample Problem Design a program that simulates the descent of a UFO.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname 04_51.7_sample_exercise_ufo_text) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+; Sample Problem Add a status line. It says “descending” when the
+;    UFO’s height is above one third of the height of the canvas. It
+;    switches to "closing in" below that. And finally, when the UFO has
+;    reached the bottom of the canvas, the status notifies the player
+;    that the UFO has “landed.”
+
+
 
 
 ; A WorldState is a Number.
@@ -30,9 +36,23 @@
   [(<= y HEIGHT) (+ y 3)]
   [else HEIGHT]
 ))
- 
+
+; WorldState -> Image
+; computes the UFO status text
+(define (ufo-status y)
+(
+cond
+ [(> y CLOSE) "descending" ]
+ [(< y CLOSE)   "closing in" ]
+ [else "---"]
+ )
+
+  )
+
+
 ; WorldState -> Image
 ; places UFO at given height into the center of MTSCN
+; Displays the text status of the UFO
  (check-expect (render 11) (place-image UFO CLOSE 11 MTSCN))
 (define (render y)
   (place-image UFO CLOSE y MTSCN))
