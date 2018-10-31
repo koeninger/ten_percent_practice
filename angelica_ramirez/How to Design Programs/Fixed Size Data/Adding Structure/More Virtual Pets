@@ -402,8 +402,8 @@ either end of the scene
 
 ; Number -> Number
 ; update the x-pos, reset at edge of screen
-(check-expect (tock-x-pos CAT2) (- 100 SPEED))
-(check-expect (tock-x-pos CAT3) (+ 50 SPEED))
+(check-expect (tock-x-pos CAT2) (make-vcat (- 100 SPEED) 0 #false))
+(check-expect (tock-x-pos CAT3) (make-vcat (+ 50 SPEED) 50 #true))
 
 (define (tock-x-pos vcat)
   (make-vcat
@@ -413,8 +413,8 @@ either end of the scene
 
 ; Number -> Number
 ; update the given happiness scale
-(check-expect (tock-happy CAT2) 0.0)
-(check-expect (tock-happy CAT3) (- 50 0.1))
+(check-expect (tock-happy CAT2) (make-vcat 100 0.0 #false))
+(check-expect (tock-happy CAT3) (make-vcat 50 (- 50 0.1) #true))
 
 (define (tock-happy vcat)
   (cond
@@ -429,6 +429,8 @@ either end of the scene
 
 ; Vcat -> Vcat
 ; update cat's direction on tock
+(check-expect (tock-direction CAT2) (make-vcat 100 0 #false))
+(check-expect (tock-direction CAT3) (make-vcat 50 50 #true))
 
 (define (tock-direction vcat)
   (cond
@@ -445,6 +447,8 @@ either end of the scene
 
 ; Vcat-> Number
 ; update positions based on direction
+(check-expect (update-x CAT2) (- 100 SPEED))
+(check-expect (update-x CAT3) (+ 50 SPEED))
 
 (define (update-x vcat)
   (cond [(vcat-direction vcat)
@@ -472,3 +476,23 @@ either end of the scene
     (stop-when unhappy?))) 
 
 (happy-cat CAT1)
+
+Exercise 92 Design the champ program, which has the chameleon continuously walking across the canvas from left to right. 
+When it reaches the right end of the canvas, it disappears and immediately reappears on the left. Like the cat, the 
+chameleon gets hungry from all the walking, and, as time passes by, this hunger expresses itself as unahappiness.
+May reuse happiness gauge from virtual cat. To make chameleon happy, feed it (down arrow, 2 points) petting isn't allowed.
+Can change color "r" turns it red, "b" blue, and "g" green. 
+Add chameleon world program to the virtual cat game and reuse functions from the latter when possible. 
+Start with the data definition VCham, for reprsenting chameleons. 
+When a partly transparent image is combined with a colored shape, the image takes on the underlying color. In the chameleon drawing, 
+it is actually the inside of the animal that is transparent, the area outside is solid white. Try out the following expression:
+(define background
+  (rectangle (image-width cham)
+             (image-height cham)
+             "solid"
+             "red"))
+ 
+(overlay cham background)
+
+
+(define cham .) 
