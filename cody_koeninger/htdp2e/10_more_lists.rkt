@@ -362,3 +362,53 @@
   (cond
     [(empty? cs) '()]
     [(cons? cs) (cons (encode-letter (first cs)) (encode-l (rest cs)))]))
+
+
+; ex 176
+
+; A Matrix is one of: 
+;  – (cons Row '())
+;  – (cons Row Matrix)
+; constraint all rows in matrix are of the same length
+ 
+; A Row is one of: 
+;  – '() 
+;  – (cons Number Row)
+
+(define example-two-by-two
+  (list
+   (list 11 12)
+   (list 21 22)))
+
+(define transposed-example-two-by-two
+  (list
+   (list 11 21)
+   (list 12 22)))
+
+; Matrix -> Matrix
+; transposes the given matrix along the diagonal 
+  
+(check-expect (transpose example-two-by-two) transposed-example-two-by-two)
+ 
+(define (transpose lln)
+  (cond
+    [(empty? (first lln)) '()]
+    [else (cons (first* lln) (transpose (rest* lln)))]))
+
+; matrix -> list
+; first column in the matrix
+(check-expect (first* example-two-by-two) (list 11 21))
+(define (first* m)
+  (cond
+    [(and (cons? m) (cons? (first m)))
+     (cons (first (first m)) (first* (rest m)))]
+    [else '()]))
+
+; matrix -> matrix
+; all but the first column in the matrix
+(check-expect (rest* example-two-by-two) (list (list 12) (list 22)))
+(define (rest* m)
+  (cond
+    [(and (cons? m) (cons? (first m)))
+     (cons (rest (first m)) (rest* (rest m)))]
+    [else '()]))
