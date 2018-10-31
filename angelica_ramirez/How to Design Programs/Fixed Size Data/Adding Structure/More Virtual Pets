@@ -396,10 +396,7 @@ either end of the scene
 (check-expect (tock CAT2) (make-vcat (- 100 SPEED) 0.0 #false))
 
 (define (tock vcat)
-  (make-vcat
-   (tock-x-pos (vcat-x-pos vcat))
-   (tock-happy (vcat-happy vcat))
-   (tock-direction (vcat-direction vcat))))
+  (tock-happy (tock-x-pos (tock-direction vcat))))
 
 ;Auxiliary functions for tock
 
@@ -409,9 +406,10 @@ either end of the scene
 (check-expect (tock-x-pos CAT3) (+ 50 SPEED))
 
 (define (tock-x-pos vcat)
-  (cond
-    [(= #true (vcat-direction vcat)) (+(vcat-x-pos vcat) SPEED)]
-    [else (- (vcat-x-pos vcat) SPEED)]))
+  (make-vcat
+   (update-x vcat)
+   (vcat-happy vcat)
+   (vcat-direction vcat)))
 
 ; Number -> Number
 ; update the given happiness scale
@@ -420,12 +418,39 @@ either end of the scene
 
 (define (tock-happy vcat)
   (cond
-    [(> (vcat-happy vcat) 0.0) (- (vcat-happy vcat) 0.1)]
-    [else 0.0]))
+    [(<= (vcat-happy vcat) 0.0)
+     (make-vcat (vcat-x-pos vcat) 0.0 (vcat-direction vcat))]
+    [(> (vcat-happy vcat) 100)
+     (make-vcat (vcat-x-pos vcat) 100 (vcat-direction vcat))]
+    [else (make-vcat
+           (vcat-x-pos vcat)
+           (- (vcat-happy vcat) 0.1)
+           (vcat-direction vcat))]))
 
-; Boolean -> Boolean
+; Vcat -> Vcat
+; update cat's direction on tock
+
 (define (tock-direction vcat)
-  (vcat-direction vcat))
+  (cond
+    [(and (vcat-direction vcat) (>= (vcat-x-pos vcat) WIDTH-OF-WORLD))
+     (make-vcat (vcat-x-pos vcat)
+                (vcat-happy vcat)
+                #false)]
+    [(and (not (vcat-direction vcat)) (<= (vcat-x-pos vcat) 0))
+     (make-vcat
+      (vcat-x-pos vcat)
+      (vcat-happy vcat)
+      #true)]
+    [else vcat]))
+
+; Vcat-> Number
+; update positions based on direction
+
+(define (update-x vcat)
+  (cond [(vcat-direction vcat)
+         (+ (vcat-x-pos vcat) SPEED)]
+        (else
+         (- (vcat-x-pos vcat) SPEED))))
 
 ; VCat -> Boolean
 ; stops when cat's happiness falls to 0
