@@ -13,5 +13,13 @@
   (make-game MIDDLE MIDDLE (make-posn CENTER CENTER)))
 
 (game-ball game0)
+; returns (make-posn 200 200) because
+; (game-ball (make-game MIDDLE MIDDLE (make-posn 200 200))) ; gets the ball from the game structure
+
 (posn? (game-ball game0))
+; returns #true because
+; (make-posn 200 200) is a posn structure
+
 (game-left-player game0)
+; returns 100 becuase
+; (game-left-player (make-game 100 MIDDLE ball)) ; gets the left-player from the game structure
