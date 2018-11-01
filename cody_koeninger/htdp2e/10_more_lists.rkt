@@ -412,3 +412,56 @@
     [(and (cons? m) (cons? (first m)))
      (cons (rest (first m)) (rest* (rest m)))]
     [else '()]))
+
+; Lo1s -> Lo1s 
+; produces a reverse version of the given list 
+(check-expect
+  (rev (cons "a" (cons "b" (cons "c" '()))))
+  (cons "c" (cons "b" (cons "a" '()))))
+(define (rev l)
+  (cond
+    [(empty? l) '()]
+    [(cons? l) (append (rev (rest l)) (list (first l)))]))
+
+
+; ex 177
+
+(define-struct editor [pre post])
+; An Editor is a structure:
+;   (make-editor Lo1S Lo1S) 
+; where pre is reversed
+; An Lo1S is one of: 
+; – '()
+; – (cons 1String Lo1S)
+
+
+; string string -> editor
+; create an editor
+(check-expect (create-editor (list "a" "b") (list "c" "d"))
+              (make-editor (list "b" "a") (list "c" "d")))
+(define (create-editor pre post)
+  (make-editor (rev pre) post))
+
+(define HEIGHT 20) ; the height of the editor 
+(define WIDTH 200) ; its width 
+(define FONT-SIZE 16) ; the font size 
+(define FONT-COLOR "black") ; the font color 
+ 
+(define MT (empty-scene WIDTH HEIGHT))
+(define CURSOR (rectangle 1 HEIGHT "solid" "red"))
+
+; Editor -> Image
+; renders an editor as an image of the two texts 
+; separated by the cursor 
+(define (editor-render e) MT)
+ 
+; Editor KeyEvent -> Editor
+; deals with a key event, given some editor
+(define (editor-kh ed ke) ed)
+
+; main : String -> Editor
+; launches the editor given some initial string 
+(define (main s)
+   (big-bang (create-editor s "")
+     [on-key editor-kh]
+     [to-draw editor-render]))
