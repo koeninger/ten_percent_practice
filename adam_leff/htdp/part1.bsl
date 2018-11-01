@@ -533,3 +533,63 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
     [on-tick fly 1]
     [stop-when end?]))
 
+//Exercise 57 - Not done yet
+(require 2htdp/image)
+(require 2htdp/universe)
+; LRCD -> LRCD
+; raises the rocket by YDELTA if it is moving already 
+
+(define HEIGHT 100) ; distances in pixels 
+(define WIDTH  100)
+(define YD 3)
+ 
+(define BACKGROUND  (empty-scene WIDTH HEIGHT))
+(define ROCKET (rectangle 5 20 "solid" "red"))
+
+(define CENTER (/ (image-height ROCKET) 2))
+
+(define (LR height)
+  (place-image ROCKET (/ WIDTH 2) (- HEIGHT height 5) BACKGROUND))
+
+(check-expect (fly "resting") "resting")
+(check-expect (fly -3) -2)
+(check-expect (fly -2) -1)
+(check-expect (fly -1) 0)
+(check-expect (fly 10) (- 10 YD))
+(check-expect (fly 22) (- 22 YD))
+ 
+(define (fly x)
+  (cond
+    [(string? x) x]
+    [(<= -3 x -1) (if (= x HEIGHT) 0 (+ x 1))]
+    [(>= x 0) (- x YD)]))
+
+(define (show x)
+  (cond
+    [(string? x)
+     (place-image ROCKET 10 (- 0 CENTER) BACKGROUND)]
+    [(<= -3 x -1)
+     (place-image (text (number->string x) 20 "red")
+                  10 (* 3/4 WIDTH)
+                  (place-image ROCKET
+                               10 (- 0 CENTER)
+                               BACKGROUND))]
+    [(>= x 0)
+     (place-image ROCKET 10 (- x CENTER) BACKGROUND)]))
+
+(define (launch x ke)
+  (cond
+    [(string? x) (if (string=? " " ke) -3 x)]
+    [(<= -3 x -1) x]
+    [(>= x 0) x]))
+
+(define (end? x)
+  (and (not (string? x)) (= x HEIGHT)))
+
+; LRCD -> LRCD
+(define (main2 s)
+  (big-bang s
+    [to-draw show]
+    [on-key launch]
+    [on-tick fly 1]
+    [stop-when end?]))
