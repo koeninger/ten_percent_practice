@@ -486,13 +486,104 @@ Add chameleon world program to the virtual cat game and reuse functions from the
 Start with the data definition VCham, for reprsenting chameleons. 
 When a partly transparent image is combined with a colored shape, the image takes on the underlying color. In the chameleon drawing, 
 it is actually the inside of the animal that is transparent, the area outside is solid white. Try out the following expression:
-(define background
-  (rectangle (image-width cham)
-             (image-height cham)
+
+(define-struct vcham [x-pos happy color])
+; A cham-status is a structure
+; (make-vcham Number Number String)
+; interpretation (make-vcham x h c) describes a chameleon's
+; x-coordinate and its happiness level and the color of the chameleon
+
+(define CHAM1 (make-vcham 0 100 "blue"))
+(define CHAM2 (make-vcham 100 0 "red"))
+(define CHAM3 (make-vcham 50 50 "green"))
+
+; physical constants
+(define WIDTH-OF-WORLD 400)
+(define HEIGHT-OF-WORLD 200)
+(define MAXIMUM-HAPPINESS-SCORE 100)
+(define MINIMUM-HAPPINESS-SCORE 0)
+(define GAUGE-WIDTH 100)
+(define GAUGE-HEIGHT 25)
+(define DOWN-CHANGE 2)
+(define TOCK-DECREASE -0.1)
+(define SPEED 3)
+
+; graphical constants
+(define CHAM .)
+
+(define BACKGROUND
+  (rectangle (image-width CHAM)
+             (image-height CHAM)
              "solid"
              "red"))
- 
-(overlay cham background)
+(overlay CHAM BACKGROUND)
+
+(define Y-CHAM
+  (- HEIGHT-OF-WORLD (/ (image-height CHAM) 2)))
+
+(define GAUGE
+  (overlay/xy
+   (rectangle GAUGE-WIDTH GAUGE-HEIGHT "solid" "black")
+   0 0
+   (empty-scene GAUGE-WIDTH GAUGE-HEIGHT)))
+
+; vcham -> vcham
+; launch the program from some initial state
+; run (happy-cham CHAM1)
+
+(define (happy-cham vcham)
+  (big-bang vcham
+    [on-tick tock]
+    [to-draw render]
+    [on-key change-cham]
+    [stop-when unhappy?]))
+
+(happy-cham CHAM1)
+
+; WorldState -> WorldState
+; moves the CHAM by 3 pixels for every clock tick
+; moves CHAM by endless left to right loop
+
+(define (tock vcham)
+  (make-vcham
+   (tock-x-pos (vcham-x-pos vcham))
+   (tock-happy (vcham-happy vcham))
+   (vcham-color vcham)))
+
+; Auxiliary functions for tock
+
+; Number -> Number
+; update the x-pos, reset at edge of screen
+
+(define (tock-x-pos xpos)
+  (cond
+    [(< xpos WIDTH-OF-WORLD) (+ xpos SPEED)]
+    [else 0]))
+
+; Number -> Number
+; update the given happiness scale
+
+(define (tock-happy happy)
+  (cond
+    [(> happy 0.0) (- happy 0.1)]
+    [else 0.0]))
+
+; vcham -> Image
+; render the cham and the happiness gauge on the scene
+; places the cat in the world using the vcat-x-pos as the x position
+; renders the happiness guage using the value of vcat-happy
+
+(define (render vcham)
+  (place-image/align
+   (rectangle (* 3 (vcham-happy vcham)) GAUGE-height "solid" "black")
+   5 10 "left" "top"
+   (place-image vcham (vcham-x-pos vcham) Y-CHAM BACKGROUND)))
 
 
-(define cham .) 
+
+; vcham -> Boolean
+; stops when cham's happiness falls to 0
+
+(define (unhappy? vcham)
+  (<= (vcham-happy vcham) MINIMUM-HAPPINESS-SCORE))
+
