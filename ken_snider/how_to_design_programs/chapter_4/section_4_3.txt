@@ -32,6 +32,7 @@
 ; Tock is a Number, representing the number of clock ticks since the program began.
 ; MaxDuration is a Number, representing the maximum number of clock ticks expected.
 
+
 ; TrafficLight -> TrafficLight
 ; yields the next state given current state s
 ; Also needs to increment Tock by 1
