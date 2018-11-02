@@ -572,10 +572,10 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
      (place-image (text (number->string x) 20 "red")
                   10 (* 3/4 WIDTH)
                   (place-image ROCKET
-                               10 (- 0 CENTER)
+                               10 0
                                BACKGROUND))]
     [(>= x 0)
-     (place-image ROCKET 10 (- x CENTER) BACKGROUND)]))
+     (place-image ROCKET 10 x BACKGROUND)]))
 
 (define (launch x ke)
   (cond
