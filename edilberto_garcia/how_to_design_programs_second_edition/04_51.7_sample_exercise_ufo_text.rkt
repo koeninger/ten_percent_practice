@@ -46,7 +46,7 @@
 
 (text 
     (cond
-        [(> y CLOSE) "descending" ]
+        [(and (> y CLOSE) (<= y HEIGHT)) "descending" ]
         [(and (< y CLOSE) (>= y HEIGHT))  "closing in" ]
         [else "landed"]
     )
