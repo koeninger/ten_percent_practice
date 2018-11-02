@@ -28,14 +28,10 @@
 
 ; Exercise 51. Design a big-bang program that simulates a traffic light for a given duration. The program renders the state of a traffic light as a solid circle of the appropriate color, and it changes state on every clock tick. What is the most appropriate initial state? Ask your engineering friends. 
 
-; Trafficlight is a Ntring, representing the current colour of a traffic light.
-; Tock is a Number, representing the number of clock ticks since the program began.
-; MaxDuration is a Number, representing the maximum number of clock ticks expected.
+; LightState (ls) is a String, representing the current colour of a traffic light.
 
-
-; TrafficLight -> TrafficLight
-; yields the next state given current state s
-; Also needs to increment Tock by 1
+; LightState -> LightState
+; Outputs the next state given current LightState
 (check-expect (traffic-light-next "red") "green")
 (check-expect (traffic-light-next "green") "yellow")
 (check-expect (traffic-light-next "yellow") "red")
@@ -46,8 +42,8 @@
     [(string=? "yellow" ls) "red"]))
 
 ; LightState -> Image
-; Renders the Happiness at the point specified on the background
-; by the position of the HappyState (in percent)
+; Renders the colour of the light
+; based on the current LightState.
 (check-expect (render "red")
               (circle 100 "solid" "red"))
 (check-expect (render "yellow")
@@ -57,15 +53,6 @@
 (define (render ls)
   (circle 100 "solid" ls))
 
-; Tock -> Boolean
-; Stops the program when we reach a given state
-(check-expect (end? tock) #true)
-(check-expect (end? (- tock 1)) #false)
-(define (end? tock)
-  (= tock MaxDuration))
-
-(define (main MaxDuration)
-   (big-bang "red"
-     [on-tick traffic-light-next]
-     [to-draw render]
-     [stop-when end?]))
+(big-bang "red"
+  [on-tick traffic-light-next 1]
+  [to-draw render])
