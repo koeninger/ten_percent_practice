@@ -2,6 +2,8 @@
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname 10_more_lists) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
 (require 2htdp/batch-io)
+(require 2htdp/universe)
+
 
 ; List-of-numbers -> List-of-numbers
 ; computes the weekly wages for all given weekly hours
@@ -450,6 +452,9 @@
 (define MT (empty-scene WIDTH HEIGHT))
 (define CURSOR (rectangle 1 HEIGHT "solid" "red"))
 
+; ex 178
+; it handles \t and \r first because they are strings of length 1, but should be ignored
+
 ; Editor -> Image
 ; renders an editor as an image of the two texts 
 ; separated by the cursor 
@@ -457,7 +462,68 @@
  
 ; Editor KeyEvent -> Editor
 ; deals with a key event, given some editor
-(define (editor-kh ed ke) ed)
+(define (editor-kh ed k)
+  (cond
+    [(key=? k "left") (editor-lft ed)]
+    [(key=? k "right") (editor-rgt ed)]
+    [(key=? k "\b") (editor-del ed)]
+    [(key=? k "\t") ed]
+    [(key=? k "\r") ed]
+    [(= (string-length k) 1) (editor-ins ed k)]
+    [else ed]))
+
+(check-expect
+  (editor-ins (make-editor '() '()) "e")
+  (make-editor (cons "e" '()) '())) 
+(check-expect
+  (editor-ins
+    (make-editor (cons "d" '())
+                 (cons "f" (cons "g" '())))
+    "e")
+  (make-editor (cons "e" (cons "d" '()))
+               (cons "f" (cons "g" '()))))
+(define (editor-ins ed k)
+  (make-editor (cons k (editor-pre ed))
+               (editor-post ed)))
+
+; Editor -> Editor
+; moves the cursor position one 1String left, 
+; if possible
+(check-expect (editor-lft  (make-editor (list "b" "a") (list "c" "d")))
+              (make-editor (list "a") (list "b" "c" "d")))
+(check-expect (editor-lft (make-editor '() '()))
+              (make-editor '() '()))
+(define (editor-lft ed)
+  (cond
+    [(empty? (editor-pre ed)) ed]
+    [(cons? (editor-pre ed))
+     (make-editor (rest (editor-pre ed)) (cons (first (editor-pre ed)) (editor-post ed)))]))
+ 
+; Editor -> Editor
+; moves the cursor position one 1String right, 
+; if possible
+(check-expect (editor-rgt  (make-editor (list "b" "a") (list "c" "d")))
+              (make-editor (list "c" "b" "a") (list "d")))
+(check-expect (editor-rgt (make-editor '() '()))
+              (make-editor '() '()))
+(define (editor-rgt ed)
+  (cond
+    [(empty? (editor-post ed)) ed]
+    [(cons? (editor-post ed))
+     (make-editor (cons (first (editor-post ed)) (editor-pre ed)) (rest (editor-post ed)))]))
+
+; Editor -> Editor
+; deletes a 1String to the left of the cursor,
+; if possible
+(check-expect (editor-del  (make-editor (list "b" "a") (list "c" "d")))
+              (make-editor (list "a") (list "c" "d")))
+(check-expect (editor-del (make-editor '() '()))
+              (make-editor '() '()))
+(define (editor-del ed)
+  (cond
+    [(empty? (editor-pre ed)) ed]
+    [(cons? (editor-pre ed))
+     (make-editor (rest (editor-pre ed)) (editor-post ed))]))
 
 ; main : String -> Editor
 ; launches the editor given some initial string 
