@@ -9,6 +9,8 @@
 (define ROCKET (rectangle 5 30 "solid" "red"))
  
 (define CENTER (/ (image-height ROCKET) 2))
+(define CENTER-WIDTH (/ (image-width BACKG) 2))
+
 
 ; An LRCD (for launching rocket countdown) is one of:
 ; – "resting"
@@ -41,26 +43,27 @@
      (place-rocket HEIGHT)]
     [(<= -3 x -1)
      (place-image (text (number->string x) 20 "red")
-                  10 (* 3/4 WIDTH)
+                  CENTER-WIDTH (* 3/4 WIDTH)
                   (place-rocket HEIGHT))]
     [(>= x 0)
      (place-rocket x)]))
 
 (define (place-rocket x)
-  (place-image ROCKET 10 (- x CENTER) BACKG))
+  (place-image ROCKET CENTER-WIDTH (- x CENTER) BACKG))
 (check-expect
  (show HEIGHT)
- (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+ (place-image ROCKET CENTER-WIDTH (- HEIGHT CENTER) BACKG))
 (check-expect
  (show HEIGHT)
- (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
+ (place-image ROCKET CENTER-WIDTH (- HEIGHT CENTER) BACKG))
 (check-expect
  (show 53)
- (place-image ROCKET 10 (- 53 CENTER) BACKG))
+ (place-image ROCKET CENTER-WIDTH (- 53 CENTER) BACKG))
 
 ; LRCD -> LRCD
 (define (main1 s)
   (big-bang s
     [to-draw show]
-    [on-key launch]))
+    [on-key launch]
+))
 
