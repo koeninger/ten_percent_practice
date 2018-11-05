@@ -487,6 +487,7 @@ Start with the data definition VCham, for reprsenting chameleons.
 When a partly transparent image is combined with a colored shape, the image takes on the underlying color. In the chameleon drawing, 
 it is actually the inside of the animal that is transparent, the area outside is solid white. Try out the following expression:
 
+
 (define-struct vcham [x-pos happy color])
 ; A cham-status is a structure
 ; (make-vcham Number Number String)
@@ -516,16 +517,78 @@ it is actually the inside of the animal that is transparent, the area outside is
 (define Y-CHAM
   (- HEIGHT-OF-WORLD (/ (image-height CHAM) 2)))
 
+(define BACKGROUND
+  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
+
 (define GAUGE
   (overlay/xy
    (rectangle GAUGE-WIDTH GAUGE-HEIGHT "solid" "black")
    0 0
    (empty-scene GAUGE-WIDTH GAUGE-HEIGHT)))
 
+; vcham -> Image
+; render the cham and the happiness gauge on the scene
+; places the cham in the world using cham-x-pos as the x position
+; renders the happiness gauge using the value of vcham-happy
+; renders the background color of the chameleon
+(check-expect (render CHAM2) (place-image/align (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image
+                                                 (overlay CHAM (rectangle (image-width CHAM) (image-height CHAM) "solid" "red")) 100 Y-CHAM BACKGROUND)))
+(check-expect (render CHAM3) (place-image/align (rectangle (* 3 50) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image
+                                                 (overlay CHAM (rectangle (image-width CHAM) (image-height CHAM) "solid" "green")) 50 Y-CHAM BACKGROUND)))
 
-; WorldState -> WorldState
-; moves the CHAM by 3 pixels for every clock tick
-; moves CHAM by endless left to right loop
+
+(define (render vcham)
+  (place-image/align
+   (rectangle (* 3 (vcham-happy vcham)) GAUGE-HEIGHT "solid" "black")
+   5 10 "left" "top"
+   (place-image (overlay CHAM (BACKGROUND-COLOR vcham)) (vcham-x-pos vcham) Y-CHAM BACKGROUND)))
+
+; Auxiliary function for Render
+
+
+; vcham -> Image
+; draws the colored background of the cham
+(check-expect (BACKGROUND-COLOR CHAM2) (rectangle (image-width CHAM) (image-height CHAM) "solid" "red"))
+(check-expect (BACKGROUND-COLOR CHAM3) (rectangle (image-width CHAM) (image-height CHAM) "solid" "green"))
+
+(define (BACKGROUND-COLOR vcham)
+  (rectangle (image-width CHAM)
+             (image-height CHAM)
+             "solid"
+             (vcham-color vcham)))
+
+; vcham KeyEvent -> Vcham
+; handles CHAM feeding and changing color of CHAM 
+; down arrow feeds CHAM
+; - "r" changes its color to red
+; - "b" changes its color to blue
+; - "g" changes its color to green
+(check-expect (change-cham CHAM2 "g") (make-vcham 100 0 "green"))
+(check-expect (change-cham CHAM2 "down") (make-vcham 100 2 "red"))
+(check-expect (change-cham CHAM3 "b") (make-vcham 50 50 "blue"))
+(check-expect (change-cham CHAM3 "down") (make-vcham 50 52 "green"))
+                                       
+
+(define (change-cham vcham ke)
+  (make-vcham (vcham-x-pos vcham)
+             (cond
+               [(key=? ke "down") (+ (vcham-happy vcham) DOWN-CHANGE)]
+               [else (vcham-happy vcham)])
+             (cond
+               [(key=? ke "r") "red"]
+               [(key=? ke "b") "blue"]
+               [(key=? ke "g") "green"]
+               [else (vcham-color vcham)])))
+
+; Worldstate -> Worldstate
+; moves the cham by 3 pixels for every clock tick
+; moves cham by endless left to right loop
+(check-expect (tock CHAM2) (make-vcham (+ 100 SPEED) 0.0 "red"))
+(check-expect (tock CHAM3) (make-vcham (+ 50 SPEED) (- 50 0.1) "green"))
 
 (define (tock vcham)
   (make-vcham
@@ -537,6 +600,8 @@ it is actually the inside of the animal that is transparent, the area outside is
 
 ; Number -> Number
 ; update the x-pos, reset at edge of screen
+(check-expect (tock-x-pos (vcham-x-pos CHAM2)) (+ 100 SPEED))
+(check-expect (tock-x-pos (vcham-x-pos CHAM3)) (+ 50 SPEED))
 
 (define (tock-x-pos xpos)
   (cond
@@ -545,66 +610,24 @@ it is actually the inside of the animal that is transparent, the area outside is
 
 ; Number -> Number
 ; update the given happiness scale
+(check-expect (tock-happy (vcham-happy CHAM2)) 0.0)
+(check-expect (tock-happy (vcham-happy CHAM3)) (- 50 0.1))
 
 (define (tock-happy happy)
   (cond
     [(> happy 0.0) (- happy 0.1)]
     [else 0.0]))
 
-; vcham -> Image
-; render the cham and the happiness gauge on the scene
-; places the cat in the world using the vcat-x-pos as the x position
-; renders the happiness guage using the value of vcat-happy
-
-(define (render vcham)
-  (place-image/align
-   (rectangle (* 3 (vcham-happy vcham)) GAUGE-HEIGHT "solid" "black")
-   5 10 "left" "top"
-   (place-image CHAM (vcham-x-pos vcham) Y-CHAM (new-scene (vcham-color vcham)))))
-
-; Auxiliary function for render
-; Color -> Image
-; create a new empty scene with a given color
-
-(define (new-scene color)
-  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD color))
-
-; VCham -> VCham
-; handle the chameleon's feeding
-; down arrow feeds chameleon
-; also handles color change of chameleon
-
-(define (change-cham vcham ke)
-  (cond [(key=? ke "down") (feed vcham)]
-        [(key=? ke "r") (change-color vcham "red")]
-        [(key=? ke "b") (change-color vcham "blue")]
-        [(key=? ke "g") (change-color vcham "green")]
-        [else vcham]))
-
-; Auxiliary functions for change-cham
-
-; Vcham -> Vcham
-; feed the chamaleon
-
-(define (feed vcham)
-  (make-vcham (vcham-x-pos vcham)
-              (+ (vcham-happy vcham) DOWN-CHANGE)
-              (vcham-color vcham)))
-
-; Vcham Color -> Vcham
-; change the color of the chameleon
-
-(define (change-color vcham color)
-  (make-vcham (vcham-x-pos vcham) (vcham-happy vcham) color))
-
 ; vcham -> Boolean
 ; stops when cham's happiness falls to 0
+(check-expect (unhappy? CHAM2) #true)
+(check-expect (unhappy? CHAM3) #false)
 
 (define (unhappy? vcham)
   (<= (vcham-happy vcham) MINIMUM-HAPPINESS-SCORE))
 
 ; vcham -> vcham
-; launch the program from some initial state
+; launch the program form some initial state
 ; run (happy-cham CHAM1)
 
 (define (happy-cham vcham)
