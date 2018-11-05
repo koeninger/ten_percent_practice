@@ -593,3 +593,19 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
     [on-key launch]
     [on-tick fly 1]
     [stop-when end?]))
+    
+//Exercise 58
+(check-expect (sales-tax 537) 0)
+(check-expect (sales-tax 1000) (* 0.05 1000))
+(check-expect (sales-tax 12017) (* 0.08 12017))
+(check-expect (sales-tax 10000) (* 0.08 10000))
+
+(define MIDDLE 1000)
+(define HIGH 10000)
+
+(define (sales-tax p)
+  (cond
+    [(and (<= 0 p) (< p MIDDLE)) 0]
+    [(and (<= MIDDLE p) (< p HIGH)) (* 0.05 p)]
+    [(>= p HIGH) (* 0.08 p)]))
+
