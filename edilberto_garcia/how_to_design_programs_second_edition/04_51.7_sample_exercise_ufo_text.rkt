@@ -39,20 +39,26 @@
 
 ; WorldState -> Image
 ; computes the UFO status text
+(check-expect (ufo-status 500) (text "descending" 24 "orange"))
+(check-expect (ufo-status (- HEIGHT 10)) (text "descending" 24 "orange"))
+(check-expect (ufo-status 10) (text "landed" 24 "orange"))
 (define (ufo-status y)
-(
-cond
- [(> y CLOSE) "descending" ]
- [(< y CLOSE)   "closing in" ]
- [else "---"]
- )
 
-  )
-
+(text 
+    (cond
+        [(and (> y CLOSE) (<= y HEIGHT)) "descending" ]
+        [(and (< y CLOSE) (>= y HEIGHT))  "closing in" ]
+        [else "landed"]
+    )
+    24
+    "orange"
+)
+)
 
 ; WorldState -> Image
 ; places UFO at given height into the center of MTSCN
 ; Displays the text status of the UFO
- (check-expect (render 11) (place-image UFO CLOSE 11 MTSCN))
+ ;(check-expect (render 11) (place-image UFO CLOSE 11 MTSCN))
 (define (render y)
-  (place-image UFO CLOSE y MTSCN))
+  (place-image (ufo-status y) 50 50
+  (place-image UFO CLOSE y MTSCN)))

@@ -28,13 +28,31 @@
 
 ; Exercise 51. Design a big-bang program that simulates a traffic light for a given duration. The program renders the state of a traffic light as a solid circle of the appropriate color, and it changes state on every clock tick. What is the most appropriate initial state? Ask your engineering friends. 
 
-; TrafficLight -> TrafficLight
-; yields the next state given current state s
+; LightState (ls) is a String, representing the current colour of a traffic light.
+
+; LightState -> LightState
+; Outputs the next state given current LightState
 (check-expect (traffic-light-next "red") "green")
 (check-expect (traffic-light-next "green") "yellow")
 (check-expect (traffic-light-next "yellow") "red")
-(define (traffic-light-next s)
+(define (traffic-light-next ls)
   (cond
-    [(string=? "red" s) "green"]
-    [(string=? "green" s) "yellow"]
-    [(string=? "yellow" s) "red"]))
+    [(string=? "red" ls) "green"]
+    [(string=? "green" ls) "yellow"]
+    [(string=? "yellow" ls) "red"]))
+
+; LightState -> Image
+; Renders the colour of the light
+; based on the current LightState.
+(check-expect (render "red")
+              (circle 100 "solid" "red"))
+(check-expect (render "yellow")
+              (circle 100 "solid" "yellow"))
+(check-expect (render "green")
+              (circle 100 "solid" "green"))
+(define (render ls)
+  (circle 100 "solid" ls))
+
+(big-bang "red"
+  [on-tick traffic-light-next 1]
+  [to-draw render])
