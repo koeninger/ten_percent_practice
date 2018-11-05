@@ -1,0 +1,14 @@
+; [3,5] is a closed interval:
+; (3,5] is a left-open interval:
+; [3,5) is a right-open interval:
+; and (3,5) is an open interval:
+;Exercise 52. Which integers are contained in the four intervals above?
+
+; for each interval above:
+
+3,4,5
+4,5
+3,4
+4
+
+
