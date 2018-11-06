@@ -638,3 +638,141 @@ it is actually the inside of the animal that is transparent, the area outside is
     [stop-when unhappy?]))
 
 (happy-cham CHAM1)
+
+Exercise 93 Copy solution to Exercise 92 and modify the copy so that the chameleon walks across a tricolor background.
+Solution uses these colors:
+(define BACKGROUND
+  (beside (empty-scene WIDTH HEIGHT "green")
+          (empty-scene WIDTH HEIGHT "white")
+          (empty-scene WIDTH HEIGHT "red")))
+but you may use any color. Observe how the chameleon changes colors to blend in as it crosses the border between two colors
+Note: When you watch the animation carefully you see the chameleon riding on a white rectangle. If you know how to use image
+editing software modify the picture so that the white rectangle is invisible. Then the chameleon will really blend in.
+
+(define-struct vcham [x-pos happy color])
+; A cham-status is a structure
+; (make-vcham Number Number String)
+; interpretation (make-vcham x h c) describes a chameleon's
+; x-coordinate and its happiness level and the color of the chameleon
+
+(define CHAM1 (make-vcham 0 100 "blue"))
+(define CHAM2 (make-vcham 100 0 "red"))
+(define CHAM3 (make-vcham 50 50 "green"))
+
+; physical constants
+(define WIDTH-OF-WORLD 400)
+(define HEIGHT-OF-WORLD 200)
+(define MAXIMUM-HAPPINESS-SCORE 100)
+(define MINIMUM-HAPPINESS-SCORE 0)
+(define GAUGE-WIDTH 100)
+(define GAUGE-HEIGHT 25)
+(define DOWN-CHANGE 2)
+(define TOCK-DECREASE -0.1)
+(define SPEED 3)
+
+; graphical constants
+(define CHAM .)
+
+
+
+(define Y-CHAM
+  (- HEIGHT-OF-WORLD (/ (image-height CHAM) 2)))
+
+(define BACKGROUND
+  (beside (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "green")
+          (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "white")
+          (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "red")))
+
+(define GAUGE
+  (overlay/xy
+   (rectangle GAUGE-WIDTH GAUGE-HEIGHT "solid" "black")
+   0 0
+   (empty-scene GAUGE-WIDTH GAUGE-HEIGHT)))
+
+; vcham -> Image
+; render the cham and the happiness gauge on the scene
+; places the cham in the world using cham-x-pos as the x position
+; renders the happiness gauge using the value of vcham-happy
+; renders the background color of the chameleon
+(check-expect (render CHAM2) (place-image/align (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image CHAM 100 Y-CHAM BACKGROUND)))
+(check-expect (render CHAM3) (place-image/align (rectangle (* 3 50) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image CHAM 50 Y-CHAM BACKGROUND)))
+
+
+(define (render vcham)
+  (place-image/align
+   (rectangle (* 3 (vcham-happy vcham)) GAUGE-HEIGHT "solid" "black")
+   5 10 "left" "top"
+   (place-image CHAM (vcham-x-pos vcham) Y-CHAM BACKGROUND)))
+
+; vcham KeyEvent -> Vcham
+; handles CHAM feeding  
+; down arrow feeds CHAM                                       
+(check-expect (change-cham CHAM2 "down") (make-vcham 100 (+ 0 DOWN-CHANGE) "red"))
+(check-expect (change-cham CHAM3 "down") (make-vcham 50 (+ 50 DOWN-CHANGE) "green"))
+
+(define (change-cham vcham ke)
+  (make-vcham (vcham-x-pos vcham)
+             (cond
+               [(key=? ke "down") (+ (vcham-happy vcham) DOWN-CHANGE)]
+               [else (vcham-happy vcham)])
+             (vcham-color vcham)))
+
+; Worldstate -> Worldstate
+; moves the cham by 3 pixels for every clock tick
+; moves cham by endless left to right loop
+(check-expect (tock CHAM2) (make-vcham (+ 100 SPEED) 0.0 "red"))
+(check-expect (tock CHAM3) (make-vcham (+ 50 SPEED) (- 50 0.1) "green"))
+
+(define (tock vcham)
+  (make-vcham
+   (tock-x-pos (vcham-x-pos vcham))
+   (tock-happy (vcham-happy vcham))
+   (vcham-color vcham)))
+
+; Auxiliary functions for tock
+
+; Number -> Number
+; update the x-pos, reset at edge of screen
+(check-expect (tock-x-pos (vcham-x-pos CHAM2)) (+ 100 SPEED))
+(check-expect (tock-x-pos (vcham-x-pos CHAM3)) (+ 50 SPEED))
+
+(define (tock-x-pos xpos)
+  (cond
+    [(< xpos WIDTH-OF-WORLD) (+ xpos SPEED)]
+    [else 0]))
+
+; Number -> Number
+; update the given happiness scale
+(check-expect (tock-happy (vcham-happy CHAM2)) 0.0)
+(check-expect (tock-happy (vcham-happy CHAM3)) (- 50 0.1))
+
+(define (tock-happy happy)
+  (cond
+    [(> happy 0.0) (- happy 0.1)]
+    [else 0.0]))
+
+; vcham -> Boolean
+; stops when cham's happiness falls to 0
+(check-expect (unhappy? CHAM2) #true)
+(check-expect (unhappy? CHAM3) #false)
+
+(define (unhappy? vcham)
+  (<= (vcham-happy vcham) MINIMUM-HAPPINESS-SCORE))
+
+; vcham -> vcham
+; launch the program form some initial state
+; run (happy-cham CHAM1)
+
+(define (happy-cham vcham)
+  (big-bang vcham
+    [on-tick tock]
+    [to-draw render]
+    [on-key change-cham]
+    [stop-when unhappy?]))
+
+(happy-cham CHAM1)
+
