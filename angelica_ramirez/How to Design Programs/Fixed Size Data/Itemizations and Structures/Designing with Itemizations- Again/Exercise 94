@@ -26,3 +26,5 @@ and its objects. Create the initial scene from the constants for the tank, the U
                (place-image TANK 100 TANK-Y
                             (place-image UFO 150 (- HEIGHT 160)
                                          BACKGROUND))))
+
+
