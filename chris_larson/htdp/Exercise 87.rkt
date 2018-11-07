@@ -44,28 +44,44 @@
 (check-expect (edit (make-editor "hello worldrealyrealyrealyrealyrealyrealyrealyrealyrealyrealylonglonglonglonglonglonglong" 0) " ") (make-editor "hello worldrealyrealyrealyrealyrealyrealyrealyrealyrealyrealylonglonglonglonglonglonglong" 0))
 
 
+; String Index Char -> String
+; Inserts character at index
 (define (string-insert str i c)
   (string-append (substring str 0 i) c (substring str (+ i 0) (string-length str))))
 
+; String Index -> String
+; Removes character at index
 (define (string-delete str i)
   (cond
     [(> i 0) (string-append (substring str 0 (- i 1)) (substring str (+ (- i 1) 1) (string-length str)))]
     [else str]))
 
+; Editor -> Integer
+; Returns the Decremented index, while stopping at zero
 (define (dec-index ed)
   (cond
     [(< (editor-index ed) 1) 0]
     [else (- (editor-index ed) 1)]))
 
+; Editor -> Integer
+; Returns a new index for the cursor
 (define (cursor-left ed)
   (cond
     [(> (editor-index ed) 0) (- (editor-index ed) 1)]
     [else 0]))
+(check-expect (cursor-left (make-editor "Hello World" 4)) 3)
+(check-expect (cursor-left (make-editor "Hello World" 0)) 0)
 
+; Editor -> Integer
+; Returns a new index for the cursor
 (define (cursor-right ed)
   (cond
     [(< (editor-index ed) (string-length (editor-text ed))) (+ (editor-index ed) 1)]
-    [else (- (string-length (editor-index ed)) 1)]))
+    [else (string-length (editor-text ed))]))
+(check-expect (cursor-right (make-editor "Hello World" 11)) 11)
+(check-expect (cursor-right (make-editor "Hello World" 4)) 5)
+(check-expect (cursor-right (make-editor "Hello World" 0)) 1)
+
 
 (define (run pre)
   (big-bang (make-editor pre (- (string-length pre) 1))
