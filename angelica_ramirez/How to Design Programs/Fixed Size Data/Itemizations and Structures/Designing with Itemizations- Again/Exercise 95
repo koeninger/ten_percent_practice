@@ -1,0 +1,67 @@
+Defining Itemizations The first step in our design recipes calls for the development of data definitions. One purpose of a 
+data definition is to describe the construction of data that represents the state of the world; another is to describe all 
+possible pieces of data that the event-handing functions of the world program consume. 
+The space invader game with a missile-firing tank requires a data representation for two different kinds of game states.
+
+; physical constants
+(define WIDTH 200)
+(define HEIGHT 200)
+
+; graphical constants
+(define UFO (overlay
+             (rectangle 20 2 "solid" "purple")
+             (ellipse 15 10 "solid" "purple")))
+
+
+(define TANK (rectangle 15 10 "solid" "olive"))
+(define TANK-HEIGHT (image-height TANK))
+(define TANK-Y (- HEIGHT (/ TANK-HEIGHT 2)))
+
+(define MISSILE (rectangle 1 15 "solid" "red"))
+
+(define BACKGROUND (empty-scene WIDTH HEIGHT "black"))
+
+; a mock up
+(define MOCK-UP
+  (place-image MISSILE 140 (- HEIGHT 120)
+               (place-image TANK 100 TANK-Y
+                            (place-image UFO 150 (- HEIGHT 160)
+                                         BACKGROUND))))
+
+(define-struct aim [ufo tank]) ;; the time period when the player is trying to get the tank in position for a shot
+(define-struct fired [ufo tank missile]) ;; representing states after the missile is fired
+
+; A UFO is a Posn
+; interpretation (make-posn x y) is the UFO's location
+; (using the top-down, left-to-right convention)
+
+(define-struct tank [loc vel])
+; A Tank is a structure:
+;   (make-tank Number Number).
+; interpretation (make-tank x dx) specifies the position:
+; (x, HEIGHT) and the tank's speed: dx pixels/tick
+
+; A Missile is a Posn
+; interpretation (make-posn x y) is the missile's place
+
+; A SIGS is one of:
+; - (make-aim UFO Tank)
+; - (make-fired UFO Tank Missile)
+; interpretation represents the complete state of a space invader game
+
+(define AIM1
+  (make-aim (make-posn 20 10) (make-tank 28 -3))) ; tank maneuvering into position to fire the missile
+
+(define FIRED1
+  (make-fired (make-posn 20 10) 
+            (make-tank 28 -3)
+            (make-posn 28 (- HEIGHT TANK-HEIGHT)))) ; like the previous one but misile has been fired
+
+(define FIRED2
+  (make-fired (make-posn 20 100)
+            (make-posn 100 3)
+            (make-posn 22 103))) ; the missile is about to collide with the UFO
+            
+Exercise 95 Explain why the three instances are generated according to the first or second clause of the data definition 
+; AIM1 is generated according to first clause since it calls for a posn and tank
+; FIRED1 and FIRED2 are generated accordign to second clause since it involves a posn, tank and missile 
