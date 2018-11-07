@@ -1,0 +1,30 @@
+Exercise 94 Use sample problem from exercise 74 in "programming with structures"
+Draw some sketches of what the game scenery looks like at various stages and use them to determine the constant
+and the variable pieces of the game. Develop physical and graphical constants that describe the dimensions of the world 
+and its objects. Create the initial scene from the constants for the tank, the UFO, and the background. 
+
+; physical constants
+(define WIDTH 200)
+(define HEIGHT 200)
+
+; graphical constants
+(define UFO (overlay
+             (rectangle 20 2 "solid" "purple")
+             (ellipse 15 10 "solid" "purple")))
+
+
+(define TANK (rectangle 15 10 "solid" "olive"))
+(define TANK-Y (- HEIGHT (/ (image-height TANK) 2)))
+
+(define MISSILE (rectangle 1 15 "solid" "red"))
+
+(define BACKGROUND (empty-scene WIDTH HEIGHT "black"))
+
+; a mock up
+(define MOCK-UP
+  (place-image MISSILE 140 (- HEIGHT 120)
+               (place-image TANK 100 TANK-Y
+                            (place-image UFO 150 (- HEIGHT 160)
+                                         BACKGROUND))))
+
+
