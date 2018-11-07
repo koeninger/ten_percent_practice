@@ -609,3 +609,36 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
     [(and (<= MIDDLE p) (< p HIGH)) (* 0.05 p)]
     [(>= p HIGH) (* 0.08 p)]))
 
+//Start of ex 59
+(require 2htdp/image)
+(require 2htdp/universe)
+
+(check-expect (tl-render "red") .)
+(check-expect (tl-render "yellow") .)
+
+; Color, mode, background -> Image
+(define (place-light color mode background)
+  (cond
+    [(string=? color "red") (place-image (circle]
+    [(string=? color "yellow") ]
+    [(string=? color "green") ]))
+
+; TrafficLight -> TrafficLight
+; yields the next state, given current state cs
+(define (tl-next cs)
+  (modulo (+ cs 1) 3))
+ 
+; TrafficLight -> Image
+; renders the current state cs as an image
+(define (tl-render current-state)
+  (cond
+    [(= current-state 0) ]
+    [(= current-state 1) ]
+    [(= current-state 2) ]))
+
+; TrafficLight -> TrafficLight
+; simulates a clock-based American traffic light
+(define (traffic-light-simulation initial-state)
+  (big-bang initial-state
+    [to-draw tl-render]
+    [on-tick tl-next 1]))
