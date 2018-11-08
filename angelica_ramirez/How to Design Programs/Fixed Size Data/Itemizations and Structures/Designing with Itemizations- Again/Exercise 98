@@ -1,0 +1,5 @@
+Exercise 98 Design the function si-game-over? for use as the stop-when handler. 
+The game stops if the UFO Lands or if the missile hits the UFO. For both conditions, we recommend that you check
+for the proximity of one object to another.
+The stop-when clause allows for an optional second sub-expression, namely a function that renders the final state of the game.
+Design si-render-final and use it as the second part for your stop-when clause in the main function of exercise 100. 
