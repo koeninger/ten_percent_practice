@@ -1,0 +1,144 @@
+; The Design Recipe
+1. Itemizations is needed due to distinctions among different classes of information in the problem statement.
+The need for structure-based data definitions is due to the demand to group several different pieces of information
+An itemization of diffferent forms of data, including some structures, is required when problem statement distinguishes different kinds of information
+and when at least soem of these pieces of information consist of several different pieces
+Data definitios may refer to other data definitions
+It's acceptable to write down a separate data definition for this clause and refer to this auxiliary definition
+Always formulate data examples using the data definitions
+
+2. Formulate a function signature that mentions only the names of defined or built-in data collections.
+Add purpose statement, adn create a function header
+
+3. Formulate functional examples that illustrate the purpose statement from the second stept, and still need one expample per item in the itemization
+
+4. development of the template now exploits two different dimensions:
+the itemization itself
+and the use of structures in its clauses
+
+If an item contains a structure, the template contains the selector expressions, in the cond clause that deals with the sub-class of data described in item
+If describe the data with a separate data definition, you do not add selector expressions and instead create a template for the separate data definition and refer to that
+template with a function call.
+If the problem statement suggests that there are several tasks to be performed, and it's likely that a composition of several, separately designed functions are needed,
+skip the template step
+
+5. Fill gaps in template.
+
+6. Test
+
+Exercise 97 Design the functions tank-render, ufo-render, and missile-render 
+Compare this expression:
+(tank-render
+ (fired-tank s)
+ (ufo-render (fired-ufo s)
+             (missile-render (fired-missile s)
+                             BACKGROUND)))
+with this one:
+(ufo-render
+ (fired-ufo s)
+ (tank-render (fired-tank s)
+              (missile-render (fired-missile s)
+                              BACKGROUND)))
+                              
+When do the two expressions produce the same result??
+when the images don't overlap 
+
+; physical constants
+(define WIDTH 200)
+(define HEIGHT 200)
+
+; graphical constants
+(define UFO (overlay
+             (rectangle 20 2 "solid" "purple")
+             (ellipse 15 10 "solid" "purple")))
+
+(define TANK (rectangle 15 10 "solid" "olive"))
+(define TANK-HEIGHT (image-height TANK))
+(define TANK-Y (- HEIGHT (/ TANK-HEIGHT 2)))
+
+(define MISSILE (rectangle 1 15 "solid" "red"))
+
+(define BACKGROUND (empty-scene WIDTH HEIGHT "black"))
+
+; a mock up
+(define MOCK-UP
+  (place-image MISSILE 140 (- HEIGHT 120)
+               (place-image TANK 100 TANK-Y
+                            (place-image UFO 150 (- HEIGHT 160)
+                                         BACKGROUND))))
+
+
+(define-struct aim [ufo tank]) ;; the time period when the player is trying to get the tank in position for a shot
+
+(define-struct fired [ufo tank missile]) ;; representing states after the missile is fired
+
+ ; A UFO is a Posn
+; interpretation (make-posn x y) is the UFO's location
+; (using the top-down, left-to-right convention)
+
+ (define-struct tank [loc vel])
+; A Tank is a structure:
+;   (make-tank Number Number).
+; interpretation (make-tank x dx) specifies the position:
+; (x, HEIGHT) and the tank's speed: dx pixels/tick
+
+; A Missile is a Posn
+; interpretation (make-posn x y) is the missile's place
+
+; A SIGS is one of:
+; - (make-aim UFO Tank)
+; - (make-fired UFO Tank Missile)
+;interpretation represents the complete state of a space invader game
+
+(define AIM1
+  (make-aim (make-posn 20 10) (make-tank 28 -3))) ; tank maneuvering into position to fire the missile
+
+(define FIRED1
+  (make-fired (make-posn 20 10) 
+            (make-tank 28 -3)
+            (make-posn 28 (- HEIGHT TANK-HEIGHT)))) ; like the previous one but misile has been fired
+
+(define FIRED2
+  (make-fired (make-posn 20 100)
+            (make-posn 100 3)
+            (make-posn 22 103))) ; the missile is about to collide with the UFO
+
+; SIGS -> Image
+; adds TANK, UFO, and possibly MISSILE to
+; the BACKGROUND scene
+; renders the given game state on top of BACKGROUND 
+
+;(define (si-render s) BACKGROUND) ; stub
+
+(define (si-render s)
+  (cond
+    [(aim? s) (tank-render (aim-tank s)
+                           (ufo-render (aim-ufo s) BACKGROUND))]
+    [(fired? s) (tank-render (fired-tank s)
+                             (ufo-render (fired-ufo s)
+                                         (missile-render (fired-missile s)
+                                                         BACKGROUND)))]))
+
+; Tank Image -> Image
+; adds t to the given image im
+
+; (define (tank-render t im) im) ;stub
+
+(define (tank-render t im)
+  (place-image TANK (tank-loc t) TANK-Y im))
+
+; UFO Image -> Image
+; adds u to the given image im
+
+;(define (ufo-render u im) im) ;;stub
+
+(define (ufo-render u im)
+  (place-image UFO (posn-x u) (posn-y u) im))
+
+; Missile Image -> Image
+; adds m to the given image im
+
+;(define (missile-render m im) im) ;;stub
+
+(define (missile-render m im)
+  (place-image MISSILE (posn-x m) (posn-y m) im))
