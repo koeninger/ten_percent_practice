@@ -609,19 +609,18 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
     [(and (<= MIDDLE p) (< p HIGH)) (* 0.05 p)]
     [(>= p HIGH) (* 0.08 p)]))
 
-//Start of ex 59
+//Exercise 59
 (require 2htdp/image)
 (require 2htdp/universe)
 
-(check-expect (tl-render "red") .)
-(check-expect (tl-render "yellow") .)
+(define BACKGROUND (empty-scene 90 30))
 
 ; Color, mode, background -> Image
 (define (place-light color mode background)
   (cond
-    [(string=? color "red") (place-image (circle]
-    [(string=? color "yellow") ]
-    [(string=? color "green") ]))
+    [(string=? color "red") (place-image (circle 10 mode color) 15 15 background)]
+    [(string=? color "yellow") (place-image (circle 10 mode color) 45 15 background)]
+    [(string=? color "green") (place-image (circle 10 mode color) 75 15 background)]))
 
 ; TrafficLight -> TrafficLight
 ; yields the next state, given current state cs
@@ -632,9 +631,9 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 ; renders the current state cs as an image
 (define (tl-render current-state)
   (cond
-    [(= current-state 0) ]
-    [(= current-state 1) ]
-    [(= current-state 2) ]))
+    [(= current-state 0) (place-light "red" "solid" (place-light "yellow" "outline" (place-light "green" "outline" BACKGROUND)))]
+    [(= current-state 1) (place-light "red" "outline" (place-light "yellow" "solid" (place-light "green" "outline" BACKGROUND)))]
+    [(= current-state 2) (place-light "red" "outline" (place-light "yellow" "outline" (place-light "green" "solid" BACKGROUND)))]))
 
 ; TrafficLight -> TrafficLight
 ; simulates a clock-based American traffic light
@@ -642,3 +641,5 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
   (big-bang initial-state
     [to-draw tl-render]
     [on-tick tl-next 1]))
+    
+    
