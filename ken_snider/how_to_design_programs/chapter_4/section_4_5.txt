@@ -1,0 +1,17 @@
+; Exercise 54. Why is (string=? "resting" x) incorrect as the first condition in show? Conversely, formulate a completely accurate condition, that is, a Boolean expression that evaluates to #true precisely when x belongs to the first sub-class of LRCD.
+
+; (define (show x)
+;  (cond
+;    [(string? x) ...]
+;    [(<= -3 x -1) ...]
+;    [(>= x 0) ...]))
+
+; (string=? "resting" x) would be incurrect because x is a representation of LRCD, which is an Itemization that includes:
+; – "resting"
+; – a Number between -3 and -1
+; – a NonnegativeNumber 
+;
+; Numbers are not strings and would be errors to this function.
+
+; A more useful expression would be:
+(and (string? x) (string=? x "resting"))
