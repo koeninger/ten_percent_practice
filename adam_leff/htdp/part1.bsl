@@ -643,3 +643,7 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
     [on-tick tl-next 1]))
     
     
+//Exercise 61
+The second is correct because it works no matter how the constants are defined
+
+//Exercise 62
