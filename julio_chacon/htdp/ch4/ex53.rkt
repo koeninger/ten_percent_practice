@@ -21,12 +21,12 @@
 
 (define (LR rh)
   (cond
-    [(false? (string->number rh))  0]
+    [(string?  rh) 0]
     [ (> rh 0) (+ rh 3)]) 
   )
 
 
 (check-expect (LR "resting") 0)
 
-;(check-expect (LR HEIGHT) 303)
+(check-expect (LR HEIGHT) 303)
 
