@@ -46,7 +46,7 @@
 (define CENTER (/ (image-height ROCKET) 2))
 
 
-
+; Auxiliary function
 (define (get_rocket_image rocket x center backg)
    (place-image rocket 10 (- x center) backg)
   )
@@ -59,3 +59,6 @@
                   10 (* 3/4 WIDTH)
                   (get_rocket_image ROCKET HEIGHT CENTER BACKG))]
     [(>= x 0)(get_rocket_image ROCKET HEIGHT x BACKG)]))
+
+; Why is less code a good idea?
+
