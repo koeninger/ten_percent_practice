@@ -30,10 +30,10 @@
 (define (place-rocket x)
   (place-image ROCKET 10 (- x CENTER) BACKG))
 
-; ===
+; === (WIP)
 
 (define HEIGHT 300) ; distances in pixels 
-(define WIDTH  100)
+(define WIDTH  100) ; distances in pixels
 (define YDELTA 3)
  
 (define BACKG  (empty-scene WIDTH HEIGHT))
