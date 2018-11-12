@@ -14,7 +14,7 @@
 (define RATE-NONE 0)
 
 ; Price -> Number
-; computes the amount of tax charged for p
+; computes the total + amount of tax charged for p
 (define (sales-tax p)
   (cond
     [(and (<= 0 p) (< p 1000))
