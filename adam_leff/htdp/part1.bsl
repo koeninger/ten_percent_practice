@@ -647,3 +647,10 @@ tall and wide shouldn't be equal, it won't fall to the correct places that way
 The second is correct because it works no matter how the constants are defined
 
 //Exercise 62
+; DoorState -> DoorState
+; simulates a door with an automatic door closer
+(define (door-simulation initial-state)
+  (big-bang initial-state
+    [on-tick door-closer 3]
+    [on-key door-action]
+    [to-draw door-render]))
