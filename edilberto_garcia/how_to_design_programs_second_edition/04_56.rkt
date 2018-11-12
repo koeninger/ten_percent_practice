@@ -88,3 +88,13 @@
   (big-bang s
     [to-draw show]
     [on-key launch]))
+
+(define (main2 s)
+  (big-bang s
+    [to-draw show]
+    [on-key launch]
+    [on-tick tick]))
+
+(define (tick tick-expr)
+  (show (+ tick-expr 10))
+)
