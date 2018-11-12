@@ -33,7 +33,10 @@
 ; raises the rocket by YDELTA,
 ;  if it is moving already 
 (define (fly x)
-  x)
+  (cond
+    [(string? x) x]
+    [(<= -3 x -1) (if (= x -1) HEIGHT (+ x 1))]
+    [(>= x 0) (- x YDELTA)]))
 
 ; LRCD -> Image
 ; renders the state as a resting or flying rocket 
@@ -60,10 +63,28 @@
  (show 53)
  (place-image ROCKET CENTER-WIDTH (- 53 CENTER) BACKG))
 
+
+; LRCD -> Boolean
+; Stop rocket when it's out of the scene
+(define (outside s)
+  (cond
+    [(and (number? s) (= s 0)) #t]
+    [else #f]))
+
+
 ; LRCD -> LRCD
 (define (main1 s)
   (big-bang s
     [to-draw show]
-    [on-key launch]
-))
+    [on-key launch]))
+;(main1 100)
+
+(define (main2 s)
+  (big-bang s
+    [to-draw show]
+    [on-tick fly 0.05]
+    [stop-when outside]
+    [on-key launch]))
+
+(main2 "resting")
 
