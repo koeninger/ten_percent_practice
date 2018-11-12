@@ -68,16 +68,15 @@
 ; Stop rocket when it's out of the scene
 (define (outside s)
   (cond
-    [(and (number? s) (= s 0)) #t]
-    [else #f]))
-
+    [(and (number? s) (= s 0)) #true]
+    [else #false]))
 
 ; LRCD -> LRCD
 (define (main1 s)
   (big-bang s
     [to-draw show]
     [on-key launch]))
-;(main1 100)
+
 
 (define (main2 s)
   (big-bang s
