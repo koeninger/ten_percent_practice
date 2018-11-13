@@ -1,0 +1,117 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex85) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require 2htdp/image)
+(require 2htdp/universe)
+
+(define-struct editor [pre post])
+; An Editor is a structure:
+;   (make-editor String String)
+; interpretation (make-editor s t) describes an editor
+; whose visible text is (string-append s t) with 
+; the cursor displayed between s and t
+
+
+(define CURSOR (rectangle 1 20 "solid" "red"))
+(define BOX (empty-scene 200 20))
+(define TEXT-SIZE 16)
+(define TEXT-COLOR "black")
+
+; Editor -> Image
+; render text with cursor for given Editor
+(check-expect (render (make-editor "a" "b"))
+              (overlay/align "left" "center"
+                             (beside (text "a" TEXT-SIZE TEXT-COLOR)
+                                     CURSOR
+                                     (text "b" TEXT-SIZE TEXT-COLOR))
+                             BOX))
+(check-expect (render (make-editor "hello" "world"))
+              (overlay/align "left" "center"
+                             (beside (text "hello" TEXT-SIZE TEXT-COLOR)
+                                     CURSOR
+                                     (text "world" TEXT-SIZE TEXT-COLOR))
+                             BOX))
+(define (render e)
+  (overlay/align "left" "center"
+                 (beside (text (editor-pre e) TEXT-SIZE TEXT-COLOR)
+                         CURSOR
+                         (text (editor-post e) TEXT-SIZE TEXT-COLOR))
+                 BOX))
+
+; String -> String
+; return first char of input String
+(define (string-first s)
+  (if (> (string-length s) 0)
+  (substring s 0 1)
+  ""))
+
+; String -> String
+; return input String w/ first char removed
+(define (string-rest s)
+  (if (> (string-length s) 0)
+  (substring s 1 (string-length s))
+  ""))
+
+; String -> String
+; return last char of input String
+(define (string-last s)
+  (substring s (string-length-minus-one s) (string-length s)))
+
+; String -> String
+(define (string-remove-last s)
+  (substring s 0 (string-length-minus-one s)))
+
+; String -> Number
+; returns length of String minus one. If result is negative, return 0.
+(check-expect (string-length-minus-one "a") 0)
+(check-expect (string-length-minus-one "abc") 2)
+(check-expect (string-length-minus-one "") 0)
+(define (string-length-minus-one s)
+  (if (> (- (string-length s) 1) 0)
+      (- (string-length s) 1)
+      0))
+
+
+; Editor KeyEvent -> Editor
+; create a new Editor based on given Editor and KeyEvent.
+; KeyEvent logic:
+;  "\b": delete char left of cursor
+;  "\t": ignore
+;  "\r": ignore
+;  all other inputs: place input char to end of pre field of ed
+(check-expect (edit (make-editor "a" "b") " ") (make-editor "a " "b"))
+(check-expect (edit (make-editor "" "b") "a") (make-editor "a" "b"))
+(check-expect (edit (make-editor "a" "") "b") (make-editor "ab" ""))
+(check-expect (edit (make-editor "a" "b") "\t") (make-editor "a" "b"))
+(check-expect (edit (make-editor "a" "b") "\r") (make-editor "a" "b"))
+(check-expect (edit (make-editor "a" "b") "left") (make-editor "" "ab"))
+(check-expect (edit (make-editor "" "ab") "left") (make-editor "" "ab"))
+(check-expect (edit (make-editor "ab" "") "left") (make-editor "a" "b"))
+(check-expect (edit (make-editor "a" "b") "right") (make-editor "ab" ""))
+(check-expect (edit (make-editor "ab" "") "right") (make-editor "ab" ""))
+(check-expect (edit (make-editor "" "ab") "right") (make-editor "a" "b"))
+(check-expect (edit (make-editor "a" "b") "\b") (make-editor "" "b"))
+(check-expect (edit (make-editor "" "b") "\b") (make-editor "" "b"))
+(check-expect (edit (make-editor "ab" "") "\b") (make-editor "a" ""))
+
+(define (edit ed ke)
+  (cond
+    [(string=? ke "\b") (make-editor (string-remove-last (editor-pre ed)) (editor-post ed))]
+    [(string=? ke "\t") ed ]
+    [(string=? ke "\r") ed ]
+    [(string=? ke "left") (make-editor
+                           (string-remove-last (editor-pre ed))
+                           (string-append (string-last (editor-pre ed)) (editor-post ed)))]
+    [(string=? ke "right") (make-editor
+                           (string-append (editor-pre ed) (string-first (editor-post ed)))
+                           (string-rest (editor-post ed)))]
+    [else (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]))
+
+
+(define (run pre)
+  )
+
+(define (main ed)
+  (big-bang ed
+    [to-draw render]
+    [on-key edit]))
