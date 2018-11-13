@@ -76,14 +76,23 @@ when the images don't overlap
 ; interpretation (make-posn x y) is the UFO's location
 ; (using the top-down, left-to-right convention)
 
- (define-struct tank [loc vel])
+(define UFO1 (make-posn 20 10))
+(define UFO2 (make-posn 20 100))
+
+(define-struct tank [loc vel])
 ; A Tank is a structure:
 ;   (make-tank Number Number).
 ; interpretation (make-tank x dx) specifies the position:
 ; (x, HEIGHT) and the tank's speed: dx pixels/tick
 
+(define TANK1 (make-tank 28 -3))
+(define TANK2 (make-tank 100 3))
+
 ; A Missile is a Posn
 ; interpretation (make-posn x y) is the missile's place
+
+(define MISSILE1 (make-posn 28 (- HEIGHT TANK-HEIGHT)))
+(define MISSILE2 (make-posn 22 103))
 
 ; A SIGS is one of:
 ; - (make-aim UFO Tank)
@@ -107,7 +116,12 @@ when the images don't overlap
 ; adds TANK, UFO, and possibly MISSILE to
 ; the BACKGROUND scene
 ; renders the given game state on top of BACKGROUND 
-
+(check-expect (si-render AIM1) (tank-render (aim-tank AIM1)
+                                            (ufo-render (aim-ufo AIM1) BACKGROUND)))
+(check-expect (si-render FIRED1) (tank-render (fired-tank FIRED1)
+                                              (ufo-render (fired-ufo FIRED1)
+                                                          (missile-render (fired-missile FIRED1)
+                                                                          BACKGROUND))))
 ;(define (si-render s) BACKGROUND) ; stub
 
 (define (si-render s)
@@ -121,6 +135,10 @@ when the images don't overlap
 
 ; Tank Image -> Image
 ; adds t to the given image im
+(check-expect (tank-render TANK1 BACKGROUND) (place-image
+                                              TANK 28 TANK-Y BACKGROUND))
+(check-expect (tank-render TANK2 BACKGROUND) (place-image
+                                              TANK 100 TANK-Y BACKGROUND))
 
 ; (define (tank-render t im) im) ;stub
 
@@ -129,7 +147,9 @@ when the images don't overlap
 
 ; UFO Image -> Image
 ; adds u to the given image im
-
+(check-expect (ufo-render UFO1 BACKGROUND) (place-image UFO 20 10 BACKGROUND))
+(check-expect (ufo-render UFO2 BACKGROUND) (place-image UFO 20 100 BACKGROUND))
+                                           
 ;(define (ufo-render u im) im) ;;stub
 
 (define (ufo-render u im)
@@ -137,6 +157,10 @@ when the images don't overlap
 
 ; Missile Image -> Image
 ; adds m to the given image im
+(check-expect (missile-render MISSILE1 BACKGROUND) (place-image
+                                                    MISSILE 28 (- HEIGHT TANK-HEIGHT) BACKGROUND))
+(check-expect (missile-render MISSILE2 BACKGROUND) (place-image
+                                                    MISSILE 22 103 BACKGROUND))
 
 ;(define (missile-render m im) im) ;;stub
 
