@@ -3,3 +3,179 @@ The game stops if the UFO Lands or if the missile hits the UFO. For both conditi
 for the proximity of one object to another.
 The stop-when clause allows for an optional second sub-expression, namely a function that renders the final state of the game.
 Design si-render-final and use it as the second part for your stop-when clause in the main function of exercise 100. 
+
+; physical constants
+(define WIDTH 200)
+(define HEIGHT 200)
+
+; graphical constants
+(define UFO (overlay
+             (rectangle 20 2 "solid" "purple")
+             (ellipse 15 10 "solid" "purple")))
+(define UFO-HEIGHT (image-height UFO))
+(define UFO-WIDTH (image-width UFO))
+
+(define TANK (rectangle 15 10 "solid" "olive"))
+(define TANK-HEIGHT (image-height TANK))
+(define TANK-Y (- HEIGHT (/ TANK-HEIGHT 2)))
+
+(define MISSILE (rectangle 1 15 "solid" "red"))
+(define MISSILE-WIDTH (image-width MISSILE))
+(define MISSILE-HEIGHT (image-height MISSILE))
+
+(define BACKGROUND (empty-scene WIDTH HEIGHT "black"))
+
+; a mock up
+(define MOCK-UP
+  (place-image MISSILE 140 (- HEIGHT 120)
+               (place-image TANK 100 TANK-Y
+                            (place-image UFO 150 (- HEIGHT 160)
+                                         BACKGROUND))))
+
+
+(define-struct aim [ufo tank]) ;; the time period when the player is trying to get the tank in position for a shot
+
+(define-struct fired [ufo tank missile]) ;; representing states after the missile is fired
+
+ ; A UFO is a Posn
+; interpretation (make-posn x y) is the UFO's location
+; (using the top-down, left-to-right convention)
+
+(define UFO1 (make-posn 20 10))
+(define UFO2 (make-posn 20 100))
+
+(define-struct tank [loc vel])
+; A Tank is a structure:
+;   (make-tank Number Number).
+; interpretation (make-tank x dx) specifies the position:
+; (x, HEIGHT) and the tank's speed: dx pixels/tick
+
+(define TANK1 (make-tank 28 -3))
+(define TANK2 (make-tank 100 3))
+
+; A Missile is a Posn
+; interpretation (make-posn x y) is the missile's place
+
+(define MISSILE1 (make-posn 28 (- HEIGHT TANK-HEIGHT)))
+(define MISSILE2 (make-posn 22 103))
+
+; A SIGS is one of:
+; - (make-aim UFO Tank)
+; - (make-fired UFO Tank Missile)
+;interpretation represents the complete state of a space invader game
+
+(define AIM1
+  (make-aim (make-posn 20 10) (make-tank 28 -3))) ; tank maneuvering into position to fire the missile
+
+(define FIRED1
+  (make-fired (make-posn 20 10) 
+            (make-tank 28 -3)
+            (make-posn 28 (- HEIGHT TANK-HEIGHT)))) ; like the previous one but misile has been fired
+
+(define FIRED2
+  (make-fired (make-posn 20 100)
+            (make-posn 100 3)
+            (make-posn 22 103))) ; the missile is about to collide with the UFO
+
+; SIGS -> Image
+; adds TANK, UFO, and possibly MISSILE to
+; the BACKGROUND scene
+; renders the given game state on top of BACKGROUND 
+(check-expect (si-render AIM1) (tank-render (aim-tank AIM1)
+                                            (ufo-render (aim-ufo AIM1) BACKGROUND)))
+(check-expect (si-render FIRED1) (tank-render (fired-tank FIRED1)
+                                              (ufo-render (fired-ufo FIRED1)
+                                                          (missile-render (fired-missile FIRED1)
+                                                                          BACKGROUND))))
+;(define (si-render s) BACKGROUND) ; stub
+
+(define (si-render s)
+  (cond
+    [(aim? s) (tank-render (aim-tank s)
+                           (ufo-render (aim-ufo s) BACKGROUND))]
+    [(fired? s) (tank-render (fired-tank s)
+                             (ufo-render (fired-ufo s)
+                                         (missile-render (fired-missile s)
+                                                         BACKGROUND)))]))
+
+; Tank Image -> Image
+; adds t to the given image im
+(check-expect (tank-render TANK1 BACKGROUND) (place-image
+                                              TANK 28 TANK-Y BACKGROUND))
+(check-expect (tank-render TANK2 BACKGROUND) (place-image
+                                              TANK 100 TANK-Y BACKGROUND))
+
+; (define (tank-render t im) im) ;stub
+
+(define (tank-render t im)
+  (place-image TANK (tank-loc t) TANK-Y im))
+
+; UFO Image -> Image
+; adds u to the given image im
+(check-expect (ufo-render UFO1 BACKGROUND) (place-image UFO 20 10 BACKGROUND))
+(check-expect (ufo-render UFO2 BACKGROUND) (place-image UFO 20 100 BACKGROUND))
+                                           
+;(define (ufo-render u im) im) ;;stub
+
+(define (ufo-render u im)
+  (place-image UFO (posn-x u) (posn-y u) im))
+
+; Missile Image -> Image
+; adds m to the given image im
+(check-expect (missile-render MISSILE1 BACKGROUND) (place-image
+                                                    MISSILE 28 (- HEIGHT TANK-HEIGHT) BACKGROUND))
+(check-expect (missile-render MISSILE2 BACKGROUND) (place-image
+                                                    MISSILE 22 103 BACKGROUND))
+
+;(define (missile-render m im) im) ;;stub
+
+(define (missile-render m im)
+  (place-image MISSILE (posn-x m) (posn-y m) im))
+
+; SIGS -> Boolean
+; stops the game when one of two conditions:
+; - the UFO lands
+; - the missile hits the UFO 
+(check-expect (si-game-over? AIM1) #false)
+(check-expect (si-game-over? FIRED1) #false)
+(check-expect (si-game-over? FIRED2) #true)
+
+; (define (si-game-over? s) #false) ;stub
+
+(define (si-game-over? s)
+  (cond
+    [(aim? s) (ufo-landed? (aim-ufo s))]
+    [(fired? s) (or
+                 (ufo-landed? (fired-ufo s))
+                 (ufo-hit? (fired-ufo s)
+                           (fired-missile s)))]))
+
+; Auxiliary functions for si-game-over
+
+; UFO -> Boolean
+; #true if UFO has landed
+; lose game
+(check-expect (ufo-landed? UFO2) #false)
+(check-expect (ufo-landed? (make-posn 10 200)) #true)
+
+; (define (ufo-landed? u) #false) ;stub
+
+(define (ufo-landed? u)
+  (>= (posn-y u) (- HEIGHT (/ UFO-HEIGHT 2))))
+
+; UFO MISSILE -> Boolean
+; #true if the UFO has been hit by the Missile
+; win game
+(check-expect (ufo-hit? UFO2 MISSILE1) #false)
+(check-expect (ufo-hit? UFO2 (make-posn 20 100)) #true)
+
+; (define (ufo-hit? u) #false) ;stub
+
+(define (ufo-hit? u m)
+  (and (<= (abs (- (posn-x u) (posn-x m)))
+           (+ (/ UFO-WIDTH 2) (/ MISSILE-WIDTH 2)))
+       (<= (abs (- (posn-y u) (posn-y m)))
+           (+ (/ UFO-HEIGHT 2) (/ MISSILE-HEIGHT 2)))))
+
+; si-render-final
+; renders the final state of the game 
