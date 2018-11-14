@@ -7,6 +7,8 @@
 (define midnight (make-time-point 00 00 00))  ; midnight
 (define time (make-time-point 12 30 02))  ; 
 
+(check-expect (time->seconds midnight) 0)
+(check-expect (time->seconds time) 45002)
 
 (define (time->seconds t)
   (+ (* (time-point-hours t) 3600)

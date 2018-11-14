@@ -6,8 +6,8 @@
 
 (define MAX 100)
 
-(define WIDTH-OF-WORLD 400)
-(define BACKGROUND (empty-scene WIDTH-OF-WORLD 100))
+(define WIDTH-OF-WORLD MAX)
+(define BACKGROUND (empty-scene WIDTH-OF-WORLD 20))
 
 
 ; WorldState -> Image

@@ -24,23 +24,36 @@
 (define word2 (make-word "h" "e" "y"))
 (define word3 (make-word "n" "o" #false))
 
-;template
+
+; compare letter
+(check-expect (compare-letter "a" "a") "a")
+(check-expect (compare-letter "a" "b") #false)
+(check-expect (compare-letter "a" #false) #false)
+
+; check both letters are strings and if they are equal
+(define (compare-letter l1 l2)
+  (cond [(and (string? l1) (string<=? "a" l1 "z")
+              (string? l2) (string<=? "a" l2 "z"))
+         (cond [(string=? l1 l2) l1]
+               [else #false])] 
+[else #false]))
+
+
+; word
 (define (fn-for-word w)
   (... (... (word-lt1 w))
        (... (word-lt2 w))
        (... (word-lt3 w))))
 
-(define (compare-word w1 w2) 
-(string-append                       
-   (cond [(eq? (word-lt1 w1) (word-lt1 w2)) ()]
-         [else #false])
-   
-   (cond [(eq? (word-lt2 w1) (word-lt2 w2)) "Letter 2"]
-         [else #false])
-  
-   (cond [(eq? (word-lt3 w1) (word-lt3 w2)) "Letter 3"]
-        [else #false])
-)
-)
 
-(compare-word word1 word2)
+(check-expect (compare-word (make-word "y" "e" "s") (make-word "y" "e" "s"))
+              (make-word "y" "e" "s"))
+(check-expect (compare-word (make-word "y" "e" "s") (make-word "l" "e" "s"))
+              (make-word #false "e" "s"))
+
+(define (compare-word w1 w2 )
+  (make-word (compare-letter (word-lt1 w1) (word-lt1 w2))
+             (compare-letter (word-lt2 w1) (word-lt2 w2))
+             (compare-letter (word-lt3 w1) (word-lt3 w2))
+  )
+)
