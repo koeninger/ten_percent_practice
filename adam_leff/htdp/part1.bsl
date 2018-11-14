@@ -654,3 +654,32 @@ The second is correct because it works no matter how the constants are defined
     [on-tick door-closer 3]
     [on-key door-action]
     [to-draw door-render]))
+    
+//Exercise 63
+(distance-to-0 (make-posn 3 4))
+(sqrt (+ (* 3 3) (* 4 4)))
+(sqrt (+ 9 16))
+(sqrt 25)
+5
+
+(distance-to-0 (make-posn 6 (* 2 4)))
+(distance-to-0 (make-posn 6 8))
+(sqrt (+ (* 6 6) (* 8 8)))
+(sqrt (+ 36 64))
+(sqrt 100)
+10
+
+(+ (distance-to-0 (make-posn 12 5)) 10)
+(+ (sqrt (+ (* 12 12) (* 5 5))) 10)
+(+ (sqrt (+ 144 25)) 10)
+(+ (sqrt 169) 10)
+(+ 13 10)
+23
+
+//Exercise 64
+It doesn't matter which direction you go because you end up going the same number of steps horizontally and vertically no matter the path
+
+(define (manhattan-distance p)
+ (+ (abs (posn-x p)) (abs (posn-y p))))
+ 
+ 

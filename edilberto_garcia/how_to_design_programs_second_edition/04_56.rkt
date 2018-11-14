@@ -29,26 +29,24 @@
 
 ; LRCD -> Image
 ; renders the state as a resting or flying rocket
-(check-expect (show "resting") (place-image ROCKET 10 HEIGHT BACKG))
- 
+(check-expect (show "resting") (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
 (check-expect (show -2) (place-image (text "-2" 20 "red")
    10 (* 3/4 WIDTH)
-   (place-image ROCKET 10 HEIGHT BACKG)))
- 
-(check-expect (show 53) (place-image ROCKET 10 53 BACKG))
+   (place-image ROCKET 10 (- HEIGHT CENTER) BACKG)))
+(check-expect (show 53) (place-image ROCKET 10 (- 53 CENTER) BACKG))
 
 (define (show x)
   (cond
-    [(string? x) (get_rocket_image ROCKET HEIGHT CENTER BACKG)]
+    [(string? x) (get_rocket_image HEIGHT)]
     [(<= -3 x -1)
      (place-image (text (number->string x) 20 "red")
                   10 (* 3/4 WIDTH)
-                  (get_rocket_image ROCKET HEIGHT CENTER BACKG))]
-    [(>= x 0)(get_rocket_image ROCKET HEIGHT x BACKG)]))
+                  (get_rocket_image HEIGHT))]
+    [(>= x 0)(get_rocket_image x)]))
 
 ; Auxiliary function
-(define (get_rocket_image rocket x center backg)
-   (place-image rocket 10 (- x center) backg)
+(define (get_rocket_image x)
+   (place-image ROCKET 10 (- x CENTER) BACKG)
   )
 
  
@@ -96,5 +94,5 @@
     [on-tick tick]))
 
 (define (tick tick-expr)
-  (show (+ tick-expr 10))
+  (fly tick-expr)
 )
