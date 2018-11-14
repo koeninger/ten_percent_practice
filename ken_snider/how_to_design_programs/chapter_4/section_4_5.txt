@@ -139,3 +139,11 @@
     [on-key launch]
     [on-tick fly .2]
     [stop-when end?]))
+
+; ===
+
+; Exercise 57. Recall that the word “height” forced us to choose one of two possible interpretations. Now that you have solved the exercises in this section, solve them again using the first interpretation of the word. Compare and contrast the solutions.
+
+The second interpretation of "height" was the height from the ground (what humans usually think of as "height"), instead of the distance from the top of the canvas.
+
+The biggest change from this adjustment is that the "flight" now needs ascending numbers instead of descending - that is, the launch starts from 1, instead of HEIGHT (the height of the scene). end? would need to calculate when the rocket was HEIGHT pixels (plus have of the rocket height since it is positioned from its center) above the ground to be "done", and that fly would have to move from -1 to half of rocket-height - again, because the rocket is positioned from its center, and at an LRCD of 0, it would be half underground.
