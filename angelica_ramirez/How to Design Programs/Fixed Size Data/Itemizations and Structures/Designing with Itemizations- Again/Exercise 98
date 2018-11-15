@@ -177,5 +177,14 @@ Design si-render-final and use it as the second part for your stop-when clause i
        (<= (abs (- (posn-y u) (posn-y m)))
            (+ (/ UFO-HEIGHT 2) (/ MISSILE-HEIGHT 2)))))
 
-; si-render-final
+; UFO MISSILE -> Image
 ; renders the final state of the game 
+(check-expect (si-render-final UFO2 (make-posn 20 100)) (overlay (text "YOU WON" 30 "green") BACKGROUND))
+(check-expect (si-render-final (make-posn 10 200) TANK1) (overlay (text "GAME OVER" 30 "red") BACKGROUND))
+
+; (define (si-render-final s) i) ;stub
+
+(define (si-render-final u m)
+  (cond
+    [(ufo-landed? u) (overlay (text "GAME OVER" 30 "red") BACKGROUND)]
+    [(ufo-hit? u m) (overlay (text "YOU WON" 30 "green") BACKGROUND)]))
