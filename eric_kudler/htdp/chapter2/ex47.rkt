@@ -21,12 +21,19 @@
 (define (tock x)
   (- x .1))
 
+(define (keystroke-handler as ke)
+  (cond
+    [(key=? ke "up") (+ as (+ as .3))]
+    [(key=? ke "down") (+ as (+ as .2))]
+    [else as]))
+
 ; WorldState -> WorldState
 ; launches the program from some initial state 
 (define (main ws)
    (big-bang ws
      [on-tick tock]
      [to-draw render]
+     [on-key keystroke-handler]
     ))
 
 
