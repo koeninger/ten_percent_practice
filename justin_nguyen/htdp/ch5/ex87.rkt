@@ -72,3 +72,20 @@
     (- (image-width (draw-text (substring (editor-text ed) 0 (editor-index ed))))) 0
     (draw-text (editor-text ed)))
    BOX))
+
+
+; Editor KeyEvent -> Editor
+; creates a new Editor based on input Editor and KeyEvent
+; KeyEvent logic:
+;  "\b"
+;  "\t"
+;  "\r"
+;  all other input: insert input at editor-index and all chars to the right once index.
+(define (edit ed ke)
+  (cond
+    [(string=? ke "\b") ...]
+    [(string=? ke "\t") ...]
+    [(string=? ke "\r") ...]
+    [(string=? ke "left") ...]
+    [(string=? ke "right") ...]
+    [else ...]))
