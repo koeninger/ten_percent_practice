@@ -1,0 +1,26 @@
+; Exercise 58. Introduce constant definitions that separate the intervals for low prices and luxury prices from the others so that the legislators in Tax Land can easily raise the taxes even more.
+
+; Tax rates
+(define UNDER1K 0)
+(define 1TO10K 0.05)
+(define OVER10K 0.08)
+
+; A Price falls into one of three intervals: 
+; — 0 through 999 (no tax)
+; — 1000 through 9999 (5% tax)
+; — 10000 and above. (8% tax)
+; Price is the value of an item
+
+; Price -> Number
+; computes the amount of tax charged for p
+(check-expect (sales-tax 0) UNDER1K)
+(check-expect (sales-tax 537) UNDER1K)
+(check-expect (sales-tax 1000) (* 1TO10K 1000))
+(check-expect (sales-tax 1282) (* 1TO10K 1282))
+(check-expect (sales-tax 10000) (* OVER10K 10000))
+(check-expect (sales-tax 12017) (* OVER10K 12017))
+(define (sales-tax p)
+  (cond
+    [(and (<= 0 p) (< p 1000)) UNDER1K]
+    [(and (<= 1000 p) (< p 10000)) (* 1TO10K p)]
+    [(>= p 10000) (* OVER10K p)]))

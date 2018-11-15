@@ -1,8 +1,23 @@
-Exercise 98 Design the function si-game-over? for use as the stop-when handler. 
-The game stops if the UFO Lands or if the missile hits the UFO. For both conditions, we recommend that you check
-for the proximity of one object to another.
-The stop-when clause allows for an optional second sub-expression, namely a function that renders the final state of the game.
-Design si-render-final and use it as the second part for your stop-when clause in the main function of exercise 100. 
+Exercise 99 Design si-move. This function is called for every clock tick to determine to which position the objects move now. 
+Accordingly, it consumes an element of SIGS and produces another one. 
+The tank and missile move in straig lines at a constant speed. Moving the UFO calls for small random jumps to the left or right.
+Since never dealt with functions that create random numbers, the rest of this exercise is a longish hint on how to deal with the issue. 
+BSL comes with a function that creates random numbers. 
+; Number -> Number
+; produces a number in the interval [0,n),
+; possibly a different one each time it is called
+(define (random n) ...)
+If random produces different numbers (almost) every time it is called, testing is difficult.
+To start, separate si-move and its proper functionality into two different parts. 
+(define (si-move w)
+  (si-move-proper 2 (random ...)))
+; SIGS Number -> SIGS
+; moves the space-invader objects predictably by delta 
+(define (si-move-proper w delta)
+  w)
+This definition separates the creation of random number from the act of moving the game objects. 
+Instead of calling random directly, you may wish to design a function that creates a random x-coordinate for the UFO.
+Consider using check-random from BSL's testing framework to test such a function. 
 
 ; physical constants
 (define WIDTH 200)
@@ -188,3 +203,24 @@ Design si-render-final and use it as the second part for your stop-when clause i
   (cond
     [(ufo-landed? u) (overlay (text "GAME OVER" 30 "red") BACKGROUND)]
     [(ufo-hit? u m) (overlay (text "YOU WON" 30 "green") BACKGROUND)]))
+
+; SIGS -> SIGS
+; determines which position the objects move for every clock tick 
+; si-move adds a random element for the UFO move to si-move-proper
+
+(define (si-move s)
+  (si-move-proper s (random-number s)))
+
+; Auxiliary functions for si-move
+
+; SIGS Number -> SIGS
+; moves the objects, moves UFO predictably by delta 
+
+(define (si-move-proper s delta)
+  (if (aim? s) ...))
+
+; SIGS -> Number
+; creates a random number in the internal [0, n)
+
+(define (random-number s)
+  (random ...))
