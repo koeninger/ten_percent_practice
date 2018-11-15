@@ -3,11 +3,6 @@
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname 04_57) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 ;Exercise 57. Recall that the word “height” forced us to choose one of two possible interpretations. Now that you have solved the exercises in this section, solve them again using the first interpretation of the word. Compare and contrast the solutions.
 
-
-; Exercise 56. Define main2 so that you can launch the rocket and watch it
-;    lift off. Read up on the on-tick clause to determine the length of
-;    one tick and how to change it.
-
 (require 2htdp/image)
 (require  2htdp/universe)
 
@@ -94,7 +89,7 @@
   (big-bang s
     [to-draw show]
     [on-key launch]
-    [on-tick tick]))
+    [on-tick tick .5]))
 
 (define (tick tick-expr)
   (fly tick-expr)
