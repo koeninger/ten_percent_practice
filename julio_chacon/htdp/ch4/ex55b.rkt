@@ -1,12 +1,8 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname 04_56) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
-; Exercise 56. Define main2 so that you can launch the rocket and watch it
-;    lift off. Read up on the on-tick clause to determine the length of
-;    one tick and how to change it.
-
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex55b) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
-(require  2htdp/universe)
+(require 2htdp/universe)
 
 (define HEIGHT 300) ; distances in pixels 
 (define WIDTH  100)
@@ -17,6 +13,21 @@
  
 (define CENTER (/ (image-height ROCKET) 2))
 
+; An LR (short for launching rocket) is one of:
+; – "resting"
+; – NonnegativeNumber
+; interpretation "resting" represents a grounded rocket
+; a number denotes the height of a rocket in flight
+
+;(define (LR rh)
+ ; (cond
+  ;  [(string?  rh) 0]
+   ; [ (> rh 0) (+ rh 3)]) 
+  ;)
+
+
+;(check-expect (LR "resting") 0)
+;(check-expect (LR HEIGHT) 303)
 
 ; An LRCD (for launching rocket countdown) is one of:
 ; – "resting"
@@ -29,42 +40,42 @@
 
 ; LRCD -> Image
 ; renders the state as a resting or flying rocket
-(check-expect (show "resting") (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
-(check-expect (show -2) (place-image (text "-2" 20 "red")
-   10 (* 3/4 WIDTH)
-   (place-image ROCKET 10 (- HEIGHT CENTER) BACKG)))
-(check-expect (show 53) (place-image ROCKET 10 (- 53 CENTER) BACKG))
+
+;because x could be an integer or even other string that is not "resting"
+
+(define (renderImage x)
+  (place-image ROCKET 10 (- x CENTER) BACKG)
+  )
+
 
 (define (show x)
   (cond
-    [(string? x) (get_rocket_image HEIGHT)]
+    [(string? x)
+     (renderImage HEIGHT)]
     [(<= -3 x -1)
      (place-image (text (number->string x) 20 "red")
                   10 (* 3/4 WIDTH)
-                  (get_rocket_image HEIGHT))]
-    [(>= x 0)(get_rocket_image x)]))
+                   (renderImage HEIGHT))]
+    [(>= x 0)
+      (renderImage x)]))
 
-; Auxiliary function
-(define (get_rocket_image x)
-   (place-image ROCKET 10 (- x CENTER) BACKG)
-  )
+;(show "resting")
+;(show -3)
+;(show 10)
 
- 
-; LRCD KeyEvent -> LRCD
-; starts the countdown when space bar is pressed, 
-; if the rocket is still resting
-(check-expect (launch "resting" " ") -3)
-(check-expect (launch "resting" "a") "resting")
-(check-expect (launch -3 " ") -3)
-(check-expect (launch -1 " ") -1)
-(check-expect (launch 33 " ") 33)
-(check-expect (launch 33 "a") 33)
 (define (launch x ke)
   (cond
     [(string? x) (if (string=? " " ke) -3 x)]
     [(<= -3 x -1) x]
     [(>= x 0) x]))
- 
+
+;(check-expect (launch "resting" " ") -3)
+;(check-expect (launch "resting" "a") "resting")
+;(check-expect (launch -3 " ") -3)
+;(check-expect (launch -1 " ") -1)
+;(check-expect (launch 33 " ") 33)
+;(check-expect (launch 33 "a") 33)
+
 ; LRCD -> LRCD
 ; raises the rocket by YDELTA if it is moving already 
  
@@ -74,7 +85,7 @@
 (check-expect (fly -1) HEIGHT)
 (check-expect (fly 10) (- 10 YDELTA))
 (check-expect (fly 22) (- 22 YDELTA))
- 
+
 (define (fly x)
   (cond
     [(string? x) x]
@@ -87,12 +98,13 @@
     [to-draw show]
     [on-key launch]))
 
+
+
 (define (main2 s)
   (big-bang s
+    [on-tick fly 1]
     [to-draw show]
-    [on-key launch]
-    [on-tick tick]))
+    [on-key launch]))
 
-(define (tick tick-expr)
-  (fly tick-expr)
-)
+
+(main2 -3)

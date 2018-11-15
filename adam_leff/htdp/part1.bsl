@@ -654,3 +654,82 @@ The second is correct because it works no matter how the constants are defined
     [on-tick door-closer 3]
     [on-key door-action]
     [to-draw door-render]))
+    
+//Exercise 63
+(distance-to-0 (make-posn 3 4))
+(sqrt (+ (* 3 3) (* 4 4)))
+(sqrt (+ 9 16))
+(sqrt 25)
+5
+
+(distance-to-0 (make-posn 6 (* 2 4)))
+(distance-to-0 (make-posn 6 8))
+(sqrt (+ (* 6 6) (* 8 8)))
+(sqrt (+ 36 64))
+(sqrt 100)
+10
+
+(+ (distance-to-0 (make-posn 12 5)) 10)
+(+ (sqrt (+ (* 12 12) (* 5 5))) 10)
+(+ (sqrt (+ 144 25)) 10)
+(+ (sqrt 169) 10)
+(+ 13 10)
+23
+
+//Exercise 64
+It doesn't matter which direction you go because you end up going the same number of steps horizontally and vertically no matter the path
+
+(define (manhattan-distance p)
+ (+ (abs (posn-x p)) (abs (posn-y p))))
+ 
+//Exercise 65
+(define-struct movie [title producer year])
+make-movie
+movie?
+movie-title
+movie-producer
+movie-year
+
+(define-struct person [name hair eyes phone])
+make-person
+person?
+person-name
+person-hair
+person-eyes
+person-phone
+
+(define-struct pet [name number])
+make-pet
+pet?
+pet-name
+pet-number
+
+(define-struct CD [artist title price])
+make-CD
+CD?
+CD-artist
+CD-title
+CD-price
+
+(define-struct sweater [material size producer])
+make-sweater
+sweater?
+sweater-material
+sweater-size
+sweater-producer
+
+//Exercise 66
+(define-struct movie [title (string) producer (string) year (integer)])
+(make-movie "Jurassic Park" "Steven Speilberg" 1991)
+
+(define-struct person [name (string) hair (string) eyes (string) phone (string)])
+(make-person "Cody" "Shaved" "Brown" "5555555")
+
+(define-struct pet [name (string) number (integer)])
+(make-pet "Mittens" 123)
+
+(define-struct CD [artist (string) title (string) price (number)])
+(make-CD "band" "album" 19.99)
+
+(define-struct sweater [material (string) size (number) producer (string)])
+(make-sweater "wool" 15 "name")

@@ -3,11 +3,6 @@
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname 04_57) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 ;Exercise 57. Recall that the word “height” forced us to choose one of two possible interpretations. Now that you have solved the exercises in this section, solve them again using the first interpretation of the word. Compare and contrast the solutions.
 
-
-; Exercise 56. Define main2 so that you can launch the rocket and watch it
-;    lift off. Read up on the on-tick clause to determine the length of
-;    one tick and how to change it.
-
 (require 2htdp/image)
 (require  2htdp/universe)
 
@@ -32,26 +27,24 @@
 
 ; LRCD -> Image
 ; renders the state as a resting or flying rocket
-(check-expect (show "resting") (place-image ROCKET 10 HEIGHT BACKG))
- 
+(check-expect (show "resting") (place-image ROCKET 10 (- HEIGHT CENTER) BACKG))
 (check-expect (show -2) (place-image (text "-2" 20 "red")
    10 (* 3/4 WIDTH)
-   (place-image ROCKET 10 HEIGHT BACKG)))
- 
-(check-expect (show 53) (place-image ROCKET 10 53 BACKG))
+   (place-image ROCKET 10 (- HEIGHT CENTER) BACKG)))
+(check-expect (show 53) (place-image ROCKET 10 (- 53 CENTER) BACKG))
 
 (define (show x)
   (cond
-    [(string? x) (get_rocket_image ROCKET HEIGHT CENTER BACKG)]
+    [(string? x) (get_rocket_image HEIGHT)]
     [(<= -3 x -1)
      (place-image (text (number->string x) 20 "red")
                   10 (* 3/4 WIDTH)
-                  (get_rocket_image ROCKET HEIGHT CENTER BACKG))]
-    [(>= x 0)(get_rocket_image ROCKET HEIGHT x BACKG)]))
+                  (get_rocket_image HEIGHT))]
+    [(>= x 0)(get_rocket_image x)]))
 
 ; Auxiliary function
-(define (get_rocket_image rocket x center backg)
-   (place-image rocket 10 (- x center) backg)
+(define (get_rocket_image x)
+   (place-image ROCKET 10 (- x CENTER) BACKG)
   )
 
  
@@ -96,8 +89,8 @@
   (big-bang s
     [to-draw show]
     [on-key launch]
-    [on-tick tick]))
+    [on-tick tick .5]))
 
 (define (tick tick-expr)
-  (show (+ tick-expr 10))
+  (fly tick-expr)
 )
