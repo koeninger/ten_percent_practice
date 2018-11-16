@@ -12,7 +12,7 @@
 ; — 10000 and above.
 ; interpretation the price of an item
 
-
+58
 (define LOW_TAX 0.05)
 (define LUXURY_TAX .08)
 
