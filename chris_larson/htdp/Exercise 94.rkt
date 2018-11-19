@@ -21,3 +21,27 @@
 (define MISSILE-SPEED 5)
 
 (define MISSILE (triangle MISSILE-WIDTH "solid" "red"))
+
+; A UFO is a Posn. 
+; interpretation (make-posn x y) is the UFO's location 
+; (using the top-down, left-to-right convention)
+ 
+(define-struct tank [loc vel])
+; A Tank is a structure:
+;   (make-tank Number Number). 
+; interpretation (make-tank x dx) specifies the position:
+; (x, HEIGHT) and the tank's speed: dx pixels/tick 
+ 
+; A Missile is a Posn. 
+; interpretation (make-posn x y) is the missile's place
+
+(place-image
+ TANK
+  28 HEIGHT-OF-WORLD
+  (place-image
+   UFO
+   20 10
+   (place-image
+    MISSILE
+    28 (- HEIGHT-OF-WORLD TANK-HEIGHT)
+    BACKGROUND)))
