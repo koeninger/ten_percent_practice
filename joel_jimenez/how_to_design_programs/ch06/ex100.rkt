@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex099) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex100) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -26,10 +26,11 @@
 ; space invader game
 
 
-(define MAX-WIDTH 200)
-(define MAX-HEIGHT 300)
+(define MAX-WIDTH 500)
+(define MAX-HEIGHT 500)
 (define BACKGROUND (empty-scene MAX-WIDTH MAX-HEIGHT))
 (define TANK (rectangle (/ MAX-WIDTH 5) (/ MAX-HEIGHT 20) "solid" "blue"))
+(define TANK-SPEED 3)
 (define MISSILE (triangle (/ MAX-WIDTH 20) "solid" "red"))
 (define UFO (ellipse (/ MAX-WIDTH 5) (/ MAX-WIDTH 10) "solid" "green"))
 (define UFO-SPEED 3)
@@ -43,15 +44,11 @@
 (define MISSILE-Y-OFFSET (/ (image-height MISSILE) 2))
 (define MISSILE-INITIAL-Y (- MAX-HEIGHT (image-height TANK)))
 (define GAME-OVER (text "GAME OVER" (/ MAX-WIDTH 10) "orange"))
-(define UFO-DX 3)
+(define UFO-DX 10)
 
-(define INITIAL-STATE
-  (place-images
-   (list UFO TANK)
-   (list
-     (make-posn INITIAL-X UFO-INITIAL-Y)
-     (make-posn INITIAL-X TANK-Y))
-   BACKGROUND))
+(define INITIAL-STATE (make-aim
+   (make-posn INITIAL-X UFO-INITIAL-Y)
+   (make-tank INITIAL-X TANK-SPEED)))
 
 (define STATE1 (make-aim (make-posn 20 10)
           (make-tank 28 -3)))
@@ -192,25 +189,27 @@
   (cond
     [(aim? s)(make-aim
        (UFO-move (aim-ufo s))
-       (tank-move (aim-tank s)))]
+       (aim-tank s))]
     [(fired? s)(make-fired
        (UFO-move (fired-ufo s))
-       (tank-move (fired-tank s))
-       (make-posn
-         (- (posn-y (fired-missile s)) MISSILE-SPEED)
-         (posn-x (fired-missile s))))]
+       (fired-tank s)
+       (make-posn (posn-x (fired-missile s))
+         (- (posn-y (fired-missile s)) MISSILE-SPEED)))]
     [else s]))
 
-; Tank -> Tank
-; updates tank-loc based on tank-vel
+; Tank, KeyEvent -> Tank
+; updates tank-loc based on tank-vel and ke
 ; and sets it between MAX-WIDTH
-(define (tank-move t)
-  (cond
-    [(<= (+ (tank-loc t) (tank-vel t)) 0)
-       (make-tank 0 (* (tank-vel t) -1))]
-    [(>= (+ (tank-loc t) (tank-vel t)) MAX-WIDTH)
-       (make-tank MAX-WIDTH (* (tank-vel t) -1))]
-    [else (make-tank (+ (tank-loc t) (tank-vel t)) (tank-vel t))]))
+(define (tank-move t ke)
+  (make-tank (cond
+      [(string=? "left" ke)
+        (if (> (- (tank-loc t) (tank-vel t)) 0)
+          (- (tank-loc t) (tank-vel t)) 0)]
+      [(string=? "right" ke)
+        (if (< (+ (tank-loc t) (tank-vel t)) MAX-WIDTH)
+          (+ (tank-loc t) (tank-vel t)) MAX-WIDTH)]
+      [else (tank-loc t)])
+    (tank-vel t)))
 
 ; UFO -> UFO
 ; Move UFO down at constant speed
@@ -228,3 +227,28 @@
     [(< (- x UFO-DX) 0) 1]
     [(> (+ x UFO-DX) MAX-WIDTH) -1]
     [else (- (random 3) 1)])))
+
+
+; SIGS, KeyEvent -> SIGS
+(define (si-control s ke)
+  (cond
+    [(and (string=? " " ke) (aim? s))
+      (make-fired (aim-ufo s) (aim-tank s)
+        (make-posn (tank-loc (aim-tank s)) MISSILE-INITIAL-Y))]
+    [(aim? s)
+      (make-aim (aim-ufo s)
+        (tank-move (aim-tank s) ke))]
+    [(fired? s)
+      (make-fired (fired-ufo s)
+        (tank-move (fired-tank s) ke)
+        (fired-missile s))]
+    [else s]))
+
+(define (space-invaders si)
+  (big-bang si
+    (on-tick si-move)
+    (on-key si-control)
+    (to-draw si-render)
+    (stop-when si-game-over? si-render-final)))
+
+(space-invaders INITIAL-STATE)
