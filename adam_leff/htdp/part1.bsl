@@ -733,3 +733,15 @@ sweater-producer
 
 (define-struct sweater [material (string) size (number) producer (string)])
 (make-sweater "wool" 15 "name")
+
+//Exercise 67
+(define SPEED 3)
+(define-struct balld [location direction])
+(make-balld 10 "up")
+
+(make-balld 5 "down")
+this is a ball falling down at 3 pixels per tick at position 5
+
+//Exercise 68
+(make-ballf 30 40 -10 5)
+
