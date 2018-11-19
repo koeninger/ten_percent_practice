@@ -77,15 +77,29 @@
 ; Editor KeyEvent -> Editor
 ; creates a new Editor based on input Editor and KeyEvent
 ; KeyEvent logic:
-;  "\b"
-;  "\t"
-;  "\r"
-;  all other input: insert input at editor-index and all chars to the right once index.
+;  "\b" remove char at editor-index - 1
+;  "\t" do nothing
+;  "\r" do nothing
+;  all other input: insert input at editor-index and
+;  move char at index and all chars to the right of it once
+(check-expect (edit (make-editor "a" 0) "b") (make-editor "ba" 1))
+(check-expect (edit (make-editor "a" 1) "b") (make-editor "ab" 2))
+(check-expect (edit (make-editor "" 0) "b") (make-editor "b" 1))
+(check-expect (edit (make-editor "a" 1) "\b") (make-editor "" 0))
 (define (edit ed ke)
   (cond
-    [(string=? ke "\b") ...]
-    [(string=? ke "\t") ...]
-    [(string=? ke "\r") ...]
-    [(string=? ke "left") ...]
-    [(string=? ke "right") ...]
-    [else ...]))
+    [(string=? ke "\b") (make-editor
+                         (string-append
+                          (substring (editor-text ed) 0 (- (editor-index ed) 1))
+                          (substring (editor-text ed) (editor-index ed) (string-length (editor-text ed))))
+                         (- (editor-index ed) 1))]
+    [(string=? ke "\t") ed]
+    [(string=? ke "\r") ed]
+    [(string=? ke "left") (make-editor (editor-text ed) (- (editor-index ed) 1))]
+    [(string=? ke "right") (make-editor (editor-text ed) (+ (editor-index ed) 1))]
+    [else (make-editor
+           (string-append
+            (substring (editor-text ed) 0 (editor-index ed))
+            ke
+            (substring (editor-text ed) (editor-index ed) (string-length (editor-text ed))))
+           (+ (editor-index ed) 1))]))
