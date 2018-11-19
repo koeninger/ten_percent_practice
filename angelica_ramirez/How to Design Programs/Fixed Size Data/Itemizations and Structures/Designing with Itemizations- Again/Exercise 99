@@ -29,6 +29,9 @@ Consider using check-random from BSL's testing framework to test such a function
              (ellipse 15 10 "solid" "purple")))
 (define UFO-HEIGHT (image-height UFO))
 (define UFO-WIDTH (image-width UFO))
+(define UFO-SPEED 7)
+(define JUMP 5)
+(define MISSILE-SPEED 10)
 
 (define TANK (rectangle 15 10 "solid" "olive"))
 (define TANK-HEIGHT (image-height TANK))
@@ -209,18 +212,62 @@ Consider using check-random from BSL's testing framework to test such a function
 ; si-move adds a random element for the UFO move to si-move-proper
 
 (define (si-move s)
-  (si-move-proper s (random-number s)))
+  (si-move-proper s (random 1)))
 
 ; Auxiliary functions for si-move
 
 ; SIGS Number -> SIGS
-; moves the objects, moves UFO predictably by delta 
+; moves the objects of space-invader predictably by delta
+; 0 - subtract 1 from UFO-SPEED
+; 1 - move -1 in x direction
+; 2 - move 1 in x direction
+(check-expect (si-move-proper AIM1 0) (make-aim (update-ufo (aim-ufo AIM1) 0) (update-tank (aim-tank AIM1))))
+(check-expect (si-move-proper FIRED1 1) (make-fired (update-ufo (fired-ufo FIRED1) 1)
+                                                    (update-tank (fired-tank FIRED1))
+                                                    (update-missile (fired-missile FIRED1))))
 
-(define (si-move-proper s delta)
-  (if (aim? s) ...))
+; (define (si-move-proper s n) s) ;stub
 
-; SIGS -> Number
+(define (si-move-proper s n)
+  (cond
+    [(aim? s) (make-aim
+               (update-ufo (aim-ufo s) n)
+               (update-tank (aim-tank s)))]
+    [(fired? s) (make-fired
+                 (update-ufo (fired-ufo s) n)
+                 (update-tank (fired-tank s))
+                 (update-missile (fired-missile s)))]))
+
+; UFO Number -> UFO
+; update a UFO with a random adjustment on tock
+; 0 - subtract JUMP from UFO-SPEED
+; 1 - move - JUMP in x direction
+; 2 - move + JUMP in x direction
+(check-expect (update-ufo UFO2 2) (make-posn (+ 20 JUMP) (+ 100 UFO-SPEED)))
+
+(define (update-ufo u n)
+  (cond
+    [(= n 0) (make-posn (posn-x u) (+ (posn-y u) (- UFO-SPEED JUMP)))]
+    [(= n 1) (make-posn (- (posn-x u) JUMP) (+ (posn-y u) UFO-SPEED))]
+    [(= n 2) (make-posn (+ (posn-x u) JUMP) (+ (posn-y u) UFO-SPEED))]))
+
+; Tank -> Tank
+; update tank x position with tank velocity on tock
+(check-expect (update-tank TANK2) (make-tank (+ 100 3) 3))
+
+(define (update-tank t)
+  (make-tank (+ (tank-loc t) (tank-vel t)) (tank-vel t)))
+
+; Missile -> Missile
+; update Missile y position on tock
+(check-expect (update-missile MISSILE2) (make-posn 22 (- 103 MISSILE-SPEED)))
+
+(define (update-missile m)
+  (make-posn (posn-x m) (- (posn-y m) MISSILE-SPEED)))
+
+
+; Number -> Number
 ; creates a random number in the internal [0, n)
+; possibly a different one each time it is called
 
-(define (random-number s)
-  (random ...))
+; (define (random-number n) (random 1))
