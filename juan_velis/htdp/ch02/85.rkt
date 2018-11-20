@@ -112,9 +112,9 @@
 ;
 (define (edit ed ke)
   (cond
-    [(and (= (string-length ke) 1) (or (string<=? "a" ke "z") (string<=? "0" ke "9")))
+    [(= (string-length ke) 1)
      (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]
-    [(string=? ke "\b") (backspace ed)]
+    [(string=? "\b" ke) (backspace ed)]
     [(string=? "left" ke) (move-left ed)]
     [(string=? "right" ke) (move-right ed)]    
     [else ed]
