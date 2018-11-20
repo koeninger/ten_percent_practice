@@ -1,0 +1,23 @@
+; Exercise 59. Finish the design of a world program that simulates the traffic light FSA. 
+
+; TrafficLight -> TrafficLight
+; yields the next state given current state s
+(check-expect (traffic-light-next "red") "green")
+(check-expect (traffic-light-next "green") "yellow")
+(check-expect (traffic-light-next "yellow") "red")
+(define (traffic-light-next s)
+  (cond
+    [(string=? "red" s) "green"]
+    [(string=? "green" s) "yellow"]
+    [(string=? "yellow" s) "red"]))
+
+; TrafficLight -> TrafficLight
+; yields the next state, given current state cs
+(define (tl-next cs) cs)
+ 
+; TrafficLight -> Image
+; renders the current state cs as an image
+(check-expect (tl-render "red") image)
+(check-expect (tl-render "yellow") image)
+(define (tl-render current-state)
+  (empty-scene 90 30))

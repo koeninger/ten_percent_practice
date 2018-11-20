@@ -73,19 +73,60 @@
     (draw-text (editor-text ed)))
    BOX))
 
-
 ; Editor KeyEvent -> Editor
 ; creates a new Editor based on input Editor and KeyEvent
 ; KeyEvent logic:
-;  "\b"
-;  "\t"
-;  "\r"
-;  all other input: insert input at editor-index and all chars to the right once index.
+;  "\b" remove char at editor-index - 1
+;  "\t" do nothing
+;  "\r" do nothing
+;  all other input: insert input at editor-index and
+;  move char at index and all chars to the right of it once
+(check-expect (edit (make-editor "a" 0) "b") (make-editor "ba" 1))
+(check-expect (edit (make-editor "a" 1) "b") (make-editor "ab" 2))
+(check-expect (edit (make-editor "abc" 2) "f") (make-editor "abfc" 3))
+(check-expect (edit (make-editor "" 0) "b") (make-editor "b" 1))
+(check-expect (edit (make-editor "a" 1) "\b") (make-editor "" 0))
+(check-expect (edit (make-editor "ab" 1) "\b") (make-editor "b" 0))
+(check-expect (edit (make-editor "a" 0) "\b") (make-editor "a" 0))
+(check-expect (edit (make-editor "a" 0) "right") (make-editor "a" 1))
+(check-expect (edit (make-editor "a" 1) "right") (make-editor "a" 1))
+(check-expect (edit (make-editor "ab" 0) "right") (make-editor "ab" 1))
+(check-expect (edit (make-editor "a" 0) "left") (make-editor "a" 0))
+(check-expect (edit (make-editor "a" 1) "left") (make-editor "a" 0))
+(check-expect (edit (make-editor "ab" 1) "left") (make-editor "ab" 0))
+(check-expect (edit (make-editor "a" 1) "\t") (make-editor "a" 1))
+(check-expect (edit (make-editor "a" 1) "\r") (make-editor "a" 1))
+
 (define (edit ed ke)
   (cond
-    [(string=? ke "\b") ...]
-    [(string=? ke "\t") ...]
-    [(string=? ke "\r") ...]
-    [(string=? ke "left") ...]
-    [(string=? ke "right") ...]
-    [else ...]))
+    [(string=? ke "\b") (if (> (editor-index ed) 0)
+                            (make-editor
+                             (string-append
+                              (substring (editor-text ed) 0 (- (editor-index ed) 1))
+                              (substring (editor-text ed) (editor-index ed) (string-length (editor-text ed))))
+                             (- (editor-index ed) 1))
+                            ed)]
+    [(string=? ke "\t") ed]
+    [(string=? ke "\r") ed]
+    [(string=? ke "left") (if (> (editor-index ed) 0)
+                              (make-editor (editor-text ed) (- (editor-index ed) 1))
+                              ed)]
+    [(string=? ke "right") (if (< (editor-index ed) (string-length (editor-text ed)))
+                               (make-editor (editor-text ed) (+ (editor-index ed) 1))
+                               ed)]
+    [else (if (< (image-width (draw-text (editor-text (insert-char ed ke)))) (image-width BOX))
+              (insert-char ed ke)
+              ed)]))
+
+(define (insert-char ed c)
+  (make-editor
+   (string-append
+    (substring (editor-text ed) 0 (editor-index ed))
+    c
+    (substring (editor-text ed) (editor-index ed) (string-length (editor-text ed))))
+   (+ (editor-index ed) 1)))
+
+(define (run t)
+  (big-bang (make-editor t 0)
+    [to-draw render]
+    [on-key edit]))
