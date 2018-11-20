@@ -22,6 +22,9 @@
 
 (define MISSILE (triangle MISSILE-WIDTH "solid" "red"))
 
+(define-struct aim [ufo tank])
+(define-struct fired [ufo tank missile])
+
 ; A UFO is a Posn. 
 ; interpretation (make-posn x y) is the UFO's location 
 ; (using the top-down, left-to-right convention)
@@ -35,7 +38,57 @@
 ; A Missile is a Posn. 
 ; interpretation (make-posn x y) is the missile's place
 
-(place-image
+
+; Tank Image -> Image 
+; adds t to the given image im
+(define (tank-render t im)
+  (place-image
+    TANK
+    (tank-loc t) HEIGHT-OF-WORLD
+    im))
+ 
+; UFO Image -> Image 
+; adds u to the given image im
+(define (ufo-render u im)
+  (place-image
+    UFO
+    (posn-x u) (posn-y u)
+    im))
+
+; MISSILE Image -> Image 
+; adds m to the given image im
+(define (missile-render m im)
+  (place-image
+    MISSILE
+    (posn-x m) (posn-y m)
+    im))
+
+; SIGS -> Image
+; renders the given game state on top of BACKGROUND 
+; for examples see figure 32
+(define (si-render s)
+  (cond
+    [(aim? s)
+     (tank-render (aim-tank s)
+                  (ufo-render (aim-ufo s) BACKGROUND))]
+    [(fired? s)
+     (tank-render
+       (fired-tank s)
+       (ufo-render (fired-ufo s)
+                   (missile-render (fired-missile s)
+                                   BACKGROUND)))]))
+
+
+
+
+(check-expect (si-render (make-aim (make-posn 20 10) (make-tank 28 -3))) (place-image
+ TANK
+  28 HEIGHT-OF-WORLD
+  (place-image
+   UFO
+   20 10
+   BACKGROUND)))
+(check-expect (si-render (make-fired (make-posn 20 10) (make-tank 28 -3) (make-posn 28 (- HEIGHT-OF-WORLD TANK-HEIGHT)))) (place-image
  TANK
   28 HEIGHT-OF-WORLD
   (place-image
@@ -44,4 +97,4 @@
    (place-image
     MISSILE
     28 (- HEIGHT-OF-WORLD TANK-HEIGHT)
-    BACKGROUND)))
+    BACKGROUND))))
