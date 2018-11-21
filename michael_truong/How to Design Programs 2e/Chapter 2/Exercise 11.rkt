@@ -1,5 +1,5 @@
 #lang racket
 
-(define (f x y)
+(define (distance x y)
   (sqrt (+ (expt x 2)
            (expt y 2))))

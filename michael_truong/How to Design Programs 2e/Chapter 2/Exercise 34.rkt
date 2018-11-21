@@ -3,7 +3,7 @@
 ; String -> String
 ; extracts the first character from a non-empty string (str)
 ; given:
-;    "hi" for str
+;    "hello_world" for str
 ; expected:
 ;    "h"
-(define (string-first str) (substring str 0 1))
+(define (string-first str) (if (> (string-length str) 0)(substring str 0 1) ""))
