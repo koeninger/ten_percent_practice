@@ -6,12 +6,23 @@
 
 ; TrafficLight -> TrafficLight
 ; yields the next state, given current state cs
-(define (tl-next cs) cs)
+(define (tl-next cs)
+  (traffic-light-next cs))
  
 ; TrafficLight -> Image
 ; renders the current state cs as an image
 (define (tl-render current-state)
-  (empty-scene 90 30))
+  (place-images/align
+   (list (circle 10 (if (string=? current-state "green") "solid" "outline") "green")
+         (circle 10 (if (string=? current-state "yellow") "solid" "outline") "yellow")
+         (circle 10 (if (string=? current-state "red") "solid" "outline") "red"))
+   (list (make-posn 15 15)
+         (make-posn 45 15)
+         (make-posn 75 15)
+         )
+   "center" "center"
+  (empty-scene 90 30)
+  ))
 
 ; TrafficLight -> TrafficLight
 ; simulates a clock-based American traffic light
@@ -29,3 +40,6 @@
     [(string=? "red" s) "green"]
     [(string=? "green" s) "yellow"]
     [(string=? "yellow" s) "red"]))
+
+
+(traffic-light-simulation "green")
