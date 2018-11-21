@@ -745,3 +745,14 @@ this is a ball falling down at 3 pixels per tick at position 5
 //Exercise 68
 (make-ballf 30 40 -10 5)
 
+//Exercise 70
+(define-struct centry [name home office cell])
+(centry-name (make-centry [name home office cell])) == name
+(centry-home (make-centry [name home office cell])) == home
+(centry-office (make-centry [name home office cell])) == office
+(centry-cell (make-centry [name home office cell])) == cell
+
+
+(define-struct phone [area number])
+(phone-area (make-phone [area number])) == area
+(phone-number (make-phone [area number])) == number
