@@ -78,8 +78,30 @@
                    (missile-render (fired-missile s)
                                    BACKGROUND)))]))
 
+; SIGS -> Boolean
+; stop when UFO and MISSILE are near or UFO reaches ground
+(define (si-game-over? s)
+  (cond
+    [(aim? s)
+     (>= (posn-y (aim-ufo s)) HEIGHT-OF-WORLD)]
+    [(fired? s)
+     (or
+      (>= (posn-y (fired-ufo s)) HEIGHT-OF-WORLD)
+      (direct-hit? s)
+      )]))
+(check-expect (si-game-over? (make-fired (make-posn 20 50) (make-tank 28 -3) (make-posn 25 55))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 20 10) (make-tank 28 -3) (make-posn 40 90))) #false)
+(check-expect (si-game-over? (make-aim (make-posn 20 50) (make-tank 28 -3))) #false)
+(check-expect (si-game-over? (make-aim (make-posn 20 HEIGHT-OF-WORLD) (make-tank 28 -3))) #true)
 
-
+; SIGS -> Boolean
+; are the missile and ufo near?
+(define (direct-hit? s)
+  (and
+   (<= (abs (- (posn-y (fired-ufo s)) (posn-y (fired-missile s)))) 10)
+   (<= (abs (- (posn-x (fired-ufo s)) (posn-x (fired-missile s)))) 10)))
+(check-expect (direct-hit? (make-fired (make-posn 20 10) (make-tank 28 -3) (make-posn 28 (- HEIGHT-OF-WORLD TANK-HEIGHT)))) #false)
+(check-expect (direct-hit? (make-fired (make-posn 20 10) (make-tank 28 -3) (make-posn 25 15))) #true)
 
 (check-expect (si-render (make-aim (make-posn 20 10) (make-tank 28 -3))) (place-image
  TANK
