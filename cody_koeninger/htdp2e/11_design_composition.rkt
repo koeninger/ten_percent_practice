@@ -326,12 +326,22 @@
 ; – (cons Posn '())
 ; – (cons Posn NELoP)
 
+; Image Posn Posn -> Image 
+; renders a line from p to q into img
+(check-expect (render-line MT (first square-p) (second square-p))
+              (scene+line MT (posn-x (first square-p)) (posn-y (first square-p)) (posn-x (second square-p)) (posn-y (second square-p)) "red"))
+(define (render-line img p q)
+  (scene+line
+    img
+    (posn-x p) (posn-y p) (posn-x q) (posn-y q)
+    "red"))
+
 ; Image NELoP -> Image 
 ; connects the dots in p by rendering lines in img
 (check-expect (connect-dots MT triangle-p)
               (scene+line
-               (scene+line MT 20 0 10 10 "red")
-               10 10 30 10 "red"))
+               (scene+line MT 20 10 20 20 "red")
+               20 20 30 20 "red"))
 (check-expect
   (connect-dots MT square-p)
   (scene+line
@@ -340,4 +350,33 @@
     20 10 20 20 "red")
    20 20 10 20 "red"))
 (define (connect-dots img p)
-  MT)
+  (cond
+    [(empty? (rest p)) img]
+    [else
+     (render-line
+       (connect-dots img (rest p))
+       (first p)
+       (second p))]))
+
+; Image Polygon -> Image 
+; adds an image of p to img
+(define (render-polygon img p)
+  (render-line (connect-dots img p)
+               (first p)
+               (last p)))
+
+; ex 192
+
+; it's acceptable to use last on polygons, because they have at least three items, it's equivalent to say
+; [(empty? (rest (rest (rest p)))) (third p)]
+; or
+; [(empty? (rest p)) (... (first p) ...)];
+
+; Polygon -> Posn
+; extracts the last item from p
+(check-expect (last triangle-p) (make-posn 30 20))
+(check-expect (last square-p) (make-posn 10 20))
+(define (last p)
+  (cond
+    [(empty? (rest (rest (rest p)))) (third p)]
+    [else (last (rest p))]))
