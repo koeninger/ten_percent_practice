@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname |85|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |86|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -107,16 +107,16 @@
 ; Editor, KeyEvent -> Editor
 ; Adds a character (0-1,a-z) ke to the end of the pre field of ed
 ; If backspace, removes a character to the left
-;
-;[(and (= (string-length ke) 1) (or (string<=? "a" ke "z") (string<=? "0" ke "9")))
+; Limit the string lenght to 20 characters
 ;
 (define (edit ed ke)
   (cond
-    [(= (string-length ke) 1)
-     (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]
     [(string=? "\b" ke) (backspace ed)]
     [(string=? "left" ke) (move-left ed)]
-    [(string=? "right" ke) (move-right ed)]    
+    [(string=? "right" ke) (move-right ed)]
+    [(and (= (string-length ke) 1)
+          (<= (string-length (string-append (editor-pre ed) (editor-post ed))) 20))
+     (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]    
     [else ed]
     )
 )
