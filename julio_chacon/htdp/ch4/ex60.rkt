@@ -1,21 +1,21 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex59) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex60) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
 ; TrafficLight -> TrafficLight
 ; yields the next state, given current state cs
 (define (tl-next cs)
-  (traffic-light-next cs))
+  (tl-next-numeric cs))
  
 ; TrafficLight -> Image
 ; renders the current state cs as an image
 (define (tl-render current-state)
   (place-images/align
-   (list (circle 10 (if (string=? current-state "green") "solid" "outline") "green")
-         (circle 10 (if (string=? current-state "yellow") "solid" "outline") "yellow")
-         (circle 10 (if (string=? current-state "red") "solid" "outline") "red"))
+   (list (circle 10 (if (= current-state 1) "solid" "outline") "green")
+         (circle 10 (if (= current-state 2) "solid" "outline") "yellow")
+         (circle 10 (if (= current-state 0) "solid" "outline") "red"))
    (list (make-posn 15 15)
          (make-posn 45 15)
          (make-posn 75 15)
@@ -41,5 +41,13 @@
     [(string=? "green" s) "yellow"]
     [(string=? "yellow" s) "red"]))
 
+; An N-TrafficLight is one of:
+; – 0 interpretation the traffic light shows red
+; – 1 interpretation the traffic light shows green
+; – 2 interpretation the traffic light shows yellow
 
-(traffic-light-simulation "green")
+; N-TrafficLight -> N-TrafficLight
+; yields the next state, given current state cs
+(define (tl-next-numeric cs) (modulo (+ cs 1) 3))
+
+(traffic-light-simulation 0)
