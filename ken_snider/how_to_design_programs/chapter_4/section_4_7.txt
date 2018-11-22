@@ -1,23 +1,41 @@
 ; Exercise 59. Finish the design of a world program that simulates the traffic light FSA. 
 
-; TrafficLight -> TrafficLight
-; yields the next state given current state s
-(check-expect (traffic-light-next "red") "green")
-(check-expect (traffic-light-next "green") "yellow")
-(check-expect (traffic-light-next "yellow") "red")
-(define (traffic-light-next s)
-  (cond
-    [(string=? "red" s) "green"]
-    [(string=? "green" s) "yellow"]
-    [(string=? "yellow" s) "red"]))
+(define LIGHT (place-image (circle 10 "outline" "red") 15 15
+                           (place-image (circle 10 "outline" "yellow") 45 15
+                                        (place-image (circle 10 "outline" "green") 75 15 (empty-scene 90 30)))))
+
+; A TrafficLight is one of the following Strings:
+; – "red"
+; – "green"
+; – "yellow"
+; interpretation the three strings represent the three 
+; possible states that a traffic light may assume
 
 ; TrafficLight -> TrafficLight
 ; yields the next state, given current state cs
-(define (tl-next cs) cs)
- 
+(check-expect (tl-next "green") "yellow")
+(check-expect (tl-next "yellow") "red")
+(check-expect (tl-next "red") "green")
+(define (tl-next cs)
+  (cond
+    [(string=? "red" cs) "green"]
+    [(string=? "green" cs) "yellow"]
+    [(string=? "yellow" cs) "red"]))
+
 ; TrafficLight -> Image
 ; renders the current state cs as an image
-(check-expect (tl-render "red") image)
-(check-expect (tl-render "yellow") image)
-(define (tl-render current-state)
-  (empty-scene 90 30))
+(check-expect (tl-render "red") (place-image (circle 10 "solid" "red") 15 15 LIGHT))
+(check-expect (tl-render "yellow") (place-image (circle 10 "solid" "yellow") 45 15 LIGHT))
+(check-expect (tl-render "green") (place-image (circle 10 "solid" "green") 75 15 LIGHT))
+(define (tl-render cs)
+  (cond
+    [(string=? "red" cs) (place-image (circle 10 "solid" "red") 15 15 LIGHT)]
+    [(string=? "yellow" cs) (place-image (circle 10 "solid" "yellow") 45 15 LIGHT)]
+    [(string=? "green" cs) (place-image (circle 10 "solid" "green") 75 15 LIGHT)]))
+
+; TrafficLight -> TrafficLight
+; simulates a clock-based American traffic light
+(define (traffic-light-simulation initial-state)
+  (big-bang initial-state
+    [to-draw tl-render]
+    [on-tick tl-next 1]))
