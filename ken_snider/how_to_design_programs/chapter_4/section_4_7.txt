@@ -71,3 +71,41 @@
 (define (tl-next-numeric cs) (modulo (+ cs 1) 3))
 
 ; This does not convey the intention more clearly. The connection between the numbers, and their meanings, is arbitrary. A red light using string "red" is clear and unambiguous by comparison. 
+
+; ===
+
+;Exercise 61. As From Functions to Programs says, programs must define constants and use names instead of actual constants. In this spirit, a data definition for traffic lights must use constants, too:This form of data definition is what a seasoned designer would use.
+;(define RED 0)
+;(define GREEN 1)
+;(define YELLOW 2)
+; 
+; An S-TrafficLight is one of:
+; – RED
+; – GREEN
+; – YELLOW
+;If the names are chosen properly, the data definition does not need an interpretation statement.
+; S-TrafficLight -> S-TrafficLight
+; yields the next state, given current state cs
+;     
+;(check-expect (tl-next- ... RED) YELLOW)
+;(check-expect (tl-next- ... YELLOW) GREEN)
+;
+;(define (tl-next-numeric cs)
+;  (modulo (+ cs 1) 3))
+;    
+;(define (tl-next-symbolic cs)
+;  (cond
+;    [(equal? cs RED) GREEN]
+;    [(equal? cs GREEN) YELLOW]
+;    [(equal? cs YELLOW) RED]))
+;
+;Above are two different functions that switch the state of a traffic light in a simulation program. Which of the two is properly designed using the recipe for itemization? Which of the two continues to work if you change the constants to the following
+;(define RED "red")
+;(define GREEN "green")
+;(define YELLOW "yellow")
+;Does this help you answer the questions?
+
+Obviously the itemized list is easier to read - As with the previous exercise, variables that are more obvious to humans will make for easier-maintained code - also evidenced by the fact that less information is needed in the function header.
+
+Designing a function that will work for any value of the constants above, versus a function that will only work for the integers 1-3 makes more sense, especially if there's any chance that the constants will change in the future. Additionally, the itemized condition is much more intuitive for future readers of the code.
+
