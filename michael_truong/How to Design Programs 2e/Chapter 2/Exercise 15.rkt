@@ -1,3 +1,4 @@
 #lang racket
 
-(define (==> sunny friday) (or (not sunny) friday))
+(define (==> sunny friday)
+  (or (not sunny) friday))
