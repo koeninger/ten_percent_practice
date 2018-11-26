@@ -756,3 +756,22 @@ this is a ball falling down at 3 pixels per tick at position 5
 (define-struct phone [area number])
 (phone-area (make-phone [area number])) == area
 (phone-number (make-phone [area number])) == number
+
+//Exercise 71
+(game-ball game0)
+(game-ball (make-game MIDDLE MIDDLE (make-posn CENTER CENTER)))
+(make-posn CENTER CENTER)
+(make-posn 200 200)
+
+(posn? (game-ball game0))
+(posn? (game-ball (make-game MIDDLE MIDDLE (make-posn CENTER CENTER))))
+(posn? (make-posn CENTER CENTER))
+(posn? (make-posn 200 200))
+true
+
+(game-left-player game0)
+(game-left-player (make-game MIDDLE MIDDLE (make-posn CENTER CENTER)))
+MIDDLE
+(quotient HEIGHT 2)
+(quotient 200 2)
+100
