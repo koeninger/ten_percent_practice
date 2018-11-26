@@ -129,22 +129,68 @@
 
 ; SIGS -> SIGS
 (define (si-move w)
-  (si-move-proper w (random (/ WIDTH-OF-WORLD 50))))
+  (si-move-proper w (ufo-random 1)))
 
+; Number
+(define (ufo-random u)
+  (- (random (/ WIDTH-OF-WORLD 50)) (/ (/ WIDTH-OF-WORLD 50) 2)))
+  
 ; SIGS Number -> SIGS 
 ; moves the space-invader objects predictably by delta
 (define (si-move-proper s delta)
   (cond
     [(aim? s)
      (make-aim
-      (make-posn (+ (posn-x (aim-ufo s)) delta) (+ (posn-y (aim-ufo s)) UFO-SPEED))
-      (make-tank (+ (tank-loc (aim-tank s)) (tank-vel (aim-tank s))) (tank-vel (aim-tank s))))]
+      (move-ufo (aim-ufo s) delta)
+      (move-tank (aim-tank s)))]
     [(fired? s)
      (make-fired
-      (make-posn (+ (posn-x (fired-ufo s)) delta) (+ (posn-y (fired-ufo s)) UFO-SPEED))
-      (make-tank (+ (tank-loc (fired-tank s)) (tank-vel (fired-tank s))) (tank-vel (fired-tank s)))
-      (make-posn (posn-x (fired-missile s)) (+ (posn-y (fired-missile s)) MISSILE-SPEED)))]))
+      (move-ufo (fired-ufo s) delta)
+      (move-tank (fired-tank s))
+      (move-missile (fired-missile s)))]))
 (check-expect (si-move-proper (make-fired (make-posn 20 10) (make-tank 28 -3) (make-posn 28 (- HEIGHT-OF-WORLD TANK-HEIGHT))) 4)
               (make-fired (make-posn 24 (+ 10 UFO-SPEED)) (make-tank 25 -3) (make-posn 28 (+ (- HEIGHT-OF-WORLD TANK-HEIGHT) MISSILE-SPEED))))
 (check-expect (si-move-proper (make-aim (make-posn 20 10) (make-tank 28 -3)) 4)
               (make-aim (make-posn 24 (+ 10 UFO-SPEED)) (make-tank 25 -3)))
+
+; tank -> tank
+(define (move-tank t)
+  (cond
+    [(< (tank-loc t) 0) (make-tank 0 0)]
+    [(> (tank-loc t) WIDTH-OF-WORLD) (make-tank WIDTH-OF-WORLD 0)]
+    [else (make-tank (+ (tank-loc t) (tank-vel t)) (tank-vel t))]))
+
+; ufo -> ufo
+(define (move-ufo u delta)
+  (cond
+    [(< (posn-x u) 0) (make-posn 0 (+ (posn-y u) UFO-SPEED))]
+    [(> (posn-x u) WIDTH-OF-WORLD) (make-posn WIDTH-OF-WORLD (+ (posn-y u) UFO-SPEED))]
+    [else (make-posn (+ (posn-x u) delta) (+ (posn-y u) UFO-SPEED))]))
+
+; missile -> missile
+(define (move-missile m)
+  (make-posn (posn-x m) (+ (posn-y m) MISSILE-SPEED)))
+
+; SIGS KeyEvent -> SIGS
+(define (si-control s ke)
+  (cond
+    [(aim? s)
+     (cond
+       [(key=? ke "left") (make-aim (aim-ufo s) (make-tank (tank-loc (aim-tank s)) (- 0 TANK-SPEED)))]
+       [(key=? ke "right") (make-aim (aim-ufo s) (make-tank (tank-loc (aim-tank s)) TANK-SPEED))]
+       [(key=? ke " ") (make-fired (aim-ufo s) (aim-tank s) (make-posn (tank-loc (aim-tank s)) (- HEIGHT-OF-WORLD TANK-HEIGHT)))]
+       )]
+    [(fired? s) s]))
+
+
+
+; AnimationState -> AnimationState
+; launches the program from some initial state
+(define (main s)
+  (big-bang s
+    [on-tick si-move]
+    [on-key si-control]
+    [to-draw si-render]
+    [stop-when si-game-over?]))
+
+(main (make-aim (make-posn 200 0) (make-tank 100 -3)))
