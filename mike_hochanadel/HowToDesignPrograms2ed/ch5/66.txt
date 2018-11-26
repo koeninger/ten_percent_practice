@@ -1,0 +1,19 @@
+(define-struct movie [title producer year])
+
+(make-movie "Blazing Saddles" "Mel Brooks" 1974)
+
+(define-struct person [name hair eyes phone])
+
+(make-person "Mike" "Brown" "Brown" "1234567890")
+
+(define-struct pet [name number])
+
+(make-pet "bozo" "234")
+
+(define-struct CD [artist title price])
+
+(make-CD "Kula Shaker" "K" 20.00)
+
+(define-struct sweater [material size producer])
+
+(make-sweater "wool" "XXL" "big bobs of broadway")
