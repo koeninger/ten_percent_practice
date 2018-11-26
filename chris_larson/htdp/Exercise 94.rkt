@@ -18,12 +18,18 @@
 (define TANK (rectangle TANK-WIDTH TANK-HEIGHT "solid" "green"))
 
 (define MISSILE-WIDTH 10)
-(define MISSILE-SPEED 5)
+(define MISSILE-SPEED -5)
 
 (define MISSILE (triangle MISSILE-WIDTH "solid" "red"))
 
 (define-struct aim [ufo tank])
 (define-struct fired [ufo tank missile])
+
+; A SIGS is one of: 
+; – (make-aim UFO Tank)
+; – (make-fired UFO Tank Missile)
+; interpretation represents the complete state of a 
+; space invader game
 
 ; A UFO is a Posn. 
 ; interpretation (make-posn x y) is the UFO's location 
@@ -120,3 +126,25 @@
     MISSILE
     28 (- HEIGHT-OF-WORLD TANK-HEIGHT)
     BACKGROUND))))
+
+; SIGS -> SIGS
+(define (si-move w)
+  (si-move-proper w (random (/ WIDTH-OF-WORLD 50))))
+
+; SIGS Number -> SIGS 
+; moves the space-invader objects predictably by delta
+(define (si-move-proper s delta)
+  (cond
+    [(aim? s)
+     (make-aim
+      (make-posn (+ (posn-x (aim-ufo s)) delta) (+ (posn-y (aim-ufo s)) UFO-SPEED))
+      (make-tank (+ (tank-loc (aim-tank s)) (tank-vel (aim-tank s))) (tank-vel (aim-tank s))))]
+    [(fired? s)
+     (make-fired
+      (make-posn (+ (posn-x (fired-ufo s)) delta) (+ (posn-y (fired-ufo s)) UFO-SPEED))
+      (make-tank (+ (tank-loc (fired-tank s)) (tank-vel (fired-tank s))) (tank-vel (fired-tank s)))
+      (make-posn (posn-x (fired-missile s)) (+ (posn-y (fired-missile s)) MISSILE-SPEED)))]))
+(check-expect (si-move-proper (make-fired (make-posn 20 10) (make-tank 28 -3) (make-posn 28 (- HEIGHT-OF-WORLD TANK-HEIGHT))) 4)
+              (make-fired (make-posn 24 (+ 10 UFO-SPEED)) (make-tank 25 -3) (make-posn 28 (+ (- HEIGHT-OF-WORLD TANK-HEIGHT) MISSILE-SPEED))))
+(check-expect (si-move-proper (make-aim (make-posn 20 10) (make-tank 28 -3)) 4)
+              (make-aim (make-posn 24 (+ 10 UFO-SPEED)) (make-tank 25 -3)))
