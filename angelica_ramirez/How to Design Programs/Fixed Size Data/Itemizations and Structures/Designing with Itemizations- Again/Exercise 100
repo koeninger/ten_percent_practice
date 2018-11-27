@@ -260,21 +260,47 @@ also define si-main which uses big-bang
 ; (define (random-number n) (random 1))
 
 ; SIGS KeyEvent -> SIGS
-; reacts to three different keys 
+; reacts to three different keys
+; moves tank via left and right arrow
+; moves missile with space bar
 
 ; (define (si-control s ke) s); stub 
 
+(define (si-control s ke)
+  (cond
+    [(key=? ke "left") (turn-left s)]
+    [(key=? ke "right") (turn-right s)]
+    [(key=? ke " ") (fire-missile s)]
+    [else s]))
+
 ; Auxiliary functions for si-control 
+
+; SIGS -> SIGS 
+; pressing the left arrow moves tank left
+
+; (define turn-left s) s); stub
+
+(define (turn-left s)
+  (cond
+    [(aim? s) (make-aim
+               (aim-ufo s)
+               (tank-left (aim-tank s)))]
+    [(fired? s) (make-fired
+                 (fired-ufo s)
+                 (tank-left (fired-tank s))
+                 (fired-missile s))]))
+; Tank -> Tank
+; turns tank left
+(define (tank-left t)
+  (cond
+    [ (<= 0 (tank-vel t)) (make-tank (tank-loc t) (- 0 (tank-vel t)))]
+    [else t]))
 
 ; SIGS -> SIGS 
 ; pressing the right arrow moves tank right 
 
 ; (define turn-right s) s); stub
 
-; SIGS -> SIGS 
-; pressing the left arrow moves tank left
-
-; (define turn-left s) s); stub
 
 ; SIGS -> SIGS 
 ; fires the missile when pressing space bar 
@@ -285,3 +311,10 @@ also define si-main which uses big-bang
 ; start the world 
 
 ; (define (main ws) s); stub 
+
+(define (main s)
+  (big-bang s
+    [to-draw si-render]
+    [on-tick si-move]
+    [on-key si-control]
+    [stop-when si-game-over?]))
