@@ -2,4 +2,5 @@
 
 (require 2htdp/image)
 
-(define (image-area img) (* (image-width img) (image-height img)))
+(define (image-area img)
+  (* (image-width img) (image-height img)))

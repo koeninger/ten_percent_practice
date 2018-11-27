@@ -33,14 +33,8 @@
                       (read-file in-signature))))
 
 (define in-first "in-fst.dat")
-(write-file in-first "Michael")
-
 (define in-lst "in-lst.dat")
-(write-file in-lst "Truong")
-
 (define in-signature "in-signature.dat")
-(write-file in-signature "Nigerian Prince")
-
 (define out "out.dat")
 
 (main in-first in-lst in-signature out)

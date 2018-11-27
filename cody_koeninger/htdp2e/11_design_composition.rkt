@@ -380,3 +380,18 @@
   (cond
     [(empty? (rest (rest (rest p)))) (third p)]
     [else (last (rest p))]))
+
+; ex 193
+(check-expect (render-poly2 MT square-p) (render-polygon MT square-p))
+(define (render-poly2 img p)
+  (connect-dots img (cons (last p) p)))
+
+(define (add-at-end l s)
+  (cond
+    [(empty? l) (cons s '())]
+    [else
+     (cons (first l) (add-at-end (rest l) s))]))
+
+(check-expect (render-poly3 MT square-p) (render-polygon MT square-p))
+(define (render-poly3 img p)
+  (connect-dots img (add-at-end p (first p))))

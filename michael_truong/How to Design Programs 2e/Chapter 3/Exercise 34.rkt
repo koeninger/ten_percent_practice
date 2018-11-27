@@ -6,4 +6,7 @@
 ;    "hello_world" for str
 ; expected:
 ;    "h"
-(define (string-first str) (if (> (string-length str) 0)(substring str 0 1) ""))
+(define (string-first str)
+  (cond
+    [(> (string-length str) 0) (substring str 0 1)]
+    [else ""]))

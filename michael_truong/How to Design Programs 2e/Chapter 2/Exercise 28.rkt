@@ -18,13 +18,12 @@
   (- (revenue ticket-price)
      (cost ticket-price)))
 
-(define PENNY)
-(define UPPER-BOUND)
+(define PENNY .1)
+(define UPPER-BOUND 5)
 (define (optimize ticket-price best-price max-profit)
-  (if (<= ticket-price UPPER-BOUND)
-      (if (> (profit ticket-price) max-profit)
-          (optimize (+ ticket-price PENNY) ticket-price (profit ticket-price))
-          (optimize (+ ticket-price PENNY) best-price max-profit))
-      best-price))
+  (cond [(<= ticket-price UPPER-BOUND) (cond
+                                         [(> (profit ticket-price) max-profit) (optimize (+ ticket-price PENNY) ticket-price (profit ticket-price))]
+                                         [else (optimize (+ ticket-price PENNY) best-price max-profit)])]
+        [else best-price]))
 
 (optimize 0 0 (profit 0))
