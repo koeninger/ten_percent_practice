@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 94|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 101|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
 (define WIDTH-OF-WORLD 400)
 (define HEIGHT-OF-WORLD 400)
 (define BACKGROUND (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
@@ -22,14 +22,17 @@
 
 (define MISSILE (triangle MISSILE-WIDTH "solid" "red"))
 
-(define-struct aim [ufo tank])
-(define-struct fired [ufo tank missile])
-
-; A SIGS is one of: 
-; – (make-aim UFO Tank)
-; – (make-fired UFO Tank Missile)
-; interpretation represents the complete state of a 
+(define-struct sigs [ufo tank missile])
+; A SIGS.v2 (short for SIGS version 2) is a structure:
+;   (make-sigs UFO Tank MissileOrNot)
+; interpretation represents the complete state of a
 ; space invader game
+ 
+; A MissileOrNot is one of: 
+; – #false
+; – Posn
+; interpretation#false means the missile is in the tank;
+; Posn says the missile is at that location
 
 ; A UFO is a Posn. 
 ; interpretation (make-posn x y) is the UFO's location 
@@ -60,6 +63,13 @@
     UFO
     (posn-x u) (posn-y u)
     im))
+
+; MissileOrNot Image -> Image 
+; adds an image of missile m to scene s 
+(define (missile-render.v2 m s)
+  s)
+(check-expect (missile-render.v2 #false BACKGROUND) BACKGROUND)
+(check-expect (missile-render.v2 (make-posn 32 (- HEIGHT-OF-WORD TANK-HEIGHT)) BACKGROUND) (place-image MISSILE 32 (- HEIGHT-OF-WORD TANK-HEIGHT) BACKGROUND))
 
 ; MISSILE Image -> Image 
 ; adds m to the given image im
