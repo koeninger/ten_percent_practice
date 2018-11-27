@@ -380,3 +380,44 @@
   (cond
     [(empty? (rest (rest (rest p)))) (third p)]
     [else (last (rest p))]))
+
+; ex 193
+(check-expect (render-poly2 MT square-p) (render-polygon MT square-p))
+(define (render-poly2 img p)
+  (connect-dots img (cons (last p) p)))
+
+(define (add-at-end l s)
+  (cond
+    [(empty? l) (cons s '())]
+    [else
+     (cons (first l) (add-at-end (rest l) s))]))
+
+(check-expect (render-poly3 MT square-p) (render-polygon MT square-p))
+(define (render-poly3 img p)
+  (connect-dots img (add-at-end p (first p))))
+
+; ex 194
+
+; Image NELoP Posn -> Image 
+; connects the dots in p by rendering lines in img, plus line to final
+(check-expect (connect-dots2 MT triangle-p (first triangle-p))
+              (scene+line
+               (scene+line
+                (scene+line MT 20 10 20 20 "red")
+                20 20 30 20 "red")
+               30 20 20 10 "red"))
+(check-expect
+  (connect-dots2 MT square-p (first square-p))
+  (scene+line
+   (scene+line
+   (scene+line
+    (scene+line MT 10 10 20 10 "red")
+    20 10 20 20 "red")
+   20 20 10 20 "red")
+   10 20 10 10 "red"))
+(define (connect-dots2 img p final)
+  (connect-dots img (add-at-end p final)))
+
+(check-expect (render-poly4 MT square-p) (render-polygon MT square-p))
+(define (render-poly4 img p)
+  (connect-dots2 img p (first p)))

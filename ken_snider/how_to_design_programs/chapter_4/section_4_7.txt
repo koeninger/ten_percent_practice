@@ -108,4 +108,58 @@
 Obviously the itemized list is easier to read - As with the previous exercise, variables that are more obvious to humans will make for easier-maintained code - also evidenced by the fact that less information is needed in the function header.
 
 Designing a function that will work for any value of the constants above, versus a function that will only work for the integers 1-3 makes more sense, especially if there's any chance that the constants will change in the future. Additionally, the itemized condition is much more intuitive for future readers of the code.
+; ===
+
+; Exercise 62. During a door simulation the “open” state is barely visible. Modify door-simulation so that the clock ticks once every three seconds. Rerun the simulation.
+
+; ---
+
+; A DoorState is one of:
+; – LOCKED
+; – CLOSED
+; – OPEN
+
+(define LOCKED "locked")
+(define CLOSED "closed")
+(define OPEN "open")
+
+; DoorState -> DoorState
+; door-closer transitions DoorState to CLOSED
+; if the state is OPEN
+(check-expect (door-closer LOCKED) LOCKED)
+(check-expect (door-closer CLOSED) CLOSED)
+(check-expect (door-closer OPEN) CLOSED)
+(define (door-closer state-of-door)
+  (cond
+    [(string=? LOCKED state-of-door) LOCKED]
+    [(string=? CLOSED state-of-door) CLOSED]
+    [(string=? OPEN state-of-door) CLOSED]))
+
+; DoorState KeyEvent -> Doorstate
+; door-action alters DoorState s based on KeyEvent k
+(check-expect (door-action LOCKED "u") CLOSED)
+(check-expect (door-action CLOSED "l") LOCKED)
+(check-expect (door-action CLOSED " ") OPEN)
+(check-expect (door-action OPEN "a") OPEN)
+(check-expect (door-action CLOSED "a") CLOSED)
+(define (door-action s k)
+  (cond
+    [(and (string=? LOCKED s) (string=? "u" k)) CLOSED]
+    [(and (string=? CLOSED s) (string=? "l" k)) LOCKED]
+    [(and (string=? CLOSED s) (string=? " " k)) OPEN]
+    [else s]))
+
+; DoorState -> Render
+; door-render renders the current DoorState s into an image
+(check-expect (door-render CLOSED)(text CLOSED 40 "red"))
+(define (door-render s)
+  (text s 40 "red"))
+
+; DoorState -> DoorState
+; simulates a door with an automatic door closer
+(define (door-simulation initial-state)
+  (big-bang initial-state
+    [on-tick door-closer 3]
+    [on-key door-action]
+    [to-draw door-render]))
 
