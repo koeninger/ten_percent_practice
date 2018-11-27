@@ -1,0 +1,39 @@
+#lang racket
+
+(require 2htdp/universe)
+(require 2htdp/image)
+
+(define MAXIMUM-HAPPINESS-LEVEL 100)
+(define FRAME-HEIGHT 10)
+(define FRAME (rectangle MAXIMUM-HAPPINESS-LEVEL FRAME-HEIGHT "outline" "black"))
+
+; WorldState -> WorldState
+; with each clock tick, happiness decreases by -0.1;
+; it never falls below 0, the minimum happiness score
+(define (tock x)
+  (max (- x .1) 0))
+
+; WorldState -> WorldState
+; every time the down arrow key is pressed, happiness increases by 1/5;
+; every time the up arrow is pressed, happiness jumps by 1/3.
+(define (key-handler ws key)
+  (cond
+    [(key=? key "up") (min (+ ws 1/3) MAXIMUM-HAPPINESS-LEVEL)]
+    [(key=? key "down") (min (+ ws .2) MAXIMUM-HAPPINESS-LEVEL)]
+    [else ws]))
+
+; WorldState -> Image
+; places the CAT into the BACKGROUND scene,
+; according to the given world state
+(define (render ws)
+   (overlay/align "left" "middle" FRAME (rectangle (* (image-width FRAME) (/ ws MAXIMUM-HAPPINESS-LEVEL)) FRAME-HEIGHT "solid" "red")))
+
+; WorldState -> WorldState
+; launches the program from some initial state 
+(define (gauge-prog)
+   (big-bang MAXIMUM-HAPPINESS-LEVEL
+     [on-tick tock]
+     [on-key key-handler]
+     [to-draw render]))
+
+(gauge-prog)
