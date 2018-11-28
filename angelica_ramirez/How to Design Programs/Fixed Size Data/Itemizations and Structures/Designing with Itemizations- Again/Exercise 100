@@ -277,7 +277,13 @@ also define si-main which uses big-bang
 
 ; SIGS -> SIGS 
 ; pressing the left arrow moves tank left
-
+(check-expect (turn-left AIM1) (make-aim
+                                (aim-ufo AIM1)
+                                (tank-left (aim-tank AIM1))))                                                           
+(check-expect (turn-left FIRED1) (make-fired
+                                  (fired-ufo FIRED1)
+                                  (tank-left (fired-tank FIRED1))
+                                  (fired-missile FIRED1)))
 ; (define turn-left s) s); stub
 
 (define (turn-left s)
@@ -291,6 +297,11 @@ also define si-main which uses big-bang
                  (fired-missile s))]))
 ; Tank -> Tank
 ; turns tank left
+(check-expect (tank-left TANK1) TANK1)
+(check-expect (tank-left TANK2) (make-tank 100 (- 0 3)))
+
+; (define (tank-left t) t) ;stub
+
 (define (tank-left t)
   (cond
     [ (<= 0 (tank-vel t)) (make-tank (tank-loc t) (- 0 (tank-vel t)))]
@@ -298,15 +309,51 @@ also define si-main which uses big-bang
 
 ; SIGS -> SIGS 
 ; pressing the right arrow moves tank right 
+(check-expect (turn-right AIM1) (make-aim
+                                 (aim-ufo AIM1)
+                                 (tank-right (aim-tank AIM1))))
+(check-expect (turn-right FIRED1) (make-fired
+                                   (fired-ufo FIRED1)
+                                   (tank-right (fired-tank FIRED1))
+                                   (fired-missile FIRED1)))
+; (define (turn-right s) s); stub
 
-; (define turn-right s) s); stub
+(define (turn-right s)
+  (cond
+    [(aim? s) (make-aim
+               (aim-ufo s)
+               (tank-right (aim-tank s)))]
+    [(fired? s) (make-fired
+                 (fired-ufo s)
+                 (tank-right (fired-tank s))
+                 (fired-missile s))]))
 
+; Tank -> Tank
+; turns tank right
+(check-expect (tank-right TANK1) (make-tank 28 (+ 0 -3)))                                  
+(check-expect (tank-right TANK2) TANK2)
+; (define (tank-right t) t) ;stub
+
+(define (tank-right t)
+  (cond
+    [ (> 0 (tank-vel t)) (make-tank (tank-loc t) (+ 0 (tank-vel t)))]
+    [else t]))
 
 ; SIGS -> SIGS 
 ; fires the missile when pressing space bar 
+; converts AIM to a FIRED
 
 ; (define fire-missile s) s) 
-
+(define (fire-missile s)
+  (cond
+    [(aim? s) (make-fired
+               (aim-ufo s)
+               (aim-tank s)
+               (make-posn
+                (+ (tank-loc (aim-tank s))
+                   (tank-vel (aim-tank s)))
+                (- HEIGHT (/ TANK-HEIGHT 2))))]
+    [(fired? s) s]))
 ; SIGS -> SIGS 
 ; start the world 
 
@@ -315,6 +362,6 @@ also define si-main which uses big-bang
 (define (main s)
   (big-bang s
     [to-draw si-render]
-    [on-tick si-move]
+    [on-tick si-move .4]
     [on-key si-control]
     [stop-when si-game-over?]))
