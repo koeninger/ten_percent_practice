@@ -97,4 +97,14 @@
 
 ; ===
 
+; Exercise 64. Design the function manhattan-distance, which measures the Manhattan distance of the given posn to the origin.
 
+; Posn -> Number
+; computes the Manhattan distance (blocks across and up) to the origin) 
+(check-expect (manhattan-distance (make-posn 0 5)) 5)
+(check-expect (manhattan-distance (make-posn 7 0)) 7)
+(check-expect (manhattan-distance (make-posn 3 4)) 7)
+(define (manhattan-distance ap)
+    (+ (posn-x ap) (posn-y ap)))
+
+; ===
