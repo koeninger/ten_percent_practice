@@ -1,0 +1,18 @@
+#lang racket
+
+(require 2htdp/image)
+(require 2htdp/universe)
+
+(define (on-tick color)
+  (cond
+    [(string=? "red" s) "green"]
+    [(string=? "green" s) "yellow"]
+    [(string=? "yellow" s) "red"]))
+
+(define (to-draw color)
+  ())
+
+(define (gauge-prog)
+   (big-bang MAX-HAPPINESS
+     [on-tick tock]
+     [to-draw render]))
