@@ -1,0 +1,34 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 103|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+; A Spider is a structure
+; (make-spider Number Number Number Number)
+; interpretation (make-spider #legs width height depth)
+
+; An Elephant is a structure
+; (make-elephant Number Number Number)
+; interpretation (make-elephant width height depth)
+
+; A boa is a structure
+; (make-boa Number Number)
+; interpretation (make-boa length girth)
+
+; An armadillos is a structure
+; (make-armadillos Number Number Number)
+; interpretation (make-armedillos width height depth)
+
+; A cage is a structure
+; (make-cage Number Number Number)
+; interpretation (make-cage width length depth)
+
+(define (fits? animal cage)
+  (cond
+    [(spider? animal) (smaller? (spider-width animal) (spider-height animal) (spider-depth animal) cage)]
+    [(elephant? animal) (smaller? (elephant-width animal) (elephant-height animal) (elephant-depth animal) cage)]
+    [(boa? animal) (smaller? (boa-length animal) (boa-girth animal) (boa-girth animal) cage)]
+    [(armadillos? animal) (smaller? (armadillos-width animal) (armadillos-height animal) (armadillos-depth animal) cage)]))
+
+(define (smaller? l w d cage)
+  (and (< l (cage-length cage))
+       (< w (cage-width cage))
+       (< d (cage-depth cage))))
