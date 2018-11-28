@@ -775,3 +775,21 @@ MIDDLE
 (quotient HEIGHT 2)
 (quotient 200 2)
 100
+
+//Exercise 72
+(define-struct phone [area number])
+; A Phone is a structure:
+;   (make-phone Number Number)
+; interpretation (make-phone a n) means
+; a phone number with an area code a
+; and a local number n
+
+(define-struct phone# [area switch num])
+; A Phone# is a structure:
+;   (make-phone# Number Number Number)
+; interpretation (make-phone a s n) means
+; a phone number with an area code a
+; an exchange s
+; and a local number n
+
+; 
