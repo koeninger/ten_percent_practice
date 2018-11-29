@@ -792,4 +792,9 @@ MIDDLE
 ; an exchange s
 ; and a local number n
 
-; 
+//Exercise 73
+; Posn Number -> Posn
+; change x coordrinate of p to n
+(define (posn-up-x p n)
+    (make-posn n (posn-y p)))
+    

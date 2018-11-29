@@ -23,3 +23,35 @@
     [(empty? d) 0]
     [(cons? d) (+ (if (string=? c (string-ith (first d) 0)) 1 0)
                   (starts-with# c (rest d)))]))
+
+;ex 196
+; letter and count
+(define-struct letter-count [letter count])
+(define (letter c) (letter-count-letter c))
+(define (count c) (letter-count-count c))
+
+; dictionary -> list of letter-count
+; how often each letter is used as first in word in dictionary
+(check-expect (count-by-letter (list "apple" "abracadabra" "bob"))
+              (list (make-letter-count "a" 2) (make-letter-count "b" 1)))
+(define (count-by-letter d)
+  (cond
+    [(empty? d) '()]
+    [(cons? d)
+     (merge-letter-counts (make-letter-count (string-ith (first d) 0) 1)
+                          (count-by-letter (rest d)))]))
+
+; letter-count list-of-letter-count -> list-of-letter-count
+; adds letter-count to the list, assumes dictionary words are in order
+(check-expect (merge-letter-counts (make-letter-count "b" 1) (list (make-letter-count "b" 2) (make-letter-count "a" 3)))
+              (list (make-letter-count "b" 3) (make-letter-count "a" 3)))
+(check-expect (merge-letter-counts (make-letter-count "b" 1) '())
+              (list (make-letter-count "b" 1)))
+(define (merge-letter-counts c cs)
+  (cond
+    [(empty? cs) (list c)]
+    [(cons? cs)
+     (if (string=? (letter c) (letter (first cs)))
+         (cons (make-letter-count (letter c) (+ (count c) (count (first cs))))
+               (rest cs))
+         (cons c cs))]))
