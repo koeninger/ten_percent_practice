@@ -60,7 +60,7 @@
 (define-struct vehicle [seats plate mpg])
 
 (define (efficiency vehicle)
-  ... (vehicle-seats vehicle) ... (vehicle-plate vehicle) ... (vehicle-mpg vehicle) ...)
+  (... (vehicle-seats vehicle) ... (vehicle-plate vehicle) ... (vehicle-mpg vehicle) ...))
 
 ; A Coordinate is one of: 
 ; – a NegativeNumber 
