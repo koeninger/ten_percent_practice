@@ -336,13 +336,24 @@ also define si-main which uses big-bang
 
 (define (tank-right t)
   (cond
-    [ (> 0 (tank-vel t)) (make-tank (tank-loc t) (+ 0 (tank-vel t)))]
+    [ (< (tank-vel t) 0) (make-tank (tank-loc t) (- 0 (tank-vel t)))]
     [else t]))
 
 ; SIGS -> SIGS 
 ; fires the missile when pressing space bar 
 ; converts AIM to a FIRED
-
+(check-expect (fire-missile AIM1) (make-fired
+                                    (aim-ufo AIM1)
+                                    (aim-tank AIM1)
+                                    (make-posn (+ (tank-loc (aim-tank AIM1))
+                                                  (tank-vel (aim-tank AIM1)))
+                                               (- HEIGHT (/ TANK-HEIGHT 2)))))
+(check-expect (fire-missile FIRED1) (make-fired
+                                      (fired-ufo FIRED1)
+                                      (fired-tank FIRED1)
+                                      (make-posn (+ (tank-loc (fired-tank FIRED1))
+                                                    (tank-vel (fired-tank FIRED1)))
+                                                 (- HEIGHT (/ TANK-HEIGHT 2)))))
 ; (define fire-missile s) s) 
 (define (fire-missile s)
   (cond
@@ -353,7 +364,12 @@ also define si-main which uses big-bang
                 (+ (tank-loc (aim-tank s))
                    (tank-vel (aim-tank s)))
                 (- HEIGHT (/ TANK-HEIGHT 2))))]
-    [(fired? s) s]))
+    [(fired? s) (make-fired
+                 (fired-ufo s)
+                 (fired-tank s)
+                 (make-posn (+ (tank-loc (fired-tank s))
+                               (tank-vel (fired-tank s)))
+                            (- HEIGHT (/ TANK-HEIGHT 2))))]))
 ; SIGS -> SIGS 
 ; start the world 
 
@@ -361,7 +377,9 @@ also define si-main which uses big-bang
 
 (define (main s)
   (big-bang s
+    [on-tick si-move]
     [to-draw si-render]
-    [on-tick si-move .4]
     [on-key si-control]
-    [stop-when si-game-over?]))
+    [stop-when si-game-over? si-render-final]))
+
+(main AIM1)
