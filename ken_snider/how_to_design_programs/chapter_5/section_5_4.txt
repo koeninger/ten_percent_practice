@@ -40,3 +40,19 @@ sweater-material
 sweater-size
 sweater-producer
 sweater?
+
+; ===
+
+; Exercise 66. Revisit the structure type definitions of exercise 65. Make sensible guesses as to what kind of values go with which fields. Then create at least one instance per structure type definition.
+
+(define-struct movie [title producer year])
+(define-struct person [name hair eyes phone])
+(define-struct pet [name number])
+(define-struct CD [artist title price])
+(define-struct sweater [material size producer])
+
+(make-movie "NPM Wars" "Nodius Maximus" 2019)
+(make-person "Bob" "red" "two" "515-555-1234")
+(make-pet "Rogue" 4)
+(make-CD "The Red Hats" "Number 8 baby!" "IBM")
+(make-sweater "alpaca" "XXL" "NiceSweatshop")
