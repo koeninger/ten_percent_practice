@@ -10,6 +10,10 @@ also define si-main which uses big-bang
 (define WIDTH 200)
 (define HEIGHT 200)
 
+; physical constants
+(define WIDTH 200)
+(define HEIGHT 200)
+
 ; graphical constants
 (define UFO (overlay
              (rectangle 20 2 "solid" "purple")
@@ -183,16 +187,14 @@ also define si-main which uses big-bang
            (+ (/ UFO-HEIGHT 2) (/ MISSILE-HEIGHT 2)))))
 
 ; UFO MISSILE -> Image
-; renders the final state of the game 
-(check-expect (si-render-final UFO2 (make-posn 20 100)) (overlay (text "YOU WON" 30 "green") BACKGROUND))
-(check-expect (si-render-final (make-posn 10 200) TANK1) (overlay (text "GAME OVER" 30 "red") BACKGROUND))
+; renders the final state of the game  BACKGROUND))
 
 ; (define (si-render-final s) i) ;stub
 
-(define (si-render-final u m)
-  (cond
-    [(ufo-landed? u) (overlay (text "GAME OVER" 30 "red") BACKGROUND)]
-    [(ufo-hit? u m) (overlay (text "YOU WON" 30 "green") BACKGROUND)]))
+(define (si-render-final s)
+  (overlay (text "GAME OVER" 20 "red") BACKGROUND))
+  
+
 
 ; SIGS -> SIGS
 ; determines which position the objects move for every clock tick 
