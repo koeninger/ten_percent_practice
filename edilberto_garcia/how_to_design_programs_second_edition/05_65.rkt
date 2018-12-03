@@ -15,3 +15,33 @@
 
 ; Write down the names of the functions (constructors, selectors, and predicates) that each introduces.
 
+
+;make-movie
+;  movie-title
+;  movie-producer
+;  movie-year
+;movie?
+
+;make-person
+;  person-name
+;  person-hair
+;  person-eyes
+;  person-phone
+;person?
+
+;make-pet
+;  pet-name
+;  pet-number
+;pet?
+
+;make-CD
+;  CD-artist
+;  CD-title
+;  CD-price
+;CD?
+
+;make-sweater
+;  sweater-material
+;  sweater-size
+;  sweater-producer
+;sweater?
