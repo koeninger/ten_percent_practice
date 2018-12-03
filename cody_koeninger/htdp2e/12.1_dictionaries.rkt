@@ -55,3 +55,26 @@
          (cons (make-letter-count (letter c) (+ (count c) (count (first cs))))
                (rest cs))
          (cons c cs))]))
+
+; ex 197
+
+; dictionary -> string
+; letter count for letter that occurs most often as the first one in a word
+(check-expect (most-frequent (list "apple" "abracadabra" "bob"))
+              "a")
+(define (most-frequent d)
+  (letter (max-by-count* (count-by-letter d))))
+
+; list-of-letter-count -> letter-count
+; letter with maximum count
+(check-expect (max-by-count* (list (make-letter-count "b" 1) (make-letter-count "a" 2) (make-letter-count "c" 1))) (make-letter-count "a" 2))
+(define (max-by-count* cs)
+  (cond
+    [(empty? cs) (error 'max-by-count "no maximum for empty list")]
+    [(empty? (rest cs)) (first cs)]
+    [(cons? cs) (max-by-count (first cs) (max-by-count* (rest cs)))]
+    ))
+
+; really would like to have local variables by now...
+(define (max-by-count a b)
+  (if (> (count a) (count b)) a b))
