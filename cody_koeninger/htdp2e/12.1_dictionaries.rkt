@@ -78,3 +78,32 @@
 ; really would like to have local variables by now...
 (define (max-by-count a b)
   (if (> (count a) (count b)) a b))
+
+; ex 198
+
+; dictionary -> list of dictionary
+; one dictionary per letter in input dictionary
+(check-expect (words-by-first-letter (list "a" "aa" "b" "bb"))
+              (list (list "a" "aa") (list "b" "bb")))
+(define (words-by-first-letter d)
+  (cond
+    [(empty? d) '()]
+    [(empty? (rest d)) (list (list (first d)))]
+    [(cons? d)
+     ; for the love of god, local variables...
+     (if (string=? (string-ith (first d) 0) (string-ith (first (first (words-by-first-letter (rest d)))) 0))
+         (cons (cons (first d) (first (words-by-first-letter (rest d)))) (rest (words-by-first-letter (rest d))))
+         (cons (list (first d)) (words-by-first-letter (rest d))))]))
+
+; see most-frequent
+(check-expect (most-frequent (list "a" "aa" "b" "c")) (most-frequent.v2 (list "a" "aa" "b" "c")))
+(define (most-frequent.v2 d)
+  (letter (max-by-count* (count-by-letter.v2 (words-by-first-letter d)))))
+
+; list of dictionary -> list of letter count
+(define (count-by-letter.v2 ld)
+  (cond
+    [(empty? ld) '()]
+    [(cons? ld)
+     (cons (make-letter-count (string-ith (first (first ld)) 0) (length (first ld)))
+           (count-by-letter.v2 (rest ld)))]))
