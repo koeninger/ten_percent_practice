@@ -56,3 +56,21 @@ sweater?
 (make-pet "Rogue" 4)
 (make-CD "The Red Hats" "Number 8 baby!" "IBM")
 (make-sweater "alpaca" "XXL" "NiceSweatshop")
+
+; ===
+
+; Exercise 67. Here is another way to represent bouncing balls:
+;(define SPEED 3)
+;(define-struct balld [location direction])
+;(make-balld 10 "up")
+;Interpret this code fragment and create other instances of balld.
+
+; This fragment creates a structure holding the location and direction of travel of a ball, with the speed defined separately as SPEED.
+; (make-balld 10 "up") would be an instance of balld representing a ball, 10 pixels from the top, moving upwards (presumably at SPEED velocity).
+
+; Other instances could be:
+
+(make-balld 10 "down") ; at the top of the canvas, moving down
+(make-balld 20 "up") ; at the bottom of a 20 pixel canvas, now bouncing up
+
+; ===
