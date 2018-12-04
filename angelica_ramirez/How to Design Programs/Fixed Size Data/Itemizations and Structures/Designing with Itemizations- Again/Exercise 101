@@ -53,11 +53,9 @@
 
 ;Exercise 101 Turn the examples in figure 35 into test cases
 
-(check-expect (si-render.v2 (make-sigs (make-posn 20 10) (make-tank 28 3) #false)) (place-image
-                                                                                    TANK 28 TANK-Y (place-image
-                                                                                                    UFO 20 10 BACKGROUND)))
-(check-expect (si-render.v2 (make-sigs (make-posn 20 10) (make-tank 28 3) (make-posn 30 (- HEIGHT TANK-HEIGHT 10)))) (place-image
-                                                                                                                      UFO 20 10 (place-image
+(check-expect (missile-render.v2 #false BACKGROUND) BACKGROUND)
+(check-expect (missile-render.v2 (make-posn 30 (- HEIGHT TANK-HEIGHT 10)) BACKGROUND) (place-image 
+                                                                                        MISSILE 30 (- HEIGHT TANK-HEIGHT 10) BACKGROUND))
                                                                                                                                  MISSILE 30
                                                                                                                                  (- HEIGHT TANK-HEIGHT 10)
                                                                                                                                  BACKGROUND)))
