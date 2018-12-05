@@ -20,3 +20,12 @@
 ;(make-posn 200 200)
 ;#true
 ;100
+
+; define constants
+; use contat values in game0
+; use game0 in game-ball
+; same for posn? transale first game0 and apply to game-ball
+; substitut game0 in game-left-player
+
+
+
