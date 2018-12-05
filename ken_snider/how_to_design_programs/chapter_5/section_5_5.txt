@@ -1,0 +1,48 @@
+;Exercise 69. Draw box representations for the solution of exercise 65.
+;(define-struct movie [title producer year])
+;(define-struct person [name hair eyes phone])
+;(define-struct pet [name number])
+;(define-struct CD [artist title price])
+;(define-struct sweater [material size producer])
+
+                           +=====+
+                           |movie|
++==========+================+====+
+|title     |producer        |year|
++----------+----------------+----+
+|"NPM Wars"|"Nodius Maximus"|2019|
++==========+================+====+
+
+                          +======+
+                          |person|
++=====+=====+=====+==============+
+|name |hair |eyes |phone         |
++-----+-----+-----+--------------+
+|"Bob"|"red"|"two"|"515-555-1234"|
++=====+=====+=====+==============+
+
+           +===+
+           |pet|
++=======+======+
+|name   |number|
++-------+------+
+|"Rogue"|4     |
++=======+======+
+
+                                   +==+
+                                   |CD|
++==============+================+=====+
+|artist        |title           |price|
++--------------+----------------+-----+
+|"The Red Hats"|"Number 8 baby!"|99   |
++==============+================+=====+
+
+                       +=======+
+                       |sweater|
++========+=====+===============+
+|material|size |producer       |
++--------+-----+---------------+
+|"alpaca"|"XXL"|"NiceSweatshop"|
++========+=====+===============+
+
+; ===

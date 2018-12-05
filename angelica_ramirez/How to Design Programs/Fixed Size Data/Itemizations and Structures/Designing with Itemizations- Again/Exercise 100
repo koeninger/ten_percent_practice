@@ -6,6 +6,7 @@ different keys:
 - pressing the space bar fires the missile if it hasn't been launched yet 
 also define si-main which uses big-bang 
 
+
 ; physical constants
 (define WIDTH 200)
 (define HEIGHT 200)
@@ -29,6 +30,9 @@ also define si-main which uses big-bang
 (define MISSILE-HEIGHT (image-height MISSILE))
 
 (define BACKGROUND (empty-scene WIDTH HEIGHT "black"))
+
+(define LOSER (overlay (text "GAME OVER" 20 "red") BACKGROUND))
+(define WINNER (overlay (text "YOU WIN" 20 "green") BACKGROUND))
 
 ; a mock up
 (define MOCK-UP
@@ -183,16 +187,30 @@ also define si-main which uses big-bang
            (+ (/ UFO-HEIGHT 2) (/ MISSILE-HEIGHT 2)))))
 
 ; UFO MISSILE -> Image
-; renders the final state of the game 
-(check-expect (si-render-final UFO2 (make-posn 20 100)) (overlay (text "YOU WON" 30 "green") BACKGROUND))
-(check-expect (si-render-final (make-posn 10 200) TANK1) (overlay (text "GAME OVER" 30 "red") BACKGROUND))
+; renders the final state of the game  BACKGROUND))
 
 ; (define (si-render-final s) i) ;stub
-
-(define (si-render-final u m)
+(define (si-render-final s)
   (cond
-    [(ufo-landed? u) (overlay (text "GAME OVER" 30 "red") BACKGROUND)]
-    [(ufo-hit? u m) (overlay (text "YOU WON" 30 "green") BACKGROUND)]))
+    ((aim? s) (AIM-loser? s))
+    ((fired? s) (FIRED-loser? s))))
+
+; Auxiliary functions for si-render-final
+
+; SIGS -> Image
+; creates LOSER image when AIM-ufo lands 
+(define (AIM-loser? s)
+  (cond
+    [(ufo-landed? (aim-ufo s)) LOSER]
+    [else s]))
+
+; SIGS -> Image
+; creates LOSER or WINNER when FIRED-ufo lands or hits
+
+(define (FIRED-loser? s)
+  (cond [(ufo-landed? (fired-ufo s)) LOSER]
+        [(ufo-hit? (fired-ufo s) (fired-missile s)) WINNER]
+        [else s]))
 
 ; SIGS -> SIGS
 ; determines which position the objects move for every clock tick 
@@ -377,9 +395,9 @@ also define si-main which uses big-bang
 
 (define (main s)
   (big-bang s
-    [on-tick si-move]
+    [on-tick si-move .3]
     [to-draw si-render]
     [on-key si-control]
     [stop-when si-game-over? si-render-final]))
 
-(main AIM1)
+(main FIRED1)

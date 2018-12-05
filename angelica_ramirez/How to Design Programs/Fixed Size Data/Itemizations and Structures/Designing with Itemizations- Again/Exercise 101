@@ -1,0 +1,61 @@
+; physical constants
+(define WIDTH 200)
+(define HEIGHT 200)
+
+; graphical constants
+(define UFO (overlay
+             (rectangle 20 2 "solid" "purple")
+             (ellipse 15 10 "solid" "purple")))
+(define UFO-HEIGHT (image-height UFO))
+(define UFO-WIDTH (image-width UFO))
+(define UFO-SPEED 7)
+(define JUMP 5)
+(define MISSILE-SPEED 10)
+
+(define TANK (rectangle 15 10 "solid" "olive"))
+(define TANK-HEIGHT (image-height TANK))
+(define TANK-Y (- HEIGHT (/ TANK-HEIGHT 2)))
+
+(define MISSILE (rectangle 1 15 "solid" "red"))
+(define MISSILE-WIDTH (image-width MISSILE))
+(define MISSILE-HEIGHT (image-height MISSILE))
+
+(define BACKGROUND (empty-scene WIDTH HEIGHT "black"))
+
+(define LOSER (overlay (text "GAME OVER" 20 "red") BACKGROUND))
+(define WINNER (overlay (text "YOU WIN" 20 "green") BACKGROUND))
+
+(define-struct sigs [ufo tank missile])
+; A Sigs.v2 (short for SIGS version 2) is a structure:
+; (make-sigs UFO TANK MissileOrNot)
+; interpretation represents the complete state of a
+; space invader game
+
+; A MissileOrNot is one of:
+; - #false
+; - Posn
+; interpretation #false means the missile is in the tank;
+; Posn says the missile is at that location
+
+; SIGS.v2 -> Image
+; renders the given game state on top of BACKGROUND
+(define (si-render.v2 s)
+  (tank-render
+   (sigs-tank s)
+   (ufo-render (sigs-ufo s)
+               (missile-render.v2 (sigs-missile s)
+                                  BACKGROUND))))
+
+; MissileOrNot Image -> Image
+; adds an image of missile m to scene s
+
+; (define (missile-render.v2 m s) s) ;stub 
+
+;Exercise 101 Turn the examples in figure 35 into test cases
+
+(check-expect (missile-render.v2 #false BACKGROUND) BACKGROUND)
+(check-expect (missile-render.v2 (make-posn 30 (- HEIGHT TANK-HEIGHT 10)) BACKGROUND) (place-image 
+                                                                                        MISSILE 30 (- HEIGHT TANK-HEIGHT 10) BACKGROUND))
+                                                                                                                                 MISSILE 30
+                                                                                                                                 (- HEIGHT TANK-HEIGHT 10)
+                                                                                                                                 BACKGROUND)))

@@ -54,5 +54,33 @@ sweater?
 (make-movie "NPM Wars" "Nodius Maximus" 2019)
 (make-person "Bob" "red" "two" "515-555-1234")
 (make-pet "Rogue" 4)
-(make-CD "The Red Hats" "Number 8 baby!" "IBM")
+(make-CD "The Red Hats" "Number 8 baby!" 99)
 (make-sweater "alpaca" "XXL" "NiceSweatshop")
+
+; ===
+
+; Exercise 67. Here is another way to represent bouncing balls:
+;(define SPEED 3)
+;(define-struct balld [location direction])
+;(make-balld 10 "up")
+;Interpret this code fragment and create other instances of balld.
+
+; This fragment creates a structure holding the location and direction of travel of a ball, with the speed defined separately as SPEED.
+; (make-balld 10 "up") would be an instance of balld representing a ball, 10 pixels from the top, moving upwards (presumably at SPEED velocity).
+
+; Other instances could be:
+
+(make-balld 10 "down") ; at the top of the canvas, moving down
+(make-balld 20 "up") ; at the bottom of a 20 pixel canvas, now bouncing up
+
+; ===
+
+; (define ball1
+;  (make-ball (make-posn 30 40) (make-vel -10 5)))
+; Exercise 68. An alternative to the nested data representation of balls uses four fields to keep track of the four properties:
+; (define-struct ballf [x y deltax deltay])
+; Programmers call this a flat representation. Create an instance of ballf that has the same interpretation as ball1.
+
+(make-ballf 20 40 -10 5)
+
+; ===
