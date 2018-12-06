@@ -43,10 +43,10 @@
 
 (define (render as)
   (cond
-    [(string=? AA as) (place-image (square 50 "solid" "white") 50 50 SCENE)]
-    [(string=? BB as) (place-image (square 50 "solid" "yellow") 50 50 SCENE)]
-    [(string=? DD as) (place-image (square 50 "solid" "green") 50 50 SCENE)]
-    [else (place-image (square 50 "solid" "red") 50 50 SCENE)]))
+    [(string=? AA as) (place-image (square 100 "solid" "white") 50 50 SCENE)]
+    [(string=? BB as) (place-image (square 100 "solid" "yellow") 50 50 SCENE)]
+    [(string=? DD as) (place-image (square 100 "solid" "green") 50 50 SCENE)]
+    [else (place-image (square 100 "solid" "red") 50 50 SCENE)]))
 
 ; State -> Bool
 ; stop when state is DD or ER
