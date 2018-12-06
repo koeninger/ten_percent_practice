@@ -1,0 +1,43 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 109|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+; ExpectsToSee.v2 is one of:
+; – AA
+; – BB
+; – DD 
+; – ER 
+ 
+(define AA "start, expect an 'a'")
+(define BB "expect 'b', 'c', or 'd'")
+(define DD "finished")
+(define ER "error, illegal key")
+
+; AnimationState String -> AnimationState
+; for each keystroke, big-bang obtains the next state
+; from (keystroke-handler cw ke); ke represents the key
+(define (keystroke-handler as ke)
+  (cond
+    [(key=? ke " ")
+     (cond
+       [(stop? as) (make-walk WALK-TIME)]
+       [else as])]
+    [else as]))
+(check-expect (keystroke-handler (make-stop -1) " ") (make-walk WALK-TIME))
+(check-expect (keystroke-handler (make-walk -1) " ") (make-walk -1))
+(check-expect (keystroke-handler (make-walk -1) "x") (make-walk -1))
+
+; State -> Bool
+; stop when happiness is zero
+(define (end? as)
+     (cond
+       [(= DD as) #true]
+       [else #false]))
+
+; AnimationState -> AnimationState
+; launches the program form some initial state
+(define (main as)
+  (big-bang as
+    [on-tick tock 1]
+    [on-key keystroke-handler]
+    [to-draw render]
+    [stop-when end?]))
