@@ -5,6 +5,6 @@
 ; A Phone Number is a structure: 
 ;   (make-phone# Number Number Number)
 ; interpretation (make-phone# area switch num) means a phone number of
-; area code made of 3 digits 000-999
-; phone switch (exchange) made of 3 digits 000-999 
-; phone number made of 4 digits 0000-9999
+; area code made of 3 digits [000 910] [912 999]
+; phone switch (exchange) made of 3 digits [000 910] [912 999]
+; phone number made of 4 digits [0000 9999]
