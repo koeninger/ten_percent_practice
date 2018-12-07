@@ -1,0 +1,20 @@
+; Exercise 72. Formulate a data definition for the above phone structure type definition that accommodates the given examples.
+; Next formulate a data definition for phone numbers using this structure type definition:
+; (define-struct phone# [area switch num])
+; Historically, the first three digits make up the area code, the next three the code for the phone switch (exchange) of your neighborhood, and the last four the phone with respect to the neighborhood. Describe the content of the three fields as precisely as possible with intervals. 
+
+; ---
+
+(define-struct phone [area number])
+; A Phone is a structure: 
+; (make-phone Number String)
+; interpretation a phone number's area code, and number
+
+(define-struct phone# [area switch num]) 
+; A Phone# is a structure:
+(make-phone# Number Number Number)
+; - Area being a Number between 111 and 999
+; - Switch being a Number between 111 and 999
+; - Num being a Number between 0001 and 9999
+
+; ===
