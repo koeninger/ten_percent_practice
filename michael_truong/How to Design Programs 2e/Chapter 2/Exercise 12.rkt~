@@ -4,4 +4,4 @@
   (expt length 3))
 
 (define (csurface length)
-  (* (sqr length) 6))
+  (* (expt length 2) 6))
