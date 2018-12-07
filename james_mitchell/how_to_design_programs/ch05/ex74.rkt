@@ -8,21 +8,30 @@
 
 ; Posn -> Posn
 ; increases the x-coordinate of p by 3
-(check-expect (x+ (make-posn 10 0)) (make-posn 13 0))
 (define (x+ p)
-  (posn-up-x p (+ (posn-x p) 3)))
+  (cond
+    [(>= (posn-x p) 100) (make-posn 0 (posn-y p))]
+    [else (posn-up-x (+ (posn-x p) 3) p)])
+  )
 
 ; Posn Number -> Posn
 ; returns a Posn with n in the x field
-(define (posn-up-x p n)
+(define (posn-up-x n p)
   (make-posn n (posn-y p)))
 
 ; Posn Number Number MouseEvt -> Posn 
 ; for mouse clicks, (make-posn x y); otherwise p
+(check-expect
+  (reset-dot (make-posn 10 20) 29 31 "button-down")
+  (make-posn 29 31))
+(check-expect
+  (reset-dot (make-posn 10 20) 29 31 "button-up")
+(make-posn 10 20))
+
 (define (reset-dot p x y me)
   (cond
-    [(mouse=? me "button-down") (make-posn x y)]
-    [else p]))
+    [(mouse=? "button-down" me) (make-posn x y)]
+[else p]))
  
 ; Posn -> Posn 
 (define (main p0)
@@ -40,3 +49,6 @@
               (place-image DOT 10 20 MTS))
 (check-expect (scene+dot (make-posn 88 73))
               (place-image DOT 88 73 MTS))
+
+
+(main (make-posn 0 50))
