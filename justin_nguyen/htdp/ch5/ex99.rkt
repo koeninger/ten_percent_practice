@@ -154,36 +154,67 @@
                   (missle-render (fired-missle s) BACKGROUND)))]))
 
 ; SIGS -> SIGS
+(check-random (si-move (make-aim (make-posn 100 100) (make-tank 100 0)))
+              (make-aim (make-posn (+ 100 (* (random 3) (if (= (random 1) 0) -1 1))) 99)
+                        (make-tank 100 0)))
+(check-random (si-move (make-aim (make-posn 50 88) (make-tank 90 5)))
+              (make-aim (make-posn (+ 50 (* (random 3) (if (= (random 1) 0) -1 1))) 87)
+                        (make-tank 90 5)))
+(check-random (si-move (make-aim (make-posn 89 5) (make-tank 33 10)))
+              (make-aim (make-posn (+ 89 (* (random 3) (if (= (random 1) 0) -1 1))) 4)
+                        (make-tank 33 10)))
 (define (si-move s)
   (si-move-proper s (random 3) (random 1)))
 
 ; SIGS Number Number -> SIGS
+(check-expect (si-move-proper (make-aim (make-posn 100 100) (make-tank 100 0)) 0 1)
+              (make-aim (make-posn 100 99) (make-tank 100 0)))
+(check-expect (si-move-proper (make-aim (make-posn 100 100) (make-tank 100 0)) 4 1)
+              (make-aim (make-posn 104 99) (make-tank 100 0)))
+(check-expect (si-move-proper (make-aim (make-posn 100 100) (make-tank 55 0)) 4 0)
+              (make-aim (make-posn 96 99) (make-tank 55 0)))
+(check-expect (si-move-proper (make-aim (make-posn 50 49) (make-tank 3 0)) 1 0)
+              (make-aim (make-posn 49 48) (make-tank 3 0)))
+(check-expect (si-move-proper (make-fired (make-posn 100 100) (make-tank 100 0) (make-posn 100 10)) 4 1)
+              (make-fired (make-posn 104 99) (make-tank 100 0) (make-posn 100 10)))
+(check-expect (si-move-proper (make-fired (make-posn 100 90) (make-tank 50 1) (make-posn 50 20)) 3 0)
+              (make-fired (make-posn 97 89) (make-tank 50 1) (make-posn 50 20)))
 (define (si-move-proper s delta dir)
   (cond
     [(aim? s)
-     (make-aim (make-posn (+ (posn-x (aim-ufo s)) (* delta (if (= dir 0) -1 1)))
-                          (posn-y (aim-ufo s)))
+     (make-aim (si-move-ufo (aim-ufo s) delta dir)
                (aim-tank s))]
     [(fired? s)
-     (make-fired (make-posn (posn-x (aim-ufo s)) (posn-y (aim-ufo s)))
-                 (aim-tank s)
+     (make-fired (si-move-ufo (fired-ufo s) delta dir)
+                 (fired-tank s)
                  (fired-missle s))]))
-  
+
+; UFO Number Number -> UFO
+(define (si-move-ufo u delta dir)
+  (make-posn (+ (posn-x u) (* delta (if (= dir 0) -1 1)))
+             (- (posn-y u) 1)))
 
 
 ; SIGS -> Bool
 ; returns true if game is over (UFO lands or missle hits UFO)
 ; returns false otherwise
+(check-expect (si-game-over? (make-aim (make-posn 100 0) (make-tank 100 0))) #true)
+(check-expect (si-game-over? (make-aim (make-posn 100 50) (make-tank 100 5))) #false)
+(check-expect (si-game-over? (make-fired (make-posn 100 0) (make-tank 100 0) (make-posn 50 50))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 80 50) (make-tank 50 3) (make-posn 79 50))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 60 60) (make-tank 60 2) (make-posn 57 57))) #true)
+
+
 (define (si-game-over? s)
   (cond
     [(aim? s)
-     (<= (aim-ufo s) (/ (image-height UFO) 2))]
+     (<= (posn-y (aim-ufo s)) (/ (image-height UFO) 2))]
     [(fired? s)
-     (if (<= 5
+     (if (>= 5
              (sqrt (+ (expt (- (posn-x (fired-ufo s)) (posn-x (fired-missle s))) 2)
                       (expt (- (posn-y (fired-ufo s)) (posn-y (fired-missle s))) 2))))
          #true
-         (<= (aim-ufo s) (/ (image-height UFO) 2)))]))
+         (<= (posn-y (fired-ufo s)) (/ (image-height UFO) 2)))]))
 
 (define (key-handler ke) ...)
 
