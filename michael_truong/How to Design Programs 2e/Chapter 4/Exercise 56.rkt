@@ -80,4 +80,5 @@
     [on-tick fly]
     [stop-when end]))
 
+(test)
 (main2 "")

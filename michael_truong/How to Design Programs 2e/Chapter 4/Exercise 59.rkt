@@ -2,6 +2,7 @@
 
 (require 2htdp/image)
 (require 2htdp/universe)
+(require test-engine/racket-tests)
 
 (define RED "red")
 (define YELLOW "yellow")
@@ -29,6 +30,9 @@
 
 ; N-TrafficLight -> N-TrafficLight
 ; yields the next state, given current state cs
+(check-expect (tl-next RED) GREEN)
+(check-expect (tl-next GREEN) YELLOW)
+(check-expect (tl-next YELLOW) RED)
 (define (tl-next cs)
   (cond
     [(equal? cs RED) GREEN]
@@ -42,4 +46,5 @@
     [to-draw tl-render]
     [on-tick tl-next 1]))
 
+(test)
 (traffic-light-simulation YELLOW)

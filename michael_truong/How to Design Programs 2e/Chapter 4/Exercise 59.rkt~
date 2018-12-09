@@ -1,8 +1,0 @@
-#lang racket
-
-; TrafficLight -> TrafficLight
-; simulates a clock-based American traffic light
-(define (traffic-light-simulation initial-state)
-  (big-bang initial-state
-    [to-draw tl-render]
-    [on-tick tl-next 1]))

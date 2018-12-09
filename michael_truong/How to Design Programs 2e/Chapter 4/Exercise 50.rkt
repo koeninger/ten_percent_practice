@@ -12,3 +12,5 @@
     [(string=? "red" s) "green"]
     [(string=? "green" s) "yellow"]
     [(string=? "yellow" s) "red"]))
+
+(test)

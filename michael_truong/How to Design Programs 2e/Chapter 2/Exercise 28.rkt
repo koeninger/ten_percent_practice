@@ -1,16 +1,17 @@
 #lang racket
 
-(define BASE-PRICE 5)
 (define BASE-ATTENDANCE 120)
+(define BASE-PRICE 5)
 (define PRICE-SENSITIVITY 150)
+(define FIXED-COST 180)
+(define VARIABLE-COST .04)
+
 (define (attendees ticket-price)
   (- BASE-ATTENDANCE (* (- ticket-price BASE-PRICE) PRICE-SENSITIVITY)))
 
 (define (revenue ticket-price)
   (* ticket-price (attendees ticket-price)))
 
-(define FIXED-COST 180)
-(define VARIABLE-COST .04)
 (define (cost ticket-price)
   (+ FIXED-COST (* VARIABLE-COST (attendees ticket-price))))
 
@@ -19,11 +20,12 @@
      (cost ticket-price)))
 
 (define PENNY .1)
-(define UPPER-BOUND 5)
-(define (optimize ticket-price best-price max-profit)
-  (cond [(<= ticket-price UPPER-BOUND) (cond
-                                         [(> (profit ticket-price) max-profit) (optimize (+ ticket-price PENNY) ticket-price (profit ticket-price))]
-                                         [else (optimize (+ ticket-price PENNY) best-price max-profit)])]
+(define (optimize ticket-price upper-bound best-price max-profit)
+  (cond [(<= ticket-price upper-bound) (cond
+                                         [(> (profit ticket-price) max-profit) (optimize (+ ticket-price PENNY) upper-bound ticket-price (profit ticket-price))]
+                                         [else (optimize (+ ticket-price PENNY) upper-bound best-price max-profit)])]
         [else best-price]))
 
-(optimize 0 0 (profit 0))
+(define LOWER-BOUND 0)
+(define UPPER-BOUND 5)
+(optimize LOWER-BOUND UPPER-BOUND 0 (profit 0))
