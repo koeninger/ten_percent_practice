@@ -34,3 +34,9 @@
 (check-expect (x+ (make-posn 10 0)) (make-posn 13 0))
 (define (x+ p)
   (make-posn (+ (posn-x p) 3) (posn-y p)))
+
+
+(define (reset-dot p x y me)
+  (cond
+    [(mouse=? me "button-down") (make-posn x y)]
+    [else p]))
