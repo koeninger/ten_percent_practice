@@ -17,3 +17,13 @@
    example-date))
 
 (define example-Ltrack (list example-track))
+
+; ex 200
+
+; LTracks -> Number
+; total play time
+(check-expect (total-time (list example-track example-track)) (* 2 666))
+(define (total-time ts)
+  (cond
+    [(empty? ts) 0]
+    [(cons? ts) (+ (track-time (first ts)) (total-time (rest ts)))]))
