@@ -2,7 +2,9 @@
 
 (define BASE-ATTENDANCE 120)
 (define BASE-PRICE 5)
-(define PRICE-SENSITIVITY 150)
+(define P 15)
+(define C .1)
+(define PRICE-SENSITIVITY (/ P C))
 (define FIXED-COST 180)
 (define VARIABLE-COST .04)
 
@@ -19,12 +21,13 @@
   (- (revenue ticket-price)
      (cost ticket-price)))
 
-(define PENNY .1)
+(define PENNY .001)
 (define (optimize ticket-price upper-bound best-price max-profit)
   (cond [(<= ticket-price upper-bound) (cond
                                          [(> (profit ticket-price) max-profit) (optimize (+ ticket-price PENNY) upper-bound ticket-price (profit ticket-price))]
                                          [else (optimize (+ ticket-price PENNY) upper-bound best-price max-profit)])]
         [else best-price]))
+
 
 (define LOWER-BOUND 0)
 (define UPPER-BOUND 5)
