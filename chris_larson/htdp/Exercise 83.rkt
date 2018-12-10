@@ -81,8 +81,20 @@
 (check-expect (string-remove-first "Hello World!") "ello World!")
 (check-expect (string-remove-first "\bHello World!") "Hello World!")
 
+; Any -> Bool
+(define (editor-or-not? e)
+  (cond
+    [(editor? e)
+     (cond
+       [(and (string? (editor-pre e)) (string? (editor-post e))) #true]
+       [else #false])]
+    [else #false]))
+(check-expect (editor-or-not? "string") #false)
+(check-expect (editor-or-not? (make-editor "Hello World! " "")) #true)
+
 ;
 (define (run pre)
   (big-bang (make-editor pre "")
     [to-draw render]
+    [check-with editor-or-not?]
     [on-key edit]))
