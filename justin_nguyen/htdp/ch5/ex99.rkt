@@ -203,8 +203,6 @@
 (check-expect (si-game-over? (make-fired (make-posn 100 0) (make-tank 100 0) (make-posn 50 50))) #true)
 (check-expect (si-game-over? (make-fired (make-posn 80 50) (make-tank 50 3) (make-posn 79 50))) #true)
 (check-expect (si-game-over? (make-fired (make-posn 60 60) (make-tank 60 2) (make-posn 57 57))) #true)
-
-
 (define (si-game-over? s)
   (cond
     [(aim? s)
@@ -216,12 +214,47 @@
          #true
          (<= (posn-y (fired-ufo s)) (/ (image-height UFO) 2)))]))
 
-(define (key-handler ke) ...)
 
+; SIGS Key -> SIGS
+; returns a new SIGS based on key input:
+;   "left" sets tank vel to -3
+;   "right sets tank vel to 3
+;   " " fires rocket (changes SIGS aim to SIGS fired)
+(check-expect (si-control (make-aim (make-posn 100 50) (make-tank 100 0)) "left")
+              (make-aim (make-posn 100 50) (make-tank 100 -3)))
+(check-expect (si-control (make-aim (make-posn 100 30) (make-tank 100 3)) "left")
+              (make-aim (make-posn 100 30) (make-tank 100 -3)))
+(check-expect (si-control (make-aim (make-posn 100 80) (make-tank 100 -3)) "right")
+              (make-aim (make-posn 100 80) (make-tank 100 3)))
+(check-expect (si-control (make-fired (make-posn 100 60) (make-tank 100 -3) (make-posn 100 20)) "left")
+              (make-fired (make-posn 100 60) (make-tank 100 -3) (make-posn 100 20)))
+(check-expect (si-control (make-fired (make-posn 100 60) (make-tank 100 3) (make-posn 100 20)) "right")
+              (make-fired (make-posn 100 60) (make-tank 100 3) (make-posn 100 20)))
+(check-expect (si-control (make-fired (make-posn 100 60) (make-tank 100 0) (make-posn 100 20)) "right")
+              (make-fired (make-posn 100 60) (make-tank 100 3) (make-posn 100 20)))
+(check-expect (si-control (make-fired (make-posn 100 60) (make-tank 100 -3) (make-posn 100 20)) " ")
+              (make-fired (make-posn 100 60) (make-tank 100 -3) (make-posn 100 20)))
+(check-expect (si-control (make-aim (make-posn 100 60) (make-tank 100 -3)) " ")
+              (make-fired (make-posn 100 60) (make-tank 100 -3) (make-posn 100 (/ (image-height TANK) 2))))
+(define (si-control s key)
+  (cond
+    [(string=? "left" key) (set-tank-vel s -3)]
+    [(string=? "right" key) (set-tank-vel s 3)]
+    [(and (string=? " " key) (aim? s)) (make-fired (aim-ufo s)
+                                (make-tank (tank-loc (aim-tank s)) (tank-vel (aim-tank s)))
+                                (make-posn (tank-loc (aim-tank s)) (/ (image-height TANK) 2)))]
+    [else s]))
+
+(define (set-tank-vel s v)
+  (cond
+    [(aim? s) (make-aim (aim-ufo s) (make-tank (tank-loc (aim-tank s)) v))]
+    [(fired? s) (make-fired (fired-ufo s)
+                            (make-tank (tank-loc (fired-tank s)) v)
+                            (fired-missle s))]))
      
 (define (main state)
   (big-bang state
     [on-tick si-move]
     [to-draw si-render]
-    [on-key key-handler]
+    [on-key si-control]
     [stop-when si-game-over?]))
