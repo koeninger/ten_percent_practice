@@ -29,3 +29,45 @@
     [(not (light? another-value)) (error "traffic light expected, second value is some other value")]
     [(string=? a-value another-value) #true]
     [else #false]))
+
+x
+; a variable
+
+(= y z)
+; (primitive variable variable)
+
+(= (= y z) 0)
+; (primitive expr value)
+
+(3 + 4)
+; (value primitive value) is not an expr
+
+number?
+; primitive requires an expr
+
+(x)
+; (variable expr) requires an expr
+
+(define (f x) x)
+; (primitive (variable variable) variable)
+
+(define (f x) y)
+; (primitive (variable variable) variable)
+
+(define (f x y) 3)
+; (primitive (variable variable variable) value)
+
+(define (f "x") x)
+; define requires only variables in the parens
+
+(define (f x y z) (x))
+; (variable) is illegal
+
+(x)
+; illegal - (variable expr) requires an expr
+
+(+ 1 (not x))
+; legal (primitive value expr), but will throw error
+
+(+ 1 2 3)
+; legal (primitive value value value)
