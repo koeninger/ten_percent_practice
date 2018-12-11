@@ -27,3 +27,31 @@
   (cond
     [(empty? ts) 0]
     [(cons? ts) (+ (track-time (first ts)) (total-time (rest ts)))]))
+
+; ex 201
+
+; LTracks -> list of strings
+; list of album titles
+(check-expect (select-all-album-titles (list example-track example-track))
+              (list "extremeties dirt and various repressed emotions" "extremeties dirt and various repressed emotions"))
+(define (select-all-album-titles ts)
+  (cond
+    [(empty? ts) '()]
+    [(cons? ts) (cons (track-album (first ts)) (select-all-album-titles (rest ts)))]))
+
+; list of strings -> list of strings
+; every string from input list, exactly once
+(check-expect (create-set (list "a" "b" "c" "a")) (list "b" "c" "a"))
+(define (create-set xs)
+  (cond
+    [(empty? xs) '()]
+    [(cons? xs) (if (member? (first xs) (rest xs))
+                    (create-set (rest xs))
+                    (cons (first xs) (create-set (rest xs))))]))
+
+; LTracks -> list of strings
+; list of unique album titles
+(check-expect (select-album-titles/unique (list example-track example-track))
+              (list "extremeties dirt and various repressed emotions"))
+(define (select-album-titles/unique xs)
+  (create-set (select-all-album-titles xs)))
