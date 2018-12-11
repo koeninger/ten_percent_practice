@@ -1,0 +1,28 @@
+; Exercise 103 Develop a data representation for the following four kinds of zoo animals
+; (spiders, elephants, boa constrictors, armadillos)
+; Develop a template for functions that consume zoo animals
+; Design the fits? function, which consumes a zoo animals and a description of a cage
+; It determines whether the cage's volume is large engough for the animal
+
+(define-struct spider [legs space])
+; A Spider is a structure:
+;   (make-spider Number Number)
+; interpretation the number of remaining legs
+; and the space needed in case of transport 
+
+(define-struct elephant [space])
+; An Elephant is a structure:
+;    (make-elephant Number)
+; interpretation specifies the space needed in case of transport
+
+(define-struct boa-constrictor [length girth])
+; A boa-constrictor is a structure:
+;   (make-boa-constrictor Number Number)
+; interpretation the length of the boa-constrictor
+; and the girth or circumference of boa-constrictor
+
+(define-struct armadillo [length space])
+; An armadillo is a structure
+;    (make-armadillo Number Number)
+; interpretation is the lenght of armadillo
+; and space needed in case of transport 
