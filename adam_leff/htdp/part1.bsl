@@ -798,3 +798,17 @@ MIDDLE
 (define (posn-up-x p n)
     (make-posn n (posn-y p)))
     
+//Exercise 74
+(require 2htdp/universe)
+(check-expect
+  (reset-dot (make-posn 10 20) 29 31 "button-down")
+  (make-posn 29 31))
+(check-expect
+  (reset-dot (make-posn 10 20) 29 31 "button-up")
+  (make-posn 10 20))
+(define (reset-dot p x y me)
+  (cond
+    [(mouse=? me "button-down") (make-posn x y)]
+    [else p]))
+    
+//Exercise 75
