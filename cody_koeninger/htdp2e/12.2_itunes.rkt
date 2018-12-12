@@ -16,6 +16,29 @@
    3
    example-date))
 
+(define example-track2
+  (create-track
+   "money is not our god"
+   "killing joke"
+   "extremeties dirt and various repressed emotions"
+   666
+   22
+   example-date
+   3
+   example-date))
+
+
+(define example-track3
+  (create-track
+   "eighties"
+   "killing joke"
+   "laugh? I nearly bought one"
+   666
+   22
+   example-date
+   3
+   example-date))
+
 (define example-Ltrack (list example-track))
 
 ; ex 200
@@ -55,3 +78,16 @@
               (list "extremeties dirt and various repressed emotions"))
 (define (select-album-titles/unique xs)
   (create-set (select-all-album-titles xs)))
+
+; ex 202
+; string LTracks -> LTracks
+; given album, return tracks belonging to that album
+(check-expect (select-album "extremeties dirt and various repressed emotions" (list example-track example-track2 example-track3))
+              (list example-track example-track2))
+(define (select-album a ts)
+  (cond
+    [(empty? ts) '()]
+    [(cons? ts)
+     (if (string=? a (track-album (first ts)))
+         (cons (first ts) (select-album a (rest ts)))
+         (select-album a (rest ts)))]))
