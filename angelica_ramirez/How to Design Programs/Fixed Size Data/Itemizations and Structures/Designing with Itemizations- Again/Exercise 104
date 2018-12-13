@@ -1,0 +1,16 @@
+; Exercise 104 Develop a data representation for vehicles. Each vehicle must describe the number of passengers that it can carry,
+; its license plate number, and its fuel consumption (miles per gallon).
+; Develop a template for functions that consumer vehicles
+
+(define-struct vehicle [passengers license mpg])
+; A vehicle is one of the following:
+; - automobile
+; - van
+; - bus
+; - suv
+; interpretation passengers are the number of passengers a vehical can carry
+; license is the license plate number
+; mpg is is fuel consumption in miles per gallon
+
+(define (consumer-vehicles v)
+  (... (vehicle-passengers v) ... (vehicle-license v) ... (vehicl-mpg v) ...)
