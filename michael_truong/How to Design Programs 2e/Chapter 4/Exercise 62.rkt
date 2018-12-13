@@ -16,6 +16,13 @@
     [(string=? CLOSED state-of-door) CLOSED]
     [(string=? OPEN state-of-door) CLOSED]))
 
+; DoorState -> Image
+; translates the state s into a large text image
+(check-expect (door-render CLOSED)
+              (text CLOSED 40 "red"))
+(define (door-render s)
+  (text s 40 "red"))
+
 ; DoorState KeyEvent -> DoorState
 ; turns key event k into an action on state s
 (check-expect (door-action LOCKED "u") CLOSED)
@@ -30,20 +37,13 @@
     [(and (string=? CLOSED s) (string=? " " k)) OPEN]
     [else s]))
 
-; DoorState -> Image
-; translates the state s into a large text image
-(check-expect (door-render CLOSED)
-              (text CLOSED 40 "red"))
-(define (door-render s)
-  (text s 40 "red"))
-
 ; DoorState -> DoorState
 ; simulates a door with an automatic door closer
 (define (door-simulation initial-state)
   (big-bang initial-state
     [on-tick door-closer 3]
-    [on-key door-action]
-    [to-draw door-render]))
+    [to-draw door-render]
+    [on-key door-action]))
 
 (test)
 (door-simulation LOCKED)

@@ -14,6 +14,17 @@
 (define GREEN-LIGHT (circle RADIUS "solid" GREEN))
 (define BLACK-LIGHT (circle RADIUS "solid" "black"))
 
+; N-TrafficLight -> N-TrafficLight
+; yields the next state, given current state cs
+(check-expect (tl-next RED) GREEN)
+(check-expect (tl-next GREEN) YELLOW)
+(check-expect (tl-next YELLOW) RED)
+(define (tl-next cs)
+  (cond
+    [(equal? cs RED) GREEN]
+    [(equal? cs GREEN) YELLOW]
+    [(equal? cs YELLOW) RED]))
+
 ; TrafficLight -> Image
 ; renders the current state cs as an image
 (define (tl-render current-state)
@@ -28,23 +39,12 @@
                   [(equal? current-state GREEN) GREEN-LIGHT]
                   [else BLACK-LIGHT])))
 
-; N-TrafficLight -> N-TrafficLight
-; yields the next state, given current state cs
-(check-expect (tl-next RED) GREEN)
-(check-expect (tl-next GREEN) YELLOW)
-(check-expect (tl-next YELLOW) RED)
-(define (tl-next cs)
-  (cond
-    [(equal? cs RED) GREEN]
-    [(equal? cs GREEN) YELLOW]
-    [(equal? cs YELLOW) RED]))
-
 ; TrafficLight -> TrafficLight
 ; simulates a clock-based American traffic light
 (define (traffic-light-simulation initial-state)
   (big-bang initial-state
-    [to-draw tl-render]
-    [on-tick tl-next 1]))
+    [on-tick tl-next 1]
+    [to-draw tl-render]))
 
 (test)
 (traffic-light-simulation YELLOW)
