@@ -81,3 +81,9 @@
 ; (+ 117 361)
 ; 478
 (f (f 1 (* 2 3)) 19)
+
+
+; Exercise 123. (if exp-test exp-then exp-else)
+; (cond
+;   [exp-test exp-then]
+;   [else exp-else]
