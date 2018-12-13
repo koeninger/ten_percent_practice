@@ -1,0 +1,17 @@
+; Exercise 105 make up at least two data examples per clause in the data definition.
+; For each of the examples, explain its meaning with a sketch of a canvas
+
+; A Coordinate is one of:
+; - a NegativeNumber
+; interpretation on the y axis, distance from top
+; - a PositiveNumber
+; interpretation on the x axis, distance from left
+; - a Posn
+; interpretation an ordinary Cartesian point
+
+(define NEG1 -1) ; distance -1 from top
+(define NEG2 -2) ; distance -2 from top
+(define POS1 1) ; distance 1 from left
+(define POS2 2) ; distance 2 from left 
+(define POSN1 (make-posn -1 1)) ; (-1,1) point
+(define POSN2 (make-posn 2 -2)) ; (2, -2) point 

@@ -1,0 +1,58 @@
+; Exercise 103 Develop a data representation for the following four kinds of zoo animals
+; (spiders, elephants, boa constrictors, armadillos)
+; Develop a template for functions that consume zoo animals
+; Design the fits? function, which consumes a zoo animals and a description of a cage
+; It determines whether the cage's volume is large engough for the animal
+
+(define-struct spider [legs space])
+; A Spider is a structure:
+;   (make-spider Number Number)
+; interpretation the number of remaining legs
+; and the space needed in case of transport 
+
+(define-struct elephant [space])
+; An Elephant is a structure:
+;    (make-elephant Number)
+; interpretation specifies the space needed in case of transport
+
+(define-struct boa-constrictor [length girth])
+; A boa-constrictor is a structure:
+;   (make-boa-constrictor Number Number)
+; interpretation the length of the boa-constrictor
+; and the girth or circumference of boa-constrictor
+
+(define-struct armadillo [length space])
+; An armadillo is a structure
+;    (make-armadillo Number Number)
+; interpretation is the length of armadillo
+; and space needed in case of transport
+
+(define-struct cage [length width height])
+; A cage is a structure
+; interpretation  (make-cage [Number Number Number]
+; cage is a rectangular prism 
+
+; ZooAnimal Cage -> Boolean
+; returns true if the cage is larger than the animal
+; - #true animal fits in cage
+(check-expect (fits? (make-spider 8 10) (make-cage 10 2 5)) #true)
+(check-expect (fits? (make-elephant 200) (make-cage 10 10 10)) #true)
+(check-expect (fits? (make-boa-constrictor 6 3) (make-cage 2 1 3)) #false)
+(check-expect (fits? (make-armadillo 60 50) (make-cage 10 10 10)) #true)
+
+(define (fits? a c)
+  (cond
+    [(spider? a) (< (spider-space a) (c-volume c))]
+    [(elephant? a) (< (elephant-space a) (c-volume c))]
+    [(boa-constrictor? a) (< (bc-volume a) (c-volume c))]
+    [(armadillo? a) (< (armadillo-space a) (c-volume c))]))
+
+; BoaConstrictor -> Number
+; finds the volume (space) of the BoaConstrictor 
+(define (bc-volume a)
+  (* pi (boa-constrictor-girth a) (boa-constrictor-length a)))
+
+; Cage -> Number
+; finds the volume of the cage 
+(define (c-volume c)
+  (* (cage-length c) (cage-width c) (cage-height c)))

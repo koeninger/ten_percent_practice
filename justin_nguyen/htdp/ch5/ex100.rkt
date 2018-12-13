@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex99) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex100) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -26,7 +26,7 @@
 
 (define MISSLE (rectangle 4 12 "solid" "yellow"))
 
-(define UFO-Y-RANGE 1)
+(define UFO-Y-RANGE 8)
 (define MISSLE-SPEED 10)
 (define TANK-SPEED 3)
 (define HITRANGE 12)
