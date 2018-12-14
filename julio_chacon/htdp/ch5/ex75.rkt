@@ -27,13 +27,17 @@
 (check-expect (ufo-move-1 u1) u3)
 (check-expect (ufo-move-1 u2)
               (make-ufo (make-posn 17 77) v2))
- 
-; UFO -> UFO 
+
 (define (ufo-move-1 u)
   (make-ufo (posn+ (ufo-loc u) (ufo-vel u))
             (ufo-vel u)))
 
 
 ; Posn Vel -> Posn 
-; adds v to p 
-(define (posn+ p v) p)
+; adds v to p
+(check-expect (posn+ p1 v1) p2)
+(check-expect (posn+ p1 v2) (make-posn 17 77))
+(define (posn+ p v)
+   (make-posn (+ (posn-x p) (vel-deltax v))
+             (+ (posn-y p) (vel-deltay v))))
+

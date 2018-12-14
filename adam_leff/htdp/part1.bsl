@@ -812,3 +812,58 @@ MIDDLE
     [else p]))
     
 //Exercise 75
+(define-struct vel [deltax deltay])
+
+(define-struct ufo [loc vel])
+(define v1 (make-vel 8 -3))
+(define v2 (make-vel -5 -3))
+ 
+(define p1 (make-posn 22 80))
+(define p2 (make-posn 30 77))
+ 
+(define u1 (make-ufo p1 v1))
+(define u2 (make-ufo p1 v2))
+(define u3 (make-ufo p2 v1))
+(define u4 (make-ufo p2 v2))
+
+; UFO -> UFO
+; determines where u moves in one clock tick; 
+; leaves the velocity as is
+ 
+(check-expect (ufo-move-1 u1) u3)
+(check-expect (ufo-move-1 u2)
+              (make-ufo (make-posn 17 77) v2))
+ 
+(define (ufo-move-1 u)
+  (make-ufo (posn+ (ufo-loc u) (ufo-vel u))
+            (ufo-vel u)))
+
+
+(check-expect (posn+ p1 v1) p2)
+(check-expect (posn+ p1 v2) (make-posn 17 77))
+
+(define (posn+ p v)
+  (make-posn (+ (posn-x p) (vel-deltax v))
+             (+ (posn-y p) (vel-deltay v))))
+
+
+//Exercise 76
+; Movie is (make-movie String String Number)
+(define-struct movie [title producer year])
+
+; Person is (make-person String String String Phone)
+(define-struct person [name hair eyes phone])
+
+; Pet is (make-pet String Number)
+(define-struct pet [name number])
+
+; CD is (make-CD String String Number)
+(define-struct CD [artist title price])
+
+; Sweater is (make-sweater String Number String)
+(define-struct sweater [material size producer])
+
+// Exercise 77
+; Daytime is (make-daytime Number Number Number)
+(define-struct daytime [hours minutes seconds])
+
