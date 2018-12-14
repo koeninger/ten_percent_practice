@@ -87,3 +87,38 @@
 ; (cond
 ;   [exp-test exp-then]
 ;   [else exp-else]
+
+
+; Exercise 124.
+
+(define PRICE 5)
+(define SALES-TAX (* 0.08 PRICE))
+(define TOTAL (+ PRICE SALES-TAX))
+; (define TOTAL (+ PRICE (* 0.08 PRICE)))
+; (define TOTAL (+ 5 (* 0.08 5)))
+; (define TOTAL (+ 5 0.4))
+; (define TOTAL 5.4)
+
+; (define COLD-F 32)
+; (define COLD-C (fahrenheit->celsius COLD-F))
+; (define (fahrenheit->celsius f)
+;   (* 5/9 (- f 32)))
+; Signals error, function fahrenheit->celsius is being called before its definition
+
+(define LEFT -100)
+(define RIGHT 100)
+(define (g x) (+ (* 5 (expt x 2)) 10))
+(define f@LEFT (g LEFT))
+(define f@RIGHT (g RIGHT))
+
+;(define f@LEFT (f -100))
+;(define f@LEFT (+ (* 5 (expt -100 2)) 10))
+;(define f@LEFT (+ (* 5 10000) 10))
+;(define f@LEFT (+ 50000 10))
+;(define f@LEFT 50010)
+;(define f@RIGHT (f 100))
+;(define f@LEFT (+ (* 5 (expt 100 2)) 10))
+;(define f@LEFT (+ (* 5 10000) 10))
+;(define f@LEFT (+ 50000 10))
+;(define f@LEFT 50010)
+; No errors, f@LEFT == f@RIGHT
