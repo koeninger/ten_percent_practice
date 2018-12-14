@@ -56,15 +56,70 @@
 ; Posn says the missile is at that location
 
 
+; SIGS -> Image
+; render tank, ufo, and missile if it exists
+(define (si-render s)
+  (tank-render (sigs-tank s)
+               (ufo-render (sigs-ufo s)
+                           (missile-render (sigs-missile s) BACKGROUND))))
+
+; SIGS Image -> Image
+; add image of ufo u onto scene i
+(define (ufo-render u i)
+  (place-image UFO (posn-x u) (posn-y u) i))
+
+; SIGS Image -> Image
+; add image of tank t onto scene i
+(define (tank-render t i)
+  (place-image TANK (tank-loc t) (- SCENE-HEIGHT (/ (image-height TANK) 2)) i))
+
 ; MissileOrNot Image -> Image 
-; adds an image of missile m to scene s 
-(define (missile-render.v2 m s)
-  s)
-
-
-; test case
-(check-expect (missile-render.v2 #false BACKGROUND)
+; adds an image of missile m to scene i
+(check-expect (missile-render #false BACKGROUND)
               BACKGROUND)
-(check-expect (missile-render.v2 (make-posn 32 (- SCENE-HEIGHT (image-height TANK) 10)) BACKGROUND)
+(check-expect (missile-render (make-posn 32 (- SCENE-HEIGHT (image-height TANK) 10)) BACKGROUND)
               (place-image MISSLE 32 (- SCENE-HEIGHT (image-height TANK) 10) BACKGROUND))
-              
+(define (missile-render m i)
+  (cond
+    [(boolean? m) i]
+    [(posn? m) (place-image MISSLE (posn-x m) (posn-y m) i)]))
+
+; SIGS Key -> SIGS
+; returns a new SIGS based on key input:
+;   "left" sets tank vel to -3
+;   "right sets tank vel to 3
+;   " " fires rocket (changes SIGS aim to SIGS fired)
+(define (si-control s key)
+  (cond
+    [(string=? "left" key) (make-sigs (sigs-ufo s)
+                                      (make-tank (tank-loc (sigs-tank s)) (- TANK-SPEED))
+                                      (sigs-missile s))]
+    [(string=? "right" key) (make-sigs (sigs-ufo s)
+                                       (make-tank (tank-loc (sigs-tank s)) TANK-SPEED)
+                                       (sigs-missile s))]
+    [(and (string=? " " key) (boolean? (sigs-missile s))) (make-sigs (sigs-ufo s)
+                                                                (sigs-tank s)
+                                                                (make-posn (tank-loc (sigs-tank s))
+                                                                           (- SCENE-HEIGHT (/ (image-height TANK) 2))))]
+    [else s]))
+
+
+
+; SIGS -> Bool
+; returns true if UFO lands OR missile hits UFO
+; else return false
+(define (si-game-over? s)
+  (cond
+    [(>= (posn-y (sigs-ufo s))
+         (- SCENE-HEIGHT (/ (image-height UFO) 2))) #true]
+    [(>= HITRANGE
+         (sqrt (+ (expt (- (posn-x (sigs-ufo s)) (posn-x (sigs-missile s))) 2)
+                  (expt (- (posn-y (sigs-ufo s)) (posn-y (sigs-missle s))) 2)))) #true]
+    [else #false]))
+
+(define (main state)
+  (big-bang state
+    [on-tick si-move]
+    [to-draw si-render]
+    [on-key si-control]
+    [stop-when si-game-over?]))
