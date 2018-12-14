@@ -101,3 +101,35 @@
     [(pos? lon) (sum lon)]
     [else (error "check-sum: list of positive numbers expected")]))
 
+; List-of-boolean -> boolean
+; determines if all the items are #true
+(define (all-true lob)
+  (cond
+    [(empty? lob) #true]
+    [else (and (first lob) (all-true (rest lob)))]))
+(check-expect (all-true (cons #true (cons #true (cons #true '())))) #true)
+(check-expect (all-true (cons #true (cons #false (cons #true '())))) #false)
+
+; List-of-boolean -> boolean
+; determines if one item is #true
+(define (one-true lob)
+  (cond
+   [(empty? lob) #false]
+   [else (or (first lob) (one-true lob))]))
+(check-expect (one-true (cons #true (cons #true (cons #true '())))) #true)
+(check-expect (one-true (cons #false (cons #false (cons #true '())))) #true)
+(check-expect (one-true (cons #false (cons #false (cons #false '())))) #false)
+
+; List-of-string -> String
+; concatenates all strings in l into one long string
+ 
+(check-expect (cat '()) "")
+(check-expect (cat (cons "a" (cons "b" '()))) "ab")
+(check-expect
+  (cat (cons "ab" (cons "cd" (cons "ef" '()))))
+  "abcdef")
+ 
+(define (cat l)
+  (cond
+    [(empty? l) ""]
+    [else (string-append (first l) (cat (rest l)))]))
