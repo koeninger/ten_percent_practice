@@ -6,6 +6,7 @@
 ;    "hello_world" for str
 ; expected:
 ;    "d"
+
 (define (string-last str)
   (cond
     [(> (string-length str) 0) (substring str (- (string-length str) 1))]

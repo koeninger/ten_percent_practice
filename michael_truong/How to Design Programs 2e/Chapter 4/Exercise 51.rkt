@@ -16,9 +16,11 @@
 
 ; N-TrafficLight -> N-TrafficLight
 ; yields the next state, given current state cs
+
 (check-expect (tl-next RED) GREEN)
 (check-expect (tl-next GREEN) YELLOW)
 (check-expect (tl-next YELLOW) RED)
+
 (define (tl-next cs)
   (cond
     [(equal? cs RED) GREEN]
@@ -27,6 +29,7 @@
 
 ; TrafficLight -> Image
 ; renders the current state cs as an image
+
 (define (tl-render current-state)
   (above/align "middle"
                 (cond
@@ -41,6 +44,7 @@
 
 ; TrafficLight -> TrafficLight
 ; simulates a clock-based American traffic light
+
 (define (traffic-light-simulation initial-state)
   (big-bang initial-state
     [on-tick tl-next 1]
