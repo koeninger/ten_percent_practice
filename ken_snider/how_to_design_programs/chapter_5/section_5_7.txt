@@ -1,0 +1,22 @@
+; Exercise 76. Formulate data definitions for the following structure type definitions:
+; (define-struct movie [title producer year])
+; (define-struct person [name hair eyes phone])
+; (define-struct pet [name number])
+; (define-struct CD [artist title price])
+; (define-struct sweater [material size producer])
+; Make sensible assumptions as to what kind of values go into each field.
+
+; ---
+
+; A Movie is (make-movie String String String)
+
+; A Person is (make-person String String String Phone)
+; where a Phone is (make-phone Number String)
+
+; A Pet is (make-pet String Number)
+
+; A CD is (make-CD String String String)
+
+; A Sweater is (make-sweater String String String)
+
+; ===
