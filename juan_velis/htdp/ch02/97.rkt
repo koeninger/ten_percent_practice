@@ -93,6 +93,12 @@
                                    BACKGROUND)))]))
 
 
+(ufo-render
+  (fired-ufo s)
+  (tank-render (fired-tank s)
+               (missile-render (fired-missile s)
+                               BACKGROUND)))
+
 (define-struct aim [posn tank])
 (define-struct fired [posn tank missile])
 
