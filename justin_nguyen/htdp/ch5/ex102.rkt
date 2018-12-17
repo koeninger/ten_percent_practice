@@ -24,12 +24,12 @@
                      (circle 3 "solid" "white"))
              (ellipse 25 22 "solid" "gray")))
 
-(define MISSLE (rectangle 4 12 "solid" "yellow"))
+(define MISSILE (rectangle 4 12 "solid" "yellow"))
 
-(define UFO-Y-RANGE 8)
-(define MISSLE-SPEED 10)
+(define UFO-Y-RANGE 2)
+(define MISSILE-SPEED 10)
 (define TANK-SPEED 3)
-(define HITRANGE 12)
+(define HITRANGE 14)
 
 (define BACKGROUND (empty-scene SCENE-WIDTH SCENE-HEIGHT "blue"))
 
@@ -65,11 +65,23 @@
 
 ; SIGS Image -> Image
 ; add image of ufo u onto scene i
+(check-expect (ufo-render (make-posn 100 0) BACKGROUND)
+              (place-image UFO 100 0 BACKGROUND))
+(check-expect (ufo-render (make-posn 100 50) BACKGROUND)
+              (place-image UFO 100 50 BACKGROUND))
+(check-expect (ufo-render (make-posn 10 90) BACKGROUND)
+              (place-image UFO 10 90 BACKGROUND))
 (define (ufo-render u i)
   (place-image UFO (posn-x u) (posn-y u) i))
 
 ; SIGS Image -> Image
 ; add image of tank t onto scene i
+(check-expect (tank-render (make-tank 100 0) BACKGROUND)
+              (place-image TANK 100 (- SCENE-HEIGHT (/ (image-height TANK) 2)) BACKGROUND))
+(check-expect (tank-render (make-tank 100 3) BACKGROUND)
+              (place-image TANK 100 (- SCENE-HEIGHT (/ (image-height TANK) 2)) BACKGROUND))
+(check-expect (tank-render (make-tank 50 -3) BACKGROUND)
+              (place-image TANK 50 (- SCENE-HEIGHT (/ (image-height TANK) 2)) BACKGROUND))
 (define (tank-render t i)
   (place-image TANK (tank-loc t) (- SCENE-HEIGHT (/ (image-height TANK) 2)) i))
 
@@ -78,17 +90,25 @@
 (check-expect (missile-render #false BACKGROUND)
               BACKGROUND)
 (check-expect (missile-render (make-posn 32 (- SCENE-HEIGHT (image-height TANK) 10)) BACKGROUND)
-              (place-image MISSLE 32 (- SCENE-HEIGHT (image-height TANK) 10) BACKGROUND))
+              (place-image MISSILE 32 (- SCENE-HEIGHT (image-height TANK) 10) BACKGROUND))
 (define (missile-render m i)
   (cond
     [(boolean? m) i]
-    [(posn? m) (place-image MISSLE (posn-x m) (posn-y m) i)]))
+    [(posn? m) (place-image MISSILE (posn-x m) (posn-y m) i)]))
 
 ; SIGS Key -> SIGS
 ; returns a new SIGS based on key input:
 ;   "left" sets tank vel to -3
 ;   "right sets tank vel to 3
 ;   " " fires rocket (changes SIGS aim to SIGS fired)
+(check-expect (si-control (make-sigs (make-posn 100 0) (make-tank 100 0) #false) "")
+              (make-sigs (make-posn 100 0) (make-tank 100 0) #false))
+(check-expect (si-control (make-sigs (make-posn 100 0) (make-tank 100 0) #false) "left")
+              (make-sigs (make-posn 100 0) (make-tank 100 (- TANK-SPEED)) #false))
+(check-expect (si-control (make-sigs (make-posn 100 0) (make-tank 100 0) #false) "right")
+              (make-sigs (make-posn 100 0) (make-tank 100 TANK-SPEED) #false))
+(check-expect (si-control (make-sigs (make-posn 100 0) (make-tank 100 0) #false) " ")
+              (make-sigs (make-posn 100 0) (make-tank 100 0) (make-posn 100 (- SCENE-HEIGHT (/ (image-height TANK) 2)))))
 (define (si-control s key)
   (cond
     [(string=? "left" key) (make-sigs (sigs-ufo s)
@@ -98,23 +118,99 @@
                                        (make-tank (tank-loc (sigs-tank s)) TANK-SPEED)
                                        (sigs-missile s))]
     [(and (string=? " " key) (boolean? (sigs-missile s))) (make-sigs (sigs-ufo s)
-                                                                (sigs-tank s)
-                                                                (make-posn (tank-loc (sigs-tank s))
-                                                                           (- SCENE-HEIGHT (/ (image-height TANK) 2))))]
+                                                                     (sigs-tank s)
+                                                                     (make-posn (tank-loc (sigs-tank s))
+                                                                                (- SCENE-HEIGHT (/ (image-height TANK) 2))))]
     [else s]))
 
+; SIGS -> SIGS
+; moves all entities accordingly
+(define (si-move s)
+  (make-sigs (si-move-ufo (sigs-ufo s) (random UFO-Y-RANGE) (random 2))
+             (si-move-tank (sigs-tank s))
+             (si-move-missile (sigs-missile s))))
+
+; UFO Number Number -> UFO
+(check-expect (si-move-ufo (make-posn 100 100) 5 1)
+              (make-posn 105 101))
+(check-expect (si-move-ufo (make-posn 100 105) 5 0)
+              (make-posn 95 106))
+(check-expect (si-move-ufo (make-posn 100 100) 0 1)
+              (make-posn 100 101))
+(check-expect (si-move-ufo (make-posn 200 100) 9 1)
+              (make-posn 200 101))
+(check-expect (si-move-ufo (make-posn 200 100) 9 0)
+              (make-posn 191 101))
+(check-expect (si-move-ufo (make-posn 0 100) 9 0)
+              (make-posn 0 101))
+(check-expect (si-move-ufo (make-posn 0 100) 9 1)
+              (make-posn 9 101))
+(define (si-move-ufo u delta dir)
+  (make-posn (if (and (>= (+ (posn-x u) (* delta (if (= dir 0) -1 1))) 0)
+                      (<= (+ (posn-x u) (* delta (if (= dir 0) -1 1))) SCENE-WIDTH))
+                 (+ (posn-x u) (* delta (if (= dir 0) -1 1)))
+                 (posn-x u))
+             (+ (posn-y u) 1)))
+
+; Tank -> Tank
+; moves tank based on its velcocity
+(check-expect (si-move-tank (make-tank 100 0))
+              (make-tank 100 0))
+(check-expect (si-move-tank (make-tank 0 -3))
+              (make-tank 0 -3))
+(check-expect (si-move-tank (make-tank 0 3))
+              (make-tank 3 3))
+(check-expect (si-move-tank (make-tank 200 3))
+              (make-tank 200 3))
+(check-expect (si-move-tank (make-tank 200 3))
+              (make-tank 200 3))
+(define (si-move-tank t)
+  (make-tank (if (and (>= (+ (tank-loc t) (tank-vel t)) 0)
+                      (<= (+ (tank-loc t) (tank-vel t)) SCENE-WIDTH))
+                 (+ (tank-loc t) (tank-vel t))
+                 (tank-loc t))
+             (tank-vel t)))
+
+; MissileOrNot -> MissileOrNot
+; move missile upwards based on speed
+(check-expect (si-move-missile (make-posn 100 15))
+              (make-posn 100 (- 15 MISSILE-SPEED)))
+(check-expect (si-move-missile (make-posn 150 90))
+              (make-posn 150 (- 90 MISSILE-SPEED)))
+(check-expect (si-move-missile (make-posn 6 167))
+              (make-posn 6 (- 167 MISSILE-SPEED)))
+(check-expect (si-move-missile #false)
+              #false)
+(check-expect (si-move-missile (make-posn 100 0))
+              #false)
+(define (si-move-missile m)
+  (cond
+    [(boolean? m) m]
+    [(posn? m) (if (> (posn-y m) 0)
+                   (make-posn (posn-x m) (- (posn-y m) MISSILE-SPEED))
+                   #false)]))
 
 
 ; SIGS -> Bool
 ; returns true if UFO lands OR missile hits UFO
 ; else return false
+(check-expect (si-game-over? (make-sigs (make-posn 100 0) (make-tank 100 0) #false))
+              #false)
+(check-expect (si-game-over? (make-sigs (make-posn 100 50) (make-tank 100 3) #false))
+              #false)
+(check-expect (si-game-over? (make-sigs (make-posn 100 200) (make-tank 100 3) #false))
+              #true)
+(check-expect (si-game-over? (make-sigs (make-posn 100 0) (make-tank 100 0) (make-posn 100 100)))
+              #false)
+(check-expect (si-game-over? (make-sigs (make-posn 100 100) (make-tank 100 0) (make-posn 100 100)))
+              #true)
 (define (si-game-over? s)
   (cond
     [(>= (posn-y (sigs-ufo s))
          (- SCENE-HEIGHT (/ (image-height UFO) 2))) #true]
-    [(>= HITRANGE
+    [(posn? (sigs-missile s)) (>= HITRANGE
          (sqrt (+ (expt (- (posn-x (sigs-ufo s)) (posn-x (sigs-missile s))) 2)
-                  (expt (- (posn-y (sigs-ufo s)) (posn-y (sigs-missle s))) 2)))) #true]
+                  (expt (- (posn-y (sigs-ufo s)) (posn-y (sigs-missile s))) 2))))]
     [else #false]))
 
 (define (main state)
