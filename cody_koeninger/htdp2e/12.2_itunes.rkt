@@ -139,3 +139,18 @@
               (date-before? d (track-played (first ts))))
          (cons (first ts) (select-album-date a d (rest ts)))
          (select-album-date a d (rest ts)))]))
+
+; ex 204
+
+; LTracks -> list of LTracks
+(check-expect (select-albums (list example-track example-track2 example-track3))
+              (list (list example-track example-track2) (list example-track3)))
+(define (select-albums ts)
+  (select-albums* (select-album-titles/unique ts) ts))
+
+(define (select-albums* albums tracks)
+  (cond
+    [(empty? albums) '()]
+    [(cons? albums)
+     (cons (select-album (first albums) tracks)
+           (select-albums* (rest albums) tracks))]))
