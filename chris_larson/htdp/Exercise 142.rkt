@@ -37,11 +37,10 @@
  
 ; List-of-temperatures -> Number 
 ; counts the temperatures on the given list 
-(define (how-many alos)
+(define (how-many ne-l)
   (cond
-    [(empty? alos) 0]
-    [else (+ (how-many (rest alos)) 1)]))
-(check-expect (how-many '()) 0)
+    [(empty? (rest ne-l)) 1]
+    [else (+ (how-many (rest ne-l)) 1)]))
 (check-expect (how-many (cons "a" '())) 1)
 (check-expect
   (how-many (cons "b" (cons "a" '()))) 2)
