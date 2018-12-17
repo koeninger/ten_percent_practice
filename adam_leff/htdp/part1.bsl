@@ -867,3 +867,6 @@ MIDDLE
 ; Daytime is (make-daytime Number Number Number)
 (define-struct daytime [hours minutes seconds])
 
+//Exercise 78
+; ThreeLetterWord is (make-threeletterword 1String 1String 1String)
+(define-struct threeletterword [first second third])

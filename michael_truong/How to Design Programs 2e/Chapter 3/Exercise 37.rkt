@@ -6,6 +6,7 @@
 ;    "hello_world"
 ; expected:
 ;    "ello_world"
+
 (define (string-rest str)
   (cond
     [(> (string-length str) 1) (substring str 1)]

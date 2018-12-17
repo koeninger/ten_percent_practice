@@ -1,0 +1,70 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex102) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+(require 2htdp/image)
+(require 2htdp/universe)
+
+(define SCENE-WIDTH 200)
+(define SCENE-HEIGHT 200)
+(define BUILD-WIDTH 10)
+(define BUILD-COLOR "dimgray")
+(define BUILD-WINDOW-COLOR "gray")
+(define WINDOW (rectangle 6 6 "solid" BUILD-WINDOW-COLOR))
+(define BUILDING-UNIT-WINDOW (overlay/offset WINDOW
+                                             0 0
+                                             (rectangle BUILD-WIDTH BUILD-WIDTH "solid" BUILD-COLOR)))
+(define BUILDING-UNIT (rectangle BUILD-WIDTH BUILD-WIDTH "solid" BUILD-COLOR))
+
+(define TANK (above
+              (rectangle 6 8 "solid" "green")
+              (rectangle 30 8 "solid" "green")))
+(define UFO (overlay
+             (beside (circle 3 "solid" "white")
+                     (circle 4 "solid" "white")
+                     (circle 3 "solid" "white"))
+             (ellipse 25 22 "solid" "gray")))
+
+(define MISSLE (rectangle 4 12 "solid" "yellow"))
+
+(define UFO-Y-RANGE 8)
+(define MISSLE-SPEED 10)
+(define TANK-SPEED 3)
+(define HITRANGE 12)
+
+(define BACKGROUND (empty-scene SCENE-WIDTH SCENE-HEIGHT "blue"))
+
+; a UFO is a Posn
+; interpretation (make-posn x y) is the UFO's location
+; (using top-down, left-right convention)
+
+(define-struct tank [loc vel])
+; a Tank is a structure:
+;  (make-tank Number Number)
+; interpretation (make-tank x dx) specifies the pos:
+; (x, HEIGHT) and the tank's speed: dx pixels/tick
+
+(define-struct sigs [ufo tank missile])
+; A SIGS.v2 (short for SIGS version 2) is a structure:
+;   (make-sigs UFO Tank MissileOrNot)
+; interpretation represents the complete state of a
+; space invader game
+ 
+; A MissileOrNot is one of: 
+; – #false
+; – Posn
+; interpretation#false means the missile is in the tank;
+; Posn says the missile is at that location
+
+
+; MissileOrNot Image -> Image 
+; adds an image of missile m to scene s 
+(define (missile-render.v2 m s)
+  s)
+
+
+; test case
+(check-expect (missile-render.v2 #false BACKGROUND)
+              BACKGROUND)
+(check-expect (missile-render.v2 (make-posn 32 (- SCENE-HEIGHT (image-height TANK) 10)) BACKGROUND)
+              (place-image MISSLE 32 (- SCENE-HEIGHT (image-height TANK) 10) BACKGROUND))
+              

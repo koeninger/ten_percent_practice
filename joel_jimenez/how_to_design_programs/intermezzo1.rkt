@@ -122,3 +122,43 @@
 ;(define f@LEFT (+ 50000 10))
 ;(define f@LEFT 50010)
 ; No errors, f@LEFT == f@RIGHT
+
+
+; Exercise 125. Discriminate the legal from the illegal sentences:
+; (define-struct oops [])
+; Legal
+; (define-struct child [parents dob date])
+; Legal
+; (define-struct (child person) [dob date])
+; Illegal, structure name is not valid
+
+
+; Exercise 126. Identify the values among the following expressions, assuming the definitions area contains these structure type definitions:
+(define-struct point [x y z])
+(define-struct none  [])
+(make-point 1 2 3)
+(make-point (make-point 1 2 3) 4 5)
+(make-point (+ 1 2) 3 4)
+(make-none)
+(make-point (point-x (make-point 1 2 3)) 4 5)
+
+
+; Exercise 127. Suppose the program contains
+(define-struct ball [x y speed-x speed-y])
+; Predict the results of evaluating the following expression:
+(number? (make-ball 1 2 3 4))
+#false
+
+(ball-speed-y (make-ball (+ 1 2) (+ 3 3) 2 3))
+(ball-speed-y (make-ball 3 6 2 3))
+3
+
+(ball-y (make-ball (+ 1 2) (+ 3 3) 2 3))
+(ball-y (make-ball 3 6 2 3))
+6
+
+; (ball-x (make-posn 1 2))
+; Error, (make-posn 1 2) is not type ball
+
+; (ball-speed-y 5)
+; Error, 5 is not type ball
