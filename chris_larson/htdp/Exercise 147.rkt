@@ -21,3 +21,38 @@
 (check-expect (one-true (cons #false (cons #false (cons #false '())))) #false)
 
 ; yes, accepting empty lists means we don't need checked functions
+
+; N String -> List-of-strings 
+; creates a list of n copies of s
+ 
+(check-expect (copier 0 "hello") '())
+(check-expect (copier 2 "hello")
+              (cons "hello" (cons "hello" '())))
+ 
+(define (copier n s)
+  (cond
+    [(zero? n) '()]
+    [(positive? n) (cons s (copier (sub1 n) s))]))
+
+(copier 3 #true)
+(copier 3 (square 9 "solid" "blue"))
+
+; N -> Number
+; computes (+ n pi) without using +
+(check-within (add-to-pi 3) (+ 3 pi) 0.001)
+(define (add-to-pi n)
+  (cond
+    [(zero? n) pi]
+    [(positive? n) (add1 (add-to-pi (sub1 n)))]))
+
+(check-within (add 3 pi) (+ 3 pi) 0.001)
+(define (add n x)
+  (cond
+    [(zero? n) x]
+    [(positive? n) (add1 (add (sub1 n) x))]))
+
+(check-within (multiply 3 pi) (* 3 pi) 0.001)
+(define (multiply n x)
+  (cond
+    [(zero? n) 0]
+    [(positive? n) (+ x (multiply (sub1 n) x))]))
