@@ -1,1 +1,245 @@
+Exercise 106 Design the cat-cham world program. Given both a location and an animal, it walks the latter across the canvas,
+starting from the given location. Here is the chosen data representations for animals:
+; A VAnimal is either
+; - a VCat
+; - a VCham
+where VCat and VCham are your data definitions for exercise 88 and 92. 
+Given that VAnimal is the collection of world states, you need to design 
+- a rendering function from VAnimal to Image
+- a function for handling clock ticks, from VAnimal to VAnimal, and
+- a function for dealing with key events so that you can feed and pet and colorize your animal- as applicable
+It remains impossible to change the color of a cat or to peta chameleon
 
+; physical constants
+(define WIDTH-OF-WORLD 400)
+(define HEIGHT-OF-WORLD 200)
+(define MAXIMUM-HAPPINESS-SCORE 100)
+(define MINIMUM-HAPPINESS-SCORE 0)
+(define GAUGE-WIDTH 100)
+(define GAUGE-HEIGHT 25)
+(define DOWN-CHANGE .2)
+(define UP-CHANGE 1/3)
+(define TOCK-DECREASE -0.1)
+(define SPEED 3)
+
+; graphical constants
+(define CHAM .)
+(define CAT .)
+
+(define Y-CAT
+  (- HEIGHT-OF-WORLD (/ (image-height CAT) 2)))
+
+
+(define Y-CHAM
+  (- HEIGHT-OF-WORLD (/ (image-height CHAM) 2)))
+
+(define BACKGROUND-CAT
+  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
+  
+(define BACKGROUND-CHAM
+  (beside (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "green")
+          (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "white")
+          (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "red")))
+
+(define GAUGE
+  (overlay/xy
+   (rectangle GAUGE-WIDTH GAUGE-HEIGHT "solid" "black")
+   0 0
+   (empty-scene GAUGE-WIDTH GAUGE-HEIGHT)))
+
+; A VAnimal is either
+; - a vcat
+; - a vcham
+
+(define-struct vcat [x-pos happy])
+; A cat-status is a structure
+;      (make-vcat Number Number)
+; interpretation (make-vcat n k) describes a cat's
+; x-coordinate and its happiness level
+
+(define CAT1 (make-vcat 0 100)) ; happy cat at origin
+(define CAT2 (make-vcat 100 0)) ; unhappy cat at x-coordinate 100
+(define CAT3 (make-vcat 50 50))
+
+(define-struct vcham [x-pos happy color])
+; A cham-status is a structure
+; (make-vcham Number Number String)
+; interpretation (make-vcham x h c) describes a chameleon's
+; x-coordinate and its happiness level and the color of the chameleon
+
+(define CHAM1 (make-vcham 0 100 "blue"))
+(define CHAM2 (make-vcham 100 0 "red"))
+(define CHAM3 (make-vcham 50 50 "green"))
+
+; VANIMAL -> Image
+; places the cat or cham in the world, using vcat-x-pos or vcham-x-pos as the x position
+; renders the happiness guage using the value of vcat-happy or vcham-happy
+; renders the background color if a chameleon 
+(check-expect (render CAT2) (place-image/align
+                             (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                             5 10 "left" "top"
+                             (place-image CAT 100 Y-CAT BACKGROUND-CAT)))
+(check-expect (render CHAM2) (place-image/align (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image CHAM 100 Y-CHAM BACKGROUND-CHAM)))
+
+(define (render vanimal)
+  (cond
+    [(vcat? vanimal) (cat-image vanimal)]
+    [(vcham? vanimal) (cham-image vanimal)]))
+  
+; VCAT -> Image
+; places the cat in the world, using vcat-x-pos as the x position
+; renders the happiness guage using the value of vcat-happy
+(check-expect (cat-image CAT1) (place-image/align
+                              (rectangle (* 3 100) GAUGE-HEIGHT "solid" "black")
+                                         5 10 "left" "top"
+                                         (place-image CAT 0 Y-CAT BACKGROUND-CAT)))
+(check-expect (cat-image CAT2) (place-image/align
+                              (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                                         5 10 "left" "top"
+                                         (place-image CAT 100 Y-CAT BACKGROUND-CAT)))
+
+(define (cat-image vcat)
+  (place-image/align
+   (rectangle (* 3 (vcat-happy vcat)) GAUGE-HEIGHT "solid" "black")
+   5 10 "left" "top"
+   (place-image CAT (vcat-x-pos vcat) Y-CAT BACKGROUND-CAT)))
+  
+; VCHAM -> Image
+; render the cham and the happiness gauge on the scene
+; places the cham in the world using cham-x-pos as the x position
+; renders the happiness gauge using the value of vcham-happy
+; renders the background color of the chameleon
+(check-expect (cham-image CHAM2) (place-image/align (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image CHAM 100 Y-CHAM BACKGROUND-CHAM)))
+(check-expect (cham-image CHAM3) (place-image/align (rectangle (* 3 50) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image CHAM 50 Y-CHAM BACKGROUND-CHAM)))
+(define (cham-image vcham)
+  (place-image/align
+   (rectangle (* 3 (vcham-happy vcham)) GAUGE-HEIGHT "solid" "black")
+   5 10 "left" "top"
+   (place-image CHAM (vcham-x-pos vcham) Y-CHAM BACKGROUND-CHAM)))
+
+; VANIMAL -> VANIMAL
+; moves the vanimal by 3 pixels for every clock tick
+; moves vanimal by endless left to right loop
+(check-expect (tock CAT2) (make-vcat (+ 100 SPEED) 0.0))
+(check-expect (tock CHAM2) (make-vcham (+ 100 SPEED) 0.0 "red"))
+
+(define (tock vanimal)
+  (cond
+    [(vcat? vanimal) (tock-cat vanimal)]
+    [(vcham? vanimal) (tock-cham vanimal)]))
+
+;Auxiliary functions for tock-cat
+
+; WorldState -> WorldState
+; moves the CAT by 3 pixel for every clock tick
+; moves CAT by endless left to right loop
+(check-expect (tock-cat CAT3) (make-vcat (+ 50 SPEED) (- 50 0.1)))
+(check-expect (tock-cat CAT2) (make-vcat (+ 100 SPEED) 0.0))
+
+(define (tock-cat vcat)
+  (make-vcat
+   (tock-x-pos (vcat-x-pos vcat))
+   (tock-happy (vcat-happy vcat))))
+
+; Worldstate -> Worldstate
+; moves the cham by 3 pixels for every clock tick
+; moves cham by endless left to right loop
+(check-expect (tock-cham CHAM2) (make-vcham (+ 100 SPEED) 0.0 "red"))
+(check-expect (tock-cham CHAM3) (make-vcham (+ 50 SPEED) (- 50 0.1) "green"))
+
+(define (tock-cham vcham)
+  (make-vcham
+   (tock-x-pos (vcham-x-pos vcham))
+   (tock-happy (vcham-happy vcham))
+   (vcham-color vcham)))
+
+; Number -> Number
+; update the x-pos, reset at edge of screen
+(check-expect (tock-x-pos 50) (+ 50 SPEED))
+(check-expect (tock-x-pos 100) (+ 100 SPEED))
+(check-expect (tock-x-pos (vcham-x-pos CHAM2)) (+ 100 SPEED))
+(check-expect (tock-x-pos (vcham-x-pos CHAM3)) (+ 50 SPEED))
+
+(define (tock-x-pos xpos)
+  (cond
+    [(< xpos WIDTH-OF-WORLD) (+ xpos SPEED)]
+    [else 0]))
+
+; Number -> Number
+; update the given happiness scale
+(check-expect (tock-happy 50) (- 50 0.1))
+(check-expect (tock-happy 0) 0.0)
+(check-expect (tock-happy (vcham-happy CHAM2)) 0.0)
+(check-expect (tock-happy (vcham-happy CHAM3)) (- 50 0.1))
+
+(define (tock-happy happy)
+  (cond
+    [(> happy 0.0) (- happy 0.1)]
+    [else 0.0]))
+
+; VANIMAL KeyEvent -> Image 
+; handles the feeding and petting if vcat
+; handles feeding and changing color if vcham
+
+(define (change-vanimal vanimal ke)
+  (cond
+    [(vcat? vanimal) (change-cat vanimal ke)]
+    [(vcham? vanimal) (change-cham vanimal ke)]))
+
+; VCAT KeyEvent -> VCat
+; handle CAT feeding and petting
+; up arrow pets CAT, down arrow feeds CAT
+(check-expect (change-cat CAT3 "up") (pet CAT3))
+(check-expect (change-cat CAT2 "a") CAT2)
+
+(define (change-cat vcat ke)
+  (cond
+    [(key=? ke "up") (pet vcat)]
+    [(key=? ke "down") (feed vcat)]
+    [else vcat]))
+
+; Auxiliary functions for change-cat
+; VCAT -> VCAT
+; pet the cat
+(check-expect (pet CAT1) (make-vcat 0 (+ 100 UP-CHANGE)))
+(check-expect (pet CAT3) (make-vcat 50 (+ 50 UP-CHANGE)))
+
+(define (pet vcat)
+  (make-vcat (vcat-x-pos vcat) (+ (vcat-happy vcat) UP-CHANGE)))
+
+; VCAT -> VCAT
+; feed the cat 
+(check-expect (feed CAT2) (make-vcat 100 (+ 0 DOWN-CHANGE)))
+(check-expect (feed CAT3) (make-vcat 50 (+ 50 DOWN-CHANGE)))
+
+(define (feed vcat)
+  (make-vcat (vcat-x-pos vcat) (+ (vcat-happy vcat) DOWN-CHANGE)))
+
+; vcham KeyEvent -> Vcham
+; handles CHAM feeding and changing color of CHAM 
+; down arrow feeds CHAM
+; - "r" changes its color to red
+; - "b" changes its color to blue
+; - "g" changes its color to green
+(check-expect (change-cham CHAM2 "g") (make-vcham 100 0 "green"))
+(check-expect (change-cham CHAM2 "down") (make-vcham 100 0.2 "red"))
+(check-expect (change-cham CHAM3 "b") (make-vcham 50 50 "blue"))
+(check-expect (change-cham CHAM3 "down") (make-vcham 50 50.2 "green"))
+                                       
+
+(define (change-cham vcham ke)
+  (make-vcham (vcham-x-pos vcham)
+             (cond
+               [(key=? ke "down") (+ (vcham-happy vcham) DOWN-CHANGE)]
+               [else (vcham-happy vcham)])
+             (cond
+               [(key=? ke "r") "red"]
+               [(key=? ke "b") "blue"]
+               [(key=? ke "g") "green"]
+               [else (vcham-color vcham)])))
