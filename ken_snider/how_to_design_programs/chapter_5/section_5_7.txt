@@ -30,3 +30,13 @@
 
 ; ===
 
+; Exercise 78. Provide a structure type and a data definition for representing three-letter words. A word consists of lowercase letters, represented with the 1Strings "a" through "z" plus #false.
+
+; ---
+
+; A Threeletterword is one of:
+; - (make-threeletterword 1String 1String 1String)
+; - #false
+(define-struct threeletterword [ letter1 letter2 letter3 ])
+
+; ===
