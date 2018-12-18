@@ -162,3 +162,18 @@
 
 ; (ball-speed-y 5)
 ; Error, 5 is not type ball
+
+
+; Exercise 128. Copy the following tests into DrRacket’s definitions area:
+(check-member-of "green" "red" "yellow" "grey")
+; "green" is not "red", "yellow", or "grey"
+(check-within (make-posn #i1.0 #i1.1)
+              (make-posn #i0.9 #i1.2)  0.01)
+; (make-posn #i1.0 #i1.1) is not within 0.01 of (make-posn #i0.9 #i1.2)
+(check-range #i0.9 #i0.6 #i0.8)
+; #i0.9 is not in the range of #i0.6 - #i0.8
+(check-random (make-posn (random 3) (random 9))
+              (make-posn (random 9) (random 3)))
+; the calls to random are nested
+(check-satisfied 4 odd?)
+; For is not odd
