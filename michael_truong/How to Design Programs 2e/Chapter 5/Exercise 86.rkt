@@ -1,16 +1,24 @@
 #lang racket
 
 (require 2htdp/image)
+(require 2htdp/universe)
 (require test-engine/racket-tests)
 
 (define-struct editor [pre post])
 
+(define max-width 200)
+(define max-height 20)
+(define font-size 11)
+
+(define (text-box ed)
+  (beside (text (editor-pre ed) font-size "black")
+          (rectangle 1 max-height "solid" "red")
+          (text (editor-post ed) font-size "black")))
+
 (define (render ed)
   (overlay/align "left" "center"
-                 (beside (text (editor-pre ed) 11 "black")
-                         (rectangle 1 20 "solid" "red")
-                         (text (editor-post ed) 11 "black"))
-                 (empty-scene 200 20)))
+                 (text-box ed)
+                 (empty-scene max-width max-height)))
 
 (define (string-first str)
   (cond
@@ -31,6 +39,11 @@
   (cond
     [(> (string-length str) 0) (substring str 0 (- (string-length str) 1))]
     [else str]))
+
+(define (limit old-ed new-ed)
+  (cond
+    [(<= (image-width (text-box new-ed)) max-width) new-ed]
+    [else old-ed]))
 
 (check-expect (render (edit (make-editor "" "helloworld") "_")) (render (make-editor "_" "helloworld")))
 (check-expect (render (edit (make-editor "h" "elloworld") "_")) (render (make-editor "h_" "elloworld")))
@@ -72,9 +85,7 @@
                                                                     (editor-post ed))]
                                    [(string=? ke "\t") ed]
                                    [(string=? ke "\r") ed]
-                                   [else (make-editor (string-append (editor-pre ed)
-                                                                     ke)
-                                                      (editor-post ed))])]
+                                   [else (limit ed (make-editor (string-append (editor-pre ed) ke) (editor-post ed)))])]
       [(> (string-length ke) 1) (cond
                                    [(string=? ke "left") (make-editor (string-remove-last (editor-pre ed))
                                                                       (string-append (string-last (editor-pre ed))
@@ -85,4 +96,10 @@
                                    [else ed])])]
     [else (make-editor (editor-pre ed) (editor-post ed))]))
 
+(define (run initial-state)
+  (big-bang initial-state
+    [to-draw render]
+    [on-key edit]))
+
 (test)
+(run (make-editor "" ""))
