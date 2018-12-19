@@ -154,3 +154,54 @@
     [(cons? albums)
      (cons (select-album (first albums) tracks)
            (select-albums* (rest albums) tracks))]))
+
+; ex 205
+
+(define ITUNES-LOCATION "/Users/cody/Music/iTunes/iTunes Music Library.xml")
+(define list-tracks
+  (read-itunes-as-lists ITUNES-LOCATION))
+
+(define example-LAssoc
+   (list
+  (list "Track ID" 469)
+  (list "Size" 14390826)
+  (list "Total Time" 416130)
+  (list "Track Number" 2)
+  (list "Year" 2017)
+  (list "Date Modified" (make-date 2018 7 5 16 24 9))
+  (list "Date Added" (make-date 2018 7 5 16 24 48))
+  (list "Bit Rate" 276)
+  (list "Sample Rate" 44100)
+  (list "Play Count" 1)
+  (list "Play Date" 3613635372)
+  (list "Play Date UTC" (make-date 2018 7 5 16 36 12))
+  (list "Artwork Count" 1)
+  (list "Persistent ID" "E8B5FD4F092415F0")
+  (list "Track Type" "File")
+  (list "File Folder Count" 5)
+  (list "Library Folder Count" 1)
+  (list "Name" "B Looper")
+  (list "Artist" "Hakase")
+  (list "Album Artist" "Hakase")
+  (list "Album" "This Was A Mistake")
+  (list "Kind" "MPEG audio file")
+  (list "Comments" "Visit http://hakasehakase.bandcamp.com")
+  (list "Location" "file:///Users/cody/Music/iTunes/iTunes%20Media/Music/Hakase/This%20Was%20A%20Mistake/02%20B%20Looper.mp3")))
+
+(define example-LAssoc2
+   (list
+  (list "Track ID" 417)
+  (list "Size" 13796992)
+  (list "Date Added" (make-date 2018 3 4 21 42 1))
+  (list "Play Count" 1)
+  (list "Release Date" (make-date 2015 4 27 7 0 47))
+  (list "Persistent ID" "8C6413E793D833C5")
+  (list "Track Type" "URL")
+  (list "Podcast" #true)
+  (list "Name" "S1-B18: The Breaking of Forstor Nagar")
+  (list "Artist" "Iconic Podcast")
+  (list "Album" "Iconic Podcast")
+  (list "Genre" "Podcast")
+  (list "Location" "http://feedproxy.google.com/~r/IconicPodcast/~5/ozp7ylfIb3E/Iconic-B18.mp3")))
+
+(define example-LLists (list example-LAssoc example-LAssoc2))
