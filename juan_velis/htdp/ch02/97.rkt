@@ -80,39 +80,54 @@
 ;                (make-tank 28 -3)
 ;                (make-posn 28 (- HEIGHT TANK-HEIGHT)))
 
+(define-struct aim [ufo tank])
+(define-struct fired [ufo tank missile])
+
+(define-struct ufo [x y])
+(define-struct missile [x y])
+
+(define A1 (make-aim (make-ufo 20 10) (make-tank 28 -3)))
+(define A2
+  (make-fired (make-ufo 20 10)
+              (make-tank 28 -3)
+              (make-missile 28 (- HEIGHT-OF-WORLD TANK-HEIGHT))))
+(define A3
+(make-fired (make-ufo 20 100)
+            (make-tank 100 3)
+            (make-missile 22 103)))
+
+
+; SIGS -> Image
+; adds TANK, UFO, and possibly MISSILE to 
+; the BACKGROUND scene
 (define (si-render s)
   (cond
-    [(aim? s)
-     (tank-render (aim-tank s)
-                  (ufo-render (aim-ufo s) BACKGROUND))]
-    [(fired? s)
-     (tank-render
-       (fired-tank s)
-       (ufo-render (fired-ufo s)
-                   (missile-render (fired-missile s)
-                                   BACKGROUND)))]))
+    [(aim? s) (tank-render (aim-tank s) (ufo-render (aim-ufo s) BACKGROUND) )]
+    [(fired? s) (tank-render (fired-tank s)
+                   (ufo-render (fired-ufo s)
+                               (missile-render (fired-missile s) BACKGROUND))
+       )])
+)
+
+; SIGS -> Image
+; renders tank
+(define (tank-render s back)
+  (place-image TANK (tank-loc s) Y-TANK back))
+
+; Img -> Image
+; renders ufo
+(define (ufo-render s back)
+  (place-image UFO (ufo-x s) (ufo-y s) back))
+
+; Img -> Image
+; render missile
+(define (missile-render s back)
+  (place-image MISSILE (missile-x s) (missile-y s) back))
+
+(si-render A3)
 
 
-(ufo-render
-  (fired-ufo s)
-  (tank-render (fired-tank s)
-               (missile-render (fired-missile s)
-                               BACKGROUND)))
-
-(define-struct aim [posn tank])
-(define-struct fired [posn tank missile])
-
-(define A1 (make-aim (make-posn 20 10) (make-tank 28 -3)))
-(define A2
-  (make-fired (make-posn 20 10)
-              (make-tank 28 -3)
-              (make-posn 28 (- HEIGHT-OF-WORLD TANK-HEIGHT))))
-(define A3
-(make-fired (make-posn 20 100)
-            (make-tank 100 3)
-            (make-posn 22 103)))
-
-
+#|
 (place-image
  TANK (tank-loc (aim-tank A1)) Y-TANK
  (place-image 
@@ -138,4 +153,4 @@
    UFO (posn-x (fired-posn A3)) (posn-y (fired-posn A3))
    BACKGROUND)
   )
-)
+)|#
