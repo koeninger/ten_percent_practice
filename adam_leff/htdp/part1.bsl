@@ -900,3 +900,23 @@ interpretation a dog is owned by a person and is some percentage happy
 (define-struct sweater [material size color])
 (define (sweater-consume s)
     (... (sweater-material s) ... (sweater-size s) ... (sweater-color s) ...))
+    
+//Exercise 81
+; Daytime -> Number
+; returns the number of seconds since the day started
+(define (time->seconds dt)
+    (+
+        (daytime-seconds dt)
+        (* (daytime-minutes dt) 60)
+        (* (daytime-hours dt) (* 60 60))))
+        
+//Exercise 82
+; Threeletterword -> ThreeLetterWord
+; creates a Threeletterword where the letters which agree
+; are returned, but the letters that don't match are false
+(define (compare-word w1 w2)
+    (make-threeletterword 
+        (if (= (threeletterword-first w1) (threeletterword-first w2)) (threeletterword-first w1) #false)
+        (if (= (threeletterword-second w1) (threeletterword-second w2)) (threeletterword-second w1) #false)
+        (if (= (threeletterword-third w1) (threeletterword-third w2)) (threeletterword-third w1) #false)
+    ))
