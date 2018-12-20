@@ -1,0 +1,7 @@
+Exercise 107 Design the cham-and-cat program, which deals with both a virtual cat and a virtual chameleon. You need
+a data definition for a "zoo" containing both animals and functions for dealing with it.
+The problem statement leaves open how keys manipulate the two animals. Here are two possible interpretations
+1. each key event goes to both animals
+2. each key event aplies to only one of the two animals 
+Choose one of the alternatives and design the appropriate program
+
