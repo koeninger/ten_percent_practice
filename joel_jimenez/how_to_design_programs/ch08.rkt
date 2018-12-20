@@ -28,3 +28,23 @@
       (cons "Green"
         (cons "Blue"
           (cons "Purple" '()))))))
+
+
+; Exercise 130. Create an element of List-of-names that contains five Strings.
+(cons "Lennon"
+(cons "McCartney"
+  (cons "Harrison"
+    (cons "Starr"
+      (cons "Jimenez" '())))))
+;   Explain why (cons "1" (cons "2" '())) is an element of List-of-names and why (cons 2 '()) isn’t.
+;   The values in the list (cons "1" (cons "2" '())) are strings, "1" and "2".
+;   The value in (cons 2 '()) is a number, 2.
+
+
+; Exercise 131. Provide a data definition for representing lists of Boolean values.
+;   The class contains all arbitrarily long lists of Booleans.
+
+; A List-of-bools is one of:
+; – '()
+; – (cons Boolean List-of-bools)
+; interpretation a list of answers to true/false questions in a test

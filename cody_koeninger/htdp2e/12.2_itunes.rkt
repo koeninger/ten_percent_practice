@@ -157,6 +157,9 @@
 
 ; ex 205
 
+; why isn't make-date exposed by the itunes module?
+(define (make-date a b c d e f) (create-date a b c d e f))
+
 (define ITUNES-LOCATION "/Users/cody/Music/iTunes/iTunes Music Library.xml")
 (define list-tracks
   (read-itunes-as-lists ITUNES-LOCATION))
@@ -205,3 +208,19 @@
   (list "Location" "http://feedproxy.google.com/~r/IconicPodcast/~5/ozp7ylfIb3E/Iconic-B18.mp3")))
 
 (define example-LLists (list example-LAssoc example-LAssoc2))
+
+; ex 206
+
+; string LAssoc Any -> Association
+; returns first association matching key, or default
+(check-expect (find-association "a" (list (list "a" 1) (list "b" 3) (list "a" 2)) 23)
+              (list "a" 1))
+(check-expect (find-association "c" (list (list "a" 1) (list "b" 3) (list "a" 2)) 23)
+              (list "c" 23))
+(define (find-association k la default)
+  (cond
+    [(empty? la) (list k default)]
+    [(and (cons? la) (cons? (first la)))
+     (if (string=? k (first (first la)))
+         (first la)
+         (find-association k (rest la) default))]))

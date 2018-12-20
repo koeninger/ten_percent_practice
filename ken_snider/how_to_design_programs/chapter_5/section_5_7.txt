@@ -40,3 +40,31 @@
 (define-struct threeletterword [ letter1 letter2 letter3 ])
 
 ; ===
+
+; Exercise 79. Create examples for the following data definitions:
+; A Color is one of: 	
+; — "white"	
+; — "yellow"	
+; — "orange"	
+; — "green"	
+; — "red"	
+; — "blue"	
+; — "black" 
+
+; H is a Number between 0 and 100.	
+; interpretation represents a happiness value 
+
+;(define-struct person [fstname lstname male?])	
+; A Person is a structure:	
+;   (make-person String String Boolean) 
+
+;(define-struct dog [owner name age happiness])	
+; A Dog is a structure:	
+;   (make-dog Person String PositiveInteger H) 
+; Add an interpretation to this data definition, too.
+
+; A Weapon is one of: 	
+; — #false	
+; — Posn	
+; interpretation #false means the missile hasn't 	
+; been fired yet; a Posn means it is in flight 
