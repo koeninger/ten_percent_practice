@@ -5,3 +5,72 @@ The problem statement leaves open how keys manipulate the two animals. Here are 
 2. each key event aplies to only one of the two animals 
 Choose one of the alternatives and design the appropriate program
 
+; physical constants
+(define WIDTH-OF-WORLD 400)
+(define HEIGHT-OF-WORLD 200)
+(define MAXIMUM-HAPPINESS-SCORE 100)
+(define MINIMUM-HAPPINESS-SCORE 0)
+(define GAUGE-WIDTH 100)
+(define GAUGE-HEIGHT 25)
+(define DOWN-CHANGE .2)
+(define UP-CHANGE 1/3)
+(define TOCK-DECREASE -0.1)
+(define SPEED 3)
+
+; graphical constants
+(define CHAM .)
+(define CAT .)
+
+(define Y-CAT
+  (- HEIGHT-OF-WORLD (/ (image-height CAT) 2)))
+
+
+(define Y-CHAM
+  (- HEIGHT-OF-WORLD (/ (image-height CHAM) 2)))
+
+(define BACKGROUND-CAT
+  (empty-scene WIDTH-OF-WORLD HEIGHT-OF-WORLD))
+  
+(define BACKGROUND-CHAM
+  (beside (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "green")
+          (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "white")
+          (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "red")))
+
+(define GAUGE
+  (overlay/xy
+   (rectangle GAUGE-WIDTH GAUGE-HEIGHT "solid" "black")
+   0 0
+   (empty-scene GAUGE-WIDTH GAUGE-HEIGHT)))
+
+; A VAnimal is either
+; - a vcat
+; - a vcham
+
+(define-struct vcat [x-pos happy])
+; A cat-status is a structure
+;      (make-vcat Number Number)
+; interpretation (make-vcat n k) describes a cat's
+; x-coordinate and its happiness level
+
+(define CAT1 (make-vcat 0 100)) ; happy cat at origin
+(define CAT2 (make-vcat 100 0)) ; unhappy cat at x-coordinate 100
+(define CAT3 (make-vcat 50 50))
+
+(define-struct vcham [x-pos happy color])
+; A cham-status is a structure
+; (make-vcham Number Number String)
+; interpretation (make-vcham x h c) describes a chameleon's
+; x-coordinate and its happiness level and the color of the chameleon
+
+(define CHAM1 (make-vcham 0 100 "blue"))
+(define CHAM2 (make-vcham 100 0 "red"))
+(define CHAM3 (make-vcham 50 50 "green"))
+
+(define-struct zoo [vcat vcham])
+; A zoo is a structure
+;    (make-zoo (make-vcat Number Number) (make-vcham Number Number))
+; interpretation the zoo has a cat and a chameleon
+
+(define ZOO1 (make-zoo CAT1 CHAM1))
+(define ZOO2 (make-vcat 50 50) (make-vcham 20 20 "blue"))
+(define ZOO3 CAT2 CHAM2)
