@@ -870,3 +870,53 @@ MIDDLE
 //Exercise 78
 ; ThreeLetterWord is (make-threeletterword 1String 1String 1String)
 (define-struct threeletterword [first second third])
+
+//Exercise 79
+(make-color "white")
+
+(make-h 50)
+
+(make-person "adam" "leff" true)
+bad idea because then you cant name the predicate that
+
+(make-dog (make-person "adam" "leff" true) "fido" 5 (make-h 100))
+interpretation a dog is owned by a person and is some percentage happy
+
+(make-weapon (make-posn 100 100))
+
+//Exercise 80
+(define-struct movie [title director year])
+(define (movie-consume m)
+    (... (movie-title m) ... (movie-director m) ... (movie-year m) ....))
+
+(define-struct pet [name number])
+(define (pet-consume p)
+    (... (pet-name p) ... (pet-number p) ...))
+
+(define-struct CD [artist title price])
+(define (cd-consume c)
+    (... (CD-artist c) ... (CD-title c) ... (CD-price c) ...))
+
+(define-struct sweater [material size color])
+(define (sweater-consume s)
+    (... (sweater-material s) ... (sweater-size s) ... (sweater-color s) ...))
+    
+//Exercise 81
+; Daytime -> Number
+; returns the number of seconds since the day started
+(define (time->seconds dt)
+    (+
+        (daytime-seconds dt)
+        (* (daytime-minutes dt) 60)
+        (* (daytime-hours dt) (* 60 60))))
+        
+//Exercise 82
+; Threeletterword -> ThreeLetterWord
+; creates a Threeletterword where the letters which agree
+; are returned, but the letters that don't match are false
+(define (compare-word w1 w2)
+    (make-threeletterword 
+        (if (= (threeletterword-first w1) (threeletterword-first w2)) (threeletterword-first w1) #false)
+        (if (= (threeletterword-second w1) (threeletterword-second w2)) (threeletterword-second w1) #false)
+        (if (= (threeletterword-third w1) (threeletterword-third w2)) (threeletterword-third w1) #false)
+    ))
