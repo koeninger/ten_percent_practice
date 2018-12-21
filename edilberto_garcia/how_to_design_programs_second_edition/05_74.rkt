@@ -29,13 +29,18 @@
 (check-expect (x+ (make-posn 10 0)) (make-posn 13 0))
 (define (x+ p) (make-posn (+ (posn-x p) 3) (posn-y p)))
 
+; MouseEvent -> Posn
+(define (reset-dot p x y me)
+  (cond
+    [(mouse=? me "button-down") (make-posn x y)]
+    [else p]))
 
 
 ; Posn -> Posn 
 (define (main p0)
   (big-bang p0
     [on-tick x+]
-    ;[on-mouse reset-dot]
+    [on-mouse reset-dot]
     [to-draw scene+dot]))
 
 
