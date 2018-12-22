@@ -1,0 +1,18 @@
+;Exercise 80. Create templates for functions that consume instances of the following structure types:
+;(define-struct movie [title director year])
+(define (read-movie p)
+  ( ... (movie-title p) ... (movie-director p) ... (movie-year p) ... ))
+
+;(define-struct pet [name number])
+(define (read-pet p)
+  ( ... (pet-name p) ... (pet-number p) ...))
+
+;(define-struct CD [artist title price])
+(define (read-CD p)
+  ( ... (CD-artist p) ... (CD-title p) ... (CD-price p) ... ))
+
+;(define-struct sweater [material size color])
+(define (read-sweater p)
+  ( ... (sweater-material p) ... (sweater-size p) ... (sweater-color p) ... ))
+
+; ===
