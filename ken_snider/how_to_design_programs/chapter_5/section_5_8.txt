@@ -16,3 +16,19 @@
   ( ... (sweater-material p) ... (sweater-size p) ... (sweater-color p) ... ))
 
 ; ===
+
+; Exercise 81. Design the function time->seconds, which consumes instances of time structures (see exercise 77) and produces the number of seconds that have passed since midnight. For example, if you are representing 12 hours, 30 minutes, and 2 seconds with one of these structures and if you then apply time->seconds to this instance, the correct result is 45002.
+
+; ---
+
+; A Timesince is (make-timesince Number Number Number)
+(define-struct timesince [hh mm ss])
+
+(define time1 (make-timesince 12 30 2))
+
+; Timesince -> Number
+; Determinues the number of seconds since midnight of Timesince ts
+(check-expect (time->seconds time1) 45002)
+(check-expect (time->seconds (make-timesince 14 20 21)) 51621)
+(define (time->seconds ts)
+  (+ (* (timesince-hh ts) 60 60) (* (timesince-mm ts) 60) (timesince-ss ts)))
