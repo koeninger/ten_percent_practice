@@ -30,6 +30,8 @@
 (define (x+ p) (make-posn (+ (posn-x p) 3) (posn-y p)))
 
 ; MouseEvent -> Posn
+(check-expect (reset-dot (make-posn 10 10) 100 10 "button-up") (make-posn 10 10))
+(check-expect (reset-dot (make-posn 10 10) 100 10 "button-down") (make-posn 100 10))
 (define (reset-dot p x y me)
   (cond
     [(mouse=? me "button-down") (make-posn x y)]
