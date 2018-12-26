@@ -159,6 +159,31 @@
   )
 )
 
+; SIGS -> SIGS
+; Move
+(define (si-move w)
+  (si-move-proper w (random 3)))
+
+
+; SIGS Number -> SIGS
+; moves the space-invader objects predictably by delta
+; 0=SPEED-1, 1=x-1, 2=x+1
+(define (si-move-proper s delta)
+  (cond [(aim? s)
+         (make-aim (update-ufo (aim-ufo s) delta)
+                   (update-tank (aim-tank s)))
+        ]
+        [(fired? s)
+         (make-fired (update-ufo (fired-ufo s) delta)
+                     (update-tank (fired-tank s))
+                     (update-missile (fired-missile s)))
+        ]
+  )
+)
+(check-expect (si-move-proper (make-aim (make-ufo 10 20) (make-tank 50 0)) 0)
+              (make-aim (make-ufo 10 (+ 20 (- SPEED UFO-DELTA)))
+                        (make-tank 50 0)))
+
 ; ufo randomnum[0,1,2] -> ufo
 ; update a UFO
 ; 0 SPEED - UFO-DELTA, 1) x - UFO-DELTA, 2) x + UFO-DELTA
@@ -188,7 +213,7 @@
 ; main
 (define (main g)
   (big-bang g 
-    ;(on-tick tock) 
+    [on-tick si-move 0.1]
     (to-draw si-render) 
     ;(on-key)
     (stop-when si-game-over?)
