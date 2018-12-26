@@ -38,6 +38,9 @@
 
 (define MISSILE (circle 3 "solid" "Black"))
 
+(define SPEED 10)
+(define UFO-DELTA 7)
+
 (define TREE
   (underlay/xy (circle 10 "solid" "green")
                9 15
@@ -155,6 +158,32 @@
         ]
   )
 )
+
+; ufo randomnum[0,1,2] -> ufo
+; update a UFO
+; 0 SPEED - UFO-DELTA, 1) x - UFO-DELTA, 2) x + UFO-DELTA
+(define (update-ufo u r)
+  (cond [(= r 0) (make-ufo (ufo-x u) (+ (ufo-y u) (- SPEED UFO-DELTA)))]
+        [(= r 1) (make-ufo (- (ufo-x u) UFO-DELTA) (+ (ufo-y u) SPEED))]
+        [(= r 2) (make-ufo (+ (ufo-x u) UFO-DELTA) (+ (ufo-y u) SPEED))]))
+(check-expect (update-ufo (make-ufo 30 30) 0)
+              (make-ufo 30 (+ 30 (- SPEED UFO-DELTA))))
+
+; Tank -> Tank
+; update tank
+(define (update-tank t)
+  (make-tank (+ (tank-loc t) (tank-vel t)) (tank-vel t)))
+
+(check-expect (update-tank (make-tank 20 5)) (make-tank 25 5))
+
+
+; Missile -> Missile
+; update missile
+(define (update-missile m)
+  (make-missile (missile-x m) (- (missile-y m) SPEED)))
+
+(check-expect (update-missile (make-missile 1 50)) (make-missile 1 (- 50 SPEED)))
+
 
 ; main
 (define (main g)
