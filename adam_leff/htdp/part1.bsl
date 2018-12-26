@@ -920,3 +920,16 @@ interpretation a dog is owned by a person and is some percentage happy
         (if (= (threeletterword-second w1) (threeletterword-second w2)) (threeletterword-second w1) #false)
         (if (= (threeletterword-third w1) (threeletterword-third w2)) (threeletterword-third w1) #false)
     ))
+    
+//Exercise 83
+(require 2htdp/image)
+(define-struct editor [pre post])
+
+; Editor -> image
+(define (render e)
+  (overlay/align "left" "center"
+               (beside
+                (text (editor-pre e) 11 "black")
+                (rectangle 1 20 "solid" "red")
+                (text (editor-post e) 11 "black"))
+               (empty-scene 200 20)))
