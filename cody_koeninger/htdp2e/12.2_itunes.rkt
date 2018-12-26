@@ -224,3 +224,14 @@
      (if (string=? k (first (first la)))
          (first la)
          (find-association k (rest la) default))]))
+
+; ex 207
+
+; LLists -> Number
+; total play time
+(check-expect (total-time/list example-LLists) 416130)
+(define (total-time/list xs)
+  (cond
+    [(empty? xs) 0]
+    [(cons? xs) (+ (second (find-association "Total Time" (first xs) 0))
+                   (total-time/list (rest xs)))]))
