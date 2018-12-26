@@ -78,19 +78,24 @@
     [(cond
       [(= (string-length ke) 1) (cond
                                    [(string=? ke "\b") (cond
-                                                         [(> (editor-index ed) 0) (make-editor (string-delete (editor-string ed) (- (editor-index ed) 1))
+                                                         [(> (editor-index ed) 0) (make-editor (string-delete (editor-string ed)
+                                                                                                              (- (editor-index ed) 1))
                                                                                                (- (editor-index ed) 1))]
                                                          [else ed])]
                                    [(string=? ke "\t") ed]
                                    [(string=? ke "\r") ed]
-                                   [else (limit ed (make-editor (string-insert (editor-string ed) (editor-index ed) ke)
+                                   [else (limit ed (make-editor (string-insert (editor-string ed)
+                                                                               (editor-index ed)
+                                                                               ke)
                                                                 (+ (editor-index ed) 1)))])]
       [(> (string-length ke) 1) (cond
                                    [(string=? ke "left") (cond
-                                                           [(> (editor-index ed) 0) (make-editor (editor-string ed) (- (editor-index ed) 1))]
+                                                           [(> (editor-index ed) 0) (make-editor (editor-string ed)
+                                                                                                 (- (editor-index ed) 1))]
                                                            [else ed])]
                                    [(string=? ke "right") (cond
-                                                            [(< (editor-index ed) (string-length (editor-string ed))) (make-editor (editor-string ed) (+ (editor-index ed) 1))]
+                                                            [(< (editor-index ed) (string-length (editor-string ed))) (make-editor (editor-string ed)
+                                                                                                                                   (+ (editor-index ed) 1))]
                                                             [else ed])]
                                    [else ed])])]
     [else ed]))
