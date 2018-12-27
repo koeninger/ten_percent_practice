@@ -235,3 +235,23 @@
     [(empty? xs) 0]
     [(cons? xs) (+ (second (find-association "Total Time" (first xs) 0))
                    (total-time/list (rest xs)))]))
+
+; ex 208
+; LLists -> List of string
+;consumes an LLists and produces set of Strings that are associated with a Boolean attribute.
+(check-expect (boolean-attributes example-LLists) (list "Podcast"))
+(define (boolean-attributes xs)
+  (create-set (bool-attrs xs)))
+(define (bool-attrs xs)
+  (cond
+    [(empty? xs) '()]
+    [(cons? xs)
+     (append (bool-attrs2 (first xs))
+             (bool-attrs (rest xs)))]))
+(define (bool-attrs2 xs)
+  (cond
+    [(empty? xs) '()]
+    [(boolean? (second (first xs)))
+               (cons (first (first xs))
+                     (bool-attrs2 (rest xs)))]
+    [else (bool-attrs2 (rest xs))]))
