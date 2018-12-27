@@ -933,3 +933,26 @@ interpretation a dog is owned by a person and is some percentage happy
                 (rectangle 1 20 "solid" "red")
                 (text (editor-post e) 11 "black"))
                (empty-scene 200 20)))
+
+//Exercise 84
+(require 2htdp/image)
+(define-struct editor [pre post])
+
+; Editor -> image
+(define (render e)
+  (overlay/align "left" "center"
+               (beside
+                (text (editor-pre e) 11 "black")
+                (rectangle 1 20 "solid" "red")
+                (text (editor-post e) 11 "black"))
+               (empty-scene 200 20)))
+
+; Editor KeyEvent -> Editor
+(define (edit ed ke)
+  (cond
+    [(string=? ke "left") ...]
+    [(string=? ke "right") ...]
+    [(string=? ke "\b") ...]
+    [(= (string-length ke) 1) ...]
+  )
+)
