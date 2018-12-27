@@ -45,3 +45,65 @@
   (cond
     [(empty? aloa) 0]
     [else (+ (first aloa) (sum (rest aloa)))]))
+
+
+; Exercise 139.
+
+; A List-of-numbers is one of:
+; – '()
+; – (cons Number List-of-numbers)
+
+; List-of-numbers -> Boolean
+; determines whether all numbers in alon are positive numbers
+(check-expect (pos? '()) #true)
+(check-expect (pos? (cons 5 '())) #true)
+(check-expect (pos? (cons -1 '())) #false)
+(define (pos? alon)
+  (cond
+    [(empty? alon) #true]
+    [(< (first alon) 0) #false]
+    [else (pos? (rest alon))]))
+
+; List-of-numbers -> Boolean
+; produces the sum all numbers in alon if they belong to List-of-amounts; otherwise it signals an error
+(check-expect (checked-sum '()) 0)
+(check-expect (checked-sum (cons 5 '())) 5)
+(check-error (checked-sum (cons -1 '())) "checked-sum: input does not belong to List-of-amounts")
+(define (checked-sum alon)
+  (cond
+    [(pos? alon) (sum alon)]
+    [else (error "checked-sum: input does not belong to List-of-amounts")]))
+
+
+; Exercise 140.
+
+; A List-of-bools is one of:
+; – '()
+; – (cons Boolean List-of-bools)
+
+; List-of-bools -> Boolean
+; determines whether all values in alob is #true
+(check-expect (all-true '()) #true)
+(check-expect (all-true (cons #true '())) #true)
+(check-expect (all-true (cons #false '())) #false)
+(check-expect (all-true (cons #false (cons #true '()))) #false)
+(check-expect (all-true (cons #false (cons #false '()))) #false)
+(check-expect (all-true (cons #true (cons #true '()))) #true)
+(define (all-true alob)
+  (cond
+    [(empty? alob) #true]
+    [(false? (first alob)) #false]
+    [else (all-true (rest alob))]))
+
+; List-of-bools -> Boolean
+; determines whether at least one value in alob is #true
+(check-expect (one-true '()) #false)
+(check-expect (one-true (cons #true '())) #true)
+(check-expect (one-true (cons #false '())) #false)
+(check-expect (one-true (cons #true (cons #false '()))) #true)
+(check-expect (one-true (cons #false (cons #false '()))) #false)
+(define (one-true alob)
+  (cond
+    [(empty? alob) #false]
+    [(not (false? (first alob))) #true]
+    [else (one-true (rest alob))]))
