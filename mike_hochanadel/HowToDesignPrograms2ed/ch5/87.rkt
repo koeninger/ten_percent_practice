@@ -14,6 +14,17 @@
 (define EDITOR_TEXT_SIZE 16)
 (define CURSOR (rectangle 1 20 "solid" "red"))
 
+; String -> String
+; string-remove-last will take in a string and return a string with the last
+; character removed
+(check-expect (string-remove-last "String") "Strin")
+(check-expect (string-remove-last "42") "4")
+(check-expect (string-remove-last "") "")
+(define (string-remove-last str)
+    (if (> (string-length str) 0)
+      (substring str 0 (- (string-length str) 1))
+      ""
+    ))
 
 ; Editor -> Number
 ; cursor-location gets the x pixel location of the
@@ -31,9 +42,20 @@
          EDITOR_TEXT_SIZE
          "black")))
 
+; Editor -> Editor
+; delete-character-editor deletes a character behind the cursor position
+(check-expect (delete-character-editor (make-editor "hello world" 0)) (make-editor "hello world" 0))
+(check-expect (delete-character-editor (make-editor "hello world" 1)) (make-editor "ello world" 0))
+(check-expect (delete-character-editor (make-editor "hello world" (string-length "hello world")))
+              (make-editor "hello worl" (string-lentgh "hello worl")))
+(define (delete-character-editor ed)
+  ed)
+
 ; Editor, KeyEvent -> Editor
-; edit takes in a KeyEvent and modifies an Editor
-;   given a valid event
+; add-character-editor adds the KeyEvent character given to the
+;  editor at the current cursor position
+(define (add-character-editor ed ke)
+  ed)
 
 ; Editor, KeyEvent -> Editor
 ; edit takes in a KeyEvent and modifies an Editor
@@ -62,16 +84,8 @@
 (define (edit ed ke)
   (cond [(= (string-length ke) 1)
          (cond [(or (string=?  ke "\t") (string=?  ke "\r")) ed]
-               [(> (editor-text-size (make-editor
-                    (string-append (editor-pre ed) ke)
-                    (editor-post ed)))
-                   EDITOR_WIDTH) ed]
-               [(string=?  ke "\b") (make-editor
-                             (string-remove-last (editor-pre ed))
-                             (editor-post ed))]
-               [else (make-editor
-                     (string-append (editor-pre ed) ke)
-                     (editor-post ed))]
+               [(string=?  ke "\b") (delete-character-editor ed)]
+               [else (add-character-editor ed ke)]
          )]
         [(string=?  "left" ke)
          (cond [(= (editor-cursor-position ed) 0) ed]
