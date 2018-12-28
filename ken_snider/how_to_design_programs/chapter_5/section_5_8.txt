@@ -32,3 +32,40 @@
 (check-expect (time->seconds (make-timesince 14 20 21)) 51621)
 (define (time->seconds ts)
   (+ (* (timesince-hh ts) 60 60) (* (timesince-mm ts) 60) (timesince-ss ts)))
+
+; ===
+
+; Exercise 82. Design the function compare-word. The function consumes two three-letter words (see exercise 78). It produces a word that indicates where the given ones agree and disagree. The function retains the content of the structure fields if the two agree; otherwise it places #false in the field of the resulting word. Hint The exercises mentions two tasks: the comparison of words and the comparison of “letters.”
+
+; ---
+
+; A Threeletterword is one of:
+; - (make-threeletterword 1String 1String 1String)
+; - #false
+(define-struct threeletterword [ letter1 letter2 letter3 ])
+
+; Threeletterword Threeletterword -> Threeletterword
+; Consumes two Threeletterwords and outputs a Threeletterword where the 1Strings match
+; otherwise outputs #false
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "a" "a")) (make-threeletterword "a" "a" "a"))
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "a" "a")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "b" "a")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "a" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "b" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "b" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "a" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "b" "a")) #false)
+(define (compare-word a b)
+  (cond
+    [(string=? (threeletterword-letter1 a) (threeletterword-letter1 b))
+     (cond
+       [(string=? (threeletterword-letter2 a) (threeletterword-letter2 b))
+        (cond
+          [(string=? (threeletterword-letter3 a) (threeletterword-letter3 b))
+           (make-threeletterword (threeletterword-letter1 a) (threeletterword-letter2 a) (threeletterword-letter3 a))]
+          [else #false])]
+       [else #false])]
+    [else #false]
+   )
+)
+
