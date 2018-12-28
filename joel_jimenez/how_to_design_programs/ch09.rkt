@@ -107,3 +107,76 @@
     [(empty? alob) #false]
     [(not (false? (first alob))) #true]
     [else (one-true (rest alob))]))
+
+; Exercise 141.
+; | l                   | (first l) | (rest l)     | (cat (rest l)) | (cat l)  |
+; |---------------------|-----------|--------------|----------------|----------|
+; |(cons "a"            | "a"       | (cons "b"    | "b"            | "ab"     |
+; |  (cons "b"          |           |   '())       |                |          |
+; |    '()))            |           |              |                |          |
+; |(cons "ab"           | "ab"      | (cons "cd"   | "cdef"         | "abcdef" |
+; |  (cons "cd"         |           |   (cons "ef" |                |          |
+; |    (cons "ef" '())) |           |     '())     |                |          |
+
+; List-of-string -> String
+; concatenates all strings in l into one long string
+(check-expect (cat '()) "")
+(check-expect (cat (cons "a" (cons "b" '()))) "ab")
+(check-expect
+  (cat (cons "ab" (cons "cd" (cons "ef" '()))))
+  "abcdef")
+(define (cat l)
+  (cond
+    [(empty? l) ""]
+    [else (string-append (first l) (cat (rest l)))]))
+
+(cat (cons "a" '()))
+; (cond
+;   [(empty? (cons "a" '())) ""]
+;   [else (string-append (first (cons "a" '())) (cat (rest (cons "a" '()))))])
+; (cond
+;   [#false ""]
+;   [else (string-append (first (cons "a" '())) (cat (rest (cons "a" '()))))])
+; (string-append "a" (cat '()))
+; (string-append "a"
+;   (cond
+;     [(empty?  '()) ""]
+;     [else (string-append (first '()) (cat (rest '())))]))
+; (string-append "a"
+;   (cond
+;     [#true ""]
+;     [else (string-append (first '()) (cat (rest '())))]))
+; (string-append "a" "")
+; "a"
+
+
+; Exercise 142.
+(require 2htdp/image)
+
+; A List-of-images is one of:
+; – '()
+; – (cons Image List-of-images)
+
+; ImageOrFalse is one of:
+; – Image
+; – #false
+
+(define rec1
+  (rectangle 5 10 "solid" "black"))
+(define square1
+  (rectangle 5 5 "solid" "black"))
+(define rec2
+  (rectangle 15 10 "solid" "black"))
+
+; List-of-images -> ImageOrFalse
+; concatenates all strings in l into one long string
+(check-expect (ill-sized? '() 5) #false)
+(check-expect (ill-sized? (cons rec1 '()) 5) #false)
+(check-expect (ill-sized? (cons square1 (cons rec1 '())) 5) square1)
+(define (ill-sized? aloi n)
+  (cond
+    [(empty? aloi) #false]
+    [(and (= (image-width (first aloi)) n)
+          (= (image-height (first aloi)) n))
+       (first aloi)]
+    [else (ill-sized? (rest aloi) n)]))
