@@ -27,7 +27,7 @@
 
 (define (string-last str)
   (cond
-    [(> (string-length str) 0) (substring str (- (string-length str) 1))]
+    [(> (string-length str) 0) (substring str (sub1 (string-length str)))]
     [else str]))
 
 (define (string-remove-first str)
@@ -37,7 +37,7 @@
 
 (define (string-remove-last str)
   (cond
-    [(> (string-length str) 0) (substring str 0 (- (string-length str) 1))]
+    [(> (string-length str) 0) (substring str 0 (sub1 (string-length str)))]
     [else str]))
 
 (define (limit old-ed new-ed)

@@ -235,3 +235,40 @@
     [(empty? xs) 0]
     [(cons? xs) (+ (second (find-association "Total Time" (first xs) 0))
                    (total-time/list (rest xs)))]))
+
+; ex 208
+; LLists -> List of string
+;consumes an LLists and produces set of Strings that are associated with a Boolean attribute.
+(check-expect (boolean-attributes example-LLists) (list "Podcast"))
+(define (boolean-attributes xs)
+  (create-set (bool-attrs xs)))
+(define (bool-attrs xs)
+  (cond
+    [(empty? xs) '()]
+    [(cons? xs)
+     (append (bool-attrs2 (first xs))
+             (bool-attrs (rest xs)))]))
+(define (bool-attrs2 xs)
+  (cond
+    [(empty? xs) '()]
+    [(boolean? (second (first xs)))
+               (cons (first (first xs))
+                     (bool-attrs2 (rest xs)))]
+    [else (bool-attrs2 (rest xs))]))
+
+; LAssoc -> Track
+; converts an LAssoc to a Track when possible
+; [name artist album time track# added play# played])
+(check-expect (track-as-struct example-LAssoc)
+              (create-track "B Looper" "Hakase" "This Was A Mistake" 416130 2 (make-date 2018 7 5 16 24 48) 1 (make-date 2018 7 5 16 36 12)))
+(define (track-as-struct a)
+  (create-track
+   (second (assoc "Name" a))
+   (second (assoc "Artist" a))
+   (second (assoc "Album" a))
+   (second (assoc "Total Time" a))
+   (second (assoc "Track Number" a))
+   (second (assoc "Date Added" a))
+   (second (assoc "Play Count" a))
+   (second (assoc "Play Date UTC" a)
+   )))

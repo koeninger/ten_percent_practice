@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname |99|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |100|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -209,6 +209,13 @@
 
 (check-expect (update-missile (make-missile 1 50)) (make-missile 1 (- 50 SPEED)))
 
+; SIGS KeyEvent -> SIG
+; Keyboard control the tank
+#|(define (si-control s key)
+  (cond [(key=? key "left") (tank-left s)]
+        [(key=? key "right") (tank-right s)]
+        [(key=? key " ") (fire-missile s)]
+[else s]))|# 
 
 ; main
 (define (main g)

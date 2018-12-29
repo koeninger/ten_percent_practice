@@ -6,6 +6,8 @@
 ;    The chosen data representation requires two data definitions:
 
 
+(define-struct vel [deltax deltay])
+
 (define-struct ufo [loc vel])
 ; A UFO is a structure: 
 ;   (make-ufo Posn Vel)
@@ -51,3 +53,7 @@
 
 
 
+; Exercise 75. Enter these definitions and their test cases
+;    into the definitions area of DrRacket and make sure they work.
+;    This is the first time that you have dealt with a “wish,”
+;    and you need to make sure you understand how the two functions work together. 
