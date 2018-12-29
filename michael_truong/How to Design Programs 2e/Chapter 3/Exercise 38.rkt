@@ -9,5 +9,5 @@
 
 (define (string-rest str)
   (cond
-    [(> (string-length str) 0) (substring str 0 (- (string-length str) 1))]
+    [(> (string-length str) 0) (substring str 0 (sub1 (string-length str)))]
     [else ""]))

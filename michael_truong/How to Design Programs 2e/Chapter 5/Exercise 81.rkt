@@ -12,6 +12,4 @@
   (minutes->seconds (hours->minutes h)))
 
 (define (time->seconds t)
-  (+ (+ (hours->seconds (time-hours t))
-        (minutes->seconds (time-minutes t)))
-     (time-seconds t)))
+  (+ (hours->seconds (time-hours t)) (minutes->seconds (time-minutes t)) (time-seconds t)))
