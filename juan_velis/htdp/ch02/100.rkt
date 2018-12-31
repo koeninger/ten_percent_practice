@@ -38,7 +38,7 @@
 
 (define MISSILE (circle 3 "solid" "Black"))
 
-(define SPEED 10)
+(define SPEED 2)
 (define UFO-DELTA 7)
 
 (define TREE
@@ -211,11 +211,56 @@
 
 ; SIGS KeyEvent -> SIG
 ; Keyboard control the tank
-#|(define (si-control s key)
+(define (si-control s key)
   (cond [(key=? key "left") (tank-left s)]
         [(key=? key "right") (tank-right s)]
-        [(key=? key " ") (fire-missile s)]
-[else s]))|# 
+        ;[(key=? key " ") (fire-missile s)]
+[else s]))
+
+
+; SIGS -> SIGS
+; Turn tank to the left
+(define (tank-left s)
+  (cond [(aim? s)
+         (make-aim (aim-ufo s)
+                   (tank-turn-left (aim-tank s)))]
+        [(fired? s)
+         (make-fired (fired-ufo s)
+                     (tank-turn-left (fired-tank s))
+                     (fired-missile s))]
+  )
+)
+
+; tank -> tank
+(define (tank-turn-left t)
+  (cond [(<= 0 (tank-vel t))
+         (make-tank (tank-loc t) (- 0 (tank-vel t)))]
+        [else t]
+  )
+)
+
+; SIGS -> SIGS
+; Turn tank to the right
+(define (tank-right s)
+  (cond [(aim? s)
+         (make-aim (aim-ufo s)
+                   (tank-turn-right (aim-tank s)))]
+        [(fired? s)
+         (make-fired (fired-ufo s)
+                     (tank-turn-right (fired-tank s))
+                     (fired-missile s))]
+  )
+)
+
+; tank -> tank
+(define (tank-turn-right t)
+  (cond [(< (tank-vel t) 0)
+         (make-tank (tank-loc t) (- 0 (tank-vel t)))]
+        [else t]
+  )
+)
+
+
 
 ; main
 (define (main g)
