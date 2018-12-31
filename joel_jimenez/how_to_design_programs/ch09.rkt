@@ -180,3 +180,54 @@
           (= (image-height (first aloi)) n))
        (first aloi)]
     [else (ill-sized? (rest aloi) n)]))
+
+
+; 9.2 Non-empty Lists
+
+; A List-of-temperatures is one of:
+; – '()
+; – (cons CTemperature List-of-temperatures)
+
+; A CTemperature is a Number greater than -273.
+
+; List-of-temperatures -> Number
+; computes the average temperature
+(check-expect
+  (average (cons 1 (cons 2 (cons 3 '())))) 2)
+(define (average alot)
+  (/ (sum alot) (how-many alot)))
+
+
+; Exercise 143. Determine how average behaves in DrRacket when applied to the
+; empty list. Then design checked-average, a function that produces an
+; informative error message when it is applied to '().
+
+;   ERROR, /: division by zero
+
+; List-of-temperatures -> Number
+; computes the average temperature from List-of-temperatures, or error when empty
+(check-expect
+  (checked-average (cons 1 (cons 2 (cons 3 '())))) 2)
+(check-error
+  (checked-average '()) "List is empty.")
+(define (checked-average alot)
+  (cond
+    [(empty? alot) (error "List is empty.")]
+    [else (average alot)]))
+
+
+; NEList-of-temperatures -> Number
+; computes the average temperature 
+(check-expect
+  (ne-average (cons 1 (cons 2 (cons 3 '())))) 2)
+(define (ne-average ne-l)
+  (/ (sum ne-l)
+     (how-many ne-l)))
+
+
+; Exercise 144. Will sum and how-many work for NEList-of-temperatures even though
+; they are designed for inputs from List-of-temperatures? If you think they don’t
+; work, provide counter-examples. If you think they would, explain why.
+
+; Yes, because sum and how-many work for List-of-temperatures and NEList-of-temperatures
+;   is a subset of List-of-temperatures.
