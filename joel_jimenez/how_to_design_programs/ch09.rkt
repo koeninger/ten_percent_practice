@@ -217,12 +217,12 @@
 
 
 ; NEList-of-temperatures -> Number
-; computes the average temperature 
+; computes the average temperature
 (check-expect
   (ne-average (cons 1 (cons 2 (cons 3 '())))) 2)
 (define (ne-average ne-l)
-  (/ (sum ne-l)
-     (how-many ne-l)))
+  (/ (sum-ne ne-l)
+     (how-many-ne ne-l)))
 
 
 ; Exercise 144. Will sum and how-many work for NEList-of-temperatures even though
@@ -231,3 +231,44 @@
 
 ; Yes, because sum and how-many work for List-of-temperatures and NEList-of-temperatures
 ;   is a subset of List-of-temperatures.
+
+
+; NEList-of-temperatures -> Number
+; computes the sum of the given temperatures
+(check-expect
+  (sum-ne (cons 1 (cons 2 (cons 3 '())))) 6)
+(define (sum-ne ne-l)
+  (cond
+    [(empty? (rest ne-l)) (first ne-l)]
+    [else (+ (first ne-l) (sum-ne (rest ne-l)))]))
+
+
+; Exercise 145.
+
+; NEList-of-temperatures -> Boolean
+; produces #true if the temperatures are sorted in descending order, else #false
+(check-expect
+  (sorted>? (cons 1 (cons 2 (cons 3 '())))) #false)
+(check-expect
+  (sorted>? (cons 1 (cons 3 (cons 2 '())))) #false)
+(check-expect
+  (sorted>? (cons 3 (cons 2 (cons 1 '())))) #true)
+(define (sorted>? ne-l)
+  (cond
+    [(empty? (rest ne-l)) #true]
+    [(< (first ne-l) (first(rest ne-l))) #false]
+    [else (sorted>? (rest ne-l))]))
+
+
+; Exercise 146.
+
+; NEList-of-temperatures -> Number
+; counts how many temperatures ne-l contains
+(check-expect
+  (how-many-ne (cons 2 (cons 3 '()))) 2)
+(check-expect
+  (how-many-ne (cons 2 '())) 1)
+(define (how-many-ne ne-l)
+  (cond
+    [(empty? (rest ne-l)) 1]
+    [else (+ 1 (how-many-ne (rest ne-l)))]))
