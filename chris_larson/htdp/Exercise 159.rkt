@@ -44,11 +44,14 @@
   (cond
     [(> (pair-balloon# w) 0) (make-pair (sub1 (pair-balloon# w)) (cons (random-drop (pair-balloon# w)) (pair-lob w)))]
     [else w]))
+(check-expect (tock (make-pair 0 '())) (make-pair 0 '()))
+(check-random (tock (make-pair 1 '())) (make-pair 0 (cons (random-drop 1) '())))
 
 ; POSN
 (define (random-drop w)
   (make-posn (random WIDTH) (random HEIGHT)))
-
+(check-random (random-drop 1) (make-posn (random WIDTH) (random HEIGHT)))
+              
 ; Number -> Image
 (define (riot pair)
   ...)
@@ -62,3 +65,59 @@
   (big-bang w0
     [on-tick tock 1]
     [to-draw to-image]))
+
+; List-of-string String -> N
+; determines how often s occurs in los
+(define (count los s)
+  (cond
+    [(empty? los) 0]
+    [(string=? (first los) s) (+ 1 (count (rest los) s))]
+    [else (count (rest los) s)]))
+(check-expect (count (cons "d" (cons "p" (cons "a" (cons "d" '())))) "d") 2)
+(check-expect (count (cons "d" (cons "p" (cons "a" (cons "d" '())))) "p") 1)
+(check-expect (count (cons "d" (cons "p" (cons "a" (cons "d" '())))) "f") 0)
+
+; Son
+(define es '())
+ 
+; Number Son -> Boolean
+; is x in s
+(define (in? x s)
+  (member? x s))
+
+(define set123
+  (cons 1 (cons 3 (cons 2 '()))))
+
+; Number Son.L -> Son.L
+; removes x from s 
+(define s1.L
+  (cons 1 (cons 1 '())))
+ 
+(check-expect
+  (set-.L 1 s1.L) es)
+ 
+(define (set-.L x s)
+  (remove-all x s))
+
+(define (set+.L x s)
+  (cons s x))
+(check-expect (set+.L set123 4) (cons 4 set123))
+(check-expect (set+.L set123 3) (cons 3 set123))
+
+; Number Son.R -> Son.R
+; removes x from s
+(define s1.R
+  (cons 1 '()))
+ 
+(check-expect
+  (set-.R 1 s1.R) es)
+ 
+(define (set-.R x s)
+  (remove x s))
+
+(define (set+.R x s)
+  (cond
+    [(in? s x) x]
+    [else (cons s x)]))
+(check-expect (set+.R set123 4) (cons 4 set123))
+(check-expect (set+.R set123 3) set123)
