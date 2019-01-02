@@ -157,6 +157,9 @@
 
 ; ex 205
 
+; why isn't make-date exposed by the itunes module?
+(define (make-date a b c d e f) (create-date a b c d e f))
+
 (define ITUNES-LOCATION "/Users/cody/Music/iTunes/iTunes Music Library.xml")
 (define list-tracks
   (read-itunes-as-lists ITUNES-LOCATION))
@@ -205,3 +208,67 @@
   (list "Location" "http://feedproxy.google.com/~r/IconicPodcast/~5/ozp7ylfIb3E/Iconic-B18.mp3")))
 
 (define example-LLists (list example-LAssoc example-LAssoc2))
+
+; ex 206
+
+; string LAssoc Any -> Association
+; returns first association matching key, or default
+(check-expect (find-association "a" (list (list "a" 1) (list "b" 3) (list "a" 2)) 23)
+              (list "a" 1))
+(check-expect (find-association "c" (list (list "a" 1) (list "b" 3) (list "a" 2)) 23)
+              (list "c" 23))
+(define (find-association k la default)
+  (cond
+    [(empty? la) (list k default)]
+    [(and (cons? la) (cons? (first la)))
+     (if (string=? k (first (first la)))
+         (first la)
+         (find-association k (rest la) default))]))
+
+; ex 207
+
+; LLists -> Number
+; total play time
+(check-expect (total-time/list example-LLists) 416130)
+(define (total-time/list xs)
+  (cond
+    [(empty? xs) 0]
+    [(cons? xs) (+ (second (find-association "Total Time" (first xs) 0))
+                   (total-time/list (rest xs)))]))
+
+; ex 208
+; LLists -> List of string
+;consumes an LLists and produces set of Strings that are associated with a Boolean attribute.
+(check-expect (boolean-attributes example-LLists) (list "Podcast"))
+(define (boolean-attributes xs)
+  (create-set (bool-attrs xs)))
+(define (bool-attrs xs)
+  (cond
+    [(empty? xs) '()]
+    [(cons? xs)
+     (append (bool-attrs2 (first xs))
+             (bool-attrs (rest xs)))]))
+(define (bool-attrs2 xs)
+  (cond
+    [(empty? xs) '()]
+    [(boolean? (second (first xs)))
+               (cons (first (first xs))
+                     (bool-attrs2 (rest xs)))]
+    [else (bool-attrs2 (rest xs))]))
+
+; LAssoc -> Track
+; converts an LAssoc to a Track when possible
+; [name artist album time track# added play# played])
+(check-expect (track-as-struct example-LAssoc)
+              (create-track "B Looper" "Hakase" "This Was A Mistake" 416130 2 (make-date 2018 7 5 16 24 48) 1 (make-date 2018 7 5 16 36 12)))
+(define (track-as-struct a)
+  (create-track
+   (second (assoc "Name" a))
+   (second (assoc "Artist" a))
+   (second (assoc "Album" a))
+   (second (assoc "Total Time" a))
+   (second (assoc "Track Number" a))
+   (second (assoc "Date Added" a))
+   (second (assoc "Play Count" a))
+   (second (assoc "Play Date UTC" a)
+   )))

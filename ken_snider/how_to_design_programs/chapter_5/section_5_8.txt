@@ -1,0 +1,71 @@
+;Exercise 80. Create templates for functions that consume instances of the following structure types:
+;(define-struct movie [title director year])
+(define (read-movie p)
+  ( ... (movie-title p) ... (movie-director p) ... (movie-year p) ... ))
+
+;(define-struct pet [name number])
+(define (read-pet p)
+  ( ... (pet-name p) ... (pet-number p) ...))
+
+;(define-struct CD [artist title price])
+(define (read-CD p)
+  ( ... (CD-artist p) ... (CD-title p) ... (CD-price p) ... ))
+
+;(define-struct sweater [material size color])
+(define (read-sweater p)
+  ( ... (sweater-material p) ... (sweater-size p) ... (sweater-color p) ... ))
+
+; ===
+
+; Exercise 81. Design the function time->seconds, which consumes instances of time structures (see exercise 77) and produces the number of seconds that have passed since midnight. For example, if you are representing 12 hours, 30 minutes, and 2 seconds with one of these structures and if you then apply time->seconds to this instance, the correct result is 45002.
+
+; ---
+
+; A Timesince is (make-timesince Number Number Number)
+(define-struct timesince [hh mm ss])
+
+(define time1 (make-timesince 12 30 2))
+
+; Timesince -> Number
+; Determinues the number of seconds since midnight of Timesince ts
+(check-expect (time->seconds time1) 45002)
+(check-expect (time->seconds (make-timesince 14 20 21)) 51621)
+(define (time->seconds ts)
+  (+ (* (timesince-hh ts) 60 60) (* (timesince-mm ts) 60) (timesince-ss ts)))
+
+; ===
+
+; Exercise 82. Design the function compare-word. The function consumes two three-letter words (see exercise 78). It produces a word that indicates where the given ones agree and disagree. The function retains the content of the structure fields if the two agree; otherwise it places #false in the field of the resulting word. Hint The exercises mentions two tasks: the comparison of words and the comparison of “letters.”
+
+; ---
+
+; A Threeletterword is one of:
+; - (make-threeletterword 1String 1String 1String)
+; - #false
+(define-struct threeletterword [ letter1 letter2 letter3 ])
+
+; Threeletterword Threeletterword -> Threeletterword
+; Consumes two Threeletterwords and outputs a Threeletterword where the 1Strings match
+; otherwise outputs #false
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "a" "a")) (make-threeletterword "a" "a" "a"))
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "a" "a")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "b" "a")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "a" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "a" "b" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "b" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "a" "b")) #false)
+(check-expect (compare-word (make-threeletterword "a" "a" "a") (make-threeletterword "b" "b" "a")) #false)
+(define (compare-word a b)
+  (cond
+    [(string=? (threeletterword-letter1 a) (threeletterword-letter1 b))
+     (cond
+       [(string=? (threeletterword-letter2 a) (threeletterword-letter2 b))
+        (cond
+          [(string=? (threeletterword-letter3 a) (threeletterword-letter3 b))
+           (make-threeletterword (threeletterword-letter1 a) (threeletterword-letter2 a) (threeletterword-letter3 a))]
+          [else #false])]
+       [else #false])]
+    [else #false]
+   )
+)
+

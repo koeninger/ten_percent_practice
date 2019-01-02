@@ -11,6 +11,10 @@
 ; DoorState -> DoorState
 ; closes an open door over the period of one tick
 
+(check-expect (door-closer LOCKED) LOCKED)
+(check-expect (door-closer CLOSED) CLOSED)
+(check-expect (door-closer OPEN) CLOSED)
+
 (define (door-closer state-of-door)
   (cond
     [(string=? LOCKED state-of-door) LOCKED]

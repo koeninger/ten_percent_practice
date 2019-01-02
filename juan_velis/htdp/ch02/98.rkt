@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname |97|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |98|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -109,48 +109,56 @@
        )])
 )
 
-; SIGS -> Image
+; Tank Img -> Image
 ; renders tank
 (define (tank-render s back)
   (place-image TANK (tank-loc s) Y-TANK back))
 
-; Img -> Image
+; UFO Img -> Image
 ; renders ufo
 (define (ufo-render s back)
   (place-image UFO (ufo-x s) (ufo-y s) back))
 
-; Img -> Image
+; Missile Img -> Image
 ; render missile
 (define (missile-render s back)
   (place-image MISSILE (missile-x s) (missile-y s) back))
 
-(si-render A3)
 
-
-#|
-(place-image
- TANK (tank-loc (aim-tank A1)) Y-TANK
- (place-image 
-  UFO (posn-x (aim-posn A1)) (posn-y (aim-posn A1))
-  BACKGROUND)
+; UFO -> Bool
+(define (ufo-landed? u)
+  (>= (ufo-y u) (- HEIGHT-OF-WORLD (image-height UFO)))
 )
+(check-expect (ufo-landed? (make-ufo 50 200)) #true)
 
-(place-image
- TANK (tank-loc (fired-tank A2)) Y-TANK
- (place-image 
-  MISSILE (posn-x (fired-missile A2)) (posn-y (fired-missile A2))
-  (place-image 
-   UFO (posn-x (fired-posn A2)) (posn-y (fired-posn A2))
-   BACKGROUND)
+; UFO MISSILE -> Bool
+(define (ufo-hit? u m)
+  (and (<= (abs (- (ufo-x u) (missile-x m)))
+           (+ (image-width UFO) (image-width MISSILE)))
+       (<= (abs (- (ufo-y u) (missile-y m)))
+           (+ (image-height UFO) (image-height MISSILE)))
   )
 )
+(check-expect (ufo-hit? (make-ufo 50 100) (make-ufo 50 100)) #true)
 
-(place-image
- TANK (tank-loc (fired-tank A3)) Y-TANK
- (place-image 
-  MISSILE (posn-x (fired-missile A3)) (posn-y (fired-missile A3))
-  (place-image 
-   UFO (posn-x (fired-posn A3)) (posn-y (fired-posn A3))
-   BACKGROUND)
-  )
+; SIGS -> bool
+; Returns true if the UFO lands or Missile hits it
+#|(define (si-game-over s)
+  (cond
+    [(aim? s) #false]
+    [(fired? s)
+     (cond
+       []
+       )])
 )|#
+
+; main
+(define (main g)
+  (big-bang g 
+    ;(on-tick tock) 
+    (to-draw si-render) 
+    ;(on-key)
+    ;(stop-when)
+))
+
+(main A3)

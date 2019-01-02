@@ -2,6 +2,8 @@
 
 (define (string-delete str i)
   (cond
-    [(> (string-length str) 0) (string-append (substring str 0 i)
-                                              (substring str (+ i 1)))]
-    [else ""]))
+    [(and (> (string-length str) 0)
+          (>= i 0)
+          (< i (string-length str))) (string-append (substring str 0 i)
+                                                    (substring str (add1 i)))]
+    [else str]))

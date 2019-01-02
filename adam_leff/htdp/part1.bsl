@@ -870,3 +870,140 @@ MIDDLE
 //Exercise 78
 ; ThreeLetterWord is (make-threeletterword 1String 1String 1String)
 (define-struct threeletterword [first second third])
+
+//Exercise 79
+(make-color "white")
+
+(make-h 50)
+
+(make-person "adam" "leff" true)
+bad idea because then you cant name the predicate that
+
+(make-dog (make-person "adam" "leff" true) "fido" 5 (make-h 100))
+interpretation a dog is owned by a person and is some percentage happy
+
+(make-weapon (make-posn 100 100))
+
+//Exercise 80
+(define-struct movie [title director year])
+(define (movie-consume m)
+    (... (movie-title m) ... (movie-director m) ... (movie-year m) ....))
+
+(define-struct pet [name number])
+(define (pet-consume p)
+    (... (pet-name p) ... (pet-number p) ...))
+
+(define-struct CD [artist title price])
+(define (cd-consume c)
+    (... (CD-artist c) ... (CD-title c) ... (CD-price c) ...))
+
+(define-struct sweater [material size color])
+(define (sweater-consume s)
+    (... (sweater-material s) ... (sweater-size s) ... (sweater-color s) ...))
+    
+//Exercise 81
+; Daytime -> Number
+; returns the number of seconds since the day started
+(define (time->seconds dt)
+    (+
+        (daytime-seconds dt)
+        (* (daytime-minutes dt) 60)
+        (* (daytime-hours dt) (* 60 60))))
+        
+//Exercise 82
+; Threeletterword -> ThreeLetterWord
+; creates a Threeletterword where the letters which agree
+; are returned, but the letters that don't match are false
+(define (compare-word w1 w2)
+    (make-threeletterword 
+        (if (= (threeletterword-first w1) (threeletterword-first w2)) (threeletterword-first w1) #false)
+        (if (= (threeletterword-second w1) (threeletterword-second w2)) (threeletterword-second w1) #false)
+        (if (= (threeletterword-third w1) (threeletterword-third w2)) (threeletterword-third w1) #false)
+    ))
+    
+//Exercise 83
+(require 2htdp/image)
+(define-struct editor [pre post])
+
+; Editor -> image
+(define (render e)
+  (overlay/align "left" "center"
+               (beside
+                (text (editor-pre e) 11 "black")
+                (rectangle 1 20 "solid" "red")
+                (text (editor-post e) 11 "black"))
+               (empty-scene 200 20)))
+
+//Exercise 84
+(require 2htdp/image)
+(define-struct editor [pre post])
+
+; Editor -> image
+(define (render e)
+  (overlay/align "left" "center"
+               (beside
+                (text (editor-pre e) 11 "black")
+                (rectangle 1 20 "solid" "red")
+                (text (editor-post e) 11 "black"))
+               (empty-scene 200 20)))
+
+(define (string-first s)
+  (substring s 0 1))
+
+(define (string-rest s)
+  (substring s 1))
+
+(define (string-last s)
+  (substring s (- (string-length s) 1) (string-length s)))
+
+(define (string-remove-last s)
+  (substring s 0 (- (string-length s) 1)))
+
+; Editor KeyEvent -> Editor
+(define (edit ed ke)
+  (cond
+    [(string=? ke "left") (make-editor
+                           (string-remove-last (editor-pre ed))
+                           (string-append (string-last (editor-pre ed)) (editor-post ed))
+                           )]
+    [(string=? ke "right") (make-editor
+                            (string-append (editor-pre ed) (string-first (editor-post ed)))
+                            (string-rest (editor-post ed))
+                            )]
+    [(string=? ke "\b") (make-editor
+                         (string-remove-last (editor-pre ed))
+                         (editor-post ed)
+                         )]
+    [(= (string-length ke) 1) (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]
+  )
+)
+
+// Exercise 85
+(define (run initial-state)
+    (big-bang initial-state
+      [on-key edit]
+      [to-draw render]))
+      
+// Exercise 86
+(define MAX-LENGTH 50)
+
+(define (edit ed ke)
+  (cond
+    [(string=? ke "left") (make-editor
+                           (string-remove-last (editor-pre ed))
+                           (string-append (string-last (editor-pre ed)) (editor-post ed))
+                           )]
+    [(string=? ke "right") (make-editor
+                            (string-append (editor-pre ed) (string-first (editor-post ed)))
+                            (string-rest (editor-post ed))
+                            )]
+    [(string=? ke "\b") (make-editor
+                         (string-remove-last (editor-pre ed))
+                         (editor-post ed)
+                         )]
+    [(= (string-length ke) 1) 
+        (if (= (+ (string-length (editor-pre ed)) (string-length (editor-post ed))) MAX-LENGTH)
+            (ed)
+            (make-editor (string-append (editor-pre ed) ke) (editor-post ed)))]
+  )
+)
