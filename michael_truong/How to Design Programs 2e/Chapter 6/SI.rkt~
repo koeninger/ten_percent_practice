@@ -1,0 +1,23 @@
+#lang racket
+
+(require 2htdp/image)
+(require 2htdp/universe)
+
+(define-struct aim [ufo tank])
+(define-struct fired [ufo tank missile])
+
+(define BACKGROUND-WIDTH 200)
+(define BACKGROUND-HEIGHT BACKGROUND-WIDTH)
+(define BACKGROUND (empty-scene BACKGROUND-WIDTH BACKGROUND-HEIGHT "white"))
+
+; SIGS -> Image
+; adds TANK, UFO, and possibly MISSILE to 
+; the BACKGROUND scene
+(define (si-render s) BACKGROUND)
+
+(define (si s)
+   (big-bang s
+     [on-tick tock]
+     [to-draw si-render]))
+
+(si-render 0)

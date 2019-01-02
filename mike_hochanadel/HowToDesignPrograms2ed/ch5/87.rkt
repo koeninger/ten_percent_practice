@@ -47,40 +47,52 @@
 (check-expect (delete-character-editor (make-editor "hello world" 0)) (make-editor "hello world" 0))
 (check-expect (delete-character-editor (make-editor "hello world" 1)) (make-editor "ello world" 0))
 (check-expect (delete-character-editor (make-editor "hello world" (string-length "hello world")))
-              (make-editor "hello worl" (string-lentgh "hello worl")))
+              (make-editor "hello worl" (string-length "hello worl")))
 (define (delete-character-editor ed)
-  ed)
+  (make-editor
+   (string-append
+    (string-remove-last (substring (editor-editor-text ed) 0 (editor-cursor-position ed)))
+    (substring (editor-editor-text ed) (editor-cursor-position ed)))
+   (cond
+     [(= (editor-cursor-position ed) 0) 0]
+     [else (- (editor-cursor-position ed) 1)])
+  ))
 
 ; Editor, KeyEvent -> Editor
 ; add-character-editor adds the KeyEvent character given to the
 ;  editor at the current cursor position
+(check-expect (add-character-editor (make-editor "hello world" 0) "y") (make-editor "yhello world" 1))
+(check-expect (add-character-editor (make-editor "hello world" 1) "y") (make-editor "hyello world" 2))
+(check-expect (add-character-editor (make-editor "hello world" (string-length "hello world")) "y")
+              (make-editor "hello worldy" (string-length "hello worldy")))
 (define (add-character-editor ed ke)
-  ed)
+  (make-editor
+   (string-append
+    (string-append (substring (editor-editor-text ed) 0 (editor-cursor-position ed)) ke)
+    (substring (editor-editor-text ed) (editor-cursor-position ed)))
+   (+ (editor-cursor-position ed) 1))
+  )
 
 ; Editor, KeyEvent -> Editor
 ; edit takes in a KeyEvent and modifies an Editor
 ;   given a valid event
-(check-expect (edit (make-editor "a" "b") "c") (make-editor "ac" "b"))
-(check-expect (edit (make-editor "" "b") "c") (make-editor "c" "b"))
-(check-expect (edit (make-editor "a" "") "c") (make-editor "ac" ""))
-(check-expect (edit (make-editor "hello" " world") ",") (make-editor "hello," " world"))
-(check-expect (edit (make-editor "hello" "world") " ") (make-editor "hello " "world"))
-(check-expect (edit (make-editor "a" "b") "\b") (make-editor "" "b"))
-(check-expect (edit (make-editor "a" "") "\b") (make-editor "" ""))
-(check-expect (edit (make-editor "" "b") "\b") (make-editor "" "b"))
-(check-expect (edit (make-editor "a" "b") "\t") (make-editor "a" "b"))
-(check-expect (edit (make-editor "a" "b") "\r") (make-editor "a" "b"))
-(check-expect (edit (make-editor "a" "b") "left") (make-editor "" "ab"))
-(check-expect (edit (make-editor "" "ab") "left") (make-editor "" "ab"))
-(check-expect (edit (make-editor "" "") "left") (make-editor "" ""))
-(check-expect (edit (make-editor "a" "b") "right") (make-editor "ab" ""))
-(check-expect (edit (make-editor "ab" "") "right") (make-editor "ab" ""))
-(check-expect (edit (make-editor "" "") "right") (make-editor "" ""))
-(check-expect (edit (make-editor "a" "b") "up") (make-editor "a" "b"))
-(check-expect (edit (make-editor "a" "b") "down") (make-editor "a" "b"))
-(check-expect (edit (make-editor "a" "b") "f1") (make-editor "a" "b"))
-(check-expect (edit (make-editor "a" "b") "shift") (make-editor "a" "b"))
-(check-expect (edit (make-editor "a" "b") "escape") (make-editor "a" "b"))
+(check-expect (edit (make-editor "ab" 2) "c") (make-editor "abc" 3))
+(check-expect (edit (make-editor "ab" 0) "\b") (make-editor "ab" 0))
+(check-expect (edit (make-editor "ab" 1) "\b") (make-editor "b" 0))
+(check-expect (edit (make-editor "ab" 2) "\b") (make-editor "a" 1))
+(check-expect (edit (make-editor "ab" 0) "\t") (make-editor "ab" 0))
+(check-expect (edit (make-editor "ab" 0) "\r") (make-editor "ab" 0))
+(check-expect (edit (make-editor "ab" 0) "left") (make-editor "ab" 0))
+(check-expect (edit (make-editor "ab" 1) "left") (make-editor "ab" 0))
+(check-expect (edit (make-editor "" 0) "left") (make-editor "" 0))
+(check-expect (edit (make-editor "ab" 0) "right") (make-editor "ab" 1))
+(check-expect (edit (make-editor "ab" 2) "right") (make-editor "ab" 2))
+(check-expect (edit (make-editor "" 0) "right") (make-editor "" 0))
+(check-expect (edit (make-editor "ab" 1) "up") (make-editor "ab" 1))
+(check-expect (edit (make-editor "ab" 2) "down") (make-editor "ab" 2))
+(check-expect (edit (make-editor "ab" 0) "f1") (make-editor "ab" 0))
+(check-expect (edit (make-editor "ab" 1) "shift") (make-editor "ab" 1))
+(check-expect (edit (make-editor "ab" 2) "escape") (make-editor "ab" 2))
 (define (edit ed ke)
   (cond [(= (string-length ke) 1)
          (cond [(or (string=?  ke "\t") (string=?  ke "\r")) ed]
@@ -89,10 +101,12 @@
          )]
         [(string=?  "left" ke)
          (cond [(= (editor-cursor-position ed) 0) ed]
-               [else (make-editor (editor-editor-text ed) (- (editor-cursor-position ed) 1))])
-        [(string=?  "right" ke) (make-editor
-         (cond [(= (editor-cursor-position ed) (string-length (editor-editor-text))) ed]
-               [else (make-editor (editor-editor-text ed) (+ (editor-cursor-position ed) 1))])
+               [else (make-editor (editor-editor-text ed) (- (editor-cursor-position ed) 1))])]
+        [(string=?  "right" ke)
+          (cond [(= (editor-cursor-position ed) (string-length (editor-editor-text ed))) ed]
+                [else (make-editor
+                       (editor-editor-text ed)
+                       (+ (editor-cursor-position ed) 1))])]
         [else ed]))
 
 ; Editor -> image

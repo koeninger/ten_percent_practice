@@ -22,18 +22,13 @@
 
 (define (string-delete str i)
   (cond
-    [(and (> (string-length str) 0)
-          (and (>= i 0)
-               (< i (string-length str)))) (string-append (substring str 0 i)
-                                                          (substring str (+ i 1)))]
+    [(>= i 0) (string-append (substring str 0 i) (substring str (add1 i)))]
     [else str]))
 
 (define (string-insert str i c)
-  (cond
-    [(<= i (string-length str)) (string-append (substring str 0 i)
-                                               c
-                                               (substring str i))]
-    [else str]))
+  (string-append (substring str 0 i)
+                 c
+                 (substring str i)))
 
 (define (limit old-ed new-ed)
   (cond
@@ -76,27 +71,20 @@
 (define (edit ed ke)
   (cond
     [(cond
-      [(= (string-length ke) 1) (cond
-                                   [(string=? ke "\b") (cond
-                                                         [(> (editor-index ed) 0) (make-editor (string-delete (editor-string ed)
-                                                                                                              (- (editor-index ed) 1))
-                                                                                               (- (editor-index ed) 1))]
-                                                         [else ed])]
+       [(= (string-length ke) 1) (cond
+                                   [(string=? ke "\b") (make-editor (string-delete (editor-string ed) (sub1 (editor-index ed)))
+                                                                    (max (sub1 (editor-index ed)) 0))]
                                    [(string=? ke "\t") ed]
                                    [(string=? ke "\r") ed]
                                    [else (limit ed (make-editor (string-insert (editor-string ed)
                                                                                (editor-index ed)
                                                                                ke)
-                                                                (+ (editor-index ed) 1)))])]
-      [(> (string-length ke) 1) (cond
-                                   [(string=? ke "left") (cond
-                                                           [(> (editor-index ed) 0) (make-editor (editor-string ed)
-                                                                                                 (- (editor-index ed) 1))]
-                                                           [else ed])]
-                                   [(string=? ke "right") (cond
-                                                            [(< (editor-index ed) (string-length (editor-string ed))) (make-editor (editor-string ed)
-                                                                                                                                   (+ (editor-index ed) 1))]
-                                                            [else ed])]
+                                                                (add1 (editor-index ed))))])]
+       [(> (string-length ke) 1) (cond
+                                   [(string=? ke "left") (make-editor (editor-string ed)
+                                                                      (max (sub1 (editor-index ed)) 0))]
+                                   [(string=? ke "right") (make-editor (editor-string ed)
+                                                                       (min (add1 (editor-index ed)) (string-length (editor-string ed))))]
                                    [else ed])])]
     [else ed]))
 

@@ -977,3 +977,33 @@ interpretation a dog is owned by a person and is some percentage happy
     [(= (string-length ke) 1) (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]
   )
 )
+
+// Exercise 85
+(define (run initial-state)
+    (big-bang initial-state
+      [on-key edit]
+      [to-draw render]))
+      
+// Exercise 86
+(define MAX-LENGTH 50)
+
+(define (edit ed ke)
+  (cond
+    [(string=? ke "left") (make-editor
+                           (string-remove-last (editor-pre ed))
+                           (string-append (string-last (editor-pre ed)) (editor-post ed))
+                           )]
+    [(string=? ke "right") (make-editor
+                            (string-append (editor-pre ed) (string-first (editor-post ed)))
+                            (string-rest (editor-post ed))
+                            )]
+    [(string=? ke "\b") (make-editor
+                         (string-remove-last (editor-pre ed))
+                         (editor-post ed)
+                         )]
+    [(= (string-length ke) 1) 
+        (if (= (+ (string-length (editor-pre ed)) (string-length (editor-post ed))) MAX-LENGTH)
+            (ed)
+            (make-editor (string-append (editor-pre ed) ke) (editor-post ed)))]
+  )
+)
