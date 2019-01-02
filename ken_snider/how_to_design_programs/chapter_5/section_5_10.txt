@@ -4,9 +4,21 @@
 ; An Editor is a structure:
 ;   (make-editor String String)
 ; interpretation (make-editor s t) describes an editor
-; whose visible text is (string-append s t) with 
+; whose visible text is (string-append s t) with
 ; the cursor displayed between s and t
 
-(overlay/align "left" "center"
-               (text "hello world" 11 "black")
-               (empty-scene 200 20))
+; Editor -> Image
+; render displays the contents of Editor as an image
+(check-expect (render (make-editor "pre" "post")) (overlay/align "left" "center"
+     (beside
+      (text "pre" 16 "black")
+      (rectangle 1 20 "solid" "red")
+      (text "post" 16 "black"))
+               (empty-scene 200 20)))
+(define (render e)
+  (overlay/align "left" "center"
+     (beside
+      (text (editor-pre e) 16 "black")
+      (rectangle 1 20 "solid" "red")
+      (text (editor-post e) 16 "black"))
+               (empty-scene 200 20)))

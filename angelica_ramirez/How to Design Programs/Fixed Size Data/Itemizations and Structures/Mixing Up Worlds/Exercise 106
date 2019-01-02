@@ -243,3 +243,24 @@ It remains impossible to change the color of a cat or to peta chameleon
                [(key=? ke "b") "blue"]
                [(key=? ke "g") "green"]
                [else (vcham-color vcham)])))
+
+; SIGS -> Boolean
+; stops when vanimal's happiness falls to 0
+(check-expect (unhappy? CAT3) #false)
+(check-expect (unhappy? CAT2) #true)
+(check-expect (unhappy? CHAM2) #true)
+(check-expect (unhappy? CHAM3) #false)
+
+(define (unhappy? vanimal)
+  (cond
+    [(vcat? vanimal) (<= (vcat-happy vanimal) MINIMUM-HAPPINESS-SCORE)]
+    [(vcham? vanimal) (<= (vcham-happy vanimal) MINIMUM-HAPPINESS-SCORE)]))
+
+; SIGS -> SIGS
+; start the world
+(define (main-cham-cat s)
+  (big-bang s
+    [on-tick tock]
+    [to-draw render]
+    [on-key change-vanimal]
+    [stop-when unhappy?]))
