@@ -42,9 +42,99 @@
      (make-editor (string-append (editor-pre ed) ke) (editor-post ed))]
     [(string=? ke "\b") (backspace ed)]
     [(string=? "left" ke) (move-left ed)]
-    [(string=? "right" ke) (move-right ed)]    
+    [(string=? "right" ke) (move-right ed)]
+    [(string=? ke "\t") ed]
+    [(string=? ke "\r") ed]
+    [(> (image-width (render ed)) WIDTH) ed]
     [else ed]
     )
 )
+
+
+; String Index Char -> String
+; Inserts character at index
+(define (string-insert str i c)
+  (string-append (substring str 0 i) c (substring str (+ i 0) (string-length str))))
+
+; String Index -> String
+; Removes character at index
+(define (string-delete str i)
+  (cond
+    [(> i 0) (string-append (substring str 0 (- i 1)) (substring str (+ (- i 1) 1) (string-length str)))]
+    [else str]))
+
+; Backspace
+; Editor -> Editor
+; Remove the character to the left of the cursor
+(define (backspace ed)
+  (cond
+    [(> (string-length (editor-pre ed)) 0)
+     (make-editor
+      (string-remove-last (editor-pre ed))
+      (editor-post ed))]
+    [else ed]
+   )
+)
+(check-expect (backspace editor1) (make-editor "hell" "world"))
+(check-expect (backspace (make-editor "ab" "cd")) (make-editor "a" "cd"))
+(check-expect (backspace (make-editor "" "world")) (make-editor "" "world"))
+
+; move-left
+; Editor -> Editor
+(define (move-left ed) 
+  (cond
+    [(> (string-length (editor-pre ed)) 0)
+     (make-editor
+      (string-remove-last (editor-pre ed))
+      (string-append (string-last (editor-pre ed)) (editor-post ed)))]
+    [else ed]
+   )                        
+)
+(check-expect (move-left (make-editor "hello" "world")) (make-editor "hell" "oworld"))
+
+; move-right
+; Editor -> Editor
+(define (move-right ed) 
+  (cond
+    [(> (string-length (editor-post ed)) 0)
+     (make-editor
+      (string-append (editor-pre ed) (string-first (editor-post ed)))
+      (string-remove-first (editor-post ed)))]
+    [else ed]
+   )                        
+)
+(check-expect (move-right (make-editor "hello" "world")) (make-editor "hellow" "orld"))
+
+; string-remove-last
+; remove the last character of a string
+; String -> String
+(define (string-remove-last s)
+  (substring s 0 (- (string-length s) 1))
+)
+(check-expect (string-remove-last "tree") "tre")
+
+; string-remove-first
+; remove the first character of a string
+; String -> String
+(define (string-remove-first s)
+  (substring s 1 (string-length s))
+)
+(check-expect (string-remove-first "tree") "ree")
+
+; string-first
+; get the first character of a string
+; String -> String
+(define (string-first s)
+  (substring s 0 1)
+)
+(check-expect (string-first "tree") "t")
+
+; string-last
+; get the last character of a string
+; String -> String
+(define (string-last s)
+  (substring s (- (string-length s) 1) (string-length s))
+)
+(check-expect (string-last "tree") "e")
 
 (render editor1)
