@@ -20,20 +20,36 @@
                  (text-box ed)
                  (empty-scene MAX-WIDTH MAX-HEIGHT)))
 
+(check-expect (string-first "") "")
+(check-expect (string-first "s") "s")
+(check-expect (string-first "str") "s")
+ 
 (define (string-first str)
   (cond
     [(> (string-length str) 0) (substring str 0 1)]
     [else str]))
+
+(check-expect (string-last "") "")
+(check-expect (string-last "s") "s")
+(check-expect (string-last "str") "r")
 
 (define (string-last str)
   (cond
     [(> (string-length str) 0) (substring str (sub1 (string-length str)))]
     [else str]))
 
+(check-expect (string-remove-first "") "")
+(check-expect (string-remove-first "s") "")
+(check-expect (string-remove-first "str") "tr")
+
 (define (string-remove-first str)
   (cond
     [(> (string-length str) 0) (substring str 1)]
     [else str]))
+
+(check-expect (string-remove-last "") "")
+(check-expect (string-remove-last "s") "")
+(check-expect (string-remove-last "str") "st")
 
 (define (string-remove-last str)
   (cond

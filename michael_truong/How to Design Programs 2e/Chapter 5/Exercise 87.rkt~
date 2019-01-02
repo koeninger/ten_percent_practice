@@ -20,21 +20,10 @@
                  (text-box ed)
                  (empty-scene MAX-WIDTH MAX-HEIGHT)))
 
-(check-expect (string-delete "" -1) "")
-(check-expect (string-delete "str" 0) "tr")
-(check-expect (string-delete "str" 1) "sr")
-(check-expect (string-delete "str" 2) "st")
-
 (define (string-delete str i)
   (cond
     [(>= i 0) (string-append (substring str 0 i) (substring str (add1 i)))]
     [else str]))
-
-(check-expect (string-insert "" 0 "s") "s")
-(check-expect (string-insert "str" 0 "_") "_str")
-(check-expect (string-insert "str" 1 "_") "s_tr")
-(check-expect (string-insert "str" 2 "_") "st_r")
-(check-expect (string-insert "str" 3 "_") "str_")
 
 (define (string-insert str i c)
   (string-append (substring str 0 i)
