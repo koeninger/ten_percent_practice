@@ -26,3 +26,15 @@
     [(empty? w) ""]
     [(cons? w)
      (string-append (first w) (word->string (rest w)))]))
+
+; 210
+
+; List-of-words -> List-of-strings
+; turns all Words in low into Strings
+(check-expect (words->strings (list (list "b" "o" "b") (list "t" "e" "d")))
+              (list "bob" "ted"))
+(define (words->strings low)
+  (cond
+    [(empty? low) '()]
+    [(cons? low)
+     (cons (word->string (first low)) (words->strings (rest low)))]))
