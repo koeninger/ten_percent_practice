@@ -89,7 +89,7 @@
 (define-struct ufo [x y])
 (define-struct missile [x y])
 
-(define A1 (make-aim (make-ufo 20 10) (make-tank 28 -3)))
+(define A1 (make-aim (make-ufo 50 10) (make-tank 28 -3)))
 (define A2
   (make-fired (make-ufo 20 10)
               (make-tank 28 -3)
@@ -214,9 +214,8 @@
 (define (si-control s key)
   (cond [(key=? key "left") (tank-left s)]
         [(key=? key "right") (tank-right s)]
-        ;[(key=? key " ") (fire-missile s)]
+        [(key=? key " ") (fire-missile s)]
 [else s]))
-
 
 ; SIGS -> SIGS
 ; Turn tank to the left
@@ -260,15 +259,34 @@
   )
 )
 
-
+; SIGS -> SIGS
+; aim to fired
+(define (fire-missile s)
+  (cond [(aim? s)
+         (make-fired (aim-ufo s)
+                     (aim-tank s)
+                     (make-missile (+ (tank-loc (aim-tank s))
+                                   (tank-vel (aim-tank s)))
+                                (- HEIGHT-OF-WORLD TANK-HEIGHT))
+         )]
+        [(fired? s)
+         (make-fired (fired-ufo s)
+                     (fired-tank s)
+                     (make-missile (+ (tank-loc (fired-tank s))
+                                   (tank-vel (fired-tank s)))
+                                (- HEIGHT-OF-WORLD TANK-HEIGHT)
+                     )
+        )]
+  )
+)
 
 ; main
 (define (main g)
   (big-bang g 
     [on-tick si-move 0.1]
-    (to-draw si-render) 
-    ;(on-key)
-    (stop-when si-game-over?)
+    [to-draw si-render]
+    [on-key si-control]
+    [stop-when si-game-over?]
 ))
 
-(main A2)
+(main A1)
