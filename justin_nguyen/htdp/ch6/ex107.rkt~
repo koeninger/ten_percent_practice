@@ -297,7 +297,7 @@
 ) 0 0 4 29 1 #"\n"
 0 0 4 3 175
 (
- #"#reader(lib \"htdp-beginner-reader.ss\" \"lang\")((modname ex106) (r"
+ #"#reader(lib \"htdp-beginner-reader.ss\" \"lang\")((modname ex107) (r"
  #"ead-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t construct"
  #"or repeating-decimal #f #t none #f () #f)))"
 ) 0 0 4 29 1 #"\n"
