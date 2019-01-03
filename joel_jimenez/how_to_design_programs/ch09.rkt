@@ -272,3 +272,36 @@
   (cond
     [(empty? (rest ne-l)) 1]
     [else (+ 1 (how-many-ne (rest ne-l)))]))
+
+    
+; Exercise 147.
+
+; An NEList-of-Booleans is one of:
+; – (cons Boolean '())
+; – (cons Boolean NEList-of-Booleans)
+; interpretation non-empty lists of Boolean values
+
+; NEList-of-Booleans -> Boolean
+; determines whether all values in ne-lob is #true
+(check-expect (ne-all-true (cons #true '())) #true)
+(check-expect (ne-all-true (cons #false '())) #false)
+(check-expect (ne-all-true (cons #false (cons #true '()))) #false)
+(check-expect (ne-all-true (cons #false (cons #false '()))) #false)
+(check-expect (ne-all-true (cons #true (cons #true '()))) #true)
+(define (ne-all-true ne-lob)
+  (cond
+    [(empty? (rest ne-lob)) (first ne-lob)]
+    [(false? (first ne-lob)) #false]
+    [else (ne-all-true (rest ne-lob))]))
+
+; NEList-of-Booleans -> Boolean
+; determines whether at least one value in ne-lob is #true
+(check-expect (ne-one-true (cons #true '())) #true)
+(check-expect (ne-one-true (cons #false '())) #false)
+(check-expect (ne-one-true (cons #true (cons #false '()))) #true)
+(check-expect (ne-one-true (cons #false (cons #false '()))) #false)
+(define (ne-one-true ne-lob)
+  (cond
+    [(empty? (rest ne-lob)) (first ne-lob)]
+    [(not (false? (first ne-lob))) #true]
+    [else (one-true (rest ne-lob))]))
