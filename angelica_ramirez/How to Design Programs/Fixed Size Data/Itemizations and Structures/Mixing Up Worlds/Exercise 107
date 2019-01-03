@@ -36,6 +36,9 @@ Choose one of the alternatives and design the appropriate program
           (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "white")
           (empty-scene (/ WIDTH-OF-WORLD 3) HEIGHT-OF-WORLD "red")))
 
+(define BACKGROUND-ZOO
+  (empty-scene (* WIDTH-OF-WORLD 4) (* HEIGHT-OF-WORLD 4)))
+
 (define GAUGE
   (overlay/xy
    (rectangle GAUGE-WIDTH GAUGE-HEIGHT "solid" "black")
@@ -72,5 +75,118 @@ Choose one of the alternatives and design the appropriate program
 ; interpretation the zoo has a cat and a chameleon
 
 (define ZOO1 (make-zoo CAT1 CHAM1))
-(define ZOO2 (make-vcat 50 50) (make-vcham 20 20 "blue"))
-(define ZOO3 CAT2 CHAM2)
+(define ZOO2 (make-zoo (make-vcat 50 50) (make-vcham 20 20 "blue")))
+(define ZOO3 (make-zoo CAT2 CHAM2))
+
+; ZOO -> Image
+; places the cat and cham in the world, using vcat-x-pos and vcham-x-pos as the x position
+; renders the happiness guage using the value of vcat-happy or vcham-happy
+; renders the background color for the cham
+
+(define (render zoo)
+  (above (cat-image (zoo-vcat zoo)) (cham-image (zoo-vcham zoo))))
+  
+; VCAT -> Image
+; places the cat in the world, using vcat-x-pos as the x position
+; renders the happiness guage using the value of vcat-happy
+(check-expect (cat-image CAT1) (place-image/align
+                              (rectangle (* 3 100) GAUGE-HEIGHT "solid" "black")
+                                         5 10 "left" "top"
+                                         (place-image CAT 0 Y-CAT BACKGROUND-CAT)))
+(check-expect (cat-image CAT2) (place-image/align
+                              (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                                         5 10 "left" "top"
+                                         (place-image CAT 100 Y-CAT BACKGROUND-CAT)))
+
+(define (cat-image vcat)
+  (place-image/align
+   (rectangle (* 3 (vcat-happy vcat)) GAUGE-HEIGHT "solid" "black")
+   5 10 "left" "top"
+   (place-image CAT (vcat-x-pos vcat) Y-CAT BACKGROUND-CAT)))
+  
+; VCHAM -> Image
+; render the cham and the happiness gauge on the scene
+; places the cham in the world using cham-x-pos as the x position
+; renders the happiness gauge using the value of vcham-happy
+; renders the background color of the chameleon
+(check-expect (cham-image CHAM2) (place-image/align (rectangle (* 3 0) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image CHAM 100 Y-CHAM BACKGROUND-CHAM)))
+(check-expect (cham-image CHAM3) (place-image/align (rectangle (* 3 50) GAUGE-HEIGHT "solid" "black")
+                                                5 10 "left" "top"
+                                                (place-image CHAM 50 Y-CHAM BACKGROUND-CHAM)))
+(define (cham-image vcham)
+  (place-image/align
+   (rectangle (* 3 (vcham-happy vcham)) GAUGE-HEIGHT "solid" "black")
+   5 10 "left" "top"
+   (place-image CHAM (vcham-x-pos vcham) Y-CHAM BACKGROUND-CHAM)))
+
+; Zoo -> Zoo
+; moves the vanimal by 3 pixels for every clock tick
+; moves vanimal by endless left to right loop
+(check-expect (tock ZOO1) (make-zoo (make-vcat 3 99.9) (make-vcham 3 99.9 "blue")))
+(check-expect (tock ZOO2) (make-zoo (make-vcat 53 49.9) (make-vcham 23 19.9 "blue")))
+
+(define (tock zoo)
+  (make-zoo (tock-cat (zoo-vcat zoo)) (tock-cham (zoo-vcham zoo))))
+
+;Auxiliary functions for tock-cat
+
+; WorldState -> WorldState
+; moves the CAT by 3 pixel for every clock tick
+; moves CAT by endless left to right loop
+(check-expect (tock-cat CAT3) (make-vcat (+ 50 SPEED) (- 50 0.1)))
+(check-expect (tock-cat CAT2) (make-vcat (+ 100 SPEED) 0.0))
+
+(define (tock-cat vcat)
+  (make-vcat
+   (tock-x-pos (vcat-x-pos vcat))
+   (tock-happy (vcat-happy vcat))))
+
+; Worldstate -> Worldstate
+; moves the cham by 3 pixels for every clock tick
+; moves cham by endless left to right loop
+(check-expect (tock-cham CHAM2) (make-vcham (+ 100 SPEED) 0.0 "red"))
+(check-expect (tock-cham CHAM3) (make-vcham (+ 50 SPEED) (- 50 0.1) "green"))
+
+(define (tock-cham vcham)
+  (make-vcham
+   (tock-x-pos (vcham-x-pos vcham))
+   (tock-happy (vcham-happy vcham))
+   (vcham-color vcham)))
+
+; Number -> Number
+; update the x-pos, reset at edge of screen
+(check-expect (tock-x-pos 50) (+ 50 SPEED))
+(check-expect (tock-x-pos 100) (+ 100 SPEED))
+(check-expect (tock-x-pos (vcham-x-pos CHAM2)) (+ 100 SPEED))
+(check-expect (tock-x-pos (vcham-x-pos CHAM3)) (+ 50 SPEED))
+
+(define (tock-x-pos xpos)
+  (cond
+    [(< xpos WIDTH-OF-WORLD) (+ xpos SPEED)]
+    [else 0]))
+
+; Number -> Number
+; update the given happiness scale
+(check-expect (tock-happy 50) (- 50 0.1))
+(check-expect (tock-happy 0) 0.0)
+(check-expect (tock-happy (vcham-happy CHAM2)) 0.0)
+(check-expect (tock-happy (vcham-happy CHAM3)) (- 50 0.1))
+
+(define (tock-happy happy)
+  (cond
+    [(> happy 0.0) (- happy 0.1)]
+    [else 0.0]))
+
+; Zoo KeyEvent -> Image
+; handles the feeding and petting of vcat
+; handles the feeding and changing color of vcham
+
+; SIGS -> SIGS
+; start the world
+(define (cham-and-cat zoo)
+  (big-bang zoo
+    [to-draw render]
+    [on-tick tock]
+    [on-key change-zoo]))

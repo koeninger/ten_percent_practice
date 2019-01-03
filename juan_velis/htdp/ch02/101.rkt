@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname |100|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |101|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -110,6 +110,40 @@
                    (ufo-render (fired-ufo s)
                                (missile-render (fired-missile s) BACKGROUND))
        )])
+)
+
+
+(define-struct sigs [ufo tank missile])
+; A SIGS.v2 (short for SIGS version 2) is a structure:
+;   (make-sigs UFO Tank MissileOrNot)
+; interpretation represents the complete state of a
+; space invader game
+ 
+; A MissileOrNot is one of: 
+; – #false
+; – Posn
+; interpretation#false means the missile is in the tank;
+; Posn says the missile is at that location
+
+
+; SIGS.v2 -> Image
+; renders the given game state on top of BACKGROUND 
+#|(define (si-render.v2 s)
+  (tank-render
+    (sigs-tank s)
+    (ufo-render (sigs-ufo s)
+                (missile-render.v2 (sigs-missile s) BACKGROUND)
+    )
+  )
+)|#
+
+; MissileOrNot Image -> Image 
+; adds an image of missile m to scene s 
+(define (missile-render.v2 m s)
+  (cond
+    [(boolean? m) s] 
+    [else (place-image MISSILE (missile-x m) (missile-y m) s)]
+  )
 )
 
 ; Tank Img -> Image

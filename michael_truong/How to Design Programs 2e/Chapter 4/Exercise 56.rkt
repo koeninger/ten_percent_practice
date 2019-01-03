@@ -4,7 +4,7 @@
 (require 2htdp/universe)
 (require test-engine/racket-tests)
 
-(define HEIGHT 300) ; distances in pixels
+(define HEIGHT 300)
 (define WIDTH  100)
 (define YDELTA 3)
  
@@ -65,6 +65,10 @@
     [(string? x) (if (string=? " " ke) -3 x)]
     [(<= -3 x -1) x]
     [(>= x 0) x]))
+
+(check-expect (end "string") #false)
+(check-expect (end 0) #true)
+(check-expect (end 1) #false)
 
 (define (end x)
   (cond
