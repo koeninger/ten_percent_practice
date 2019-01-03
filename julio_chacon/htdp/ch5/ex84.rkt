@@ -15,15 +15,74 @@
 (define (render ed)
   (overlay/align "left" "center"
               (beside
-               (text "hello world" 11 "black")
-               (rectangle 1 20 "solid" "red"))
+               (text (editor-pre ed) 11 "black")
+               (rectangle 1 20 "solid" "red")
+               (text (editor-post ed) 11 "black"))
                (empty-scene 200 20)))
 
 
+(check-expect (edit (make-editor "pre" "post") "\b")  (make-editor "pr" "post"))
+(check-expect (edit (make-editor "pre" "post") "\t") (make-editor "pre" "post"))
+(check-expect (edit (make-editor "pre" "post") "\r") (make-editor "pre" "post"))
+(check-expect (edit (make-editor "pre" "post") "right") (make-editor "prep" "ost"))
+(check-expect (edit (make-editor "pre" "post") "left") (make-editor "pr" "epost"))
+(check-expect (edit (make-editor "pre" "post") "a")  (make-editor "pre" "posta"))
+(check-expect (edit (make-editor "pre" "post") "b")  (make-editor "pre" "postb"))
+(check-expect (edit (make-editor "pre" "post") "c")  (make-editor "pre" "postc"))
+(check-expect (edit (make-editor "pre" "post") "x")  (make-editor "pre" "postx"))
+(check-expect (edit (make-editor "pre" "post") "y")  (make-editor "pre" "posty"))
+(check-expect (edit (make-editor "pre" "post") "z")  (make-editor "pre" "postz"))
+
+; Editor KeyEvent -> Editor 
+; returns editor based on keyevent passed,
 (define (edit ed ke)
   (cond
-    [(string=? "\b" ke) "delete"]
-    [(or (string=? "\t" ke) (string=? "\r" ke)) "ignore"]
-    [(string=? "left" ke) "left"]
-    [(string=? "right" ke) "right"]
-    [elses (make-editor "test" "test")]))
+    [(string=? "\b" ke) (make-editor (string-remove-last (editor-pre ed)) (editor-post ed))]
+    [(or (string=? "\t" ke) (string=? "\r" ke)) (make-editor (editor-pre ed) (editor-post ed))]
+    [(string=? "left" ke) (make-editor
+                           (string-remove-last (editor-pre ed))
+                           (string-append (string-last (editor-pre ed)) (editor-post ed)))]
+    [(string=? "right" ke) (make-editor
+                            (string-append (editor-pre ed) (string-first (editor-post ed)) )
+                            (string-remove-first  (editor-post ed)))]
+    [else (make-editor (editor-pre ed) (string-add (editor-post ed) ke))]))
+
+
+; String String -> String 
+; adds char to end of txt,
+; char is single character
+; txt is previous text passed
+(define (string-add txt char)
+  (string-append txt char))
+
+; String -> String 
+; removes char from end of txt,
+; char is single character
+; txt is text passed
+(define (string-remove-last txt)
+  ( substring txt 0 (- (string-length txt) 1 ) ))
+
+
+; String -> String 
+; removes char from begining of txt,
+; char is single character
+; txt is text passed
+(define (string-remove-first txt)
+  ( substring txt 1 ))
+
+
+; String -> String 
+; returns first character from text,
+; char is single character
+; txt is text passed
+(define (string-first txt)
+  ( string-ith  txt 0 ))
+
+
+; String -> String 
+; returns last character from text,
+; char is single character
+; txt is text passed
+(define (string-last txt)
+  ( substring  txt (- (string-length txt) 1 ) ))
+
