@@ -59,3 +59,13 @@
      (if (member? (first los) DICT)
          (cons (first los) (in-dictionary (rest los)))
          (in-dictionary (rest los)))]))
+
+; 212
+
+; a list-of-words is one of
+; '() or
+; (cons word list-of-words)
+
+(define example-word (list "a" "b"))
+(define example-list-of-words (list example-word (list "c" "d")))
+

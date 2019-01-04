@@ -1019,3 +1019,27 @@ interpretation a dog is owned by a person and is some percentage happy
           (text (substring (editor-st ed) (editor-idx ed)) 11 "black"))
          (empty-scene 200 20)))
          
+(define (edit ed ke)
+    (cond
+     [(string=? ke "left") (make-editor
+                            (editor-st ed)
+                            (- (editor-idx ed) 1)
+                            )]
+     [(string=? ke "right") (make-editor
+                             (editor-st ed)
+                             (+ (editor-idx ed) 1)
+                             )]
+     [(string=? ke "\b") (make-editor
+                            (string-append (substring (editor-st ed) 0 (- (editor-idx ed) 1)) (substring (editor-st ed) (+ (editor-idx ed) 1)))
+                            (- (editor-idx ed) 1)
+                          )]
+     [(= (string-length ke) 1) (make-editor
+                                (string-append
+                                    (substring (editor-st ed) 0 (editor-idx ed))
+                                    ke
+                                    (substring (editor-st ed) (editor-idx ed))
+                                )
+                                (+ (editor-idx ed) 1)
+                            )]
+    )
+)
