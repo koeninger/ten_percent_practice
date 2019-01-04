@@ -1,6 +1,12 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname 12.3_word_games) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp")) #f)))
+(require 2htdp/batch-io)
+; On OS X: 
+(define DICT-LOCATION "/usr/share/dict/words")
+
+(define DICT (read-lines DICT-LOCATION))
+
 ; 209
 
 ; A Word is one of:
@@ -38,3 +44,18 @@
     [(empty? low) '()]
     [(cons? low)
      (cons (word->string (first low)) (words->strings (rest low)))]))
+
+; 211
+
+
+; List-of-strings -> List-of-strings
+; picks out all those Strings that occur in the dictionary
+(check-expect (in-dictionary (list "biscuit" "asasa" "cake"))
+              (list "biscuit" "cake"))
+(define (in-dictionary los)
+  (cond
+    [(empty? los) '()]
+    [(cons? los)
+     (if (member? (first los) DICT)
+         (cons (first los) (in-dictionary (rest los)))
+         (in-dictionary (rest los)))]))

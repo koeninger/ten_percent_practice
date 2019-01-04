@@ -180,8 +180,66 @@ Choose one of the alternatives and design the appropriate program
     [else 0.0]))
 
 ; Zoo KeyEvent -> Image
-; handles the feeding and petting of vcat
-; handles the feeding and changing color of vcham
+; handles the feeding and petting of cat
+; handles the feeding and petting of cham
+
+(define (change-zoo zoo ke)
+  (make-zoo (change-cat (zoo-vcat zoo) ke) (change-cham (zoo-vcham zoo) ke)))
+
+; VCAT KeyEvent -> VCat
+; handle CAT feeding and petting
+; up arrow pets CAT, down arrow feeds CAT
+(check-expect (change-cat CAT3 "up") (pet CAT3))
+(check-expect (change-cat CAT2 "a") CAT2)
+
+(define (change-cat vcat ke)
+  (cond
+    [(key=? ke "up") (pet vcat)]
+    [(key=? ke "down") (feed vcat)]
+    [else vcat]))
+
+; Auxiliary functions for change-cat
+; VCAT -> VCAT
+; pet the cat
+(check-expect (pet CAT1) (make-vcat 0 (+ 100 UP-CHANGE)))
+(check-expect (pet CAT3) (make-vcat 50 (+ 50 UP-CHANGE)))
+
+(define (pet vcat)
+  (make-vcat (vcat-x-pos vcat) (+ (vcat-happy vcat) UP-CHANGE)))
+
+; VCAT -> VCAT
+; feed the cat 
+(check-expect (feed CAT2) (make-vcat 100 (+ 0 DOWN-CHANGE)))
+(check-expect (feed CAT3) (make-vcat 50 (+ 50 DOWN-CHANGE)))
+
+(define (feed vcat)
+  (make-vcat (vcat-x-pos vcat) (+ (vcat-happy vcat) DOWN-CHANGE)))
+
+; vcham KeyEvent -> Vcham
+; handles CHAM feeding and changing color of CHAM 
+; down arrow feeds CHAM
+; up arrow pets cham 
+(check-expect (change-cham CHAM2 "down") (make-vcham 100 0.2 "red"))
+(check-expect (change-cham CHAM3 "down") (make-vcham 50 50.2 "green"))
+
+(define (change-cham vcham ke)
+  (make-vcham (vcham-x-pos vcham)
+             (cond
+               [(key=? ke "down") (+ (vcham-happy vcham) DOWN-CHANGE)]
+               [(key=? ke "up") (+ (vcham-happy vcham) UP-CHANGE)]
+               [else (vcham-happy vcham)])
+             (vcham-color vcham)))
+
+; SIGS -> Boolean
+; stops when vanimal's happiness falls to 0
+(check-expect (unhappy? ZOO3) #true)
+(check-expect (unhappy? ZOO1) #false)
+
+
+(define (unhappy? zoo)
+  (or
+    (<= (vcat-happy (zoo-vcat zoo)) MINIMUM-HAPPINESS-SCORE)
+    (<= (vcham-happy (zoo-vcham zoo)) MINIMUM-HAPPINESS-SCORE)))
 
 ; SIGS -> SIGS
 ; start the world
@@ -189,4 +247,5 @@ Choose one of the alternatives and design the appropriate program
   (big-bang zoo
     [to-draw render]
     [on-tick tock]
-    [on-key change-zoo]))
+    [on-key change-zoo]
+    [stop-when unhappy?]))

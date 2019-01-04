@@ -1007,3 +1007,15 @@ interpretation a dog is owned by a person and is some percentage happy
             (make-editor (string-append (editor-pre ed) ke) (editor-post ed)))]
   )
 )
+
+//Exercise 87
+(define-struct editor [st idx])
+
+(define (render ed)
+    (overlay/align "left" "center"
+         (beside
+          (text (substring (editor-st ed) 0 (editor-idx ed)) 11 "black")
+          (rectangle 1 20 "solid" "red")
+          (text (substring (editor-st ed) (editor-idx ed)) 11 "black"))
+         (empty-scene 200 20)))
+         

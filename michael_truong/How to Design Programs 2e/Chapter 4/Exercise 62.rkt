@@ -24,8 +24,9 @@
 ; DoorState -> Image
 ; translates the state s into a large text image
 
-(check-expect (door-render CLOSED)
-              (text CLOSED 40 "red"))
+(check-expect (door-render LOCKED) (text LOCKED 40 "red"))
+(check-expect (door-render CLOSED) (text CLOSED 40 "red"))
+(check-expect (door-render OPEN) (text OPEN 40 "red"))
 
 (define (door-render s)
   (text s 40 "red"))
