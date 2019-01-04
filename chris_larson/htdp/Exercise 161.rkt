@@ -53,3 +53,15 @@
 ; converts dollars to euros
 (define (convert-euro d rate)
   (* rate d))
+
+; List-of-strings String String -> List-of-strings
+; replaces all ocurances of first string with second string
+(define (substitute lot s1 s2)
+  (cond
+    [(empty? lot) '()]
+    [(string=? (first lot) s1) (cons s2 (substitute (rest lot) s1 s2))]
+    [else (cons (first lot) (substitute (rest lot) s1 s2))]))
+(check-expect (substitute '() "hi" "hello") '())
+(check-expect (substitute (cons "hi" '()) "hi" "hello") (cons "hello" '()))
+(check-expect (substitute (cons "robot" '()) "robot" "r2d2") (cons "r2d2" '()))
+(check-expect (substitute (cons "human" (cons "robot" '())) "robot" "r2d2") (cons "human" (cons "r2d2" '())))
