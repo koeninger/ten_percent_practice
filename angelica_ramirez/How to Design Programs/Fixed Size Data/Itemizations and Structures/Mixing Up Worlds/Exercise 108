@@ -1,0 +1,34 @@
+; Exercise 108 Design a world program that impletments a pedestrian traffice light.
+; The light switches from its default (orange person standing on red background) when press the space bar
+; all other transitions must be reactions to clock ticks
+; to allow pedestrian to cross the street, the ligth receives a signal and switches to a green, walking person
+; this phase lasts 10 seconds
+; after that it display digits 9, 8, ... 0 with odd colors orange and even colored greeen
+; when reaching 0, the light switches back to default
+
+; graphical constants
+
+(define ORANGE-PERSON .)
+
+(define GREEN-PERSON .)
+
+; A state is one of
+; - "wait" - pedestrians wait at cross walk, orange person on red background
+; - "walk" - pedestrians can walk, for 10 seconds, green person on green background
+; - "count" - pedestrians can walk with countdown, red for odd numbers, green for even numbers
+; interpretation pedestrians wait for "walk" state, pedestrians can walk for 20 seconds total
+
+(define-struct trafficsignal [state count])
+; interpretation trafficsignal is a (make-trafficsignal [String Number])
+; - state is "wait", "walk" or "count"
+; - count is [0,10]
+
+(define WAIT1 (make-trafficsignal "wait" 0))
+(define WALK1 (make-trafficsignal "walk" 10)) 
+(define COUNT1 (make-trafficesignal "count" 5))
+
+; TrafficSignal -> Image
+
+; WorldState -> WorldState 
+
+; TrafficSignal KeyEvent -> TrafficSignal
