@@ -1043,3 +1043,10 @@ interpretation a dog is owned by a person and is some percentage happy
                             )]
     )
 )
+
+//Exercise 88
+(define-struct vcat [xcoord happy])
+; A VCat is a structure:
+; (make-vcat Number Number)
+; interpretation (make-vcat x h) describes a cat
+; at x-coodrinate x with happiness h

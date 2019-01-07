@@ -69,3 +69,44 @@
 (define example-word (list "a" "b"))
 (define example-list-of-words (list example-word (list "c" "d")))
 
+(define (arrangements w)
+  (cond
+    [(empty? w) (list '())]
+    [else (insert-everywhere/in-all-words (first w)
+            (arrangements (rest w)))]))
+
+; 1string list-of-words -> list-of-words
+; first argument inserted at the beginning, between all letters, and at the end of all words of the given list.
+(check-expect (insert-everywhere/in-all-words "a" '())
+              '())
+(check-expect (insert-everywhere/in-all-words "a" (list '()))
+              (list (list "a")))
+(check-expect (insert-everywhere/in-all-words "a" (list (list "e")))
+              (list (list "a" "e") (list "e" "a")))
+(check-expect (insert-everywhere/in-all-words "a" (list (list "e" "r") (list "r" "e")))
+              (list (list "a" "e" "r") (list "e" "a" "r") (list "e" "r" "a")
+                    (list "a" "r" "e") (list "r" "a" "e") (list "r" "e" "a")))
+(define (insert-everywhere/in-all-words c ws)
+  (cond
+    [(empty? ws) '()]
+    [(cons? ws) (append (insert-everywhere c (first ws)) (insert-everywhere/in-all-words c (rest ws)))]))
+; 1string word -> list-of-words
+; first argument inserted at the beginning, between all letters, and at the end of given word
+(check-expect (insert-everywhere "a" '())
+              (list (list "a")))
+(check-expect (insert-everywhere "a" (list "r"))
+              (list (list "a" "r") (list "r" "a")))
+(check-expect (insert-everywhere "a" (list "e" "r"))
+              (list (list "a" "e" "r") (list "e" "a" "r") (list "e" "r" "a")))
+(define (insert-everywhere c w)
+  (cond
+    [(empty? w) (list (list c))]
+    [(cons? w) (cons (cons c w)
+                     (insert-first (first w) (insert-everywhere c (rest w))))]))
+;1string list-of-words -> list-of-words
+; add c to head of each word
+(define (insert-first c ws)
+  (cond
+    [(empty? ws) '()]
+    [(cons? ws) (cons (cons c (first ws))
+                      (insert-first c (rest ws)))]))
