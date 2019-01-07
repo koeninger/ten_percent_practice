@@ -8,9 +8,22 @@
 
 ; graphical constants
 
+(define HEIGHT 58)
+(define WIDTH 70)
 (define ORANGE-PERSON .)
 
 (define GREEN-PERSON .)
+
+(define RED-BACKGROUND
+  (rectangle WIDTH HEIGHT "outline" "red"))
+(define GREEN-BACKGROUND
+  (rectangle WIDTH HEIGHT "outline" "green"))
+(define ORANGEWITHBACKGROUND
+  (overlay (rectangle WIDTH HEIGHT "outline" "red") ORANGE-PERSON))
+
+(define GREENWITHBACKGROUND
+  (overlay (rectangle WIDTH HEIGHT "outline" "green") GREEN-PERSON))
+(define TEXT-SIZE 56)
 
 ; A state is one of
 ; - "wait" - pedestrians wait at cross walk, orange person on red background
@@ -19,16 +32,46 @@
 ; interpretation pedestrians wait for "walk" state, pedestrians can walk for 20 seconds total
 
 (define-struct trafficsignal [state count])
-; interpretation trafficsignal is a (make-trafficsignal [String Number])
+; interpretation trafficsignal, ts, is a (make-trafficsignal [String Number])
 ; - state is "wait", "walk" or "count"
 ; - count is [0,10]
 
 (define WAIT1 (make-trafficsignal "wait" 0))
 (define WALK1 (make-trafficsignal "walk" 10)) 
-(define COUNT1 (make-trafficesignal "count" 5))
+(define COUNT1 (make-trafficsignal "count" 5))
 
 ; TrafficSignal -> Image
+; renders the various states of the traffic signal
+(check-expect (render WAIT1) ORANGEWITHBACKGROUND)
+(check-expect (render WALK1) GREENWITHBACKGROUND)
+(check-expect (render COUNT1) (overlay
+                               GREEN-BACKGROUND
+                               (text (number->string 5) TEXT-SIZE "orange")))        
+
+(define (render ts)
+  (cond
+    [(string=? (trafficsignal-state ts) "wait") ORANGEWITHBACKGROUND]
+    [(string=? (trafficsignal-state ts) "walk") GREENWITHBACKGROUND]
+    [(string=? (trafficsignal-state ts) "count") (overlay GREEN-BACKGROUND
+                                                          (render-number (trafficsignal-count ts)))]
+    [else ts]))
+
+; Number -> Image
+; renders the Numbers, green text for even and orange text for odd
+(check-expect (render-number 1) (text "1" TEXT-SIZE "orange"))
+(check-expect (render-number 4) (text (number->string 4) TEXT-SIZE "green"))
+
+(define (render-number n)
+  (cond
+    [(odd? n) (text (number->string n) TEXT-SIZE "orange")]
+    [(even? n) (text (number->string n) TEXT-SIZE "green")]))
 
 ; WorldState -> WorldState 
 
 ; TrafficSignal KeyEvent -> TrafficSignal
+
+; TrafficSignal -> TrafficSignal
+; starts the world with (main WAIT1)
+(define (main ts)
+  (big-bang ts
+    [to-draw render]))
