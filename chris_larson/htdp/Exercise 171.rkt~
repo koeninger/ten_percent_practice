@@ -1,0 +1,40 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 171|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp")) #f)))
+
+; A List-of-strings is one of
+; --'()
+; --(cons String List-of-strings)
+
+(cons "  TTT"
+(cons ""
+(cons "  "
+(cons ""
+(cons "  Put up in a place"
+(cons ""
+(cons "  where it's easy to see"
+(cons ""
+(cons "  the cryptic admonishment"
+(cons ""
+(cons "  T.T.T."
+(cons ""
+(cons "  "
+(cons ""
+(cons "  When you feel how depressingly"
+(cons ""
+(cons "  slowly you climb,"
+(cons ""
+(cons "  it's well to remember that"
+(cons ""
+(cons "  Things Take Time."
+(cons ""
+(cons "  "
+(cons ""
+(cons "  Piet Hein" '())))))))))))))))))))))))))
+
+(read-lines "ttt.txt")
+(read-words "ttt.txt")
+
+; A List-list-of-strings is one of
+; --'()
+; --(cons List-of-strings List-list-of-strings)
