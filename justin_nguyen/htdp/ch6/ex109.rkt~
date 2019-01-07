@@ -1,0 +1,15 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex109) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+
+; ExpectsToSee is one of:
+; AA - expect an "a" (start)
+; BB - expect "b", "c", or "d"
+; DD - finished
+; ER - error (illegal key)
+
+(define AA "start, expect a")
+(define BB "expect b | c")
+(define DD "finished")
+(define ER "error")
