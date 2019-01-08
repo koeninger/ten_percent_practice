@@ -25,6 +25,8 @@
   (overlay (rectangle WIDTH HEIGHT "outline" "green") GREEN-PERSON))
 (define TEXT-SIZE 56)
 
+(define START-COUNT 9) 
+
 ; A state is one of
 ; - "wait" - pedestrians wait at cross walk, orange person on red background
 ; - "walk" - pedestrians can walk, for 10 seconds, green person on green background
@@ -69,9 +71,17 @@
 ; WorldState -> WorldState 
 
 ; TrafficSignal KeyEvent -> TrafficSignal
+; handle the "space" key to start
+(check-expect (start (make-trafficsignal "wait" 2) "b") (make-trafficsignal "wait" 2))
+(check-expect (start (make-trafficsignal "count" 3) " ") (make-trafficsignal "walk" START-COUNT))
+
+(define (start ts ke)
+  (cond [(key=? ke " ") (make-trafficsignal "walk" START-COUNT)]
+        [else ts]))
 
 ; TrafficSignal -> TrafficSignal
 ; starts the world with (main WAIT1)
 (define (main ts)
   (big-bang ts
-    [to-draw render]))
+    [to-draw render]
+    [on-key start]))
