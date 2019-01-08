@@ -350,3 +350,39 @@
   (cond
     [(zero? n) pi]
     [(positive? n) (add1 (add-to-pi (sub1 n)))]))
+
+
+; Exercise 151;
+
+; N, Number -> Number
+; It consumes a natural number n and multiplies it with a number x without using *.
+(check-expect (multiply 3 5) 15)
+(check-expect (multiply 0 5) 0)
+(check-expect (multiply 1 -5) -5)
+(define (multiply n x)
+  (cond
+    [(zero? n) 0]
+    [(positive? n) (+ (multiply (sub1 n) x) x)]))
+
+
+; Exercise 152.
+
+(define REC1 (rectangle 10 10 "outline" "black"))
+
+; N, Image -> Image
+; produces a column—a vertical arrangement—of n copies of img
+(check-expect (col 3 REC1) (above REC1 (above REC1 (above REC1 empty-image))))
+(check-expect (col 0 REC1) empty-image)
+(define (col n img)
+  (cond
+    [(zero? n) empty-image]
+    [(positive? n) (above img (col (sub1 n) img))]))
+
+; N, Image -> Image
+; produces a row—a horizontal arrangement—of n copies of img
+(check-expect (row 3 REC1) (beside REC1 (beside REC1 (beside REC1 empty-image))))
+(check-expect (row 0 REC1) empty-image)
+(define (row n img)
+  (cond
+    [(zero? n) empty-image]
+    [(positive? n) (beside img (row (sub1 n) img))]))
