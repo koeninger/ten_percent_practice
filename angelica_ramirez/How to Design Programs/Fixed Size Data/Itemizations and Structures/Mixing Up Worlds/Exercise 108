@@ -68,7 +68,37 @@
     [(odd? n) (text (number->string n) TEXT-SIZE "orange")]
     [(even? n) (text (number->string n) TEXT-SIZE "green")]))
 
-; WorldState -> WorldState 
+; WorldState -> WorldState
+; handles the tock by counting down, start walking or waiting
+(check-expect (tock WAIT1) (make-trafficsignal "wait" 0))
+(check-expect (tock WALK1) (make-trafficsignal "walk" 9))
+(check-expect (tock COUNT1) (make-trafficsignal "count" 4))
+
+(define (tock ts)
+  (cond
+    [(string=? (trafficsignal-state ts) "wait") ts]
+    [(zero? (trafficsignal-count ts)) (new-state ts)]
+    [else (countdown ts)]))
+
+; TrafficSignal -> TrafficSignal
+; countdown each tick counting down
+(check-expect (countdown COUNT1) (make-trafficsignal "count" 4))
+(check-expect (countdown WALK1) (make-trafficsignal "walk" 9))
+
+(define (countdown ts)
+  (make-trafficsignal (trafficsignal-state ts) (sub1 (trafficsignal-count ts))))
+    
+
+; TrafficSignal -> TrafficSignal
+; returns a new Trafficsignal with a new state
+(check-expect (new-state WALK1) (make-trafficsignal "count" START-COUNT))
+(check-expect (new-state COUNT1) (make-trafficsignal "wait" 0))
+
+(define (new-state ts)
+  (cond
+    [(string=? (trafficsignal-state ts) "walk") (make-trafficsignal "count" START-COUNT)]
+    [else WAIT1]))
+                                                
 
 ; TrafficSignal KeyEvent -> TrafficSignal
 ; handle the "space" key to start
@@ -83,5 +113,8 @@
 ; starts the world with (main WAIT1)
 (define (main ts)
   (big-bang ts
+    [on-tick tock 1]
     [to-draw render]
     [on-key start]))
+
+(main WAIT1)
