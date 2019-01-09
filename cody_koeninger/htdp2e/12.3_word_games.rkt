@@ -75,6 +75,8 @@
     [else (insert-everywhere/in-all-words (first w)
             (arrangements (rest w)))]))
 
+; 213
+
 ; 1string list-of-words -> list-of-words
 ; first argument inserted at the beginning, between all letters, and at the end of all words of the given list.
 (check-expect (insert-everywhere/in-all-words "a" '())
@@ -110,3 +112,16 @@
     [(empty? ws) '()]
     [(cons? ws) (cons (cons c (first ws))
                       (insert-first c (rest ws)))]))
+
+; 214
+
+
+; String -> List-of-strings
+; finds all words that the letters of some given word spell
+ 
+(check-member-of (alternative-words "cat")
+                 (list "act" "cat")
+                 (list "cat" "act"))
+(define (alternative-words s)
+  (in-dictionary
+    (words->strings (arrangements (string->word s)))))
