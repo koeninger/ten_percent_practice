@@ -65,4 +65,46 @@
   (words-on-line
     (read-words/line file-name)))
 
+; 1String -> String
+; converts the given 1String to a 3-letter numeric String
+ 
+(check-expect (encode-letter "z") (code1 "z"))
+(check-expect (encode-letter "\t")
+              (string-append "00" (code1 "\t")))
+(check-expect (encode-letter "a")
+              (string-append "0" (code1 "a")))
+ 
+(define (encode-letter s)
+  (cond
+    [(>= (string->int s) 100) (code1 s)]
+    [(< (string->int s) 10)
+     (string-append "00" (code1 s))]
+    [(< (string->int s) 100)
+     (string-append "0" (code1 s))]))
+ 
+; 1String -> String
+; converts the given 1String into a String
+ 
+(check-expect (code1 "z") "122")
+ 
+(define (code1 c)
+  (number->string (string->int c)))
 
+; List-of-lines -> string
+; concats a list of list-of-strings into a single string
+(define (collapse lol)
+  (cond
+    [(empty? lol) ""]
+    [else (string-append (collapse-line (first lol)) (if (empty? (rest lol)) "" "\n") (collapse (rest lol)))]))
+(check-expect (collapse (read-words/line "ttt.txt")) "TTT\n\n\n\nPut up in a place\n\nwhere it's easy to see\n\nthe cryptic admonishment\n\nT.T.T.\n\n\n\nWhen you feel how depressingly\n\nslowly you climb,\n\nit's well to remember that\n\nThings Take Time.\n\n\n\nPiet Hein\n\n")
+
+; List-of-strings -> string
+; combines los to a single string separated by " "
+(define (collapse-line los)
+  (cond
+    [(empty? los) ""]
+    [else (string-append (first los) (if (empty? (rest los)) "" " ") (collapse-line (rest los)))]))
+(check-expect (collapse-line (cons "the" (cons "cryptic" (cons "admonishment" '())))) "the cryptic admonishment")
+
+(write-file "ttt.dat"
+            (collapse (read-words/line "ttt.txt")))

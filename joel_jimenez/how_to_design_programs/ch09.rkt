@@ -273,7 +273,7 @@
     [(empty? (rest ne-l)) 1]
     [else (+ 1 (how-many-ne (rest ne-l)))]))
 
-    
+
 ; Exercise 147.
 
 ; An NEList-of-Booleans is one of:
@@ -305,3 +305,84 @@
     [(empty? (rest ne-lob)) (first ne-lob)]
     [(not (false? (first ne-lob))) #true]
     [else (one-true (rest ne-lob))]))
+
+
+; 9.3 Natural Numbers
+
+; An N is one of:
+; – 0
+; – (add1 N)
+; interpretation represents the counting numbers
+
+; N String -> List-of-strings
+; creates a list of n copies of s
+(check-expect (copier 0 "hello") '())
+(check-expect (copier 2 "hello")
+              (cons "hello" (cons "hello" '())))
+(define (copier n s)
+  (cond
+    [(zero? n) '()]
+    [(positive? n) (cons s (copier (sub1 n) s))]))
+
+
+; Exercise 149.
+
+(define (copier.v2 n s)
+  (cond
+    [(zero? n) '()]
+    [else (cons s (copier.v2 (sub1 n) s))]))
+; (copier.v2 0.1 "x")
+; (cond  [(zero? 0.1) '()] [else (cons "x" (copier.v2 (sub1 0.1) "x"))]))
+; (cond  [#false '()] [else (cons "x" (copier.v2 (sub1 0.1) "x"))]))
+; (cons "x" (copier.v2 (sub1 0.1) "x"))
+; (cons "x" (copier.v2 -0.9 "x"))
+; (cons "x" (cond  [(zero? -0.9) '()] [else (cons "x" (copier.v2 (sub1 -0.9) "x"))])))
+; (cons "x" (cons "x" (copier.v2 (sub1 -0.9) "x")))))
+; INFINITE LOOP
+
+
+; Exercise 150.
+
+; N -> Number
+; computes (+ n pi) without using +
+(check-within (add-to-pi 3) (+ 3 pi) 0.001)
+(define (add-to-pi n)
+  (cond
+    [(zero? n) pi]
+    [(positive? n) (add1 (add-to-pi (sub1 n)))]))
+
+
+; Exercise 151;
+
+; N, Number -> Number
+; It consumes a natural number n and multiplies it with a number x without using *.
+(check-expect (multiply 3 5) 15)
+(check-expect (multiply 0 5) 0)
+(check-expect (multiply 1 -5) -5)
+(define (multiply n x)
+  (cond
+    [(zero? n) 0]
+    [(positive? n) (+ (multiply (sub1 n) x) x)]))
+
+
+; Exercise 152.
+
+(define REC1 (rectangle 10 10 "outline" "black"))
+
+; N, Image -> Image
+; produces a column—a vertical arrangement—of n copies of img
+(check-expect (col 3 REC1) (above REC1 (above REC1 (above REC1 empty-image))))
+(check-expect (col 0 REC1) empty-image)
+(define (col n img)
+  (cond
+    [(zero? n) empty-image]
+    [(positive? n) (above img (col (sub1 n) img))]))
+
+; N, Image -> Image
+; produces a row—a horizontal arrangement—of n copies of img
+(check-expect (row 3 REC1) (beside REC1 (beside REC1 (beside REC1 empty-image))))
+(check-expect (row 0 REC1) empty-image)
+(define (row n img)
+  (cond
+    [(zero? n) empty-image]
+    [(positive? n) (beside img (row (sub1 n) img))]))
