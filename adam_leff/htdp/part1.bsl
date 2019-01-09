@@ -1050,3 +1050,24 @@ interpretation a dog is owned by a person and is some percentage happy
 ; (make-vcat Number Number)
 ; interpretation (make-vcat x h) describes a cat
 ; at x-coodrinate x with happiness h
+
+//Exercise 89
+(define (happy-cat initial-state)
+    (big-bang initial-state
+        [to-draw render]
+        [on-tick move]
+        [on-key feed-pet]))
+        
+(define (move c)
+    (make-vcat 
+        (+ (vcat-xcoord c) 1)
+        (- (vcat-happy c) 1)
+    ))
+    
+(define (render c)
+    )
+    
+(define (feed-pet c)
+    )
+    
+(happy-cat (make-vcat 0 100))
