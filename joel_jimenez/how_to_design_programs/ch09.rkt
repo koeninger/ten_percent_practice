@@ -386,3 +386,31 @@
   (cond
     [(zero? n) empty-image]
     [(positive? n) (beside img (row (sub1 n) img))]))
+
+
+; Exercise 153.
+
+(define SQUARE-SIZE 10)
+(define SQUARES-X 8)
+(define SQUARES-Y 18)
+(define SEAT (rectangle SQUARE-SIZE SQUARE-SIZE "outline" "black"))
+(define WIDTH (* SQUARES-X SQUARE-SIZE))
+(define HEIGHT (* SQUARES-Y SQUARE-SIZE))
+(define HIT (circle 2 "solid" "red"))
+(define lecture-hall
+  (overlay (col SQUARES-Y (row SQUARES-X SEAT)) (empty-scene WIDTH HEIGHT)))
+
+; An ALOP is one of:
+; – '()
+; – (cons Posn '())
+; interpretation represents a list of Posn
+
+; ALOP -> Image
+; produces an image of the lecture hall with red dots added as specified by the ALOP
+(check-expect (add-balloons (cons (make-posn 15 30)(cons (make-posn 5 10) '())))
+  (place-image HIT 15 30 (place-image HIT 5 10 lecture-hall)))
+(check-expect (add-balloons '()) lecture-hall)
+(define (add-balloons alop)
+  (cond
+    [(empty? alop) lecture-hall]
+    [(posn? (first alop)) (place-image HIT (posn-x (first alop)) (posn-y (first alop)) (add-balloons (rest alop)))]))
