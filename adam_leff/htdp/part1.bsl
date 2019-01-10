@@ -1061,13 +1061,30 @@ interpretation a dog is owned by a person and is some percentage happy
 (define (move c)
     (make-vcat 
         (+ (vcat-xcoord c) 1)
-        (- (vcat-happy c) 1)
+        (- (vcat-happy c) 0.1)
     ))
-    
+
+
+(define cat1 .)
+(define cat2 .)
+(define BACKGROUND2 (empty-scene 400 (image-height cat1)))
+(define (pick-cat ws)
+  (if (odd? ws) cat1 cat2))
+
+(define BACKGROUND1 (empty-scene 50 20))
 (define (render c)
-    )
+    (beside
+      (place-image (rectangle (if (< (vcat-happy c) 100) (vcat-happy c) 100) 20 "solid" "red") 0 10 BACKGROUND1)
+      (place-image (pick-cat (vcat-xcoord c)) (vcat-xcoord c) (/ (image-height cat1) 2) BACKGROUND2)))
+
     
-(define (feed-pet c)
+(define (feed-pet c ke)
+    (cond
+        [(string=? ke "up") (make-vcat (vcat-xcoord c)
+            (modulo (* (/ 4 3) (vcat-happy c)) 100))]
+        [(string=? ke "up") (make-vcat (vcat-xcoord c)
+            (modulo (* (/ 6 5) (vcat-happy c)) 100))]
+    )
     )
     
 (happy-cat (make-vcat 0 100))
