@@ -8,6 +8,9 @@ import cv2
 ap = argparse.ArgumentParser()
 ap.add_argument("-i", "--image", required = True,
 	help = "path to the image file")
+
+ap.add_argument("-b", "--blur", required = True,
+	help = "kernel size of gaussian blur")
 args = vars(ap.parse_args())
 
 # load the image and convert it to grayscale
@@ -25,7 +28,8 @@ gradient = cv2.subtract(gradX, gradY)
 gradient = cv2.convertScaleAbs(gradient)
 
 # blur and threshold the image
-blurred = cv2.blur(gradient, (7, 7))
+b = int(args["blur"])
+blurred = cv2.blur(gradient, (b, b))
 (_, thresh) = cv2.threshold(blurred, 225, 255, cv2.THRESH_BINARY)
 
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (21, 7))
