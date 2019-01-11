@@ -4,8 +4,14 @@
 (require 2htdp/universe)
 (require lang/posn)
 
-(define-struct aim [ufo tank])
-(define-struct fired [ufo tank missile])
+(define-struct vel [dx dy])
+
+(define-struct ufo [posn vel])
+(define-struct tank [posn vel])
+(define-struct missile [posn vel])
+
+(define-struct aim [tank ufo])
+(define-struct fired [tank ufo missile])
 
 (define SQUARE-LENGTH 4)
 (define X (square SQUARE-LENGTH "solid" "black"))
@@ -45,10 +51,27 @@
 ; SIGS -> Image
 ; adds TANK, UFO, and possibly MISSILE to 
 ; the BACKGROUND scene
-(define (si-render s) (overlay IMAGE-TANK BACKGROUND))
 
-(define (si vc)
-   (big-bang vc
-     [to-draw si-render]))
+(define (si-render s)
+  (cond
+    [(aim? s) (place-images
+               (list IMAGE-TANK)
+               (list (tank-posn (aim-tank s)))
+               BACKGROUND)]
+    [else 0]))
 
-(si 0)
+;CHECK FUNCTION HEADERS
+
+(define (si-control s key)
+  (cond
+    [(aim? s) (make-aim (make-tank (make-posn) ()) (aim-ufo s))]
+    
+    [(fired? s) s]
+    [else s]))
+
+(define (si s)
+   (big-bang s
+     [to-draw si-render]
+     [on-key si-control]))
+
+(si (make-aim (make-tank (make-posn 0 0) (make-vel 0 0)) (make-ufo (make-posn 0 0) (make-vel 0 0))))

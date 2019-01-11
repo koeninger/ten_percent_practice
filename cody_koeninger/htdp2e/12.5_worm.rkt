@@ -93,9 +93,31 @@
     "top"
     img))
 
+; 216
+
+;world-state -> boolean
+; stop when worm hits wall
+(check-expect (stop? (mk-ws 0 0 0 0)) #t)
+(check-expect (stop? (mk-ws 0 Y-CELLS 0 0)) #t)
+(define (stop? ws)
+  (or (>= (ws-x ws) X-CELLS)
+      (>= (ws-y ws) Y-CELLS)
+      (<= (ws-x ws) 0)
+      (<= (ws-y ws) 0)))
+
+(define (draw-stop ws)
+  (place-image/align
+   (text "YOU DIED" 48 "black")
+   (* .5 X-CELLS DIAMETER)
+   (* .5 Y-CELLS DIAMETER)
+   "center"
+   "center"
+   (draw ws)))
+
 ; clock ticks every rate seconds
 (define (worm-main rate)
   (big-bang INITIAL-STATE
     [on-tick tick rate]
     [on-key key]
-    [to-draw draw]))
+    [to-draw draw]
+    [stop-when stop? draw-stop]))
