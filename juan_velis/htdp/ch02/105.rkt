@@ -13,12 +13,12 @@
 
 ; this is a point on the y axis
 (define coordy (make-coordinate 10))
-(define coordy (make-coordinate 5))
+(define coordy2 (make-coordinate 5))
 
 ; this is a point on the x axis
 (define coordx (make-coordinate 20))
-(define coordx (make-coordinate 25))
+(define coordx2 (make-coordinate 25))
 
 ; this is a x,y point on the canvas
 (define coord (make-coordinate (make-posn 20 10)))
-(define coord (make-coordinate (make-posn 25 5)))
+(define coord2 (make-coordinate (make-posn 25 5)))

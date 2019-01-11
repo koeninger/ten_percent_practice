@@ -4,8 +4,14 @@
 (require 2htdp/universe)
 (require lang/posn)
 
-(define-struct aim [ufo tank])
-(define-struct fired [ufo tank missile])
+(define-struct vel [dx dy])
+
+(define-struct ufo [p v])
+(define-struct tank [p v])
+(define-struct missile [p v])
+
+(define-struct aim [tank ufo])
+(define-struct fired [tank missile ufo])
 
 (define SQUARE-LENGTH 4)
 (define X (square SQUARE-LENGTH "solid" "black"))
@@ -45,10 +51,52 @@
 ; SIGS -> Image
 ; adds TANK, UFO, and possibly MISSILE to 
 ; the BACKGROUND scene
-(define (si-render s) (overlay IMAGE-TANK BACKGROUND))
 
-(define (si vc)
-   (big-bang vc
-     [to-draw si-render]))
+(define (si-render s)
+  (cond
+    [(aim? s) (place-images (list IMAGE-TANK)
+                            (list (tank-p (aim-tank s)))
+                            BACKGROUND)]
+    [else 0]))
 
-(si 0)
+(define (move-position p v)
+  (make-posn (+ (posn-x p) (vel-dx v))
+             (+ (posn-y p) (vel-dy v))))
+
+(define (move-tank t key)
+  (make-tank (move-position (tank-p t)
+                            (make-vel (* (vel-dx (tank-v t)) (cond
+                                                               [(key=? key "left") -1]
+                                                               [(key=? key "right") 1]
+                                                               [else 0]))
+                                      (* (vel-dy (tank-v t)) (cond
+                                                               [(key=? key "up") -1]
+                                                               [(key=? key "down") 1]
+                                                               [else 0]))))
+             (tank-v t)))
+
+(define (move-missile m)
+  (make-missile (move-position (missile-p m)
+                               (missile-v m))
+                (missile-v m)))
+
+(define (move-ufo u)
+  (make-ufo (move-position (ufo-p u)
+                           (ufo-v u))
+            (ufo-v u)))
+
+(define (si-control s key)
+  (cond
+    [(aim? s) (make-aim (move-tank (aim-tank s) key) (aim-ufo s))]
+    [(fired? s) s]
+    [else s]))
+
+(define (si s)
+   (big-bang s
+     [on-tick si-move]
+     [to-draw si-render]
+     [on-key si-control]))
+
+(si (make-aim (make-tank (make-posn 0 0) (make-vel 3 3)) (make-ufo (make-posn 0 0) (make-vel 0 0))))
+
+;OOB
