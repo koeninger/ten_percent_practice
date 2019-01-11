@@ -81,7 +81,7 @@
 ; List-list-of-strings -> String
 ; Counts 1Strings, words and lines
 (define (counts llos)
-  (string-append "l:" (line-count llos)))
+  (string-append "l:" (number->string (line-count llos)) " w:" (number->string (word-count llos)) " s:" (number->string (1string-count llos))))
 
 ; List-list-of-string
 ; returns line count
@@ -91,3 +91,43 @@
     [else (+ 1 (line-count (rest llos)))]))
 (check-expect (line-count (cons (cons " " '()) (cons (cons " " '()) (cons " " '())))) 3)
 (check-expect (line-count (read-words/line "ttt.txt")) 27)
+
+; List-list-of-string
+; returns word count
+(define (word-count llos)
+  (cond
+    [(empty? llos) 0]
+    [else (+ (row-count (first llos)) (word-count (rest llos)))]))
+(check-expect (word-count (cons (cons "hello" (cons "world" '())) (cons (cons "hello" (cons "world" '())) '()))) 4)
+
+; List-of-string
+; returns word count
+(define (row-count los)
+  (cond
+    [(empty? los) 0]
+    [else (+ 1 (row-count (rest los)))]))
+(check-expect (row-count (cons "hello" (cons "world" '()))) 2)
+
+; List-list-of-string
+; returns 1String count
+(define (1string-count llos)
+  (cond
+    [(empty? llos) 0]
+    [else (+ (1string-row-count (first llos)) (1string-count (rest llos)))]))
+(check-expect (1string-count (cons (cons "hello" (cons "world" '())) (cons (cons "hello" (cons "world" '())) '()))) 20)
+
+; List-of-string
+; returns 1String count
+(define (1string-row-count los)
+  (cond
+    [(empty? los) 0]
+    [else (+ (1string-word-count (explode (first los))) (1string-row-count (rest los)))]))
+(check-expect (1string-row-count (cons "hello" (cons "world" '()))) 10)
+
+; List-of-1String -> Number
+; returns 1String count
+(define (1string-word-count s)
+  (cond
+    [(empty? s) 0]
+    [else (+ 1 (1string-word-count (rest s)))]))
+(check-expect (1string-word-count (explode "hello")) 5)
