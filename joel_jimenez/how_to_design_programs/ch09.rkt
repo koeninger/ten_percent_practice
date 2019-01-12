@@ -414,3 +414,54 @@
   (cond
     [(empty? alop) lecture-hall]
     [(posn? (first alop)) (place-image HIT (posn-x (first alop)) (posn-y (first alop)) (add-balloons (rest alop)))]))
+    
+
+; 9.4 Russian Dolls
+
+(define-struct layer [color doll])
+
+; An RD (short for Russian doll) is one of:
+; – String
+; – (make-layer String RD)
+
+; RD -> Number
+; how many dolls are a part of an-rd
+(check-expect (depth "red") 1)
+(check-expect
+  (depth
+   (make-layer "yellow" (make-layer "green" "red")))
+  3)
+(define (depth an-rd)
+  (cond
+    [(string? an-rd) 1]
+    [else (+ (depth (layer-doll an-rd)) 1)]))
+
+
+; Exercise 154.
+
+; RD -> String
+; produces a string of all colors, separated by a comma and a space
+(check-expect (colors "red") "red")
+(check-expect
+  (colors
+   (make-layer "yellow" (make-layer "green" "red")))
+  "yellow, green, red")
+(define (colors an-rd)
+  (cond
+    [(string? an-rd) an-rd]
+    [else (string-append (layer-color an-rd) ", " (colors (layer-doll an-rd)))]))
+
+
+; Exercise 155.
+
+; RD -> String
+; produces the (color of the) innermost doll
+(check-expect (inner "red") "red")
+(check-expect
+  (inner
+   (make-layer "yellow" (make-layer "green" "red")))
+  "red")
+(define (inner an-rd)
+  (cond
+    [(string? an-rd) an-rd]
+    [else (inner (layer-doll an-rd))]))
