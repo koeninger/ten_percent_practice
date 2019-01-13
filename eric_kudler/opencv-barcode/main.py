@@ -30,8 +30,7 @@ for barcode in barcodes:
 
     # draw the barcode data and barcode type on the image
     text = "{} ({})".format(barcodeData, barcodeType)
-    cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
-		0.5, (0, 0, 255), 2)
+    cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
     # print the barcode type and data to the terminal
     print("[INFO] Found {} barcode: {}".format(barcodeType, barcodeData))
