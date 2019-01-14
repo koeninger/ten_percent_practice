@@ -4,14 +4,13 @@
 (define BACKGROUND
   (empty-scene WIDTH HEIGHT))
 
-(define YELLOWBACKGROUND
-  (rectangle WIDTH HEIGHT "solid" "yellow"))
+(define TEXT-SIZE 10)
+(define TEXT-COLOR "black")
 
-(define REDBACKGROUND
-  (rectangle WIDTH HEIGHT "solid" "red"))
-
-(define GREENBACKGROUND
-  (rectangle WIDTH HEIGHT "solid" "green"))
+(define START-COLOR "white")
+(define WRONG-COLOR "red")
+(define END-COLOR "green")
+(define GOOD-COLOR "yellow")
 
 ; ExpectsToSee is one of:
 ; - AA
@@ -24,3 +23,31 @@
 (define DD "finished")
 (define ER "error, illegal key")
 
+; ExpectsToSee -> Image
+; produces the display image for the given ExpectsToSee world state
+(check-expect (render AA) (ets-color AA "white"))
+(check-expect (render BB) (ets-color BB "yellow"))
+(check-expect (render DD) (ets-color DD "green"))
+(check-expect (render ER) (ets-color ER "red"))
+
+(define (render ets)
+  (cond
+    [(string=? AA ets) (ets-color AA START-COLOR)]
+    [(string=? BB ets) (ets-color BB GOOD-COLOR)]
+    [(string=? DD ets) (ets-color DD END-COLOR)]
+    [(string=? ER ets) (ets-color ER WRONG-COLOR)]))
+
+; ETS Background -> Image
+; render the ETS on an empty scene
+(check-expect (ets-color AA "white") (place-image/align (text AA TEXT-SIZE TEXT-COLOR)
+                                                        (/ WIDTH 2) (/ HEIGHT 2) "center" "center"
+                                                        (overlay (rectangle WIDTH HEIGHT "solid" "white") BACKGROUND)))
+(check-expect (ets-color ER "red") (place-image/align (text ER TEXT-SIZE TEXT-COLOR)
+                                                      (/ WIDTH 2) (/ HEIGHT 2) "center" "center"
+                                                      (overlay (rectangle WIDTH HEIGHT "solid" "red") BACKGROUND)))
+
+(define (ets-color ets clr)
+  (place-image/align
+   (text ets TEXT-SIZE TEXT-COLOR)
+   (/ WIDTH 2) (/ HEIGHT 2) "center" "center"
+   (overlay (rectangle WIDTH HEIGHT "solid" clr) BACKGROUND)))
