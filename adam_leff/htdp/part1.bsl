@@ -1088,3 +1088,14 @@ interpretation a dog is owned by a person and is some percentage happy
     )
     
 (happy-cat (make-vcat 0 100))
+
+//Exercise 90
+(define (happy-cat initial-state)
+    (big-bang initial-state
+        [to-draw render]
+        [on-tick move]
+        [on-key feed-pet]
+        [stop-when sad?]))
+        
+(define (sad? c)
+    (= (vcat-happy c) 0))

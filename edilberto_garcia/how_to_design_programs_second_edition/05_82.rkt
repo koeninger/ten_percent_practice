@@ -20,5 +20,13 @@
 
 (define (compare-word word1 word2)
 
+  (implode (list (three-letter-word-letter1 word1) (three-letter-word-letter2 word1) (three-letter-word-letter3 word1)))
 
+ ; (implode (list (three-letter-word-letter1 word2) (three-letter-word-letter2 word2) (three-letter-word-letter3 word2)))
+
+  
 )
+
+(define (compare-letter letter1 letter2)
+(char=? (list letter1 letter2))
+ )
