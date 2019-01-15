@@ -5,8 +5,10 @@ import cv2
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
+ap.add_argument("-i", "--image", required=False,
                 help="path to input image")
+ap.add_argument("-x", "--input", required=False,
+                help="path to collection of barcodes to be analyzed in bulk")
 args = vars(ap.parse_args())
 
 # load the input image
