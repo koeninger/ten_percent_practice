@@ -386,3 +386,82 @@
   (cond
     [(zero? n) empty-image]
     [(positive? n) (beside img (row (sub1 n) img))]))
+
+
+; Exercise 153.
+
+(define SQUARE-SIZE 10)
+(define SQUARES-X 8)
+(define SQUARES-Y 18)
+(define SEAT (rectangle SQUARE-SIZE SQUARE-SIZE "outline" "black"))
+(define WIDTH (* SQUARES-X SQUARE-SIZE))
+(define HEIGHT (* SQUARES-Y SQUARE-SIZE))
+(define HIT (circle 2 "solid" "red"))
+(define lecture-hall
+  (overlay (col SQUARES-Y (row SQUARES-X SEAT)) (empty-scene WIDTH HEIGHT)))
+
+; An ALOP is one of:
+; – '()
+; – (cons Posn '())
+; interpretation represents a list of Posn
+
+; ALOP -> Image
+; produces an image of the lecture hall with red dots added as specified by the ALOP
+(check-expect (add-balloons (cons (make-posn 15 30)(cons (make-posn 5 10) '())))
+  (place-image HIT 15 30 (place-image HIT 5 10 lecture-hall)))
+(check-expect (add-balloons '()) lecture-hall)
+(define (add-balloons alop)
+  (cond
+    [(empty? alop) lecture-hall]
+    [(posn? (first alop)) (place-image HIT (posn-x (first alop)) (posn-y (first alop)) (add-balloons (rest alop)))]))
+    
+
+; 9.4 Russian Dolls
+
+(define-struct layer [color doll])
+
+; An RD (short for Russian doll) is one of:
+; – String
+; – (make-layer String RD)
+
+; RD -> Number
+; how many dolls are a part of an-rd
+(check-expect (depth "red") 1)
+(check-expect
+  (depth
+   (make-layer "yellow" (make-layer "green" "red")))
+  3)
+(define (depth an-rd)
+  (cond
+    [(string? an-rd) 1]
+    [else (+ (depth (layer-doll an-rd)) 1)]))
+
+
+; Exercise 154.
+
+; RD -> String
+; produces a string of all colors, separated by a comma and a space
+(check-expect (colors "red") "red")
+(check-expect
+  (colors
+   (make-layer "yellow" (make-layer "green" "red")))
+  "yellow, green, red")
+(define (colors an-rd)
+  (cond
+    [(string? an-rd) an-rd]
+    [else (string-append (layer-color an-rd) ", " (colors (layer-doll an-rd)))]))
+
+
+; Exercise 155.
+
+; RD -> String
+; produces the (color of the) innermost doll
+(check-expect (inner "red") "red")
+(check-expect
+  (inner
+   (make-layer "yellow" (make-layer "green" "red")))
+  "red")
+(define (inner an-rd)
+  (cond
+    [(string? an-rd) an-rd]
+    [else (inner (layer-doll an-rd))]))

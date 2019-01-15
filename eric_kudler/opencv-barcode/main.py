@@ -5,8 +5,10 @@ import cv2
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=True,
+ap.add_argument("-i", "--image", required=False,
                 help="path to input image")
+ap.add_argument("-x", "--input", required=False,
+                help="path to collection of barcodes to be analyzed in bulk")
 args = vars(ap.parse_args())
 
 # load the input image
@@ -30,8 +32,7 @@ for barcode in barcodes:
 
     # draw the barcode data and barcode type on the image
     text = "{} ({})".format(barcodeData, barcodeType)
-    cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX,
-		0.5, (0, 0, 255), 2)
+    cv2.putText(image, text, (x, y - 10), cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 255), 2)
 
     # print the barcode type and data to the terminal
     print("[INFO] Found {} barcode: {}".format(barcodeType, barcodeData))
