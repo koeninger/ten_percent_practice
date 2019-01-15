@@ -18,15 +18,27 @@
 
 
 
+
+(check-expect
+    (compare-word (make-three-letter-word "J" "O" "E") (make-three-letter-word "J" "O" "E"))
+    (make-three-letter-word "J" "O" "E")
+)
+
+(check-expect
+    (compare-word (make-three-letter-word "E" "E" "E") (make-three-letter-word "E" "O" "E"))
+    (make-three-letter-word "E" #false "E")
+)
 (define (compare-word word1 word2)
-
-  (implode (list (three-letter-word-letter1 word1) (three-letter-word-letter2 word1) (three-letter-word-letter3 word1)))
-
- ; (implode (list (three-letter-word-letter1 word2) (three-letter-word-letter2 word2) (three-letter-word-letter3 word2)))
-
-  
+  (make-three-letter-word
+      (compare-letter (three-letter-word-letter1 word1) (three-letter-word-letter1 word2))
+      (compare-letter (three-letter-word-letter2 word1) (three-letter-word-letter2 word2))
+      (compare-letter (three-letter-word-letter3 word1) (three-letter-word-letter3 word2))
+   )
 )
 
 (define (compare-letter letter1 letter2)
-(char=? (list letter1 letter2))
- )
+  (if (string=? letter1 letter2)
+    letter1
+    #false
+   )
+)
