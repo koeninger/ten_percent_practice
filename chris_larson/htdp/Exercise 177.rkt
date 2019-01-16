@@ -109,17 +109,45 @@
 ; Editor -> Editor
 ; moves the cursor position one 1String left, 
 ; if possible 
-(define (editor-lft ed) ed)
- 
+(define (editor-lft ed)
+  (cond
+    [(empty? (editor-pre ed)) ed]
+    [else (make-editor (rest (editor-pre ed)) (cons (first (editor-pre ed)) (editor-post ed)))]))
+(check-expect
+  (editor-lft (create-editor "cd" "fgh"))
+  (create-editor "c" "dfgh"))
+(check-expect
+  (editor-lft (create-editor "" "cdfgh"))
+  (create-editor "" "cdfgh"))
+
 ; Editor -> Editor
 ; moves the cursor position one 1String right, 
 ; if possible 
-(define (editor-rgt ed) ed)
- 
+(define (editor-rgt ed)
+    (cond
+    [(empty? (editor-post ed)) ed]
+    [else (make-editor (cons (first (editor-post ed)) (editor-pre ed)) (rest (editor-post ed)))]))
+(check-expect
+  (editor-rgt (create-editor "cd" "fgh"))
+  (create-editor "cdf" "gh"))
+(check-expect
+  (editor-rgt (create-editor "cdfgh" ""))
+  (create-editor "cdfgh" ""))
+
 ; Editor -> Editor
 ; deletes a 1String to the left of the cursor,
 ; if possible 
-(define (editor-del ed) ed)
+(define (editor-del ed)
+  (cond
+    [(empty? (editor-pre ed)) ed]
+    [else (make-editor (rest (editor-pre ed)) (editor-post ed))]))
+(check-expect
+  (editor-del (create-editor "cd" "fgh"))
+  (create-editor "c" "fgh"))
+(check-expect
+  (editor-del (create-editor "" "fgh"))
+  (create-editor "" "fgh"))
+
 
 ; main : String -> Editor
 ; launches the editor given some initial string 
