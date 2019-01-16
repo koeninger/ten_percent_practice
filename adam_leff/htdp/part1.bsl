@@ -1099,3 +1099,21 @@ interpretation a dog is owned by a person and is some percentage happy
         
 (define (sad? c)
     (= (vcat-happy c) 0))
+    
+//Exercise 91
+(define-struct vcat [xcoord happy direction])
+; A VCat is a structure:
+; (make-vcat Number Number String)
+; interpretation (make-vcat x h d) describes a cat
+; at x-coodrinate x with happiness h
+; direction d is either "l" or "r"
+
+(define (move c)
+    (make-vcat 
+        (if (= vcat-direction "r") (+ (vcat-xcoord c) 1) (- (vcat-xcoord c) 1))
+        (- (vcat-happy c) 0.1)
+        (cond
+            [(= (vcat-xcoord c) 50) "l"]
+            [(= (vcat-xcoord c) 0) "r"]
+        )
+    ))
