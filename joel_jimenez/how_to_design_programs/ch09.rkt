@@ -414,7 +414,7 @@
   (cond
     [(empty? alop) lecture-hall]
     [(posn? (first alop)) (place-image HIT (posn-x (first alop)) (posn-y (first alop)) (add-balloons (rest alop)))]))
-    
+
 
 ; 9.4 Russian Dolls
 
@@ -465,3 +465,66 @@
   (cond
     [(string? an-rd) an-rd]
     [else (inner (layer-doll an-rd))]))
+
+
+; 9.5 Lists and World
+
+(define HEIGHT 80) ; distances in terms of pixels
+(define WIDTH 100)
+(define XSHOTS (/ WIDTH 2))
+
+; graphical constants
+(define BACKGROUND (empty-scene WIDTH HEIGHT))
+(define SHOT (triangle 3 "solid" "red"))
+
+; A List-of-shots is one of:
+; – '()
+; – (cons Shot List-of-shots)
+; interpretation the collection of shots fired
+
+; A Shot is a Number.
+; interpretation represents the shot's y-coordinate
+
+; A ShotWorld is List-of-numbers.
+; interpretation each number on such a list
+;   represents the y-coordinate of a shot
+
+
+; Exercise 156.
+
+; ShotWorld -> Image
+; adds the image of a shot for each  y on w
+; at (MID,y} to the background image
+(check-expect (to-image '()) BACKGROUND)
+(check-expect (to-image (cons 9 '()))
+  (place-image SHOT XSHOTS 9 BACKGROUND))
+(define (to-image w)
+  (cond
+    [(empty? w) BACKGROUND]
+    [else (place-image SHOT XSHOTS (first w) (to-image (rest w)))]))
+
+; ShotWorld -> ShotWorld
+; moves each shot on w up by one pixel
+(check-expect (tock '()) '())
+(check-expect (tock (cons 9 '())) (cons 8 '()))
+(check-expect (tock (cons 5 (cons 1 '()))) (cons 4 (cons 0 '())))
+(define (tock w)
+  (cond
+    [(empty? w) '()]
+    [else (cons (sub1 (first w)) (tock (rest w)))]))
+
+; ShotWorld KeyEvent -> ShotWorld
+; adds a shot to the world
+; if the player presses the space bar
+(check-expect (keyh '() " ") (cons HEIGHT '()))
+(check-expect (keyh '() "a") '())
+(define (keyh w ke)
+  (if (key=? ke " ") (cons HEIGHT w) w))
+
+
+; ShotWorld -> ShotWorld
+(define (main w0)
+  (big-bang w0
+    [on-tick tock]
+    [on-key keyh]
+    [to-draw to-image]))
