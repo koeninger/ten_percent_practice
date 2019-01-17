@@ -50,11 +50,6 @@
 (define (create-editor s1 s2)
   (make-editor (rev (explode s1)) (explode s2)))
 (check-expect (create-editor "all" "good") (make-editor lla good))
-
-; Editor -> Image
-; renders an editor as an image of the two texts 
-; separated by the cursor 
-(define (editor-render e) MT)
  
 ; Editor KeyEvent -> Editor
 ; deals with a key event, given some editor
@@ -148,6 +143,27 @@
   (editor-del (create-editor "" "fgh"))
   (create-editor "" "fgh"))
 
+; Editor -> Image
+(define (editor-render ed)
+  (place-image/align
+    (beside (editor-text (reverse (editor-pre ed)))
+            CURSOR
+            (editor-text (editor-post ed)))
+    1 1
+    "left" "top"
+    MT))
+
+; Lo1s -> Image
+; renders a list of 1Strings as a text image 
+(define (editor-text s)
+  (cond
+    [(empty? s) (text "" FONT-SIZE FONT-COLOR)]
+    [else (beside  (text (first s) FONT-SIZE FONT-COLOR) (editor-text (rest s)))]))
+
+(check-expect
+  (editor-text
+   (cons "p" (cons "o" (cons "s" (cons "t" '())))))
+  (text "post" FONT-SIZE FONT-COLOR))
 
 ; main : String -> Editor
 ; launches the editor given some initial string 
