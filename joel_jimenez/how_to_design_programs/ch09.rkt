@@ -467,15 +467,15 @@
     [else (inner (layer-doll an-rd))]))
 
 
-; 9.5 Lists and World
+; Exercise 157.
 
-(define HEIGHT 80) ; distances in terms of pixels
-(define WIDTH 100)
-(define XSHOTS (/ WIDTH 2))
+(define HEIGHT 30) ; distances in terms of pixels 
+(define WIDTH 220)
+(define XSHOTS (/ WIDTH 4))
 
 ; graphical constants
-(define BACKGROUND (empty-scene WIDTH HEIGHT))
-(define SHOT (triangle 3 "solid" "red"))
+(define BACKGROUND (rectangle WIDTH HEIGHT "solid" "green"))
+(define SHOT (rectangle 1 4 "solid" "black"))
 
 ; A List-of-shots is one of:
 ; – '()
@@ -507,10 +507,13 @@
 ; moves each shot on w up by one pixel
 (check-expect (tock '()) '())
 (check-expect (tock (cons 9 '())) (cons 8 '()))
+(check-expect (tock (cons 0 '())) '())
 (check-expect (tock (cons 5 (cons 1 '()))) (cons 4 (cons 0 '())))
 (define (tock w)
   (cond
     [(empty? w) '()]
+    ; Exercise 158.
+    [(<= (first w) 0) (tock (rest w))]
     [else (cons (sub1 (first w)) (tock (rest w)))]))
 
 ; ShotWorld KeyEvent -> ShotWorld
