@@ -48,7 +48,7 @@
 ; String String -> Editor
 ; Combines 2 strings to make an editor
 (define (create-editor s1 s2)
-  (make-editor (rev (explode s1)) (explode s2)))
+  (make-editor (rev (main(explode s1)) (explode s2)))
 (check-expect (create-editor "all" "good") (make-editor lla good))
  
 ; Editor KeyEvent -> Editor
