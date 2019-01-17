@@ -1117,3 +1117,27 @@ interpretation a dog is owned by a person and is some percentage happy
             [(= (vcat-xcoord c) 0) "r"]
         )
     ))
+    
+//Exercise 92
+(define-struct vcham [xcoord happy color])
+
+(define (cham initial-state)
+    (big-bang initial-state
+        [to-draw render]
+        [on-tick move]
+        [on-key feed-pet-color]))
+        
+(define (move c)
+    (make-vcham
+        (+ (vcham-xcoord c) 1)
+        (- (vcham-happy c) 0.1)
+    ))
+    
+(define (feed-pet-color c ke)
+    (cond
+        [(string=? ke "up") (make-vcat (vcat-xcoord c)
+            (modulo (* (/ 4 3) (vcat-happy c)) 100))]
+        [(string=? ke "down") (make-vcat (vcat-xcoord c)
+            (modulo (* (/ 6 5) (vcat-happy c)) 100))]
+    )
+    )
