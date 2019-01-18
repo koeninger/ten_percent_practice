@@ -469,7 +469,7 @@
 
 ; Exercise 157.
 
-(define HEIGHT 30) ; distances in terms of pixels 
+(define HEIGHT 30) ; distances in terms of pixels
 (define WIDTH 220)
 (define XSHOTS (/ WIDTH 4))
 
@@ -531,3 +531,37 @@
     [on-tick tock]
     [on-key keyh]
     [to-draw to-image]))
+
+
+; Exercise 159.
+
+(define-struct pair [balloon# lob])
+; A Pair is a structure (make-pair N List-of-posns)
+; A List-of-posns is one of:
+; – '()
+; – (cons Posn List-of-posns)
+; interpretation (make-pair n lob) means n balloons
+; must yet be thrown and added to lob
+
+; Pair -> Image
+; draws the List-of-posns onto lecture-hall
+(check-expect (balloon-render (make-pair 5 '())) (add-balloons '()))
+(check-expect (balloon-render (make-pair 5 (list (make-posn 5 5)))) (add-balloons (list (make-posn 5 5))))
+(define (balloon-render p)
+  (add-balloons (pair-lob p)))
+
+; Pair -> Pair
+; adds one balloon dropping after another at a rate of one per second
+(check-random (balloon-tock (make-pair 5 '())) (make-pair 4 (list (make-posn (random MAX-WIDTH) (random MAX-HEIGHT)))))
+(check-expect (balloon-tock (make-pair 0 '())) (make-pair 0 '()))
+(define (balloon-tock p)
+  (if (> (pair-balloon# p) 0)
+    (make-pair (sub1 (pair-balloon# p)) (cons (make-posn (random MAX-WIDTH) (random MAX-HEIGHT)) (pair-lob p))) p))
+
+
+; Number -> Pair
+; consumes how many balloons the students want to throw
+(define (riot b)
+  (big-bang (make-pair b '())
+    [on-tick balloon-tock 1]
+    [to-draw balloon-render]))
