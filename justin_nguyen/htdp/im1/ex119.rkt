@@ -1,16 +1,8 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname ex119) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
-;(x)
-; illegal. there is no grammar match for (variable)
+;(define (f "x") x)
+; "x" is a value, which is not allowed in the grammar of def
 
-;(+ 1 (not x))
-; legal. this matches the expr grammar
-; (primitive expr expr) ==
-; (primitive value expr) ==
-; (primitive value (primitive expr)) ==
-; (primitive value (primitive value))
-
-;(+ 1 2 3)
-; legal. matches the expr grammar:
-; (primitive value value value)
+;(define (f x y z) (x))
+; (x) is not a legal expr, which is expected in the grammar of def
