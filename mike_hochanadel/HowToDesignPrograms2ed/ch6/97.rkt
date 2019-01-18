@@ -17,12 +17,35 @@
 ; A Missile is a Posn. 
 ; interpretation (make-posn x y) is the missile's place
 
+(define BACKGROUND (empty-scene 200 200))
+
+(define MISSILE (triangle 10 "solid" "red"))
+(define UFO (overlay
+             (circle 10 "solid" "green")
+             (rectangle 30 10 "solid" "green")))
+(define TANK (overlay/align
+              "center"
+              "bottom"
+              (rectangle 10 20 "solid" "black")
+              (rectangle 30 10 "solid" "black")))
 
 ; A SIGS is one of: 
 ; – (make-aim UFO Tank)
 ; – (make-fired UFO Tank Missile)
 ; interpretation represents the complete state of a 
 ; space invader game
+
+; tank, Image -> Image
+; renders the tank on top of the given Image
+(define (tank-render t im) im)
+
+; UFO, Image -> Image
+; renders UFO on top of the given Image
+(define (ufo-render u im) im)
+
+; Missile, Image -> Image
+; renders Missile on top of the given Image
+(define (missile-render m im) im)
 
 ; SIGS -> Image
 ; renders the given game state on top of BACKGROUND 
