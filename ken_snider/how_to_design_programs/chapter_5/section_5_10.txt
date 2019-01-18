@@ -30,3 +30,9 @@
 
 ; Editor KeyEvent -> Editor
 ; Alters Editor based on KeyEvent
+(define (edit ed ke)
+  (cond
+    [(string=? "left" ke) ...]
+    [(string=? "right" ke) ...]
+    [(= (string-length ke) 1) ...]
+    ))
