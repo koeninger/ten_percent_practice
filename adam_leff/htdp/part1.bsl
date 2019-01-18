@@ -1117,3 +1117,57 @@ interpretation a dog is owned by a person and is some percentage happy
             [(= (vcat-xcoord c) 0) "r"]
         )
     ))
+    
+//Exercise 92
+(define-struct vcham [xcoord happy color])
+
+(define (chambg c)
+  (rectangle (image-width cham)
+             (image-height cham)
+             "solid"
+             c))
+             
+(define (cham initial-state)
+    (big-bang initial-state
+        [to-draw render]
+        [on-tick move]
+        [on-key feed-pet-color]))
+        
+(define (move c)
+    (make-vcham
+        (+ (vcham-xcoord c) 1)
+        (- (vcham-happy c) 0.1)
+        (vcham-color c)
+    ))
+    
+(define (feed-pet-color c ke)
+    (cond
+        [(string=? ke "up") (make-vcham (vcham-xcoord c)
+            (modulo (* (/ 4 3) (vcham-happy c)) 100)
+            (vcham-color c))]
+        [(string=? ke "down") (make-vcham (vcham-xcoord c)
+            (modulo (* (/ 6 5) (vcham-happy c)) 100)
+            (vcham-color c))]
+        [(= ke "r") (make-vcham
+            (vcham-xcoord c)
+            (vcham-happy c)
+            "red"
+        )]
+        [(= ke "g") (make-vcham
+            (vcham-xcoord c)
+            (vcham-happy c)
+            "green"
+        )]
+        [(= ke "b") (make-vcham
+            (vcham-xcoord c)
+            (vcham-happy c)
+            "blue"
+        )]
+    )
+)
+
+
+(define (render c)
+    (beside
+      (place-image (rectangle (if (< (vcham-happy c) 100) (vcham-happy c) 100) 20 "solid" "red") 0 10 BACKGROUND1)
+      (place-image (overlay cham (chambg (vcham-color c)) (vcham-xcoord c) (/ (image-height cham) 2) BACKGROUND2))))
