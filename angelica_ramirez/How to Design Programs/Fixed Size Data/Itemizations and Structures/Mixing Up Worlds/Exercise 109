@@ -52,36 +52,28 @@
    (/ WIDTH 2) (/ HEIGHT 2) "center" "center"
    (overlay (rectangle WIDTH HEIGHT "solid" clr) BACKGROUND)))
 
-; ExpectsToSee KeyEvent -> ExpectsToSee
-; runs the program using keyboard
 
-(define (keyboard ets ke)
+
+;ExpectsToSee KeyEvent -> ExpectsToSee
+; produces the next ETS depending on if a key event occurred
+; and if the desired key was pressed
+; desired keys are in order of (a, b or c, d)
+(check-expect (keyboard-respond AA "a") BB)
+(check-expect (keyboard-respond AA "c") ER)
+(check-expect (keyboard-respond BB "b") BB)
+(check-expect (keyboard-respond BB "p") ER)
+(check-expect (keyboard-respond BB "d") DD)
+(check-expect (keyboard-respond DD "d") DD)
+
+
+(define (keyboard-respond ets ke)
   (cond
-    [(= (string-length ke) 1)
-     (keyboard-respond ets ke)]
-    [else ets]))
-
-;ExpectsToSee 1String -> ExpectsToSee
-; given state and a letter, returns to the next state
-
-(define (keyboard-respond ets lt)
-  (cond
-    [(string=? AA ets) (cond
-                         [(string=? lt "a") BB]
-                         [else ER])]
-    [(string=? BB ets) (cond
-                         [(or
-                           (string=? lt "b")
-                           (string=? lt "c")) BB]
-                         [(string=? lt "d") DD]
-                         [else ER])]
-    [else ets]))
-
-; ETS -> Boolean
-; stops the program on DD state
-
-(define (stop? ets)
-  (string=? DD ets))
+    [(and (string=? AA ets) (string=? "a" ke)) BB]
+    [(and (string=? BB ets) (string=? "b" ke)) BB]
+    [(and (string=? BB ets) (string=? "c" ke)) BB]
+    [(and (string=? BB ets) (string=? "d" ke)) DD]
+    [(string=? DD ets) DD]
+    [else ER]))
 
 ; runs the program
 ; run with (main AA)
@@ -89,7 +81,7 @@
 (define (main ets)
   (big-bang ets
     [to-draw render]
-    [on-key keyboard]
-    [stop-when stop?]))
+    [on-key keyboard-respond]
+    ))
 
 (main AA)
