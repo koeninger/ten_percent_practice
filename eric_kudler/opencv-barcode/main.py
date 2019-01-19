@@ -61,6 +61,10 @@ for barcode in total_barcodes:
     if image_x >= pdf.w:
         image_x = pdf.w / 4
         image_y += 100
+        if image_y >= pdf.h:
+            pdf.add_page()
+            image_y = 20
+
 
 pdf.output("test.pdf")
 
