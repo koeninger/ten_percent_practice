@@ -11,10 +11,10 @@ BARCODE_IMAGE_WIDTH = 45
 
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
-ap.add_argument("-i", "--image", required=False,
-                help="path to input image")
-ap.add_argument("-x", "--input", required=False,
+ap.add_argument("-i", "--input", required=False,
                 help="path to collection of barcodes to be analyzed in bulk")
+ap.add_argument("-o", "--output", required=False, const='output/', nargs='?',
+                help="path to directory to keep pdfs in")
 
 total_barcodes = []
 args = vars(ap.parse_args())
@@ -65,8 +65,10 @@ for barcode in total_barcodes:
             pdf.add_page()
             image_y = 20
 
-
-pdf.output("test.pdf")
+timestamp = int(round(time.time() * 1000))
+if not os.path.exists(args["output"]):
+    os.makedirs(args["output"])
+pdf.output(args["output"] + "/" + str(timestamp) + ".pdf")
 
 # show the output image
 # cv2.imshow("Image", image)
