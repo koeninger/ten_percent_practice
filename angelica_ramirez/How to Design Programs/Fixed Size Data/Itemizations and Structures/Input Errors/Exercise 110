@@ -1,0 +1,51 @@
+; Number -> Number
+; computes the area of a disk with radius r
+
+(define (area-of-disk r)
+  (* 3.14 (* r r)))
+
+; Any BSL value is one of:
+; - Number
+; - Boolean
+; - String
+; - Image
+; - (make-posn Any Any)
+; ...
+; - (make-tank Any Any)
+; ...
+
+; Any -> ??
+(define (checked-f v)
+  (cond
+    [(number? v) ...]
+    [(boolean? v) ...]
+    [(string? v) ...]
+    [(image? v) ...]
+    [(posn? v) (...(posn-x v) ... (posn-y v) ...)]
+    ...
+    ; which selectors are needed in the next clause?
+    [(tank? v) ...]
+    ...))
+
+(error "area-of-disk: number expected")
+
+(define MESSAGE "area-of-disk: number expected")
+
+(define (check-area-of-disk v)
+  (cond
+    [(number? v) (area-of-disk v)]
+    [(boolean? v) (error MESSAGE)]
+    [(string? v) (error MESSAGE)]
+    [(image? v) (error MESSAGE)]
+    [(posn? v) (error MESSAGE)]
+    ...
+    [(tank? v) (error MESSAGE)]
+    ...))
+
+; Any -> Number
+; computes the area of a disk with radius v,
+; if v is a number
+(define (checked-area-of-disk v)
+  (cond
+    [(and (number? v) (positive? v)) (area-of-disk v)]
+    [else (error "area-of-disk: number expected")]))
