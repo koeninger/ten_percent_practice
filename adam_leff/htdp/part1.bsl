@@ -1171,3 +1171,14 @@ interpretation a dog is owned by a person and is some percentage happy
     (beside
       (place-image (rectangle (if (< (vcham-happy c) 100) (vcham-happy c) 100) 20 "solid" "red") 0 10 BACKGROUND1)
       (place-image (overlay cham (chambg (vcham-color c)) (vcham-xcoord c) (/ (image-height cham) 2) BACKGROUND2))))
+      
+//Exercise 93
+(define BACKGROUND
+  (beside (empty-scene WIDTH HEIGHT "green") 
+          (empty-scene WIDTH HEIGHT "white")
+          (empty-scene WIDTH HEIGHT "red")))
+
+(define (render c)
+    (beside
+      (place-image (rectangle (if (< (vcham-happy c) 100) (vcham-happy c) 100) 20 "solid" "red") 0 10 BACKGROUND1)
+      (place-image cham (vcham-xcoord c) (/ (image-height cham) 2) BACKGROUND))))
