@@ -17,6 +17,7 @@ BarNone uses [OpenCV](https://opencv.org/) and [Pyzbar](https://pypi.org/project
 3.  Create a `virtualenv` using
     ```
     mkvirtualenv barnone -p python3
+    workon barnone
     ```
 4.  Enter your virtualenv and install your packages with
     ```
