@@ -17,6 +17,8 @@
 (define background (empty-scene 200 20))
 
 
+
+
 (
     define (render txt)
     (
