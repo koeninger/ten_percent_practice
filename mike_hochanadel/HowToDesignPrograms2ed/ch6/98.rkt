@@ -39,6 +39,10 @@
               (rectangle TANK_TOP_WIDTH TANK_HEIGHT "solid" "black")
               (rectangle TANK_WIDTH (/ TANK_HEIGHT  2) "solid" "black")))
 
+(define GAME_OVER (text "Game OVER!" 12 "black"))
+(define YOU_WIN (text "You Win!" 12 "green"))
+(define YOU_LOSE (text "You Lose!" 12 "red"))
+
 
 ; A SIGS is one of: 
 ; – (make-aim UFO Tank)
@@ -142,38 +146,72 @@
                    (missile-render (fired-missile s)
                                    BACKGROUND)))]))
 
+; SIGS -> Image
+; renders the final state of the given game on top of BACKGROUND
+(check-expect (si-render-final (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 36)))
+ (place-image
+   GAME_OVER 40 20
+   (place-image
+    (cond
+     [(ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 36))) YOU_WIN]
+     [else YOU_LOSE])
+    40 34 BACKGROUND)))
+(check-expect (si-render-final (make-aim (make-posn 34 190) (make-tank 14 0)))
+ (place-image
+   GAME_OVER 40 20
+   (place-image
+    (cond
+     [(ufo-hit? (make-aim (make-posn 34 190) (make-tank 14 0))) YOU_WIN]
+     [else YOU_LOSE])
+    40 34 BACKGROUND)))
+(check-expect (si-render-final (make-fired (make-posn 50 190) (make-tank 14 0) (make-posn 100 100)))
+ (place-image
+   GAME_OVER 40 20
+   (place-image
+    (cond
+     [(ufo-hit? (make-fired (make-posn 50 190) (make-tank 14 0) (make-posn 100 100))) YOU_WIN]
+     [else YOU_LOSE])
+    40 34 BACKGROUND)))
+(define (si-render-final s)
+  (place-image
+   GAME_OVER 40 20
+   (place-image
+    (cond
+     [(ufo-hit? s) YOU_WIN]
+     [else YOU_LOSE])
+    40 34 BACKGROUND)))
+
 ; SIGS -> boolean
-; si-game-over? takes the game state and reports whether the game is over or not
-;  the game is over if a Missile hits the target or the UFO lands
-(check-expect (si-game-over (make-aim (make-posn 34 190) (make-tank 14 0))) #true)
-(check-expect (si-game-over (make-aim (make-posn 34 100) (make-tank 14 0))) #false)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 100 100))) #false)
-(check-expect (si-game-over (make-fired (make-posn 50 190) (make-tank 14 0) (make-posn 100 100))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 50))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 50))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 50))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 35))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 65))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 35))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 65))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 65))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 35))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 36))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 34))) #false)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 69 35))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 71 35))) #false)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 64))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 66))) #false)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 31 65))) #true)
-(check-expect (si-game-over (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 29 65))) #false)
-(define (si-game-over s)
+; ufo-hit states if the UFO has been hit by the missile
+(check-expect (ufo-hit? (make-aim (make-posn 34 190) (make-tank 14 0))) #false)
+(check-expect (ufo-hit? (make-aim (make-posn 34 100) (make-tank 14 0))) #false)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 100 100))) #false)
+(check-expect (ufo-hit? (make-fired (make-posn 50 190) (make-tank 14 0) (make-posn 100 100))) #false)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 50))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 50))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 50))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 35))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 65))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 35))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 65))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 65))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 35))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 36))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 34))) #false)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 69 35))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 71 35))) #false)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 64))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 66))) #false)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 31 65))) #true)
+(check-expect (ufo-hit? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 29 65))) #false)
+(define (ufo-hit? s)
   (cond
     [(fired? s)
-     (cond
-       [(and
+       (cond
+        [(and
          (and
           (>=
-           (+ (posn-y (fired-ufo s)) (/ UFO_HEIGHT 2))
+           (+ (posn-y (fired-ufo s)) (/ UFO_HEIGHT 2))
            (- (posn-y (fired-missile s)) (/ MISSILE_SIZE 2))
           )
           (<=
@@ -190,9 +228,57 @@
            (+ (posn-x (fired-ufo s)) (/ UFO_WIDTH 2)))
           ))
           #true]
-       [(>= (posn-y (fired-ufo s)) (- BACKGROUND_HEIGHT (/ UFO_HEIGHT 2))) #true]
        [else #false])]
+      [else #false]))
+
+; SIGS -> boolean
+; ufo-landed states if the UFO has landed in the scene
+(check-expect (ufo-landed? (make-aim (make-posn 34 190) (make-tank 14 0))) #true)
+(check-expect (ufo-landed? (make-aim (make-posn 34 100) (make-tank 14 0))) #false)
+(check-expect (ufo-landed? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 100 100))) #false)
+(check-expect (ufo-landed? (make-fired (make-posn 50 190) (make-tank 14 0) (make-posn 100 100))) #true)
+(check-expect (ufo-landed? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 29 65))) #false)
+(define (ufo-landed? s)
+  (cond
+    [(fired? s)
+     (cond
+      [(>= (posn-y (fired-ufo s)) (- BACKGROUND_HEIGHT (/ UFO_HEIGHT 2))) #true]
+      [else #false]
+     )
+    ]
     [else
      (cond
        [(>= (posn-y (aim-ufo s)) (- BACKGROUND_HEIGHT (/ UFO_HEIGHT 2))) #true]
-       [else #false])]))
+       [else #false]
+     )
+    ]))
+       
+
+; SIGS -> boolean
+; si-game-over? takes the game state and reports whether the game is over or not
+;  the game is over if a Missile hits the target or the UFO lands
+(check-expect (si-game-over? (make-aim (make-posn 34 190) (make-tank 14 0))) #true)
+(check-expect (si-game-over? (make-aim (make-posn 34 100) (make-tank 14 0))) #false)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 100 100))) #false)
+(check-expect (si-game-over? (make-fired (make-posn 50 190) (make-tank 14 0) (make-posn 100 100))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 50))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 50))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 50))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 35))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 65))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 35))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 65))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 65))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 35))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 36))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 70 34))) #false)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 69 35))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 71 35))) #false)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 64))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 30 66))) #false)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 31 65))) #true)
+(check-expect (si-game-over? (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 29 65))) #false)
+(define (si-game-over? s)
+  (cond
+    [(ufo-hit? s) #true]
+    [else (ufo-landed? s)]))
