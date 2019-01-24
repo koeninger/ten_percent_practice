@@ -1,0 +1,48 @@
+; Number -> Number
+; computes the area of a disk with radius r
+
+(define (area-of-disk r)
+  (* 3.14 (* r r)))
+
+; Any -> Number
+; computes the area of a disk with radius v,
+; if v is a number
+(check-expect (checked-area-of-disk 1) 3.14)
+(check-expect (checked-area-of-disk "r") (error "area-of-disk: number expected"))
+
+(define (checked-area-of-disk v)
+  (cond
+    [(and (number? v) (positive? v)) (area-of-disk v)]
+    [else (error "area-of-disk: number expected")]))
+
+(define-struct vec [ x y])
+; a vec is
+; (make-vec PositiveNumber PositiveNumber)
+; interpretation represents a velocity vector
+
+(define VEC1 (make-vec 1 1))
+(define VEC2 (make-vec 0 1))
+
+; Any Any -> Vec
+; a checked versions of the primitive operation make-vec using x and y
+; ensures that the argument to make-vec are positive numbers and
+; enforces the informal data definition
+(check-expect (checked-make-vec 4 "r") (error "checked-make-vec: number expected"))
+(check-expect (checked-make-vec 1 1) VEC1)
+
+(define (checked-make-vec x y)
+  (cond
+    [(and (number? x) (number? y)) (make-vec x y)]
+    [else (error "checked-make-vec: number expected")]))
+
+; Any -> Boolean
+; is a an element of the MissileorNot collection
+(check-expect (missile-or-not? #false) #true)
+(check-expect (missile-or-not? (make-posn 9 2)) #true)
+(check-expect (missile-or-not? "yellow") #false)
+(check-expect (missile-or-not? #true) #false)
+(check-expect (missile-or-not? 10) #false)
+(check-expect (missile-or-not? empty-image) #false)
+
+(define (missile-or-not? v)
+  (or (false? v) (posn? v)))

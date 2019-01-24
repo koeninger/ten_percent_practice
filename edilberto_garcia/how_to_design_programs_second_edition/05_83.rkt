@@ -4,14 +4,38 @@
 ; Exercise 83. Design the function render, which consumes an Editor and produces an image.
 
 
-(overlay/align "left" "center"
-               (text "hello world" 11 "black")
-               (empty-scene 200 20))
+
+; The purpose of the function is to render the text within an empty scene of 200x20 image pixels.
+;    For the cursor, use a 1x20 image red rectangle and for the strings, black text of size 16.
 
 
-(define-struct editor [pre post])
+(require 2htdp/image)
+(require 2htdp/universe)
+
+
+(define cursor (rectangle 1 20 "solid" "red"))
+(define background (empty-scene 200 20))
+
+
+
+
+(
+    define (render txt)
+    (
+        overlay/align "left" "center"
+        (beside (text (editor-pre txt) 11 "black") cursor (text (editor-post txt) 11 "black"))
+        background
+    )
+        
+)
+
+
+
 ; An Editor is a structure:
 ;   (make-editor String String)
 ; interpretation (make-editor s t) describes an editor
 ; whose visible text is (string-append s t) with 
 ; the cursor displayed between s and t
+
+(define-struct editor [pre post])
+

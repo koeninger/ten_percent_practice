@@ -28,6 +28,13 @@
 ;Develop a goodly number of examples for edit, paying attention to special cases. When we solved this exercise, we created 20 examples and turned all of them into tests.
 ;Hint Think of this function as consuming KeyEvents, a collection that is specified as an enumeration. It uses auxiliary functions to deal with the Editor structure. Keep a wish list handy; you will need to design additional functions for most of these auxiliary functions, such as string-first, string-rest, string-last, and string-remove-last. If you haven’t done so, solve the exercises in Functions.
 
+(define-struct editor [pre post])
+; An Editor is a structure:
+;   (make-editor String String)
+; interpretation (make-editor s t) describes an editor
+; whose visible text is (string-append s t) with
+; the cursor displayed between s and t
+
 ; Editor KeyEvent -> Editor
 ; Alters Editor based on KeyEvent
 (define (edit ed ke)
@@ -36,3 +43,28 @@
     [(string=? "right" ke) ...]
     [(= (string-length ke) 1) ...]
     ))
+
+; Editor -> Editor
+; Moves the cursor left one character
+(define (move-left ed) ...)
+
+; Editor -> Editor
+; Moves the cursor right one character
+(define (move-right ed) ...)
+
+; Editor -> Image
+; render displays the contents of Editor as an image
+(check-expect (render (make-editor "pre" "post")) (overlay/align "left" "center"
+     (beside
+      (text "pre" 16 "black")
+      (rectangle 1 20 "solid" "red")
+      (text "post" 16 "black"))
+               (empty-scene 200 20)))
+(define (render e)
+  (overlay/align "left" "center"
+     (beside
+      (text (editor-pre e) 16 "black")
+      (rectangle 1 20 "solid" "red")
+      (text (editor-post e) 16 "black"))
+               (empty-scene 200 20)))
+
