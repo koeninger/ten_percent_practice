@@ -7,20 +7,4 @@
     [(empty? alon) #false]
     [else (or (= (first alon) n)
               (search n (rest alon)))]))
-(check-expect (search 1 (list 1 2 3 4 5 6 7 8 9 0)) #true)
-(check-expect (search 0 (list 1 2 3 4 5 6 7 8 9 0)) #true)
-(check-expect (search 5 (list 1 2 3 4 5 6 7 8 9 0)) #true)
-(check-expect (search 11 (list 1 2 3 4 5 6 7 8 9 0)) #false)
 
-
-; Number List-of-numbers -> Boolean
-(define (search-sorted n alon)
-  (cond
-    [(empty? alon) #false]
-    [else (or (= (first alon) n)
-          (if (< n (first alon)) (search n (rest alon)) #false))]))
-
-(check-expect (search-sorted 1 (list 9 8 7 6 5 4 3 2 1 0)) #true)
-(check-expect (search-sorted 0 (list 9 8 7 6 5 4 3 2 1 0)) #true)
-(check-expect (search-sorted 5 (list 9 8 7 6 5 4 3 2 1 0)) #true)
-(check-expect (search-sorted 11 (list 9 8 7 6 5 4 3 2 1 0)) #false)

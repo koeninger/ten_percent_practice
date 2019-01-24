@@ -1186,3 +1186,10 @@ interpretation a dog is owned by a person and is some percentage happy
 //Exercise 95
 3 instances are created by the second definition
 
+//Exercise 97
+
+(define (tank-render ))
+
+(define (ufo-render ))
+
+(define (missile-render ))
