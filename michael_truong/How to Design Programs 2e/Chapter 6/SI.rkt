@@ -47,7 +47,7 @@
 (define TANK-Y-MIN (/ TANK-HEIGHT 2))
 (define TANK-Y-MAX (- BACKGROUND-HEIGHT (/ TANK-HEIGHT 2)))
 
-(define TANK-DX 1)
+(define TANK-DX 3)
 (define TANK-DY 0)
 (define TANK-VEL (make-vel TANK-DX TANK-DY))
 
@@ -68,7 +68,7 @@
 (define UFO-Y-MIN (/ UFO-HEIGHT 2))
 (define UFO-Y-MAX (- BACKGROUND-HEIGHT (/ UFO-HEIGHT 2)))
 
-(define UFO-DX 0)
+(define UFO-DX 3)
 (define UFO-DY 3)
 (define UFO-VEL (make-vel UFO-DX UFO-DY))
 
@@ -88,6 +88,9 @@
 (define MISSILE-DY -10)
 (define MISSILE-VEL (make-vel MISSILE-DX MISSILE-DY))
 
+(define (rand min max)
+  (+ min (random (- max min))))
+
 (define (move-position p v x-min x-max y-min y-max)
   (make-posn (min (max (+ (posn-x p) (vel-dx v)) x-min) x-max)
              (min (max (+ (posn-y p) (vel-dy v)) y-min) y-max)))
@@ -106,9 +109,19 @@
 
 (define (move-ufo u)
   (make-ufo (move-position (ufo-posn u)
-                           (ufo-vel u)
+                           (make-vel (rand (- (vel-dx (ufo-vel u)))
+                                           (vel-dx (ufo-vel u)))
+                                     (vel-dy (ufo-vel u)))
                            UFO-X-MIN UFO-X-MAX UFO-Y-MIN UFO-Y-MAX)
             (ufo-vel u)))
+
+(define (collision? i1 p1 i2 p2)
+  (< (sqrt (+ (sqr (- (posn-x p1)
+                      (posn-x p2)))
+              (sqr (- (posn-y p1)
+                      (posn-y p2)))))
+     (+ (min (image-width i1) (image-height i1))
+        (min (image-width i2) (image-height i2)))))
 
 ; SIGS -> Image
 ; adds TANK, UFO, and possibly MISSILE to 
@@ -117,10 +130,15 @@
 (define (si-move s)
   (cond
     [(tank? s) (make-aim (move-tank s)
-                         (make-ufo (make-posn UFO-X-MAX UFO-Y-MIN) UFO-VEL))]
+                         (make-ufo (make-posn (rand UFO-X-MIN UFO-X-MAX) UFO-Y-MIN) UFO-VEL))]
     [(aim? s) (make-aim (move-tank (aim-tank s))
                         (move-ufo (aim-ufo s)))]
     [(fired? s) (cond
+                  [(collision? MISSILE-IMAGE
+                               (missile-posn (fired-missile s))
+                               UFO-IMAGE
+                               (ufo-posn (fired-ufo s)))
+                   (fired-tank s)]
                   [(<= (posn-y (missile-posn (fired-missile s))) MISSILE-Y-MIN) (make-aim (move-tank (fired-tank s))
                                                                                           (move-ufo (fired-ufo s)))]
                   [else (make-fired (move-tank (fired-tank s))
