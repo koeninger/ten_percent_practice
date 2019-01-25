@@ -23,6 +23,7 @@
 
 (define MISSILE_SIZE 10)
 (define MISSILE (triangle MISSILE_SIZE "solid" "red"))
+(define MISSILE_SPEED 5)
 
 (define UFO_WIDTH 30)
 (define UFO_HEIGHT 20)
@@ -30,6 +31,7 @@
              (circle (/ UFO_HEIGHT 2) "solid" "green")
              (rectangle UFO_WIDTH (/ UFO_HEIGHT 2) "solid" "green")))
 (define UFO_MOVE_RANGE 10)
+(define UFO_LANDING_SPEED 2)
 
 (define TANK_HEIGHT 20)
 (define TANK_WIDTH 30)
@@ -315,10 +317,83 @@
                 [else (aim-ufo w)]))
       (random UFO_MOVE_RANGE))]))
 
+; Number -> boolean
+; detects the left boundary for the x plane of the game area
+(check-expect (left-boundary-hit? -3) #true)
+(check-expect (left-boundary-hit? 0) #true)
+(check-expect (left-boundary-hit? BACKGROUND_WIDTH) #false)
+(check-expect (left-boundary-hit? (+ 3 BACKGROUND_WIDTH)) #false)
+(check-expect (left-boundary-hit? (- BACKGROUND_WIDTH 34)) #false)
+(define (left-boundary-hit? x)
+  (cond
+    [(<= x 0) #true]
+    [else #false]
+   ))
+
+; Number -> boolean
+; detects the right boundary for the x plane of the game area
+(check-expect (right-boundary-hit? -3) #false)
+(check-expect (right-boundary-hit? 0) #false)
+(check-expect (right-boundary-hit? BACKGROUND_WIDTH) #true)
+(check-expect (right-boundary-hit? (+ 3 BACKGROUND_WIDTH)) #true)
+(check-expect (right-boundary-hit? (- BACKGROUND_WIDTH 34)) #false)
+(define (right-boundary-hit? x)
+  (cond
+    [(>= x BACKGROUND_WIDTH) #true]
+    [else #false]
+   ))
+
+; Number Number -> Number
+; gets the x position given the current position
+(check-expect (new-x-position 0 -3) 0)
+(check-expect (new-x-position -3 -3) 0)
+(check-expect (new-x-position 3 -3) 0)
+(check-expect (new-x-position 43 -3) 40)
+(check-expect (new-x-position BACKGROUND_WIDTH 3) BACKGROUND_WIDTH)
+(check-expect (new-x-position (+ BACKGROUND_WIDTH 10) 3) BACKGROUND_WIDTH)
+(check-expect (new-x-position 34 3) 37)
+(define (new-x-position x u-x)
+   (cond
+     [(left-boundary-hit? x) 0]
+     [(right-boundary-hit? x) BACKGROUND_WIDTH]
+     [else (+ x u-x)]))
+
+; Number -> boolean
+; tells if the missile fired off the scene
+(check-expect (missile-gone? 0) #false)
+(check-expect (missile-gone? 30) #false)
+(check-expect (missile-gone? (- BACKGROUND_HEIGHT 20)) #false)
+(check-expect (missile-gone? (+ BACKGROUND_HEIGHT 10)) #true)
+(check-expect (missile-gone? BACKGROUND_HEIGHT) #true)
+(define (missile-gone? y)
+  (cond
+    [(>= y BACKGROUND_HEIGHT) #true]
+    [else #false]))
+
 ; SIGS Number -> SIGS 
 ; moves the space-invader objects predictably by delta
 (define (si-move-proper w u-x)
-  w)
+  (cond
+    [(and
+      (fired? w)
+      (false? (missile-gone? (posn-y (fired-missile w)))))
+              (make-fired
+                 (make-posn
+                  (new-x-position (posn-x (fired-ufo w)) u-x)
+                  (+ (posn-y (fired-ufo w)) UFO_LANDING_SPEED))
+                 (make-tank
+                  (new-x-position (tank-loc (fired-tank w)) (tank-vel (fired-tank w)))
+                  (tank-vel (fired-tank w)))
+                 (make-posn
+                  (posn-x (fired-missile w))
+                  (- (posn-y (fired-missile w)) MISSILE_SPEED)))]
+     [else (make-aim
+                 (make-posn
+                  (new-x-position (posn-x (fired-ufo w)) u-x)
+                  (+ (posn-y (fired-ufo w)) UFO_LANDING_SPEED))
+                 (make-tank
+                  (new-x-position (tank-loc (fired-tank w)) (tank-vel (fired-tank w)))
+                  (tank-vel (fired-tank w))))]))
 
 ;SIGS -> SIGS
 ; move handler for the objecs in the game
