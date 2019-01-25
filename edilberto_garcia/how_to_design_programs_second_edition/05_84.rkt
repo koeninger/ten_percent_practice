@@ -10,17 +10,12 @@
 ;Hint Think of this function as consuming KeyEvents, a collection that is specified as an enumeration. It uses auxiliary functions to deal with the Editor structure. Keep a wish list handy; you will need to design additional functions for most of these auxiliary functions, such as string-first, string-rest, string-last, and string-remove-last. If you haven’t done so, solve the exercises in Functions.
 
 
-
-
 (require 2htdp/image)
 (require 2htdp/universe)
 
 
 (define cursor (rectangle 1 20 "solid" "red"))
 (define background (empty-scene 200 20))
-
-
-
 
 (
     define (render txt)
@@ -33,13 +28,11 @@
 )
 
 
-
 ; An Editor is a structure:
 ;   (make-editor String String)
 ; interpretation (make-editor s t) describes an editor
 ; whose visible text is (string-append s t) with 
 ; the cursor displayed between s and t
-
 (define-struct editor [pre post])
 
 
@@ -47,4 +40,15 @@
 
 (define (edit editor_object ke)
 
- )
+
+
+   (cond
+    [(= (string-length ke) 1) ...]
+    [(string=? "left" ke) ...]
+    [(string=? "right" ke) ...]
+    [(string=? "up" ke) ...]
+    [(string=? "down" ke) ...]
+   )
+
+  
+)

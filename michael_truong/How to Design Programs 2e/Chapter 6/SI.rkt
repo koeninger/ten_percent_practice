@@ -3,6 +3,7 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 (require lang/posn)
+(require test-engine/racket-tests)
 
 (define-struct vel [dx dy])
 
@@ -46,7 +47,7 @@
 (define TANK-Y-MIN (/ TANK-HEIGHT 2))
 (define TANK-Y-MAX (- BACKGROUND-HEIGHT (/ TANK-HEIGHT 2)))
 
-(define TANK-DX 1)
+(define TANK-DX 3)
 (define TANK-DY 0)
 (define TANK-VEL (make-vel TANK-DX TANK-DY))
 
@@ -67,8 +68,8 @@
 (define UFO-Y-MIN (/ UFO-HEIGHT 2))
 (define UFO-Y-MAX (- BACKGROUND-HEIGHT (/ UFO-HEIGHT 2)))
 
-(define UFO-DX 0)
-(define UFO-DY 10)
+(define UFO-DX 3)
+(define UFO-DY 3)
 (define UFO-VEL (make-vel UFO-DX UFO-DY))
 
 (define MISSILE-IMAGE (scale 1 (above X
@@ -87,31 +88,40 @@
 (define MISSILE-DY -10)
 (define MISSILE-VEL (make-vel MISSILE-DX MISSILE-DY))
 
-(define (limit-position p x-min x-max y-min y-max)
-  (make-posn (min (max (posn-x p) x-min) x-max)
-             (min (max (posn-y p) y-min) y-max)))
+(define (rand min max)
+  (+ min (random (- max min))))
 
-(define (move-position p v)
-  (make-posn (+ (posn-x p) (vel-dx v))
-             (+ (posn-y p) (vel-dy v))))
+(define (move-position p v x-min x-max y-min y-max)
+  (make-posn (min (max (+ (posn-x p) (vel-dx v)) x-min) x-max)
+             (min (max (+ (posn-y p) (vel-dy v)) y-min) y-max)))
 
 (define (move-tank t)
-  (make-tank (limit-position (move-position (tank-posn t)
-                                            (tank-vel t))
-                             TANK-X-MIN TANK-X-MAX TANK-Y-MIN TANK-Y-MAX)
+  (make-tank (move-position (tank-posn t)
+                            (tank-vel t)
+                            TANK-X-MIN TANK-X-MAX TANK-Y-MIN TANK-Y-MAX)
              (tank-vel t)))
 
 (define (move-missile m)
-  (make-missile (limit-position (move-position (missile-posn m)
-                                               (missile-vel m))
-                                MISSILE-X-MIN MISSILE-X-MAX MISSILE-Y-MIN MISSILE-Y-MAX)
+  (make-missile (move-position (missile-posn m)
+                               (missile-vel m)
+                               MISSILE-X-MIN MISSILE-X-MAX MISSILE-Y-MIN MISSILE-Y-MAX)
                 (missile-vel m)))
 
 (define (move-ufo u)
-  (make-ufo (limit-position (move-position (ufo-posn u)
-                                           (ufo-vel u))
-                             UFO-X-MIN UFO-X-MAX UFO-Y-MIN UFO-Y-MAX)
+  (make-ufo (move-position (ufo-posn u)
+                           (make-vel (rand (- (vel-dx (ufo-vel u)))
+                                           (vel-dx (ufo-vel u)))
+                                     (vel-dy (ufo-vel u)))
+                           UFO-X-MIN UFO-X-MAX UFO-Y-MIN UFO-Y-MAX)
             (ufo-vel u)))
+
+(define (collision? i1 p1 i2 p2)
+  (< (sqrt (+ (sqr (- (posn-x p1)
+                      (posn-x p2)))
+              (sqr (- (posn-y p1)
+                      (posn-y p2)))))
+     (+ (min (image-width i1) (image-height i1))
+        (min (image-width i2) (image-height i2)))))
 
 ; SIGS -> Image
 ; adds TANK, UFO, and possibly MISSILE to 
@@ -119,9 +129,16 @@
 
 (define (si-move s)
   (cond
+    [(tank? s) (make-aim (move-tank s)
+                         (make-ufo (make-posn (rand UFO-X-MIN UFO-X-MAX) UFO-Y-MIN) UFO-VEL))]
     [(aim? s) (make-aim (move-tank (aim-tank s))
                         (move-ufo (aim-ufo s)))]
     [(fired? s) (cond
+                  [(collision? MISSILE-IMAGE
+                               (missile-posn (fired-missile s))
+                               UFO-IMAGE
+                               (ufo-posn (fired-ufo s)))
+                   (fired-tank s)]
                   [(<= (posn-y (missile-posn (fired-missile s))) MISSILE-Y-MIN) (make-aim (move-tank (fired-tank s))
                                                                                           (move-ufo (fired-ufo s)))]
                   [else (make-fired (move-tank (fired-tank s))
@@ -131,6 +148,9 @@
 
 (define (si-render s)
   (cond
+    [(tank? s) (place-images (list TANK-IMAGE)
+                             (list (tank-posn s))
+                             BACKGROUND)]
     [(aim? s) (place-images (list TANK-IMAGE
                                   UFO-IMAGE)
                             (list (tank-posn (aim-tank s))
@@ -143,7 +163,7 @@
                                     (ufo-posn (fired-ufo s))
                                     (missile-posn (fired-missile s)))
                               BACKGROUND)]
-    [else 0]))
+    [else BACKGROUND]))
 
 (define (tank-change-directions t key)
   (make-tank (tank-posn t)
@@ -172,10 +192,11 @@
     [else s]))
 
 (define (ufo-has-landed? u)
-  (>= (posn-y (ufo-posn u)) UFO-Y-MAX))
+  (> (posn-y (ufo-posn u)) UFO-Y-MAX))
 
 (define (si-game-over? s)
   (cond
+    [(tank? s) #false]
     [(aim? s) (ufo-has-landed? (aim-ufo s))]
     [(fired? s) (ufo-has-landed? (fired-ufo s))]
     [else #false]))
@@ -187,5 +208,4 @@
      [on-key si-control]
      [stop-when si-game-over?]))
 
-(si (make-aim (make-tank (make-posn TANK-X-MIN TANK-Y-MAX) TANK-VEL)
-              (make-ufo (make-posn UFO-X-MIN UFO-Y-MIN) UFO-VEL)))
+(si (make-tank (make-posn TANK-X-MAX TANK-Y-MAX) TANK-VEL))
