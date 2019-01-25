@@ -1,7 +1,6 @@
 # import the necessary packages
 import numpy as np
 import argparse
-import imutils
 import cv2
 
 # construct the argument parse and parse the arguments
@@ -12,47 +11,48 @@ ap.add_argument("-i", "--image", required = True,
 ap.add_argument("-b", "--blur", required = True,
 	help = "kernel size of gaussian blur")
 args = vars(ap.parse_args())
+im = cv2.imread(args['image'], cv2.IMREAD_GRAYSCALE)
+im_out = cv2.imread(args['image'])
 
-# load the image and convert it to grayscale
-image = cv2.imread(args["image"])
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+# riscalatura dell'immagine
+scale = 800.0 / im.shape[1]
+im = cv2.resize(im, (int(im.shape[1] * scale), int(im.shape[0] * scale)))
 
-# compute the Scharr gradient magnitude representation of the images
-# in both the x and y direction using OpenCV 2.4
-ddepth = cv2.cv.CV_32F if imutils.is_cv2() else cv2.CV_32F
-gradX = cv2.Sobel(gray, ddepth=ddepth, dx=1, dy=0, ksize=-1)
-gradY = cv2.Sobel(gray, ddepth=ddepth, dx=0, dy=1, ksize=-1)
+# blackhat
+kernel = np.ones((1, 3), np.uint8)
+im = cv2.morphologyEx(im, cv2.MORPH_BLACKHAT, kernel, anchor=(1, 0))
 
-# subtract the y-gradient from the x-gradient
-gradient = cv2.subtract(gradX, gradY)
-gradient = cv2.convertScaleAbs(gradient)
+# sogliatura
+thresh, im = cv2.threshold(im, 10, 255, cv2.THRESH_BINARY)
 
-# blur and threshold the image
-b = int(args["blur"])
-blurred = cv2.blur(gradient, (b, b))
-(_, thresh) = cv2.threshold(blurred, 225, 255, cv2.THRESH_BINARY)
+# operazioni  morfologiche
+kernel = np.ones((1, 5), np.uint8)
+im = cv2.morphologyEx(im, cv2.MORPH_DILATE, kernel, anchor=(2, 0), iterations=2)  # dilatazione
+im = cv2.morphologyEx(im, cv2.MORPH_CLOSE, kernel, anchor=(2, 0), iterations=2)  # chiusura
 
-kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (21, 7))
-closed = cv2.morphologyEx(thresh, cv2.MORPH_CLOSE, kernel)
+kernel = np.ones((21, 35), np.uint8)
+im = cv2.morphologyEx(im, cv2.MORPH_OPEN, kernel, iterations=1)
 
-# perform a series of erosions and dilations
-closed = cv2.erode(closed, None, iterations = 4)
-closed = cv2.dilate(closed, None, iterations = 4)
+# estrazione dei componenti connessi
+contours, hierarchy = cv2.findContours(im, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_NONE)
 
-# find the contours in the thresholded image, then sort the contours
-# by their area, keeping only the largest one
-cnts = cv2.findContours(closed.copy(), cv2.RETR_EXTERNAL,
-	cv2.CHAIN_APPROX_SIMPLE)
-cnts = imutils.grab_contours(cnts)
-c = sorted(cnts, key = cv2.contourArea, reverse = True)[0]
+unscale = 1.0 / scale
 
-# compute the rotated bounding box of the largest contour
-rect = cv2.minAreaRect(c)
-box = cv2.cv.BoxPoints(rect) if imutils.is_cv2() else cv2.boxPoints(rect)
-box = np.int0(box)
+if contours != None:
+	for contour in contours:
 
-# draw a bounding box arounded the detected barcode and display the
-# image
-cv2.drawContours(image, [box], -1, (0, 255, 0), 3)
-cv2.imshow("Image", image)
+
+		# estraggo il rettangolo di area minima (in formato (centro_x, centro_y), (width, height), angolo)
+		rect = cv2.minAreaRect(contour)
+		# l'effetto della riscalatura iniziale deve essere eliminato dalle coordinate rilevate
+		rect = \
+			((int(rect[0][0] * unscale), int(rect[0][1] * unscale)), \
+			 (int(rect[1][0] * unscale), int(rect[1][1] * unscale)), \
+			 rect[2])
+
+		# disegno il tutto sull'immagine originale
+		box = np.int0(cv2.boxPoints(rect))
+		cv2.drawContours(im_out, [box], 0, (0, 255, 0), thickness=2)
+
+cv2.imshow("Image", im_out)
 cv2.waitKey(0)

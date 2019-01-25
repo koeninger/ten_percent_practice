@@ -68,7 +68,6 @@
     [(empty? ua) '()]
     [else (cons (* (first ua) EURO-RATE) (convert-euro (rest ua)))]))
 
-
 ; Number, List-of-US-amounts -> List-of-Euro-amounts
 ; consumes an exchange rate and a list of US$ amounts and converts the latter into a list of € amounts
 (check-expect (convert-euro* EURO-RATE '()) '())
@@ -78,3 +77,24 @@
   (cond
     [(empty? ua) '()]
     [else (cons (* (first ua) er) (convert-euro* er (rest ua)))]))
+
+
+; Exercise 165
+
+(check-expect (subst-robot '()) '())
+(check-expect (subst-robot (list "test")) (list "test"))
+(check-expect (subst-robot (list "robot")) (list "r2d2"))
+(check-expect (subst-robot (list "test" "robot")) (list "test" "r2d2"))
+(define (subst-robot toys)
+  (cond
+    [(empty? toys) '()]
+    [else (cons (if (string=? "robot" (first toys)) "r2d2" (first toys)) (subst-robot (rest toys)))]))
+
+(check-expect (substitute "robot" "r2d2" '()) '())
+(check-expect (substitute "robot" "r2d2" (list "test")) (list "test"))
+(check-expect (substitute "robot" "r2d2" (list "robot")) (list "r2d2"))
+(check-expect (substitute "test" "prod" (list "test" "robot")) (list "prod" "robot"))
+(define (substitute old new strings)
+  (cond
+    [(empty? strings) '()]
+    [else (cons (if (string=? old (first strings)) new (first strings)) (substitute old new (rest strings)))]))
