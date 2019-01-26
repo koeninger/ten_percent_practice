@@ -153,65 +153,17 @@
     [else s]))
 
 (define (si-render s)
-  (cond
-    [(tank? s) (place-images (list TANK-IMAGE)
-                             (list (tank-posn s))
-                             BACKGROUND)]
-    [(aim? s) (place-images (list TANK-IMAGE
-                                  UFO-IMAGE)
-                            (list (tank-posn (aim-tank s))
-                                  (ufo-posn (aim-ufo s)))
-                            BACKGROUND)]
-    [(fired? s) (place-images (list TANK-IMAGE
-                                    UFO-IMAGE
-                                    MISSILE-IMAGE)
-                              (list (tank-posn (fired-tank s))
-                                    (ufo-posn (fired-ufo s))
-                                    (missile-posn (fired-missile s)))
-                              BACKGROUND)]
-    [else BACKGROUND]))
-
-(define (tank-change-directions t key)
-  (make-tank (tank-posn t)
-             (make-vel (cond
-                         [(key=? key "left") (- (abs (vel-dx (tank-vel t))))]
-                         [(key=? key "right") (abs (vel-dx (tank-vel t)))]
-                         [else (vel-dx (tank-vel t))])
-                       (vel-dy (tank-vel t)))))
-
-(define (si-control s key)
-  (cond
-    [(aim? s) (cond
-                [(key=? key " ") (make-fired (aim-tank s)
-                                             (aim-ufo s)
-                                             (make-missile (tank-posn (aim-tank s)) MISSILE-VEL))]
-                [(or (key=? key "left")
-                     (key=? key "right")) (make-aim (tank-change-directions (aim-tank s) key)
-                                                    (aim-ufo s))]
-                [else s])]
-    [(fired? s) (cond
-                  [(or (key=? key "left")
-                       (key=? key "right")) (make-fired (tank-change-directions (fired-tank s) key)
-                                                        (fired-ufo s)
-                                                        (fired-missile s))]
-                  [else s])]
-    [else s]))
-
-(define (ufo-has-landed? u)
-  (>= (posn-y (ufo-posn u)) UFO-Y-MAX))
+  (place-images (list UFO-IMAGE)
+                             (list (ufo-posn s))
+                             BACKGROUND))
 
 (define (si-game-over? s)
-  (cond
-    [(tank? s) #false]
-    [(aim? s) (ufo-has-landed? (aim-ufo s))]
-    [(fired? s) (ufo-has-landed? (fired-ufo s))]
-    [else #false]))
+  (>= (posn-y (ufo-posn s)) UFO-Y-MAX))
 
 (define (si s)
    (big-bang s
      [on-tick si-move]
      [to-draw si-render]
-     [on-key si-control]
      [stop-when si-game-over?]))
 
-(si (make-tank (make-posn TANK-X-MIN TANK-Y-MAX) TANK-VEL))
+(si (make-ufo (make-posn 0 0) UFO-VEL))
