@@ -11,15 +11,34 @@
 (define COLOR2 "yellow")
 (define COLOR3 "green")
 (define COLORX "red")
-	
+
+(define SCENE (empty-scene WIDTH HEIGHT "white"))
+
 ; ExpectsToSee.v2 is one of:
 ; – AA
 ; – BB
 ; – DD 
 ; – ER 
 
-(define AA "start, ...")
-(define BB "expect ...")
-(define DD "finished")
-(define ER "error, ...")
+(define AA "start, expect to see an 'a' next")
+(define BC "expect to see: 'b', 'c' or 'd'")
+(define DD "encountered a 'd', finished")
+(define ER "error, user pressed illegal key")
 
+(define (expect x)
+  (cond [(string=? AA x) (... x)]
+        [(string=? BC x) (... x)]
+        [(string=? DD x) (... x)]
+        [(string=? ER x) (... x)]
+  )
+)
+
+(define render (place-image/align
+                (text AA 16 "black")
+                100 100 "center" "center"
+                (overlay
+                 (rectangle 200 200 "solid" COLOR1) SCENE)
+               )
+)
+
+render
