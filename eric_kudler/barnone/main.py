@@ -81,7 +81,7 @@ def filter_barcode(original_image):
     image = cv2.warpAffine(image, M, (cols, rows))
 
     #add a vertical directional blur
-    kernel_size = 9
+    kernel_size = 100
     kernel_motion_blur = np.zeros((kernel_size, kernel_size))
     kernel_motion_blur[:, int((kernel_size - 1) / 2)] = np.ones(kernel_size)
     kernel_motion_blur = kernel_motion_blur / kernel_size
