@@ -370,13 +370,35 @@
     [(>= y BACKGROUND_HEIGHT) #true]
     [else #false]))
 
-; SIGS Number -> SIGS 
+; SIGS Number -> SIGS
 ; moves the space-invader objects predictably by delta
+(check-expect
+ (si-move-proper
+  (make-fired (make-posn 12 34) (make-tank 45 3) (make-posn 45 BACKGROUND_HEIGHT))
+  9)
+ (make-aim
+  (make-posn (new-x-position 12 9) (+ 34 UFO_LANDING_SPEED))
+  (make-tank (new-x-position 45 3) 3)))
+(check-expect
+ (si-move-proper
+  (make-fired (make-posn 12 34) (make-tank 45 3) (make-posn 45 56))
+  9)
+ (make-fired
+  (make-posn (new-x-position 12 9) (+ 34 UFO_LANDING_SPEED))
+  (make-tank (new-x-position 45 3) 3)
+  (make-posn 45 (- 56 MISSILE_SPEED))))
+(check-expect
+ (si-move-proper
+  (make-aim (make-posn 12 34) (make-tank 45 3))
+  9)
+ (make-aim
+  (make-posn (new-x-position 12 9) (+ 34 UFO_LANDING_SPEED))
+  (make-tank (new-x-position 45 3) 3)))
 (define (si-move-proper w u-x)
   (cond
-    [(and
-      (fired? w)
-      (false? (missile-gone? (posn-y (fired-missile w)))))
+    [(fired? w)
+      (cond
+        [(false? (missile-gone? (posn-y (fired-missile w))))
               (make-fired
                  (make-posn
                   (new-x-position (posn-x (fired-ufo w)) u-x)
@@ -387,13 +409,21 @@
                  (make-posn
                   (posn-x (fired-missile w))
                   (- (posn-y (fired-missile w)) MISSILE_SPEED)))]
-     [else (make-aim
+        [else
+         (make-aim
                  (make-posn
                   (new-x-position (posn-x (fired-ufo w)) u-x)
                   (+ (posn-y (fired-ufo w)) UFO_LANDING_SPEED))
                  (make-tank
                   (new-x-position (tank-loc (fired-tank w)) (tank-vel (fired-tank w)))
-                  (tank-vel (fired-tank w))))]))
+                  (tank-vel (fired-tank w))))])]
+     [else (make-aim
+                 (make-posn
+                  (new-x-position (posn-x (aim-ufo w)) u-x)
+                  (+ (posn-y (aim-ufo w)) UFO_LANDING_SPEED))
+                 (make-tank
+                  (new-x-position (tank-loc (aim-tank w)) (tank-vel (aim-tank w)))
+                  (tank-vel (aim-tank w))))]))
 
 ;SIGS -> SIGS
 ; move handler for the objecs in the game
