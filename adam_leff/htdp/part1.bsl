@@ -1188,8 +1188,23 @@ interpretation a dog is owned by a person and is some percentage happy
 
 //Exercise 97
 
-(define (tank-render ))
+(define (tank-render t im)
+    (overlay/xy
+        TANK
+        (tank-x t)
+        HEIGHT
+        im))
 
-(define (ufo-render ))
+(define (ufo-render u im)
+    (overlay/xy
+        UFO
+        (posn-x u)
+        (posn-y u)
+        im))
 
-(define (missile-render ))
+(define (missile-render m im)
+    (overlay/xy
+        MISSLE
+        (posn-x m)
+        (posn-y m)
+        im))

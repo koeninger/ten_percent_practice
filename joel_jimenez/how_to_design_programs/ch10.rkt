@@ -98,3 +98,101 @@
   (cond
     [(empty? strings) '()]
     [else (cons (if (string=? old (first strings)) new (first strings)) (substitute old new (rest strings)))]))
+
+
+; 10.2 Structures in Lists
+
+(define-struct work [employee rate hours])
+; A (piece of) Work is a structure:
+;   (make-work String Number Number)
+; interpretation (make-work n r h) combines the name
+; with the pay rate r and the number of hours h
+
+; Low (short for list of works) is one of:
+; – '()
+; – (cons Work Low)
+; interpretation an instance of Low represents the
+; hours worked for a number of employees
+
+; Low -> List-of-numbers
+; computes the weekly wages for the given records
+(define (wage*.v2 an-low)
+  (cond
+    [(empty? an-low) '()]
+    [(cons? an-low) (cons (wage.v2 (first an-low))
+                          (wage*.v2 (rest an-low)))]))
+(check-expect (wage*.v2 (list (make-work "Robby" 11.95 39))) (list (* 11.95 39)))
+
+; Work -> Number
+; computes the wage for the given work record w
+(define (wage.v2 w)
+  (* (work-rate w) (work-hours w)))
+
+
+; Exercise 166.
+
+(define-struct paycheck [name amount])
+; A paycheck is a structure:
+;   (make-paycheck String Number)
+; interpretation (make-paycheck n a) combines the name
+; with the amount of pay for that employee
+
+; Low -> List-of-numbers
+; computes the weekly wages for the given records
+(check-expect (wage*.v3
+    (list (make-work "Robby" 11.95 39)))
+  (list (make-paycheck "Robby" (* 11.95 39))))
+(define (wage*.v3 an-low)
+  (cond
+    [(empty? an-low) '()]
+    [(cons? an-low) (cons (make-paycheck (work-employee (first an-low)) (wage.v2 (first an-low)))
+                          (wage*.v3 (rest an-low)))]))
+
+(define-struct work.v4 [id employee rate hours])
+; A (piece of) Work.v2 is a structure:
+;   (make-work Number String Number Number)
+; interpretation (make-work i n r h) combines the id
+; and name with the pay rate r and the number of hours h
+
+; Work -> Number
+; computes the wage for the given work record w
+(define (wage.v4 w)
+  (* (work.v4-rate w) (work.v4-hours w)))
+
+(define-struct paycheck.v4 [id name amount])
+; A paycheck is a structure:
+;   (make-paycheck String Number)
+; interpretation (make-paycheck n a) combines the id and
+; name with the amount of pay for that employee
+
+; Low -> List-of-numbers
+; computes the weekly wages for the given records
+(check-expect (wage*.v4
+    (list (make-work.v4 1 "Robby" 11.95 39)))
+  (list (make-paycheck.v4 1 "Robby" (* 11.95 39))))
+(define (wage*.v4 an-low)
+  (cond
+    [(empty? an-low) '()]
+    [(cons? an-low) (cons (make-paycheck.v4
+                            (work.v4-id (first an-low))
+                            (work.v4-employee (first an-low))
+                            (wage.v4 (first an-low)))
+                          (wage*.v4 (rest an-low)))]))
+
+
+; Exercise 167.
+
+; An ALOP is one of:
+; – '()
+; – (cons Posn '())
+; interpretation represents a list of Posn
+
+; ALOP -> Number
+; consumes a list of Posn and produces the sum of all of its x-coordinates
+(check-expect (sum '()) 0)
+(check-expect (sum (list (make-posn 5 10))) 5)
+(check-expect (sum (list (make-posn 1 5) (make-posn 5 10))) 6)
+(define (sum alop)
+  (cond
+    [(empty? alop) 0]
+    [else (+ (posn-x (first alop)) (sum (rest alop)))]))
