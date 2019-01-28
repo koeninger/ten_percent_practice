@@ -89,7 +89,6 @@ def filter_barcode(original_image):
 
     kernel_sharpening = np.ones((3, 3)) * -1
     kernel_sharpening[1][1] = 9
-    print(kernel_sharpening)
     image = cv2.filter2D(image, -1, kernel_sharpening)
 
     cv2.imshow("Image", image)
