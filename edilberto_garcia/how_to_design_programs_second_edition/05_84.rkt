@@ -37,17 +37,16 @@
 
 
 
-
+; Editor KeyEvent -> Editor
+; Adds a character after  pre-text
+; If key is delete key then it deletes last character
 (define (edit editor_object ke)
 
 
 
    (cond
-    [(= (string-length ke) 1) ...]
-    [(string=? "left" ke) ...]
-    [(string=? "right" ke) ...]
-    [(string=? "up" ke) ...]
-    [(string=? "down" ke) ...]
+    [(string=? "\b" ke) ...]
+    [else ]
    )
 
   
