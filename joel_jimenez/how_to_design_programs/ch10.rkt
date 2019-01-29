@@ -196,3 +196,80 @@
   (cond
     [(empty? alop) 0]
     [else (+ (posn-x (first alop)) (sum (rest alop)))]))
+
+
+; Exercise 168.
+
+; ALOP -> ALOP
+; for each (make-posn x y) it consumes, it returns (make-posn x (+ y 1))
+(check-expect (translate* '()) '())
+(check-expect (translate* (list (make-posn 5 10))) (list (make-posn 5 11)))
+(check-expect (translate* (list (make-posn 1 5) (make-posn 5 10))) (list (make-posn 1 6) (make-posn 5 11)))
+(define (translate* alop)
+  (cond
+    [(empty? alop) '()]
+    [else (cons (translate (first alop)) (translate* (rest alop)))]))
+
+; posn -> posn
+; translates a single Posn
+(define (translate p)
+  (make-posn (posn-x p) (+ (posn-y p) 1)))
+
+
+; Exercise 169.
+
+; ALOP -> ALOP
+; result contains all those Posns whose x-coordinates are
+; between 0 and 100 and whose y-coordinates are between 0 and 200
+(check-expect (legal '()) '())
+(check-expect (legal (list (make-posn 101 10))) '())
+(check-expect (legal (list (make-posn 1 5) (make-posn 5 201))) (list (make-posn 1 5)))
+(define (legal alop)
+  (cond
+    [(empty? alop) '()]
+    [(legal? (first alop)) (cons (first alop) (legal (rest alop)))]
+    [else (legal (rest alop))]))
+
+; posn -> posn
+; returns Posns if x-coordinates are between 0 and 100 and whose
+; y-coordinates are between 0 and 200 for a single Posn, else '()
+(define (legal? p)
+  (and
+     (>= (posn-x p) 0)
+     (<= (posn-x p) 100)
+     (>= (posn-y p) 0)
+     (<= (posn-y p) 200)))
+
+
+; Exercise 170.
+
+; An ALOP is one of:
+; – '()
+; – (cons Phone '())
+; interpretation represents a list of phone numbers
+
+(define-struct phone [area switch four])
+; A Phone is a structure:
+;   (make-phone Three Three Four)
+; A Three is a Number between 100 and 999.
+; A Four is a Number between 1000 and 9999.
+
+; ALOP -> ALOP
+; replaces all occurrence of area code 713 with 281
+(check-expect (replace* '()) '())
+(check-expect (replace* (list (make-phone "310" "555" "1234"))) (list (make-phone "310" "555" "1234")))
+(check-expect (replace* (list (make-phone "713" "555" "1234"))) (list (make-phone "281" "555" "1234")))
+(define (replace* alop)
+  (cond
+    [(empty? alop) '()]
+    [else (cons (replace (first alop)) (replace* (rest alop)))]))
+
+
+; Phone -> Phone
+; replaces the occurrence of area code 713 with 281
+(define (replace p)
+  (make-phone
+    (if (string=? (phone-area p) "713")
+        "281" (phone-area p))
+    (phone-switch p)
+    (phone-four p)))
