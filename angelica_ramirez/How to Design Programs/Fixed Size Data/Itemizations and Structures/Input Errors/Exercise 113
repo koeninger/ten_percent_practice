@@ -1,0 +1,80 @@
+; Design predicates for the following data definitions from the preceding section: 
+SIGS, Coordinate (exercise 105), and VAnimal. 
+
+(define-struct aim [ufo tank])
+(define-struct fired [ufo tank missile])
+
+; A UFO is a Posn
+; interpretation (make-posn x y) is the UFO's location
+; using the top-down, left-to-right convention
+
+(define-struct tank [loc vel])
+; A Tank is a structure
+; (make-tank Number Number)
+; interpretation (make-tank x dx) specifies the position
+; (x, HEIGHT) and the tank's speed: dx pixels/tick
+
+; A Missile is a Posn
+; interpretation (make-posn x y) is the missile's place
+
+; A SIGS is one of:
+; - (make-aim UFO Tank)
+; - (make-fired UFO Tan Missile)
+; interpretation represents the complete state of a
+; space invader game
+(check-expect (sigs-or-not? (make-aim (make-posn 20 10) (make-tank 28 -3))) #true)
+(check-expect (sigs-or-not? (make-fired (make-posn 20 10)
+                                        (make-tank 28 -3)
+                                        (make-posn 22 103))) #true)
+(check-expect (sigs-or-not? (make-aim (make-posn 20 10) "go")) #false)
+(check-expect (sigs-or-not? (make-fired (make-posn 1 1) "tank" (make-posn 1 1))) #false)
+
+(define (sigs-or-not? s)
+  (cond
+    [(aim? s) (and (posn? (aim-ufo s)) (tank? (aim-tank s)))]
+    [(fired? s) (and (posn? (fired-ufo s)) (tank? (fired-tank s)) (posn? (fired-missile s)))]
+    [else #false]))
+    
+; A Coordinate is one of:
+; - a NegativeNumber
+; interpretation on the y axis, distance from top
+; - a PositiveNumber
+; interpretation on the x axis, distance from left
+; - a Posn
+; interpretation an ordinary Cartesian point
+(check-expect (coordinate-or-not? 4) #true)
+(check-expect (coordinate-or-not? -3) #true)
+(check-expect (coordinate-or-not? (make-posn 3 3)) #true)
+(check-expect (coordinate-or-not? "string") #false)
+
+(define (coordinate-or-not? c)
+  (cond
+    [(number? c) #true]
+    [(posn? c) #true]
+    [else #false]))
+    
+; A Vanimal is either
+; - a Vcat
+; - a Vcham
+
+(define-struct vcat [x-pos happy])
+; A vcat is a structure
+; (make-vcat Number Number)
+; interpretation (make-vcat n k) describe's a cat's
+; x-coordinate and its happiness level
+
+(define-struct vcham [x-pos happy color])
+; a vcham is a structure
+; (make-vcham Number Number String)
+; interpretation (make-vcham x h c) describes a chameleon's
+; x-coordinate and its happiness level and the color of the chameleon 
+
+(check-expect (vanimal-or-not? (make-vcat 0 100)) #true)
+(check-expect (vanimal-or-not? (make-vcham 0 100 "blue")) #true)
+(check-expect (vanimal-or-not? "string") #false)
+
+(define (vanimal-or-not? v)
+  (cond
+    [(vcat? v) #true]
+    [(vcham? v) #true]
+    [else #false]))
