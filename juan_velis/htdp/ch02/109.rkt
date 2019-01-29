@@ -33,12 +33,19 @@
   )
 )
 
-(define render (place-image/align
+(define (render e col) (place-image/align
+                (text e 16 "black")
+                100 100 "center" "center"
+                (overlay
+                 (rectangle 200 200 "solid" col) SCENE)
+               )
+)
+
+(check-expect (render AA COLOR1) (place-image/align
                 (text AA 16 "black")
                 100 100 "center" "center"
                 (overlay
                  (rectangle 200 200 "solid" COLOR1) SCENE)
-               )
-)
+                ))
 
-render
+(render AA COLOR2)
