@@ -40,14 +40,17 @@
 ; Editor KeyEvent -> Editor
 ; Adds a character after  pre-text
 ; If key is delete key then it deletes last character
+(check-expect (edit (make-editor "Starfleetz" "Headquarters") "\b") (make-editor "Starfleet" "Headquarters"))
+(check-expect (edit (make-editor "Gamm" "Quadrant") "a") (make-editor "Gamma" "Quadrant"))
 (define (edit editor_object ke)
-
-
+(make-editor
 
    (cond
-    [(string=? "\b" ke) ...]
-    [else ]
+    [(string=? "\b" ke) (substring (editor-pre editor_object) 0 (- (string-length (editor-pre editor_object)) 1))  ]
+    [else (string-append (editor-pre editor_object) ke)]
    )
 
-  
+   (editor-post editor_object))
+ 
+
 )
