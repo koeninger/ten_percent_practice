@@ -1208,3 +1208,10 @@ interpretation a dog is owned by a person and is some percentage happy
         (posn-x m)
         (posn-y m)
         im))
+        
+//Exercise 98
+(define (si-game-over? s)
+    (cond
+        [(= (posn-y (sigs-UFO s)) 0) true]
+        [(and (= (posn-y (sigs-UFO s)) (posn-y (sigs-Missile s))) (= (posn-x (sigs-UFO s)) (posn-x (sigs-Missile s)))) true]
+        [false]))
