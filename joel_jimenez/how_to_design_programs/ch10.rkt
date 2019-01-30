@@ -1,3 +1,5 @@
+(require 2htdp/batch-io)
+
 ; 10.1 Functions that Produce Lists
 
 ; Number -> Number
@@ -184,7 +186,7 @@
 
 ; An ALOP is one of:
 ; – '()
-; – (cons Posn '())
+; – (cons Posn ALOP)
 ; interpretation represents a list of Posn
 
 ; ALOP -> Number
@@ -273,3 +275,56 @@
         "281" (phone-area p))
     (phone-switch p)
     (phone-four p)))
+
+
+; Exercise 171.
+
+; A List-of-strings is one of:
+; – '()
+; – (cons String List-of-strings)
+; interpretation represents a list of String
+(cons  "TTT"
+  (cons ""
+    (cons "Put up in a place"
+      (cons "where it's easy to see"
+        (cons "the cryptic admonishment"
+          (cons "T.T.T."
+            (cons  ""
+              (cons "When you feel how depressingly"
+                (cons "slowly you climb,"
+                  (cons "it's well to remember that"
+                    (cons "Things Take Time."
+                      (cons ""
+                        (cons "Piet Hein" '())))))))))))))
+(cons  "TTT"
+  (cons ""
+    (cons "Put" (cons "up" (cons "in" (cons "a" (cons "place"
+      (cons "where" (cons "it's" (cons "easy" (cons "to" (cons "see"
+        (cons "the" (cons "cryptic" (cons "admonishment"
+          (cons "T.T.T."
+            (cons  ""
+              (cons "When" (cons "you" (cons "feel" (cons "how" (cons "depressingly"
+                (cons "slowly" (cons "you" (cons "climb,"
+                  (cons "it's" (cons "well" (cons "to" (cons "remember" (cons "that"
+                    (cons "Things" (cons "Take" (cons "Time."
+                      (cons ""
+                        (cons "Piet" (cons "Hein" '()))))))))))))))))))))))))))))))))))))
+
+; A List-of-list-of-strings is one of:
+; – '()
+; – (cons List-of-strings List-of-list-of-strings)
+; interpretation represents a list of List-of-strings
+(list
+  (cons "TTT" '())
+  (cons "" '())
+  (cons "Put" (cons "up" (cons "in" (cons "a" (cons "place" '())))))
+  (cons "where" (cons "it's" (cons "easy" (cons "to" (cons "see" '())))))
+  (cons "the" (cons "cryptic" (cons "admonishment" '())))
+  (cons "T.T.T." '())
+  (cons "" '())
+  (cons "When" (cons "you" (cons "feel" (cons "how" (cons "depressingly" '())))))
+  (cons "slowly" (cons "you" (cons "climb," '())))
+  (cons "it's" (cons "well" (cons "to" (cons "remember" (cons "that" '())))))
+  (cons "Things" (cons "Take" (cons "Time." '())))
+  (cons "" '())
+  (cons "Piet" (cons "Hein" '())))
