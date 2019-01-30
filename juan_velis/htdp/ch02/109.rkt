@@ -25,27 +25,62 @@
 (define DD "encountered a 'd', finished")
 (define ER "error, user pressed illegal key")
 
-(define (expect x)
-  (cond [(string=? AA x) (... x)]
-        [(string=? BC x) (... x)]
-        [(string=? DD x) (... x)]
-        [(string=? ER x) (... x)]
-  )
-)
-
-(define (render e col) (place-image/align
+(define (render e) (place-image/align
                 (text e 16 "black")
                 100 100 "center" "center"
                 (overlay
-                 (rectangle 200 200 "solid" col) SCENE)
+                 (rectangle 200 200 "solid" (wcolor e)) SCENE)
                )
 )
-
-(check-expect (render AA COLOR1) (place-image/align
+(check-expect (render AA) (place-image/align
                 (text AA 16 "black")
                 100 100 "center" "center"
                 (overlay
-                 (rectangle 200 200 "solid" COLOR1) SCENE)
+                 (rectangle 200 200 "solid" (wcolor AA)) SCENE)
                 ))
 
-(render AA COLOR2)
+; ExpectToSee -> String
+; return the color to use
+(define (wcolor e)
+  (cond [(string=? AA e) COLOR1]
+        [(string=? BC e) COLOR2]
+        [(string=? DD e) COLOR3]
+        [(string=? ER e) COLORX]
+   )
+)
+
+; ExpectsToSee 1String -> ExpectsToSee
+; FSM
+(define (fsm e l)
+  (cond [(string=? AA e)
+         (cond [(string=? l "a") BC]
+               [else ER])]
+        [(string=? BC e)
+         (cond [(or (string=? l "b")
+                    (string=? l "c")) BC]
+               [(string=? l "d") DD]
+               [else ER])]
+        [else e])
+)
+(check-expect (fsm AA "a") BC) 
+(check-expect (fsm BC "b") BC)
+(check-expect (fsm AA "r") ER)
+(check-expect (fsm BC "d") DD)
+
+
+; ExpectToSee, KeyEvent -> ExpectToSee
+(define (checkkey e k)
+  (cond
+    [(= (string-length k) 1) (fsm e k)] ; 1 keystroke
+    [else e]
+  )
+)
+
+(define (main e)
+  (big-bang e
+    [to-draw render]
+    [on-key  checkkey]
+  )
+)
+
+(main AA)
