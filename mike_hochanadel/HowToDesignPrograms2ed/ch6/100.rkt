@@ -79,27 +79,27 @@
    im))
 
 ; UFO, Image -> Image
-; renders UFO on top of the given Image
+; renders UFO on top of the given Image(si
 (check-expect (ufo-render (make-posn 100 35) BACKGROUND) (place-image
    UFO
    (posn-x (make-posn 100 35))
-   (- (image-height BACKGROUND) (posn-y (make-posn 100 35)))
+   (posn-y (make-posn 100 35))
    BACKGROUND))
 (check-expect (ufo-render (make-posn 0 0) BACKGROUND) (place-image
    UFO
    (posn-x (make-posn 0 0))
-   (- (image-height BACKGROUND) (posn-y (make-posn 0 0)))
+   (posn-y (make-posn 0 0))
    BACKGROUND))
 (check-expect (ufo-render (make-posn BACKGROUND_WIDTH BACKGROUND_HEIGHT) BACKGROUND) (place-image
    UFO
    (posn-x (make-posn BACKGROUND_WIDTH BACKGROUND_HEIGHT))
-   (- (image-height BACKGROUND) (posn-y (make-posn  BACKGROUND_WIDTH BACKGROUND_HEIGHT)))
+   (posn-y (make-posn  BACKGROUND_WIDTH BACKGROUND_HEIGHT))
    BACKGROUND))
 (define (ufo-render u im)
   (place-image
    UFO
    (posn-x u)
-   (- (image-height im) (posn-y u))
+   (posn-y u)
    im))
 
 ; Missile, Image -> Image
@@ -107,23 +107,23 @@
 (check-expect (missile-render (make-posn 67 34) BACKGROUND) (place-image
    MISSILE
    (posn-x (make-posn 67 34))
-   (- (image-height BACKGROUND) (posn-y (make-posn 67 34)))
+   (posn-y (make-posn 67 34))
    BACKGROUND))
 (check-expect (missile-render (make-posn 0 0) BACKGROUND) (place-image
    MISSILE
    (posn-x (make-posn 0 0))
-   (- (image-height BACKGROUND) (posn-y (make-posn 0 0)))
+   (posn-y (make-posn 0 0))
    BACKGROUND))
 (check-expect (missile-render (make-posn BACKGROUND_WIDTH BACKGROUND_HEIGHT) BACKGROUND) (place-image
    MISSILE
    (posn-x (make-posn BACKGROUND_WIDTH BACKGROUND_HEIGHT))
-   (- (image-height BACKGROUND) (posn-y (make-posn BACKGROUND_WIDTH BACKGROUND_HEIGHT)))
+   (posn-y (make-posn BACKGROUND_WIDTH BACKGROUND_HEIGHT))
    BACKGROUND))
 (define (missile-render m im)
   (place-image
    MISSILE
    (posn-x m)
-   (- (image-height im) (posn-y m))
+   (posn-y m)
    im))
 
 ; SIGS -> Image
@@ -287,47 +287,27 @@
     [(ufo-hit? s) #true]
     [else (ufo-landed? s)]))
 
-; SIGS -> Number 
+; Number -> Number 
 ; get the x coordinate change for the UFO
-(check-random (si-ufo-delta (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 50)))
+(check-random (si-ufo-delta 5)
    (cond
-    [(= (random 1) 1) (+ 
-      (posn-x (fired-ufo (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 50))))      
-      (random UFO_MOVE_RANGE))]
-    [else (-
-      (posn-x (fired-ufo (make-fired (make-posn 50 50) (make-tank 14 0) (make-posn 50 50))))   
-      (random UFO_MOVE_RANGE))]))
-(check-random (si-ufo-delta (make-aim (make-posn 34 100) (make-tank 14 0)))
-   (cond
-    [(= (random 1) 1) (+ 
-      (posn-x (aim-ufo (make-aim (make-posn 34 100) (make-tank 14 0))))      
-      (random UFO_MOVE_RANGE))]
-    [else (-
-      (posn-x (aim-ufo (make-aim (make-posn 34 100) (make-tank 14 0))))   
-      (random UFO_MOVE_RANGE))]))
+    [(= (random 2) 1) (make-positive (random 5))]
+    [else (make-negative (random 5))]))
 (define (si-ufo-delta w)
   (cond
-    [(= (random 1) 1) (+ 
-      (posn-x (cond
-                [(fired? w) (fired-ufo w)]
-                [else (aim-ufo w)]))
-      (random UFO_MOVE_RANGE))]
-    [else (-
-      (posn-x (cond
-                [(fired? w) (fired-ufo w)]
-                [else (aim-ufo w)]))
-      (random UFO_MOVE_RANGE))]))
+    [(= (random 2) 1) (make-positive (random w))]
+    [else (make-negative (random w))]))
 
 ; Number -> boolean
 ; detects the left boundary for the x plane of the game area
 (check-expect (left-boundary-hit? -3) #true)
-(check-expect (left-boundary-hit? 0) #true)
+(check-expect (left-boundary-hit? 0) #false)
 (check-expect (left-boundary-hit? BACKGROUND_WIDTH) #false)
 (check-expect (left-boundary-hit? (+ 3 BACKGROUND_WIDTH)) #false)
 (check-expect (left-boundary-hit? (- BACKGROUND_WIDTH 34)) #false)
 (define (left-boundary-hit? x)
   (cond
-    [(<= x 0) #true]
+    [(< x 0) #true]
     [else #false]
    ))
 
@@ -335,40 +315,40 @@
 ; detects the right boundary for the x plane of the game area
 (check-expect (right-boundary-hit? -3) #false)
 (check-expect (right-boundary-hit? 0) #false)
-(check-expect (right-boundary-hit? BACKGROUND_WIDTH) #true)
+(check-expect (right-boundary-hit? BACKGROUND_WIDTH) #false)
 (check-expect (right-boundary-hit? (+ 3 BACKGROUND_WIDTH)) #true)
 (check-expect (right-boundary-hit? (- BACKGROUND_WIDTH 34)) #false)
 (define (right-boundary-hit? x)
   (cond
-    [(>= x BACKGROUND_WIDTH) #true]
+    [(> x BACKGROUND_WIDTH) #true]
     [else #false]
    ))
 
 ; Number Number -> Number
 ; gets the x position given the current position
-(check-expect (new-x-position 0 -3) 0)
-(check-expect (new-x-position -3 -3) 0)
+(check-expect (new-x-position 0 -3) -3)
+(check-expect (new-x-position -3 -3) BACKGROUND_WIDTH)
 (check-expect (new-x-position 3 -3) 0)
 (check-expect (new-x-position 43 -3) 40)
-(check-expect (new-x-position BACKGROUND_WIDTH 3) BACKGROUND_WIDTH)
-(check-expect (new-x-position (+ BACKGROUND_WIDTH 10) 3) BACKGROUND_WIDTH)
+(check-expect (new-x-position BACKGROUND_WIDTH 3) (+ BACKGROUND_WIDTH 3) )
+(check-expect (new-x-position (+ BACKGROUND_WIDTH 10) 3) 0)
 (check-expect (new-x-position 34 3) 37)
 (define (new-x-position x u-x)
    (cond
-     [(left-boundary-hit? x) 0]
-     [(right-boundary-hit? x) BACKGROUND_WIDTH]
+     [(left-boundary-hit? x) BACKGROUND_WIDTH]
+     [(right-boundary-hit? x) 0]
      [else (+ x u-x)]))
 
 ; Number -> boolean
 ; tells if the missile fired off the scene
-(check-expect (missile-gone? 0) #false)
+(check-expect (missile-gone? 0) #true)
 (check-expect (missile-gone? 30) #false)
-(check-expect (missile-gone? (- BACKGROUND_HEIGHT 20)) #false)
-(check-expect (missile-gone? (+ BACKGROUND_HEIGHT 10)) #true)
-(check-expect (missile-gone? BACKGROUND_HEIGHT) #true)
+(check-expect (missile-gone? -20) #true)
+(check-expect (missile-gone? (+ BACKGROUND_HEIGHT 10)) #false)
+(check-expect (missile-gone? BACKGROUND_HEIGHT) #false)
 (define (missile-gone? y)
   (cond
-    [(>= y BACKGROUND_HEIGHT) #true]
+    [(<= y 0) #true]
     [else #false]))
 
 ; SIGS Number -> SIGS
@@ -377,9 +357,10 @@
  (si-move-proper
   (make-fired (make-posn 12 34) (make-tank 45 3) (make-posn 45 BACKGROUND_HEIGHT))
   9)
- (make-aim
+ (make-fired
   (make-posn (new-x-position 12 9) (+ 34 UFO_LANDING_SPEED))
-  (make-tank (new-x-position 45 3) 3)))
+  (make-tank (new-x-position 45 3) 3)
+  (make-posn 45 (- BACKGROUND_HEIGHT MISSILE_SPEED))))
 (check-expect
  (si-move-proper
   (make-fired (make-posn 12 34) (make-tank 45 3) (make-posn 45 56))
@@ -393,7 +374,7 @@
   (make-aim (make-posn 12 34) (make-tank 45 3))
   9)
  (make-aim
-  (make-posn (new-x-position 12 9) (+ 34 UFO_LANDING_SPEED))
+  (make-posn (+ 12 9) (+ 34 UFO_LANDING_SPEED))
   (make-tank (new-x-position 45 3) 3)))
 (define (si-move-proper w u-x)
   (cond
@@ -429,7 +410,7 @@
 ; SIGS -> SIGS
 ; move handler for the objecs in the game
 (define (si-move w)
-  (si-move-proper w (si-ufo-delta w)))
+  (si-move-proper w (si-ufo-delta UFO_MOVE_RANGE)))
 
 ; Number -> Number
 ; Takes a number and forces it to negative, unless it's zero
@@ -461,7 +442,7 @@
               (make-aim (make-posn 34 43) (make-tank 54 (make-positive -10))))
 (check-expect (si-control (make-aim (make-posn 34 43) (make-tank 54 10)) "right")
               (make-aim (make-posn 34 43) (make-tank 54 (make-positive 10))))
-(check-expect (si-control (make-aim (make-posn 34 43) (make-tank 54 10)) "space")
+(check-expect (si-control (make-aim (make-posn 34 43) (make-tank 54 10)) " ")
               (make-fired (make-posn 34 43) (make-tank 54 10) (make-posn 54 (- BACKGROUND_HEIGHT TANK_HEIGHT))))
 (check-expect (si-control (make-fired (make-posn 34 43) (make-tank 54 -10) (make-posn 100 50)) "left")
               (make-fired (make-posn 34 43) (make-tank 54 (make-negative -10)) (make-posn 100 50)))
@@ -471,7 +452,7 @@
               (make-fired (make-posn 34 43) (make-tank 54 (make-positive -10)) (make-posn 100 50)))
 (check-expect (si-control (make-fired (make-posn 34 43) (make-tank 54 10) (make-posn 100 50)) "right")
               (make-fired (make-posn 34 43) (make-tank 54 (make-positive 10)) (make-posn 100 50)))
-(check-expect (si-control (make-fired (make-posn 34 43) (make-tank 54 10) (make-posn 100 50)) "space")
+(check-expect (si-control (make-fired (make-posn 34 43) (make-tank 54 10) (make-posn 100 50)) " ")
               (make-fired (make-posn 34 43) (make-tank 54 10) (make-posn 100 50)))
 (define (si-control s ke)
   (cond
@@ -480,13 +461,13 @@
         (fired-ufo s)
         (make-tank (tank-loc (fired-tank s))
                       (cond
-                        [(string=? ke "left") (make-negative (tank-vel (fired-tank s)))]
-                        [(string=? ke "right") (make-positive (tank-vel (fired-tank s)))]
+                        [(key=? ke "left") (make-negative (tank-vel (fired-tank s)))]
+                        [(key=? ke "right") (make-positive (tank-vel (fired-tank s)))]
                         [else (tank-vel (fired-tank s))]))
         (fired-missile s))]
     [else
       (cond
-       [(string=? ke "space") (make-fired
+       [(key=? ke " ") (make-fired
                                (aim-ufo s)
                                (aim-tank s)
                                (make-posn
@@ -496,8 +477,8 @@
               (aim-ufo s)
               (make-tank (tank-loc (aim-tank s))
                (cond
-                [(string=? ke "left") (make-negative (tank-vel (aim-tank s)))]
-                [(string=? ke "right") (make-positive (tank-vel (aim-tank s)))]
+                [(key=? ke "left") (make-negative (tank-vel (aim-tank s)))]
+                [(key=? ke "right") (make-positive (tank-vel (aim-tank s)))]
                 [else (tank-vel (aim-tank s))])))])]))
 
 ; SIGS -> SIGS
@@ -507,4 +488,4 @@
     [on-tick si-move]
     [to-draw si-render]
     [on-key si-control]
-    [stop-when si-game-over?]))
+    [stop-when si-game-over? si-render-final]))
