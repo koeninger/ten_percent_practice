@@ -42,8 +42,8 @@
 (define TANK-WIDTH (image-width TANK-IMAGE))
 (define TANK-HEIGHT (image-height TANK-IMAGE))
 
-(define TANK-X-MIN (/ TANK-WIDTH 2))
-(define TANK-X-MAX (- BACKGROUND-WIDTH (/ TANK-WIDTH 2)))
+(define TANK-X-MIN 0)
+(define TANK-X-MAX BACKGROUND-WIDTH)
 (define TANK-Y-MIN (/ TANK-HEIGHT 2))
 (define TANK-Y-MAX (- BACKGROUND-HEIGHT (/ TANK-HEIGHT 2)))
 
@@ -63,13 +63,13 @@
 (define UFO-WIDTH (image-width UFO-IMAGE))
 (define UFO-HEIGHT (image-height UFO-IMAGE))
 
-(define UFO-X-MIN (/ UFO-WIDTH 2))
-(define UFO-X-MAX (- BACKGROUND-WIDTH (/ UFO-WIDTH 2)))
-(define UFO-Y-MIN (/ UFO-HEIGHT 2))
+(define UFO-X-MIN 0)
+(define UFO-X-MAX BACKGROUND-WIDTH)
+(define UFO-Y-MIN (- (/ UFO-HEIGHT 2)))
 (define UFO-Y-MAX (- BACKGROUND-HEIGHT (/ UFO-HEIGHT 2)))
 
 (define UFO-DX 3)
-(define UFO-DY 9)
+(define UFO-DY 3)
 (define UFO-VEL (make-vel UFO-DX UFO-DY))
 
 (define MISSILE-IMAGE (scale 1 (above X
@@ -79,8 +79,8 @@
 (define MISSILE-WIDTH (image-width MISSILE-IMAGE))
 (define MISSILE-HEIGHT (image-height MISSILE-IMAGE))
 
-(define MISSILE-X-MIN (/ MISSILE-WIDTH 2))
-(define MISSILE-X-MAX (- BACKGROUND-WIDTH (/ MISSILE-WIDTH 2)))
+(define MISSILE-X-MIN 0)
+(define MISSILE-X-MAX BACKGROUND-WIDTH)
 (define MISSILE-Y-MIN (- (/ MISSILE-HEIGHT 2)))
 (define MISSILE-Y-MAX (- BACKGROUND-HEIGHT (/ MISSILE-HEIGHT 2)))
 
@@ -88,7 +88,7 @@
 (define MISSILE-DY -10)
 (define MISSILE-VEL (make-vel MISSILE-DX MISSILE-DY))
 
-(define (rand min max)
+(define (random-between min max)
   (+ min (random (- max min))))
 
 (define (move-position p v x-min x-max y-min y-max)
@@ -107,19 +107,21 @@
                                MISSILE-X-MIN MISSILE-X-MAX MISSILE-Y-MIN MISSILE-Y-MAX)
                 (missile-vel m)))
 
-(define (move-ufo2 u)
+(define (move-ufo u)
   (make-ufo (move-position (ufo-posn u)
-                           (make-vel (rand (- (vel-dx (ufo-vel u)))
-                                           (vel-dx (ufo-vel u)))
+                           (make-vel (random-between (- (vel-dx (ufo-vel u)))
+                                                     (vel-dx (ufo-vel u)))
                                      (vel-dy (ufo-vel u)))
                            UFO-X-MIN UFO-X-MAX UFO-Y-MIN UFO-Y-MAX)
             (ufo-vel u)))
 
-(define (move-ufo u)
-  (make-ufo (move-position (ufo-posn u)
-                           (ufo-vel u)
-                           UFO-X-MIN UFO-X-MAX UFO-Y-MIN UFO-Y-MAX)
-            (ufo-vel u)))
+(define (hit? m-p ufo-p)
+  (and (<= (- (posn-x ufo-p) UFO-WIDTH)
+           (posn-x m-p)
+           (+ (posn-x ufo-p) UFO-WIDTH))
+       (<= (- (posn-y ufo-p) UFO-HEIGHT)
+           (- (posn-y m-p) MISSILE-HEIGHT)
+           (+ (posn-y ufo-p) UFO-HEIGHT))))
 
 (define (collision? i1 p1 i2 p2)
   (< (sqrt (+ (sqr (- (posn-x p1)
@@ -136,14 +138,12 @@
 (define (si-move s)
   (cond
     [(tank? s) (make-aim (move-tank s)
-                         (make-ufo (make-posn (rand UFO-X-MIN UFO-X-MAX) UFO-Y-MIN) UFO-VEL))]
+                         (make-ufo (make-posn (random-between UFO-X-MIN UFO-X-MAX) UFO-Y-MIN) UFO-VEL))]
     [(aim? s) (make-aim (move-tank (aim-tank s))
                         (move-ufo (aim-ufo s)))]
     [(fired? s) (cond
-                  [(collision? MISSILE-IMAGE
-                               (missile-posn (fired-missile s))
-                               UFO-IMAGE
-                               (ufo-posn (fired-ufo s)))
+                  [(hit? (missile-posn (fired-missile s))
+                         (ufo-posn (fired-ufo s)))
                    (fired-tank s)]
                   [(<= (posn-y (missile-posn (fired-missile s))) MISSILE-Y-MIN) (make-aim (move-tank (fired-tank s))
                                                                                           (move-ufo (fired-ufo s)))]
@@ -212,6 +212,6 @@
      [on-tick si-move]
      [to-draw si-render]
      [on-key si-control]
-     [stop-when si-game-over?]))
+     [stop-when si-game-over? si-render]))
 
-(si (make-tank (make-posn TANK-X-MIN TANK-Y-MAX) TANK-VEL))
+(si (make-tank (make-posn (/ (+ TANK-X-MIN TANK-X-MAX) 2) TANK-Y-MAX) TANK-VEL))
