@@ -104,13 +104,14 @@ def get_barcodes(input_directory):
 
         # load the input image
         image = cv2.imread(input_directory + filename)
-
+        print("File: " + filename)
         filtered_image = filter_barcode(image)
 
         # find the barcodes in the image and decode each of the barcodes
         barcodes = pyzbar.decode(filtered_image)
 
         if not barcodes:
+            print("FILTER FAIL")
             barcodes = pyzbar.decode(image)
 
         total_barcodes += barcodes
