@@ -48,3 +48,7 @@
  
 
 )
+
+
+(define (to-draw) ...)
+(define (on-key)  ...)
