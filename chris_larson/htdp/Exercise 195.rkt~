@@ -36,20 +36,3 @@
 
 ; (starts-with# "z" AS-LIST)
 ; 719
-
-; A Letter Count is a Letter and an Integer
-; c is the number of times l appears in a Dictionary
-(define-struct letter-count [l c])
-
-; Dictionary -> List-of-Letter-Counts
-(define (count-by-letter d)
-  (count-by-letters LETTERS d))
-
-; List-of-Letters Dictionary -> List-of-Letter-Counts
-(define (count-by-letters l d)
-  (cond
-    [(empty? l) '()]
-    [else (cons (make-letter-count (first l) (starts-with# (first l) d)) (count-by-letters (rest l) d))]))
-(check-expect (count-by-letters (list "a" "b" "h") (list "hello" "world" "how" "is" "every" "thing")) (list (make-letter-count "a" 0) (make-letter-count "b" 0) (make-letter-count "h" 2)))
-
-; (count-by-letter AS-LIST)
