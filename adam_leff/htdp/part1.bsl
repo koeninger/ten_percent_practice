@@ -1215,3 +1215,8 @@ interpretation a dog is owned by a person and is some percentage happy
         [(= (posn-y (sigs-UFO s)) 0) true]
         [(and (= (posn-y (sigs-UFO s)) (posn-y (sigs-Missile s))) (= (posn-x (sigs-UFO s)) (posn-x (sigs-Missile s)))) true]
         [false]))
+        
+//Exercise 116
+1. This is a variable
+2. This is a primitive with expressons after it
+3. This is a primitive with a nested expression and then a variable

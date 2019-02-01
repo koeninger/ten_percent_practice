@@ -9,7 +9,7 @@
 
 (define-struct ufo [posn vel])
 (define-struct tank [posn vel])
-(define-struct missile [posn vel])
+(define-struct missile [posn vel detonated?])
 
 (define-struct aim [tank ufo])
 (define-struct fired [tank ufo missile])
@@ -105,7 +105,8 @@
   (make-missile (move-position (missile-posn m)
                                (missile-vel m)
                                MISSILE-X-MIN MISSILE-X-MAX MISSILE-Y-MIN MISSILE-Y-MAX)
-                (missile-vel m)))
+                (missile-vel m)
+                (missile-detonated? m)))
 
 (define (move-ufo u)
   (make-ufo (move-position (ufo-posn u)
@@ -115,13 +116,22 @@
                            UFO-X-MIN UFO-X-MAX UFO-Y-MIN UFO-Y-MAX)
             (ufo-vel u)))
 
-(define (hit? m-p ufo-p)
-  (and (<= (- (posn-x ufo-p) UFO-WIDTH)
-           (posn-x m-p)
-           (+ (posn-x ufo-p) UFO-WIDTH))
-       (<= (- (posn-y ufo-p) UFO-HEIGHT)
-           (- (posn-y m-p) MISSILE-HEIGHT)
-           (+ (posn-y ufo-p) UFO-HEIGHT))))
+(define (move-aim a)
+  (make-aim (move-tank (aim-tank a))
+            (move-ufo (aim-ufo a))))
+
+(define (move-fired f)
+  (make-fired (move-tank (fired-tank f))
+              (move-ufo (fired-ufo f))
+              (move-missile (fired-missile f))))
+
+(define (missile-hit? m u)
+  (and (<= (- (posn-x (ufo-posn u)) UFO-WIDTH)
+           (posn-x (missile-posn m))
+           (+ (posn-x (ufo-posn u)) UFO-WIDTH))
+       (<= (- (posn-y (ufo-posn u)) UFO-HEIGHT)
+           (- (posn-y (missile-posn m)) MISSILE-HEIGHT)
+           (+ (posn-y (ufo-posn u)) UFO-HEIGHT))))
 
 (define (collision? i1 p1 i2 p2)
   (< (sqrt (+ (sqr (- (posn-x p1)
@@ -138,18 +148,20 @@
 (define (si-move s)
   (cond
     [(tank? s) (make-aim (move-tank s)
-                         (make-ufo (make-posn (random-between UFO-X-MIN UFO-X-MAX) UFO-Y-MIN) UFO-VEL))]
-    [(aim? s) (make-aim (move-tank (aim-tank s))
-                        (move-ufo (aim-ufo s)))]
+                         (make-ufo (make-posn (random-between UFO-X-MIN UFO-X-MAX)
+                                              UFO-Y-MIN)
+                                   UFO-VEL))]
+    [(aim? s) (move-aim s)]
     [(fired? s) (cond
-                  [(hit? (missile-posn (fired-missile s))
-                         (ufo-posn (fired-ufo s)))
-                   (fired-tank s)]
+                  [(missile-detonated? (fired-missile s)) (fired-tank s)]
+                  [(missile-hit? (fired-missile s) (fired-ufo s)) (move-fired (make-fired (fired-tank s)
+                                                                                          (fired-ufo s)
+                                                                                          (make-missile (missile-posn (fired-missile s))
+                                                                                                        (missile-vel (fired-missile s))
+                                                                                                        #true)))]
                   [(<= (posn-y (missile-posn (fired-missile s))) MISSILE-Y-MIN) (make-aim (move-tank (fired-tank s))
                                                                                           (move-ufo (fired-ufo s)))]
-                  [else (make-fired (move-tank (fired-tank s))
-                                    (move-ufo (fired-ufo s))
-                                    (move-missile (fired-missile s)))])]
+                  [else (move-fired s)])]
     [else s]))
 
 (define (si-render s)
@@ -184,7 +196,7 @@
     [(aim? s) (cond
                 [(key=? key " ") (make-fired (aim-tank s)
                                              (aim-ufo s)
-                                             (make-missile (tank-posn (aim-tank s)) MISSILE-VEL))]
+                                             (make-missile (tank-posn (aim-tank s)) MISSILE-VEL #false))]
                 [(or (key=? key "left")
                      (key=? key "right")) (make-aim (tank-change-directions (aim-tank s) key)
                                                     (aim-ufo s))]
@@ -209,7 +221,7 @@
 
 (define (si s)
    (big-bang s
-     [on-tick si-move]
+     [on-tick si-move 1]
      [to-draw si-render]
      [on-key si-control]
      [stop-when si-game-over? si-render]))

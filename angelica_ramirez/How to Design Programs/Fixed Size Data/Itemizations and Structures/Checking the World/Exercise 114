@@ -1,0 +1,20 @@
+; A UnitWorld is a number
+; between 0 (inclusive) and 1 (exclusive)
+
+; Any -> Boolean
+; is x between 0 (inclusive) and 1 (exclusive)
+
+(check-expect (between-0-and-1? "a") #false)
+(check-expect (between-0-and-1? 1.2) #false)
+(check-expect (between-0-and-1? 0.2) #true)
+(check-expect (between-0-and-1? 0.0) #true)
+(check-expect (between-0-and-1? 1.0) #false)
+
+(define (between-0-and-1? x)
+  (and (number? x) (<= 0 x) (< x 1)))
+
+(define (main s0)
+  (big-bang s0
+    ...
+    [check-with between-0-and-1?]
+    ...))

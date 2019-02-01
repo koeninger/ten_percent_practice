@@ -44,3 +44,4 @@
 ; Editor -> Editor
 ; Moves the cursor right one character
 (define (move-right ed) ...)
+
