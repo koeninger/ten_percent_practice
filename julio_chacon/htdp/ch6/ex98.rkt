@@ -4,22 +4,22 @@
 (require 2htdp/image)
 (require 2htdp/universe)
 
-
-
-
-
+(define-struct ufo [x y])
 ; A UFO is a Posn. 
 ; interpretation (make-posn x y) is the UFO's location 
 ; (using the top-down, left-to-right convention)
- 
+
+(define-struct missile [x y])
+; A Missile is a Posn. 
+; interpretation (make-posn x y) is the missile's place
+
+
 (define-struct tank [loc vel])
 ; A Tank is a structure:
 ;   (make-tank Number Number). 
 ; interpretation (make-tank x dx) specifies the position:
 ; (x, HEIGHT) and the tank's speed: dx pixels/tick 
  
-; A Missile is a Posn. 
-; interpretation (make-posn x y) is the missile's place
 
 ; A SIGS is one of: 
 ; – (make-aim UFO Tank)
@@ -53,18 +53,29 @@
 (define UFO-SPEED 2)
 
 
-(define render
+(define (si-render-missile s)
   (place-images
    (list
       TANK
       MISSILE
+      UFO )
+   (list
+    (make-posn  (tank-loc (fired-tank s)) (- CANVAS-HEIGHT (* TANK-HEIGHT .5)))
+    (fired-missile s)
+    (fired-ufo s))
+   BACKGROUND)
+  )
+
+
+(define (si-render-aim s)
+  (place-images
+   (list
+      TANK
       UFO 
       )
-   (list (make-posn 200 (- CANVAS-HEIGHT (* TANK-HEIGHT .5)))
-         (make-posn 200 100)
-         (make-posn 200 10))
+   (list (make-posn (tank-loc (aim-tank s)) (- CANVAS-HEIGHT (* TANK-HEIGHT .5)))
+         (aim-ufo s))
    BACKGROUND)
-
   )
 
 
@@ -74,14 +85,42 @@
 (define (si-render s)
   (cond
     [(aim? s)
-     (tank-render (aim-tank s)
-                  (ufo-render (aim-ufo s) BACKGROUND))]
+     (si-render-aim s)]
     [(fired? s)
-     (tank-render
-       (fired-tank s)
-       (ufo-render (fired-ufo s)
-                   (missile-render (fired-missile s)
-                                   BACKGROUND)))]))
+      (si-render-missile s)]))
+
+
+	
+
+; Tank Image -> Image 
+; adds t to the given image im
+(define (tank-render t im)
+  (place-image
+    TANK
+    (tank-loc t) CANVAS-HEIGHT
+    im))
+
+; UFO Image -> Image 
+; adds u to the given image im
+(define (ufo-render u im)
+  (place-image
+    UFO
+    (posn-x u) (posn-y u)
+    im))
+
+; Missile Image -> Image 
+; adds m to the given image im
+(define (missile-render m im)
+  (place-image
+    MISSILE
+    (posn-x m) (posn-y m)
+    im))
+
+
+
+(define si-game-over? )
+
+
 
 
 (make-aim
@@ -92,27 +131,8 @@
   (make-posn 20 100)
   (make-tank 100 3)
   (make-posn 22 103))
-	
-
 
 (make-fired
   (make-posn 10 20)
   (make-tank 28 -3)
   (make-posn 32 (- CANVAS-HEIGHT TANK-HEIGHT 10)))
-	
-
-; Tank Image -> Image 
-; adds t to the given image im
-(define (tank-render t im) im)
-
-; UFO Image -> Image 
-; adds u to the given image im
-(define (ufo-render u im) im)
-
-; Missile Image -> Image 
-; adds m to the given image im
-(define (missile-render m im) im)
-
-
-
-(define (si-game-over data))
