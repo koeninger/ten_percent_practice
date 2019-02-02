@@ -50,7 +50,7 @@
 
 (define (move-position p v x-min x-max y-min y-max)
   (make-posn (+ (posn-x p) (vel-dx v))
-             (limit (+ (posn-y p) (vel-dy v)))))
+             (+ (posn-y p) (vel-dy v))))
 
 (define (move-ufo2 u)
   (make-ufo (move-position (ufo-posn u)
@@ -75,7 +75,7 @@
                              BACKGROUND))
 
 (define (si-game-over? s)
-  (= (posn-y (ufo-posn s)) UFO-Y-MAX))
+  (> (posn-y (ufo-posn s)) UFO-Y-MAX))
 
 (define (si s)
    (big-bang s

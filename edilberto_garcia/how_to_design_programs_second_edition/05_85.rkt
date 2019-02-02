@@ -48,3 +48,9 @@
  
 
 )
+
+
+(define (run editor-instance)
+  (big-bang editor-instance
+    [to-draw render]
+    [on-key edit]))
