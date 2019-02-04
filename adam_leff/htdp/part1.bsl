@@ -1220,3 +1220,8 @@ interpretation a dog is owned by a person and is some percentage happy
 1. This is a variable
 2. This is a primitive with expressons after it
 3. This is a primitive with a nested expression and then a variable
+
+//Exercise 117
+1. This is in the wrong order, the + needs to come first
+2. This is a function without an argument
+3. This is a variable which shouldnt have ()
