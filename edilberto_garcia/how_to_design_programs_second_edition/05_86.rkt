@@ -34,13 +34,17 @@
 ; Editor KeyEvent -> Editor
 ; Adds a character after  pre-text
 ; If key is delete key then it deletes last character
-(check-expect (edit (make-editor "Starfleetz" "Headquarters") "\b") (make-editor "Starfleet" "Headquarters"))
-(check-expect (edit (make-editor "Gamm" "Quadrant") "a") (make-editor "Gamma" "Quadrant"))
+;(check-expect (edit (make-editor "Starfleetz" "Headquarters") "\b") (make-editor "Starfleet" "Headquarters"))
+;(check-expect (edit (make-editor "Gamm" "Quadrant") "a") (make-editor "Gamma" "Quadrant"))
+(check-expect (edit
+     (make-editor "Really long sentence really long sentence really long sentence" "really long sentence") "X")
+     (make-editor "Really long sentence really long sentence really long sentence" "really long sentence")
+)
 (define (edit editor_object ke)
 (make-editor
 
    (cond
-    [(]
+    [(and (string? ke) (equal? (string-length ke) 1) ( > (image-width (render editor_object)) 200)) (editor-pre editor_object)]
     [(string=? "\b" ke) (substring (editor-pre editor_object) 0 (- (string-length (editor-pre editor_object)) 1))  ]
     [else (string-append (editor-pre editor_object) ke)]
    )
@@ -49,9 +53,6 @@
  
 
 )
-
-
-
 
 (define (run editor-instance)
   (big-bang editor-instance
