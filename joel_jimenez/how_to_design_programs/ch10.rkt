@@ -283,48 +283,72 @@
 ; – '()
 ; – (cons String List-of-strings)
 ; interpretation represents a list of String
-(cons  "TTT"
-  (cons ""
-    (cons "Put up in a place"
-      (cons "where it's easy to see"
-        (cons "the cryptic admonishment"
-          (cons "T.T.T."
-            (cons  ""
-              (cons "When you feel how depressingly"
-                (cons "slowly you climb,"
-                  (cons "it's well to remember that"
-                    (cons "Things Take Time."
-                      (cons ""
-                        (cons "Piet Hein" '())))))))))))))
-(cons  "TTT"
-  (cons ""
-    (cons "Put" (cons "up" (cons "in" (cons "a" (cons "place"
-      (cons "where" (cons "it's" (cons "easy" (cons "to" (cons "see"
-        (cons "the" (cons "cryptic" (cons "admonishment"
-          (cons "T.T.T."
-            (cons  ""
-              (cons "When" (cons "you" (cons "feel" (cons "how" (cons "depressingly"
-                (cons "slowly" (cons "you" (cons "climb,"
-                  (cons "it's" (cons "well" (cons "to" (cons "remember" (cons "that"
-                    (cons "Things" (cons "Take" (cons "Time."
-                      (cons ""
-                        (cons "Piet" (cons "Hein" '()))))))))))))))))))))))))))))))))))))
+(define los1
+  (cons  "TTT"
+    (cons ""
+      (cons "Put up in a place"
+        (cons "where it's easy to see"
+          (cons "the cryptic admonishment"
+            (cons "T.T.T."
+              (cons  ""
+                (cons "When you feel how depressingly"
+                  (cons "slowly you climb,"
+                    (cons "it's well to remember that"
+                      (cons "Things Take Time."
+                        (cons ""
+                          (cons "Piet Hein" '()))))))))))))))
+
+(define los2
+  (cons  "TTT"
+    (cons ""
+      (cons "Put" (cons "up" (cons "in" (cons "a" (cons "place"
+        (cons "where" (cons "it's" (cons "easy" (cons "to" (cons "see"
+          (cons "the" (cons "cryptic" (cons "admonishment"
+            (cons "T.T.T."
+              (cons  ""
+                (cons "When" (cons "you" (cons "feel" (cons "how" (cons "depressingly"
+                  (cons "slowly" (cons "you" (cons "climb,"
+                    (cons "it's" (cons "well" (cons "to" (cons "remember" (cons "that"
+                      (cons "Things" (cons "Take" (cons "Time."
+                        (cons ""
+                          (cons "Piet" (cons "Hein" '())))))))))))))))))))))))))))))))))))))
 
 ; A List-of-list-of-strings is one of:
 ; – '()
 ; – (cons List-of-strings List-of-list-of-strings)
 ; interpretation represents a list of List-of-strings
-(list
-  (cons "TTT" '())
-  (cons "" '())
-  (cons "Put" (cons "up" (cons "in" (cons "a" (cons "place" '())))))
-  (cons "where" (cons "it's" (cons "easy" (cons "to" (cons "see" '())))))
-  (cons "the" (cons "cryptic" (cons "admonishment" '())))
-  (cons "T.T.T." '())
-  (cons "" '())
-  (cons "When" (cons "you" (cons "feel" (cons "how" (cons "depressingly" '())))))
-  (cons "slowly" (cons "you" (cons "climb," '())))
-  (cons "it's" (cons "well" (cons "to" (cons "remember" (cons "that" '())))))
-  (cons "Things" (cons "Take" (cons "Time." '())))
-  (cons "" '())
-  (cons "Piet" (cons "Hein" '())))
+(define lolos
+  (list
+    (cons "TTT" '())
+    (cons "" '())
+    (cons "Put" (cons "up" (cons "in" (cons "a" (cons "place" '())))))
+    (cons "where" (cons "it's" (cons "easy" (cons "to" (cons "see" '())))))
+    (cons "the" (cons "cryptic" (cons "admonishment" '())))
+    (cons "T.T.T." '())
+    (cons "" '())
+    (cons "When" (cons "you" (cons "feel" (cons "how" (cons "depressingly" '())))))
+    (cons "slowly" (cons "you" (cons "climb," '())))
+    (cons "it's" (cons "well" (cons "to" (cons "remember" (cons "that" '())))))
+    (cons "Things" (cons "Take" (cons "Time." '())))
+    (cons "" '())
+    (cons "Piet" (cons "Hein" '()))))
+
+
+; Exercise 172.
+
+; List-of-list-of-strings -> String
+; converts a list of lines into a string.
+(check-expect (collapse lolos)
+  "TTT \n \nPut up in a place \nwhere it's easy to see \nthe cryptic admonishment \nT.T.T. \n \nWhen you feel how depressingly \nslowly you climb, \nit's well to remember that \nThings Take Time. \n \nPiet Hein \n")
+(define (collapse lls)
+  (cond
+    [(empty? lls) ""]
+    [else (string-append (collapse-line (first lls)) "\n" (collapse (rest lls)))]))
+
+; List-of-strings -> String
+; converts a list of lines into a string.
+(check-expect (collapse-line (list "Hello," "World!")) "Hello, World! ")
+(define (collapse-line ls)
+  (cond
+    [(empty? ls) ""]
+    [else (string-append (first ls) " " (collapse-line (rest ls)))]))
