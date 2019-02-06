@@ -401,3 +401,63 @@
     [(string=? w "an") #true]
     [(string=? w "the") #true]
     [else #false]))
+
+
+; Exercise 174.
+
+; 1String -> String
+; converts the given 1String to a 3-letter numeric String
+(check-expect (encode-letter "z") (code1 "z"))
+(check-expect (encode-letter "\t") (string-append "00" (code1 "\t")))
+(check-expect (encode-letter "a") (string-append "0" (code1 "a")))
+(define (encode-letter s)
+  (cond
+    [(>= (string->int s) 100) (code1 s)]
+    [(< (string->int s) 10)
+     (string-append "00" (code1 s))]
+    [(< (string->int s) 100)
+     (string-append "0" (code1 s))]))
+
+; 1String -> String
+; converts the given 1String into a String
+(check-expect (code1 "z") "122")
+(define (code1 c)
+  (number->string (string->int c)))
+
+; String -> String
+; encodes text files numerically. Each letter in a word should be encoded
+; as a numeric three-letter string with a value between 0 and 256.
+(check-expect (encode-file "TTT.txt")
+  "084084084080117116117112105110097112108097099101119104101114101105116039115101097115121116111115101101116104101099114121112116105099097100109111110105115104109101110116084046084046084046087104101110121111117102101101108104111119100101112114101115115105110103108121115108111119108121121111117099108105109098044105116039115119101108108116111114101109101109098101114116104097116084104105110103115084097107101084105109101046080105101116072101105110")
+(define (encode-file n)
+  (encode-list (read-words/line n)))
+
+; List-of-list-of-strings -> String
+; encodes a List-of-list-of-strings numerically. Each letter in a word should
+; be encoded as a numeric three-letter string with a value between 0 and 256.
+(check-expect (encode-list (list (list "Hello," '() "World!")))
+  "072101108108111044087111114108100033")
+(define (encode-list lls)
+  (cond
+    [(empty? lls) ""]
+    [else (string-append (encode-words (first lls)) (encode-list (rest lls)))]))
+
+; List-of-strings -> String
+; encodes a List-of-strings numerically. Each letter in a word should
+; be encoded as a numeric three-letter string with a value between 0 and 256.
+(check-expect (encode-words (list "Hello," "World!"))
+  "072101108108111044087111114108100033")
+(define (encode-words ls)
+  (cond
+    [(empty? ls) ""]
+    [(empty? (first ls)) (encode-words (rest ls))]
+    [else (string-append (encode-word (explode (first ls))) (encode-words (rest ls)))]))
+
+; String -> String
+; encodes a String numerically. Each letter in a word should
+; be encoded as a numeric three-letter string with a value between 0 and 256.
+(check-expect (encode-word (list "t" "e" "s" "t")) "116101115116")
+(define (encode-word w)
+  (cond
+    [(empty? w) ""]
+    [else (string-append (encode-letter (first w)) (encode-word (rest w)))]))
