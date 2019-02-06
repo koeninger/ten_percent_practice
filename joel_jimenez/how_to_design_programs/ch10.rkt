@@ -352,3 +352,52 @@
   (cond
     [(empty? ls) ""]
     [else (string-append (first ls) " " (collapse-line (rest ls)))]))
+
+
+; Exercise 173.
+
+; String -> String
+; consumes the name n of a file, reads the file, removes the articles, and writes the
+; result out to a file whose name is the result of concatenating "no-articles-" with n
+(check-expect (remove-articles-file "TTT.txt") "no-articles-TTT.txt")
+(define (remove-articles-file n)
+  (write-file (string-append "no-articles-" n) (remove-articles* (read-words/line n))))
+
+; List-of-list-of-strings -> String
+; consumes a List-of-list-of-strings, removes the articles, and returns as string
+(check-expect (remove-articles* '()) "")
+(check-expect (remove-articles* (list (list ""))) "\n")
+(check-expect (remove-articles* (list (list "a"))) "")
+(check-expect (remove-articles* (list (list "Hello,") (list "World!"))) "Hello,\nWorld!\n")
+(check-expect (remove-articles* (list (list "Hello,") (list "an") (list "World!"))) "Hello,\nWorld!\n")
+(define (remove-articles* lls)
+  (cond
+    [(empty? lls) ""]
+    [else (string-append (remove-articles (first lls)) (remove-articles* (rest lls)))]))
+
+; List-of-strings -> String
+; removes the articles from each string in List-of-strings
+(check-expect (remove-articles '()) "")
+(check-expect (remove-articles (list "")) "\n")
+(check-expect (remove-articles (list "a")) "")
+(check-expect (remove-articles (list "Hello," "World!")) "Hello, World!\n")
+(check-expect (remove-articles (list "Hello," "the" "World!")) "Hello, World!\n")
+(define (remove-articles ls)
+  (cond
+    [(empty? ls) ""]
+    [(is-article? (first ls)) (remove-articles (rest ls))]
+    [else (string-append (first ls) (if (empty? (rest ls)) "\n" " ") (remove-articles (rest ls)))]))
+
+; String -> Boolean
+; determines if string is an article (an article is one of the following three words: "a", "an", and "the")
+(check-expect (is-article? "") #false)
+(check-expect (is-article? "a") #true)
+(check-expect (is-article? "an") #true)
+(check-expect (is-article? "the") #true)
+(check-expect (is-article? "test") #false)
+(define (is-article? w)
+  (cond
+    [(string=? w "a") #true]
+    [(string=? w "an") #true]
+    [(string=? w "the") #true]
+    [else #false]))
