@@ -1225,3 +1225,10 @@ interpretation a dog is owned by a person and is some percentage happy
 1. This is in the wrong order, the + needs to come first
 2. This is a function without an argument
 3. This is a variable which shouldnt have ()
+
+//Exercise 118
+all of these start with define, has a list of variables, and ends with an expression
+
+//Exercise 119
+1. Has an expression instead of a variable
+2. Has an illegal expression at the end
