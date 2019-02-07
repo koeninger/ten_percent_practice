@@ -1232,3 +1232,8 @@ all of these start with define, has a list of variables, and ends with an expres
 //Exercise 119
 1. Has an expression instead of a variable
 2. Has an illegal expression at the end
+
+//Exercise 120
+1. is illegal because there is no function name
+2. is legal because it is all functions followed by expressions
+3. is legal for the same reason
