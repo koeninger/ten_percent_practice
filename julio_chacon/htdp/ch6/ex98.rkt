@@ -49,7 +49,10 @@
 
 (define MISSILE (triangle (* TANK-HEIGHT .5) "solid" "black"))
 
-(define UFO (ellipse 40 20 "solid" "red"))
+(define UFO-WIDTH 40)
+(define UFO-HEIGHT 20)
+(define UFO-IMPACT 15)
+(define UFO (ellipse UFO-WIDTH UFO-HEIGHT "solid" "red"))
 (define UFO-SPEED 2)
 
 
@@ -117,22 +120,34 @@
     im))
 
 
+(define (missil-impact m u)
+  (cond
+    [ (>= UFO-IMPACT ( sqrt ( + (sqr(-(posn-x m) (posn-x u)) )
+                                (sqr(- (posn-y m) (posn-y u)) )))
+          ) #true]
+    [else #false]
+  ))
 
-(define si-game-over? )
+(define (ufo-landed u)
+  (cond
+    [ (<= (posn-y u) (- CANVAS-HEIGHT (* UFO-HEIGHT .5)) ) #false ]
+    [else #true])
+  )
+
+(define (si-game-over? s)
+  (cond
+    [(aim? s)
+     (ufo-landed (aim-ufo s))]
+    [(fired? s)
+      (missil-impact (fired-ufo s) (fired-missile s) )]))
+
+(define (si-render-final s) s)
 
 
+(si-game-over? (make-aim
+  (make-posn 20 391)
+  (make-tank 100 3)))
 
-
-(make-aim
-  (make-posn 10 20)
-  (make-tank 28 -3))
-	
-(make-fired
-  (make-posn 20 100)
-  (make-tank 100 3)
-  (make-posn 22 103))
-
-(make-fired
-  (make-posn 10 20)
-  (make-tank 28 -3)
-  (make-posn 32 (- CANVAS-HEIGHT TANK-HEIGHT 10)))
+(si-render (make-aim
+  (make-posn 20 391)
+  (make-tank 100 3)))
