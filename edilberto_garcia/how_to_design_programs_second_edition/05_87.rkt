@@ -29,7 +29,7 @@
 ; interpretation (make-editor s t) describes an editor
 ; whose visible text is (string-append s t) with 
 ; the cursor displayed between s and t
-(define-struct editor [pre post])
+(define-struct editor [str index])
 
 
 
