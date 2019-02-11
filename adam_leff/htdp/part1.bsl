@@ -1237,3 +1237,52 @@ all of these start with define, has a list of variables, and ends with an expres
 1. is illegal because there is no function name
 2. is legal because it is all functions followed by expressions
 3. is legal for the same reason
+
+//Exercise 121
+1.
+(+ (* (/ 12 8) 2/3)
+    (- 20 (sqrt 4))) 
+
+(+ (* 3/2 2/3)
+    (- 20 2)) 
+    
+(+ 1
+    18) 
+    
+18
+
+2.
+(cond
+    [(= 0 0) #false]
+    [(> 0 1) (string=? "a" "a")]
+    [else (= (/  1 0) 9)]) 
+    
+(cond
+    [#true #false]
+    [(> 0 1) (string=? "a" "a")]
+    [else (= (/  1 0) 9)]) 
+    
+#false
+
+3.
+(cond
+    [(= 2 0) #false]
+    [(> 2 1) (string=? "a" "a")]
+    [else (= (/  1 2) 9)])
+    
+(cond
+    [#false #false]
+    [(> 2 1) (string=? "a" "a")]
+    [else (= (/  1 2) 9)])
+    
+(cond
+    [(> 2 1) (string=? "a" "a")]
+    [else (= (/  1 2) 9)])
+    
+(cond
+    [#true (string=? "a" "a")]
+    [else (= (/  1 2) 9)])
+    
+(string=? "a" "a")
+
+#true
