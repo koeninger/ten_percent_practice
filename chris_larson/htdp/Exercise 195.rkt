@@ -138,8 +138,7 @@
     [else (cons (if (string=? s (letter-count-letter (first l)) s) (make-letter-count s (+ 1 (letter-count-count (first l)))) (first l)) (add-to-letters s (rest l)))]))
 
 (check-expect (add-to-letters "a" (list (make-letter-count "a" 0) (make-letter-count "b" 0) (make-letter-count "h" 0))) (list (make-letter-count "a" 1) (make-letter-count "b" 0) (make-letter-count "h" 0)))
-
-(check-expect (count-letters LETTER-LIST AS-LIST) COUNTS)
+;(check-expect (count-letters LETTER-LIST AS-LIST) COUNTS)
 
 
 

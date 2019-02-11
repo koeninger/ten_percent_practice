@@ -1,6 +1,6 @@
 ;; The first three lines of this file were inserted by DrRacket. They record metadata
 ;; about the language level of this file in a form that our tools can easily process.
-#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex98) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname ex99) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
 (require 2htdp/image)
 (require 2htdp/universe)
 
@@ -53,8 +53,11 @@
 (define UFO-HEIGHT 20)
 (define UFO-IMPACT 15)
 (define UFO (ellipse UFO-WIDTH UFO-HEIGHT "solid" "red"))
-(define UFO-SPEED 2)
+(define UFO-SPEED 1)
 
+(define START-GAME (make-aim
+  (make-posn 200 100)
+  (make-tank 200 TANK-SPEED)))
 
 (define (si-render-missile s)
   (place-images
@@ -97,27 +100,27 @@
 
 ; Tank Image -> Image 
 ; adds t to the given image im
-(define (tank-render t im)
-  (place-image
-    TANK
-    (tank-loc t) CANVAS-HEIGHT
-    im))
+;(define (tank-render t im)
+;  (place-image
+;    TANK
+;    (tank-loc t) CANVAS-HEIGHT
+;    im));
 
-; UFO Image -> Image 
-; adds u to the given image im
-(define (ufo-render u im)
-  (place-image
-    UFO
-    (posn-x u) (posn-y u)
-    im))
+;; UFO Image -> Image 
+;; adds u to the given image im
+;(define (ufo-render u im)
+;  (place-image
+;    UFO
+;    (posn-x u) (posn-y u)
+;    im));
 
-; Missile Image -> Image 
-; adds m to the given image im
-(define (missile-render m im)
-  (place-image
-    MISSILE
-    (posn-x m) (posn-y m)
-    im))
+;; Missile Image -> Image 
+;; adds m to the given image im
+;(define (missile-render m im)
+;  (place-image
+;    MISSILE
+;    (posn-x m) (posn-y m)
+;    im))
 
 
 (define (missil-impact m u)
@@ -144,10 +147,58 @@
 (define (si-render-final s) s)
 
 
-(si-game-over? (make-aim
-  (make-posn 20 391)
-  (make-tank 100 3)))
 
-(si-render (make-aim
-  (make-posn 20 391)
-  (make-tank 100 3)))
+
+
+(define (move-ufo pos delta)
+  (cond
+    [ delta
+      (make-posn (+ (posn-x pos) 5) (+ (posn-y pos) UFO-SPEED))]
+    [else
+      (make-posn (- (posn-x pos) 5) (+ (posn-y pos) UFO-SPEED))]
+  ))
+
+
+(define (move-tank t)
+  (cond
+    [(< (tank-loc t) 0) (make-tank 0 0)]
+    [(> (tank-loc t) CANVAS-WIDTH) (make-tank CANVAS-WIDTH 0)]
+    [else (make-tank (+ (tank-loc t) (tank-vel t)) (tank-vel t))]))
+
+
+(define (random-move n)
+  (cond
+    [(even? (random n)) #true ]
+    [else #false])
+  )
+
+(define (si-move s)
+  (si-move-proper s (random-move 6) )
+  )
+
+(define (si-move-proper s delta)
+  (cond
+    [(aim? s)
+     (make-aim
+      (move-ufo (aim-ufo s) delta)
+      (move-tank (aim-tank s)))
+     ]
+    [(fired? s)
+    (make-fired
+      (move-ufo (fired-ufo s) delta)
+      (move-tank (fired-tank s))
+      (make-posn (posn-x (fired-missile s)) (posn-y (fired-missile s))))
+     ])
+  )
+
+
+ 
+(define (main s)
+  (big-bang s
+    [on-tick si-move]
+    ;[on-key si-control]
+    [to-draw si-render]
+    [stop-when si-game-over?]))
+
+(main START-GAME)
+

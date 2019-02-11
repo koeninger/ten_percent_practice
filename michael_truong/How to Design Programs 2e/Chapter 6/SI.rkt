@@ -11,8 +11,8 @@
 (define-struct tank [posn vel])
 (define-struct missile [posn vel])
 
-(define-struct aim [tank ufo])
-(define-struct fired [tank ufo missile])
+(define-struct aim [ufo tank])
+(define-struct fired [ufo tank missile])
                          
 (define BACKGROUND-WIDTH 300)
 (define BACKGROUND-HEIGHT BACKGROUND-WIDTH)
@@ -42,8 +42,8 @@
 (define TANK-WIDTH (image-width TANK-IMAGE))
 (define TANK-HEIGHT (image-height TANK-IMAGE))
 
-(define TANK-X-MIN 0)
-(define TANK-X-MAX BACKGROUND-WIDTH)
+(define TANK-X-MIN (/ TANK-WIDTH 2))
+(define TANK-X-MAX (- BACKGROUND-WIDTH (/ TANK-WIDTH 2)))
 (define TANK-Y-MIN (/ TANK-HEIGHT 2))
 (define TANK-Y-MAX (- BACKGROUND-HEIGHT (/ TANK-HEIGHT 2)))
 
@@ -63,8 +63,8 @@
 (define UFO-WIDTH (image-width UFO-IMAGE))
 (define UFO-HEIGHT (image-height UFO-IMAGE))
 
-(define UFO-X-MIN 0)
-(define UFO-X-MAX BACKGROUND-WIDTH)
+(define UFO-X-MIN (/ UFO-WIDTH 2))
+(define UFO-X-MAX (- BACKGROUND-WIDTH (/ UFO-WIDTH 2)))
 (define UFO-Y-MIN (- (/ UFO-HEIGHT 2)))
 (define UFO-Y-MAX (- BACKGROUND-HEIGHT (/ UFO-HEIGHT 2)))
 
@@ -79,8 +79,8 @@
 (define MISSILE-WIDTH (image-width MISSILE-IMAGE))
 (define MISSILE-HEIGHT (image-height MISSILE-IMAGE))
 
-(define MISSILE-X-MIN 0)
-(define MISSILE-X-MAX BACKGROUND-WIDTH)
+(define MISSILE-X-MIN (/ MISSILE-WIDTH 2))
+(define MISSILE-X-MAX (- BACKGROUND-WIDTH (/ MISSILE-WIDTH 2)))
 (define MISSILE-Y-MIN (- (/ MISSILE-HEIGHT 2)))
 (define MISSILE-Y-MAX (- BACKGROUND-HEIGHT (/ MISSILE-HEIGHT 2)))
 
