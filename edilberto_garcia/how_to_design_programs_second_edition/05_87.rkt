@@ -17,6 +17,8 @@
     define (render txt)
     (
         overlay/align "left" "center"
+
+        ;break up the editor text by the string index then place the cursor between
         (beside (text (editor-pre txt) 11 "black") cursor (text (editor-post txt) 11 "black"))
         background
     )
@@ -25,10 +27,10 @@
 
 
 ; An Editor is a structure:
-;   (make-editor String String)
-; interpretation (make-editor s t) describes an editor
-; whose visible text is (string-append s t) with 
-; the cursor displayed between s and t
+;   (make-editor String Integer)
+; interpretation (make-editor s i) describes an editor
+; whose visible text is s with 
+; the cursor displayed between at i
 (define-struct editor [str index])
 
 
@@ -36,8 +38,8 @@
 ; Editor KeyEvent -> Editor
 ; Adds a character after  pre-text
 ; If key is delete key then it deletes last character
-;(check-expect (edit (make-editor "Starfleetz" "Headquarters") "\b") (make-editor "Starfleet" "Headquarters"))
-;(check-expect (edit (make-editor "Gamm" "Quadrant") "a") (make-editor "Gamma" "Quadrant"))
+(check-expect (edit (make-editor "Starfleetz" "Headquarters") "\b") (make-editor "Starfleet" "Headquarters"))
+(check-expect (edit (make-editor "Gamm" "Quadrant") "a") (make-editor "Gamma" "Quadrant"))
 (check-expect (edit
      (make-editor "Really long sentence really long sentence really long sentence" "really long sentence") "X")
      (make-editor "Really long sentence really long sentence really long sentence" "really long sentence")
