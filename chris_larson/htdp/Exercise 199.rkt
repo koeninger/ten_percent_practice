@@ -82,3 +82,13 @@
         (create-set (select-all-album-titles t)))
 (check-expect (select-album-titles/unique LTRACKS-1) (list "album" "Album Name"))
 (check-expect (select-album-titles/unique LTRACKS-2) (list "album" "Album Name"))
+
+; String LTracks -> LTracks
+; returns tracks with matching title
+(define (select-album s t)
+  (cond
+    [(empty? t) '()]
+    [else (if (string=? s (track-album (first t))) (cons (first t) (select-album s (rest t))) (select-album s (rest t)))]))
+(check-expect (select-album "album" LTRACKS-1) (list TRACK-1))
+(check-expect (select-album "album" LTRACKS-2) (list TRACK-1 TRACK-1))
+(check-expect (select-album "not here" LTRACKS-1) '())
