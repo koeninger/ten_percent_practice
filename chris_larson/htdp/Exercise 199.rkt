@@ -92,3 +92,17 @@
 (check-expect (select-album "album" LTRACKS-1) (list TRACK-1))
 (check-expect (select-album "album" LTRACKS-2) (list TRACK-1 TRACK-1))
 (check-expect (select-album "not here" LTRACKS-1) '())
+
+; LTracks -> List-of-LTracks
+; lists tracks under album
+(define (select-albums t)
+  (select-albums-list (select-album-titles/unique t) t))
+(check-expect (select-albums LTRACKS-1) (list (list TRACK-1) (list TRACK-2)))
+
+; LTracks List-of-albums -> LTracks
+; lists tracks under album list
+(define (select-albums-list s t)
+  (cond
+    [(empty? s) '()]
+    [else (cons (select-album (first s) t) (select-albums-list (rest s) t))]))
+(check-expect (select-albums-list (list "album" "Album Name") LTRACKS-1) (list (list TRACK-1) (list TRACK-2)))
