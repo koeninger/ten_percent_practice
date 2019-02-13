@@ -3,25 +3,8 @@
 #reader(lib "htdp-beginner-reader.ss" "lang")((modname |Exercise 199|) (read-case-sensitive #t) (teachpacks ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "itunes.rkt" "teachpack" "2htdp"))) (htdp-settings #(#t constructor repeating-decimal #f #t none #f ((lib "image.rkt" "teachpack" "2htdp") (lib "universe.rkt" "teachpack" "2htdp") (lib "batch-io.rkt" "teachpack" "2htdp") (lib "itunes.rkt" "teachpack" "2htdp")) #f)))
 
 ; the 2htdp/itunes library documentation, part 1: 
- 
-; An LTracks is one of:
-; – '()
-; – (cons Track LTracks)
-; (list (make-track "name" "artist" "album" 10000 10 (make-date 2018 02 04 01 02 50) 11 (make-date 2018 02 11 01 02 50)) (make-track "Song Name" "Artist Name" "Album Name" 90000 10 (make-date 2018 02 04 01 02 50) 11 (make-date 2018 02 11 01 02 50)))
 
-(define-struct track
-  [name artist album time track# added play# played])
-; A Track is a structure:
-;   (make-track String String String N N Date N Date)
-; interpretation An instance records in order: the track's 
-; title, its producing artist, to which album it belongs, 
-; its playing time in milliseconds, its position within the 
-; album, the date it was added, how often it has been 
-; played, and the date when it was last played
-; (make-track "name" "artist" "album" 10000 10 (make-date 2018 02 04 01 02 50) 11 (make-date 2018 02 11 01 02 50))
-; (make-track "Song Name" "Artist Name" "Album Name" 90000 10 (make-date 2018 02 04 01 02 50) 11 (make-date 2018 02 11 01 02 50))
-
-(define-struct date [year month day hour minute second])
+; (define-struct date [year month day hour minute second])
 ; A Date is a structure:
 ;   (make-date N N N N N N)
 ; interpretation An instance records six pieces of information:
@@ -29,31 +12,83 @@
 ; day (between 1 and 31), hour (between 0 
 ; and 23), minute (between 0 and 59), and 
 ; second (also between 0 and 59).
-; (make-date 2018 02 04 01 02 50)
-; (make-date 1999 10 08 11 02 05)
+(define DATE-1 (create-date 2018 02 04 01 02 50))
+(define DATE-2 (create-date 1999 10 08 11 02 05))
 
-; Any Any Any Any Any Any Any Any -> Track or #false
-; creates an instance of Track for legitimate inputs
-; otherwise it produces #false
-(define (create-track name artist album time
-                      track# added play# played)
-  ...)
- 
-; Any Any Any Any Any Any -> Date or #false
-; creates an instance of Date for legitimate inputs 
-; otherwise it produces #false
-(define (create-date y mo day h m s)
-  ...)
- 
-; String -> LTracks
-; creates a list-of-tracks representation from the
-; text in file-name (an XML export from iTunes)
-(define (read-itunes-as-tracks file-name)
-  ...)
+; (define-struct track
+;   [name artist album time track# added play# played])
+; A Track is a structure:
+;   (make-track String String String N N Date N Date)
+; interpretation An instance records in order: the track's 
+; title, its producing artist, to which album it belongs, 
+; its playing time in milliseconds, its position within the 
+; album, the date it was added, how often it has been 
+; played, and the date when it was last played
+(define TRACK-1 (create-track "name" "artist" "album" 10000 10 DATE-1 11 DATE-1))
+(define TRACK-2 (create-track "Song Name" "Artist Name" "Album Name" 90000 10 DATE-2 11 DATE-2))
+
+; An LTracks is one of:
+; – '()
+; – (cons Track LTracks)
+(define LTRACKS-1 (list TRACK-1 TRACK-2))
+(define LTRACKS-2 (list TRACK-1 TRACK-1 TRACK-2))
 
 ; modify the following to use your chosen name
-(define ITUNES-LOCATION "itunes.xml")
+(define ITUNES-LOCATION "/Users/chris/itunes.xml")
  
 ; LTracks
 (define itunes-tracks
   (read-itunes-as-tracks ITUNES-LOCATION))
+
+; LTracks -> Number
+; adds up play times
+(define (total-time t)
+  (cond
+    [(empty? t) 0]
+    [else (+ (track-time (first t)) (total-time (rest t)))]))
+(check-expect (total-time LTRACKS-1) 100000)
+
+; LTracks -> List-of-Strings
+; list album names
+(define (select-all-album-titles t)
+  (cond
+    [(empty? t) '()]
+    [else (cons (track-album (first t)) (select-all-album-titles (rest t)))]))
+(check-expect (select-all-album-titles LTRACKS-1) (list "album" "Album Name"))
+
+; List-of-Strings -> List-of-Strings
+; removes duplicate strings
+(define (create-set los)
+  (cond
+    [(empty? los) '()]
+    [else (if (occurs? (first los) (rest los)) (create-set (rest los)) (cons (first los) (create-set (rest los))))]))
+(check-expect (create-set (list "thing1" "thing2" "thing3")) (list "thing1" "thing2" "thing3"))
+(check-expect (create-set (list "thing1" "thing1" "thing2" "thing3")) (list "thing1" "thing2" "thing3"))
+(check-expect (create-set (list "thing1" "thing2" "thing3" "thing1")) (list "thing2" "thing3" "thing1"))
+
+; String List-of-Strings -> Bool
+(define (occurs? s los)
+  (cond
+    [(empty? los) #false]
+    [else (if (string=? s (first los)) #true (occurs? s (rest los)))]))
+(check-expect (occurs? "thing1" (list "thing1" "thing2" "thing3")) #true)
+(check-expect (occurs? "thing2" (list "thing1" "thing2" "thing3")) #true)
+(check-expect (occurs? "thing3" (list "thing1" "thing2" "thing3")) #true)
+(check-expect (occurs? "thing4" (list "thing1" "thing2" "thing3")) #false)
+
+; LTracks -> List-of-Strings
+; creates list of unique album names
+(define (select-album-titles/unique t)
+        (create-set (select-all-album-titles t)))
+(check-expect (select-album-titles/unique LTRACKS-1) (list "album" "Album Name"))
+(check-expect (select-album-titles/unique LTRACKS-2) (list "album" "Album Name"))
+
+; String LTracks -> LTracks
+; returns tracks with matching title
+(define (select-album s t)
+  (cond
+    [(empty? t) '()]
+    [else (if (string=? s (track-album (first t))) (cons (first t) (select-album s (rest t))) (select-album s (rest t)))]))
+(check-expect (select-album "album" LTRACKS-1) (list TRACK-1))
+(check-expect (select-album "album" LTRACKS-2) (list TRACK-1 TRACK-1))
+(check-expect (select-album "not here" LTRACKS-1) '())

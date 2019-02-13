@@ -461,3 +461,120 @@
   (cond
     [(empty? w) ""]
     [else (string-append (encode-letter (first w)) (encode-word (rest w)))]))
+
+
+; Exercise 175.
+
+(define-struct word-count [letters words lines])
+; A Word-Count is a structure:
+;   (make-work Number Number Number)
+; interpretation (make-word-count s w l) where s is the
+;   number of 1Strings, w the words, and l the lines
+
+; String -> Word-Count
+; consumes the name of a file and produces a Word-Count
+(check-expect (wc "ttt.txt") (make-word-count 148 33 13))
+(define (wc n)
+  (make-word-count
+    (count-letters* (read-words/line n))
+    (count-words (read-words/line n))
+    (count-list (read-words/line n))))
+
+; List -> Numbers
+; counts the number of elements in a List
+(check-expect (count-list '()) 0)
+(check-expect (count-list (list "test")) 1)
+(check-expect (count-list (list (list "Hello,") (list "World!"))) 2)
+(define (count-list l)
+  (cond
+    [(empty? l) 0]
+    [else (+ 1 (count-list (rest l)))]))
+
+; List-of-list-of-strings -> Numbers
+; counts the number of words in a List-of-list-of-strings
+(check-expect (count-words '()) 0)
+(check-expect (count-words (list (list "test"))) 1)
+(check-expect (count-words (list (list "Hello,") (list "World!"))) 2)
+(check-expect (count-words (list (list "Hello,") '() (list "World!"))) 2)
+(define (count-words lls)
+  (cond
+    [(empty? lls) 0]
+    [else (+ (count-list (first lls)) (count-words (rest lls)))]))
+
+; List-of-list-of-strings -> Numbers
+; counts the number of letters in a List-of-list-of-strings
+(check-expect (count-letters* '()) 0)
+(check-expect (count-letters* (list (list "test"))) 4)
+(check-expect (count-letters* (list (list "Hello,") (list "World!"))) 12)
+(check-expect (count-letters* (list (list "Hello,") '() (list "World!"))) 12)
+(define (count-letters* lls)
+  (cond
+    [(empty? lls) 0]
+    [else (+ (count-letters (first lls)) (count-letters* (rest lls)))]))
+
+; List-of-strings -> Numbers
+; counts the number of letters in a List-of-strings
+(check-expect (count-letters '()) 0)
+(check-expect (count-letters (list "test")) 4)
+(check-expect (count-letters (list "Hello," "World!")) 12)
+(define (count-letters ls)
+  (cond
+    [(empty? ls) 0]
+    [else (+ (count-list (explode (first ls))) (count-letters (rest ls)))]))
+
+
+; Exercise 176.
+
+; A Matrix is one of:
+;  – (cons Row '())
+;  – (cons Row Matrix)
+; constraint all rows in matrix are of the same length
+
+; A Row is one of:
+;  – '()
+;  – (cons Number Row)
+
+(define row1 (list 11 12))
+(define row2 (list 21 22))
+(define example1 (list row1 row2))
+
+(define row3 (list 11 12 33))
+(define row4 (list 21 22 37))
+(define row5 (list 21 22 35))
+(define example2 (list row3 row4 row5))
+
+(define wor1 (cons 11 (cons 21 '())))
+(define wor2 (cons 12 (cons 22 '())))
+(define tam1 (cons wor1 (cons wor2 '())))
+
+(define wor3 (list 11 21 21))
+(define wor4 (list 12 22 22))
+(define wor5 (list 33 37 35))
+(define tam2 (list wor3 wor4 wor5))
+
+
+; Matrix -> Matrix
+; transposes the given matrix along the diagonal
+(check-expect (transpose example1) tam1)
+(check-expect (transpose example2) tam2)
+(define (transpose lln)
+  (cond
+    [(empty? lln) '()]
+    [else (cons (first* lln) (transpose (rest* lln)))]))
+
+; Matrix -> List
+; consumes a matrix and produces the first column as a list of numbers
+(check-expect (first* example1) wor1)
+(define (first* lln)
+  (cond
+    [(empty? lln) '()]
+    [else (cons (first (first lln)) (first* (rest lln)))]))
+
+; Matrix -> Matrix
+; consumes a matrix and removes the first column
+(check-expect (rest* example1) (list (list 12) (list 22)))
+(define (rest* lln)
+  (cond
+    [(empty? lln) '()]
+    [(empty? (rest (first lln))) '()]
+    [else (cons (rest (first lln)) (rest* (rest lln)))]))
