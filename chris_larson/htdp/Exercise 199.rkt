@@ -93,6 +93,54 @@
 (check-expect (select-album "album" LTRACKS-2) (list TRACK-1 TRACK-1))
 (check-expect (select-album "not here" LTRACKS-1) '())
 
+; String Date LTracks -> LTracks
+; returns all albums played after date
+(define (select-album-date s d t)
+  (select-tracks-date d (select-album s t)))
+
+; Date LTracks -> LTracks
+; returns tracks plated after date
+(define (select-tracks-date d t)
+  (cond
+    [(empty? t) '()]
+    [else (if (date-after d (track-played (first t))) (cons (first t) (select-tracks-date d (rest t))) (select-tracks-date d (rest t)))]))
+(check-expect (select-tracks-date (create-date 1998 09 08 11 02 04) LTRACKS-1) LTRACKS-1)
+(check-expect (select-tracks-date (create-date 2000 09 08 11 02 04) LTRACKS-1) (list TRACK-1))
+(check-expect (select-tracks-date (create-date 2018 02 04 01 02 50) LTRACKS-1) '())
+
+; Date Date -> Bool
+; true if first date is older than second date
+; year month day hour minute second
+(define (date-after d1 d2)
+  (cond
+    [(< (date-year d1) (date-year d2)) #true]
+    [(> (date-year d1) (date-year d2)) #false]
+    [(< (date-month d1) (date-month d2)) #true]
+    [(> (date-month d1) (date-month d2)) #false]
+    [(< (date-day d1) (date-day d2)) #true]
+    [(> (date-day d1) (date-day d2)) #false]
+    [(< (date-hour d1) (date-hour d2)) #true]
+    [(> (date-hour d1) (date-hour d2)) #false]
+    [(< (date-minute d1) (date-minute d2)) #true]
+    [(> (date-minute d1) (date-minute d2)) #false]
+    [(< (date-second d1) (date-second d2)) #true]
+    [(> (date-second d1) (date-second d2)) #false]
+    [else #false]))
+(check-expect (date-after (create-date 2018 02 04 01 02 50) (create-date 2018 02 04 01 02 50)) #false)
+(check-expect (date-after (create-date 2018 02 04 01 02 50) (create-date 2017 02 04 01 02 50)) #false)
+(check-expect (date-after (create-date 2018 02 04 01 02 50) (create-date 2018 01 04 01 02 50)) #false)
+(check-expect (date-after (create-date 2018 02 04 01 02 50) (create-date 2018 02 03 01 02 50)) #false)
+(check-expect (date-after (create-date 2018 02 04 02 02 50) (create-date 2018 02 04 01 02 50)) #false)
+(check-expect (date-after (create-date 2018 02 04 01 02 50) (create-date 2018 02 04 01 01 50)) #false)
+(check-expect (date-after (create-date 2018 02 04 01 02 50) (create-date 2018 02 04 01 02 40)) #false)
+
+(check-expect (date-after (create-date 2017 02 04 01 02 50) (create-date 2018 02 04 01 02 50)) #true)
+(check-expect (date-after (create-date 2018 01 04 01 02 50) (create-date 2018 02 04 01 02 50)) #true)
+(check-expect (date-after (create-date 2018 02 03 01 02 50) (create-date 2018 02 04 01 02 50)) #true)
+(check-expect (date-after (create-date 2018 02 04 01 02 50) (create-date 2018 02 04 02 02 50)) #true)
+(check-expect (date-after (create-date 2018 02 04 01 01 50) (create-date 2018 02 04 01 02 50)) #true)
+(check-expect (date-after (create-date 2018 02 04 01 02 40) (create-date 2018 02 04 01 02 50)) #true)
+
 ; LTracks -> List-of-LTracks
 ; lists tracks under album
 (define (select-albums t)
