@@ -1,0 +1,11 @@
+Exercise 117. 
+Explain why they are syntactically illegal. 
+
+; (3 + 4)
+;; The primitive expression + operator is not in the right place to be a properly formed expression. Should be (+ 3 4)
+
+; number?
+;; A primitive cannot stand alone, can only be used in a properly formed expression
+
+; (x)
+;; Can only be used as part of certain expressions or definition statements. 

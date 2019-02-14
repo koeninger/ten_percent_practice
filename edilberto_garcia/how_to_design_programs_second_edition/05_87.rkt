@@ -13,16 +13,18 @@
 (define cursor (rectangle 1 20 "solid" "red"))
 (define background (empty-scene 200 20))
 
+(define (build-text-image txt)
+  (text txt 11 "black")
+)
+
+
 (
     define (render txt)
     (
         overlay/align "left" "center"
-
-        ;break up the editor text by the string index then place the cursor between
-        (beside (text (editor-pre txt) 11 "black") cursor (text (editor-post txt) 11 "black"))
+       (beside (build-text-image (substring (editor-str txt) 0 (editor-index txt))) cursor (build-text-image (substring (editor-str txt) (editor-index txt))))
         background
-    )
-        
+    ) 
 )
 
 
@@ -38,6 +40,7 @@
 ; Editor KeyEvent -> Editor
 ; Adds a character after  pre-text
 ; If key is delete key then it deletes last character
+
 (check-expect (edit (make-editor "Starfleetz" "Headquarters") "\b") (make-editor "Starfleet" "Headquarters"))
 (check-expect (edit (make-editor "Gamm" "Quadrant") "a") (make-editor "Gamma" "Quadrant"))
 (check-expect (edit
@@ -47,18 +50,28 @@
 (define (edit editor_object ke)
 (make-editor
 
-   (cond
+  (cond
     [(and (string? ke) (equal? (string-length ke) 1) ( > (image-width (render editor_object)) 200)) (editor-pre editor_object)]
-    [(string=? "\b" ke) (substring (editor-pre editor_object) 0 (- (string-length (editor-pre editor_object)) 1))  ]
+    ;[start cursor - 1] [new key] [cursor + 1 end]
+    ;[start cursor - 2] [cursor + 1 end]
+    [(string=? "\b" ke)
+
+     (
+      string-append
+
+      
+     )
+     (substring (editor-str editor_object) 0 (- (string-length (editor-pre editor_object)) 1))
+     ]
     [else (string-append (editor-pre editor_object) ke)]
    )
 
-   (editor-post editor_object))
+   (editor-index editor_object))
  
-
 )
 
 (define (run editor-instance)
   (big-bang editor-instance
     [to-draw render]
-    [on-key edit]))
+    ;[on-key edit]))
+    ))
