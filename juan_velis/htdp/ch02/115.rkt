@@ -22,3 +22,21 @@
 (check-expect (light=? "red" "green") #false)
 (check-expect (light=? "green" "green") #true)
 (check-expect (light=? "yellow" "yellow") #true)
+
+
+(define MSG1 "traffic light expected for parameter 1")
+(define MSG2 "traffic light expected for parameter 2")
+
+; Any Any -> Boolean
+(define (light=?-2 a-value another-value)
+  (if (light? a-value)
+      (if (light? another-value)
+          (string=? a-value another-value)
+          (error MSG2))
+      (error MSG1)
+  )
+)
+(check-expect (light=?-2 "red" "red") #true)
+(check-expect (light=?-2 "red" "green") #false)
+(check-expect (light=?-2 "green" "green") #true)
+(check-expect (light=?-2 "yellow" "yellow") #true)
