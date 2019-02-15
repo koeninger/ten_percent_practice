@@ -264,7 +264,7 @@
 -1 -1 2 1 #"\0"
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 -1 -1 -1 1 0 0 0 0 0 0.0 0.0 0.0 1.0 1.0 1.0 65 105 225 0
-0 0 -1 -1           0 2702 0 4 3 85
+0 0 -1 -1           0 2720 0 4 3 85
 (
  #";; The first three lines of this file were inserted by DrRacket. The"
  #"y record metadata"
@@ -286,41 +286,7 @@
  #"achpack\" \"2htdp\") (lib \"batch-io.rkt\" \"teachpack\" \"2htdp\") "
  #"(lib \"universe.rkt\" \"teachpack\" \"2htdp\")) #f)))"
 ) 0 0 4 29 1 #"\n"
-0 0 17 3 27 #"; A Zoo is I think a struct"
-0 0 24 29 1 #"\n"
-0 0 17 3 17 #";  (make-zoo ...."
-0 0 24 29 1 #"\n"
-0 0 17 3 36 #"; Focus animal can be some thing...."
-0 0 24 29 1 #"\n"
-0 0 24 29 1 #"\n"
 0 0 17 3 14 #"; Other steps:"
-0 0 24 29 1 #"\n"
-0 0 17 3 82
-(
- #"; - where to put focus? in the zoo or somewhere else?  refactor our "
- #"this code from"
-) 0 0 24 29 1 #"\n"
-0 0 17 3 81
-(
- #";  106 and instead of checking for an animal check for focus?  Don't"
- #" think I send"
-) 0 0 24 29 1 #"\n"
-0 0 17 3 87
-(
- #";  event to both animals.  could move out animal checks in current k"
- #"eyevent handler and"
-) 0 0 24 29 1 #"\n"
-0 0 17 3 86
-(
- #";  do it by focus.  maybe just do a focus animal as VAnimalFocus ( k"
- #" and l as VCat and"
-) 0 0 24 29 1 #"\n"
-0 0 17 3 82
-(
- #";  VCham respectively.  and pop that in the zoo, Pass the zoo to key"
- #" event and use"
-) 0 0 24 29 1 #"\n"
-0 0 17 3 53 #";  VFocusAnimal in a the cond or something like that."
 0 0 24 29 1 #"\n"
 0 0 17 3 89
 (
@@ -2964,6 +2930,45 @@
 0 0 24 3 1 #" "
 0 0 21 3 1 #"3"
 0 0 24 3 1 #")"
+0 0 24 29 1 #"\n"
+0 0 24 29 1 #"\n"
+0 0 17 3 49 #"; A VFocusAnimal is one of the following 1String:"
+0 0 24 29 1 #"\n"
+0 0 17 3 7 #"; - 'k'"
+0 0 24 29 1 #"\n"
+0 0 17 3 7 #"; - 'l'"
+0 0 24 29 1 #"\n"
+0 0 17 3 52 #"; interpretation the 1String represents the availble"
+0 0 24 29 1 #"\n"
+0 0 17 3 50 #";  VAnimals for focus, with 'k' being for VCat and"
+0 0 24 29 1 #"\n"
+0 0 17 3 16 #";  'l' for VCham"
+0 0 24 29 1 #"\n"
+0 0 24 29 1 #"\n"
+0 0 24 29 1 #"\n"
+0 0 24 3 1 #"("
+0 0 15 3 13 #"define-struct"
+0 0 24 3 1 #" "
+0 0 14 3 3 #"zoo"
+0 0 24 3 2 #" ["
+0 0 14 3 3 #"cat"
+0 0 24 3 1 #" "
+0 0 14 3 9 #"chameleon"
+0 0 24 3 1 #" "
+0 0 14 3 5 #"focus"
+0 0 24 3 2 #"])"
+0 0 24 29 1 #"\n"
+0 0 17 3 20 #"; A Zoo is a struct:"
+0 0 24 29 1 #"\n"
+0 0 17 3 39 #";    (make-zoo VCat VCham VFocusAnimal)"
+0 0 24 29 1 #"\n"
+0 0 17 3 63
+#"; interpretation (make-zoo (cat chameleon focus)) describes the"
+0 0 24 29 1 #"\n"
+0 0 17 3 63
+#"; two VAnimals that are housed in the zoo and the initial focus"
+0 0 24 29 1 #"\n"
+0 0 17 3 34 #"; for whomever is visiting the zoo"
 0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
 0 0 17 3 19 #"; Background detail"
