@@ -27,6 +27,33 @@
 (define TRACK-1 (create-track "name" "artist" "album" 10000 10 DATE-1 11 DATE-1))
 (define TRACK-2 (create-track "Song Name" "Artist Name" "Album Name" 90000 10 DATE-2 11 DATE-2))
 
+; An LAssoc is one of: 
+; – '()
+; – (cons Association LAssoc)
+; 
+; An Association is a list of two items: 
+;   (cons String (cons BSDN '()))
+(define ARTWORK-1 (cons "Artwork Count" (cons 1 '())))
+(define NAME-1 (cons "Name" (cons "Name" '())))
+(define ALBUM-1 (cons "Album" (cons "Album" '())))
+
+(define ARTWORK-2 (cons "Artwork Count" (cons 2 '())))
+(define NAME-2 (cons "Name" (cons "Name 2" '())))
+(define ALBUM-2 (cons "Album" (cons "Album 2" '())))
+
+; A BSDN is one of: 
+; – Boolean
+; – Number
+; – String
+; – Date
+(define LASSOC-1 (list ARTWORK-1 NAME-1 ALBUM-1))
+(define LASSOC-2 (list ARTWORK-2 NAME-2 ALBUM-2))
+
+; An LLists is one of:
+; – '()
+; – (cons LAssoc LLists)
+(list LASSOC-1 LASSOC-2)
+
 ; An LTracks is one of:
 ; – '()
 ; – (cons Track LTracks)
@@ -39,6 +66,9 @@
 ; LTracks
 (define itunes-tracks
   (read-itunes-as-tracks ITUNES-LOCATION))
+; LLists
+(define list-tracks
+  (read-itunes-as-lists ITUNES-LOCATION))
 
 ; LTracks -> Number
 ; adds up play times
