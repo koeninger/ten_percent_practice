@@ -6,25 +6,107 @@
 (require test-engine/racket-tests)
 
 (define-struct vel [dx dy])
-
-(define-struct ufo [posn vel])
-(define-struct tank [posn vel])
-(define-struct missile [posn vel])
-
+(define-struct ufo [img posn vel])
+(define-struct tank [img posn vel])
+(define-struct missile [img posn vel])
 (define-struct sigs [ufo tank missile])
+                         
+(define SPACE-WIDTH 300)
+(define SPACE-HEIGHT SPACE-WIDTH)
+(define SPACE (empty-scene SPACE-WIDTH SPACE-HEIGHT "white"))
+
+(define SQUARE-LENGTH 4)
+(define X (square SQUARE-LENGTH "solid" "black"))
+(define O (square SQUARE-LENGTH "solid" (make-color 255 255 255 0)))
+
+(define UFO-IMAGE (scale 1 (above (beside O O X O O O O O X O O)
+                                  (beside O O O X O O O X O O O)
+                                  (beside O O X X X X X X X O O)
+                                  (beside O X X O X X X O X X O)
+                                  (beside X X X X X X X X X X X)
+                                  (beside X O X X X X X X X O X)
+                                  (beside X O X O O O O O X O X)
+                                  (beside O O O X X O X X O O O))))
+
+(define UFO-DX 3)
+(define UFO-DY 3)
+
+(define TANK-IMAGE (scale 1/2 (above (beside O O O O O O O X O O O O O O O)
+                                     (beside O O O O O O O X O O O O O O O)
+                                     (beside O O O O O O O X O O O O O O O)
+                                     (beside O O O O O O X X X O O O O O O)
+                                     (beside O O O O O O X X X O O O O O O)
+                                     (beside O O O O O O X X X O O O O O O)
+                                     (beside O O O X O O X X X O O X O O O)
+                                     (beside O O O X O X X X X X O X O O O)
+                                     (beside X O O X X X X X X X X X O O X)
+                                     (beside X O O X X X X X X X X X O O X)
+                                     (beside X O O X X X X X X X X X O O X)
+                                     (beside X O X X X X X X X X X X X O X)
+                                     (beside X X X X X X X X X X X X X X X)
+                                     (beside X X X O X X X X X X X O X X X)
+                                     (beside X X O O X X O X O X X O O X X)
+                                     (beside X O O O O O O X O O O O O O X))))
+
+(define TANK-DX 3)
+(define TANK-DY 0)
+
+(define MISSILE-IMAGE (scale 1 (above X
+                                      X
+                                      X)))
+
+(define MISSILE-DX 0)
+(define MISSILE-DY -20)
+(define MISSILE-VEL (make-vel MISSILE-DX MISSILE-DY))
+
+(define (si-move s)
+  (make-sigs (make-ufo (ufo-img (sigs-ufo s))
+             (make-tank (tank-img (sigs-tank s))
+                        ()
+                        (tank-vel (sigs-tank s))
+             ()))
+
+(define (si-render s)
+  (cond
+    [(boolean? (sigs-missile s)) (place-images (list (ufo-img (sigs-ufo s))
+                                                     (tank-img (sigs-tank s)))
+                                               (list (ufo-posn (sigs-ufo s))
+                                                     (tank-posn (sigs-tank s)))
+                                               SPACE)]
+    [else (place-images (list (ufo-img (sigs-ufo s))
+                              (tank-img (sigs-tank s))
+                              (missile-img (sigs-missile s)))
+                        (list (ufo-posn (sigs-ufo s))
+                              (tank-posn (sigs-tank s))
+                              (missile-posn (sigs-missile s))))]))
+
+(define (neg n)
+  (- (abs n)))
+
+(define (pos n)
+  (abs n))
+
+(define (tank-change-directions t key)
+  (make-tank TANK-IMAGE
+             (tank-posn t)
+             (make-vel (cond
+                         [(key=? key "left") (neg (vel-dx (tank-vel t)))]
+                         [(key=? key "right") (pos (vel-dx (tank-vel t)))]
+                         [else (vel-dx (tank-vel t))])
+                       (vel-dy (tank-vel t)))))
+
+(define (missile-launch t)
+  (make-missile MISSILE-IMAGE
+                (tank-posn t)
+                MISSILE-VEL))
 
 (define (si-control s key)
   (make-sigs (sigs-ufo)
+             (tank-change-directions (sigs-tank s) key)
              (cond
-               [(boolean? (sigs-tank s)) (sigs-tank s)]
-               [else (make-tank
-                      (tank-posn (sigs-tank s))
-                      (make-vel (cond
-                                  [(key=? key "left") (- (abs (vel-dx (tank-vel (sigs-tank s)))))]
-                                  [(key=? key "right") (abs (vel-dx (tank-vel (sigs-tank s))))]
-                                  [else (vel-dx (tank-vel (sigs-tank s)))])
-                                (vel-dy (tank-vel (sigs-tank s)))))])
-             (sigs-missile)))
+               [(boolean? (sigs-missile s)) (sigs-missile s)]
+               [(key=? key " ") (missile-launch (sigs-tank s))]
+               [else (sigs-missile s)])))
 
 (define (si s)
    (big-bang s
@@ -32,3 +114,5 @@
      [to-draw si-render]
      [on-key si-control]
      [stop-when si-game-over? si-render]))
+
+;function headers, tests
