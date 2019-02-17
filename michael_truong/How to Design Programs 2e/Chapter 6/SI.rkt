@@ -91,29 +91,38 @@
 (define (random-between min max)
   (+ min (random (- max min))))
 
-(define (move-position p v x-min x-max y-min y-max)
-  (make-posn (min (max (+ (posn-x p) (vel-dx v)) x-min) x-max)
-             (min (max (+ (posn-y p) (vel-dy v)) y-min) y-max)))
+(define (x-min img)
+  (/ (image-width img) 2))
 
-(define (move-tank t)
-  (make-tank (move-position (tank-posn t)
-                            (tank-vel t)
-                            TANK-X-MIN TANK-X-MAX TANK-Y-MIN TANK-Y-MAX)
-             (tank-vel t)))
+(define (x-max img)
+  (- SPACE-WIDTH (/ (image-width img) 2)))
 
-(define (move-ufo u)
-  (make-ufo (move-position (ufo-posn u)
-                           (make-vel (random-between (- (vel-dx (ufo-vel u)))
-                                                     (vel-dx (ufo-vel u)))
-                                     (vel-dy (ufo-vel u)))
-                           UFO-X-MIN UFO-X-MAX UFO-Y-MIN UFO-Y-MAX)
+(define (y-min img)
+  (/ (image-height img) 2))
+
+(define (y-max img)
+  (- SPACE-HEIGHT (/ (image-height img) 2)))
+
+(define (move-position img p v)
+  (make-posn (min (max (+ (posn-x p) (vel-dx v)) (x-min img)) (x-max img))
+             (min (max (+ (posn-y p) (vel-dy v)) (y-min img)) (y-max img))))
+
+(define (ufo-move u)
+  (make-ufo (ufo-img u)
+            (move-position (ufo-img u) (ufo-posn u) (ufo-vel u))
             (ufo-vel u)))
 
-(define (move-missile m)
-  (make-missile (move-position (missile-posn m)
-                               (missile-vel m)
-                               MISSILE-X-MIN MISSILE-X-MAX MISSILE-Y-MIN MISSILE-Y-MAX)
-                (missile-vel m)))
+(define (tank-move t)
+  (make-tank (tank-img t)
+             (move-position (tank-img t) (tank-posn t) (tank-vel t))
+             (tank-vel t)))
+
+(define (missile-move m)
+  (cond
+    [(boolean? m) m]
+    [else (make-missile (missile-img m)
+                        (move-position (missile-img m) (missile-posn m) (missile-vel m))
+                        (missile-vel m))]))
 
 (define (move-aim a)
   (make-aim (move-tank (aim-tank a))

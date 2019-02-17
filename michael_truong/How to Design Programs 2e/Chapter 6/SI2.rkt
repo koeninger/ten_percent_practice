@@ -59,9 +59,21 @@
 (define MISSILE-DY -20)
 (define MISSILE-VEL (make-vel MISSILE-DX MISSILE-DY))
 
+(define (x-min img)
+  (/ (image-width img) 2))
+
+(define (x-max img)
+  (- SPACE-WIDTH (/ (image-width img) 2)))
+
+(define (y-min img)
+  (/ (image-height img) 2))
+
+(define (y-max img)
+  (- SPACE-HEIGHT (/ (image-height img) 2)))
+
 (define (move-position img p v)
-  (make-posn (min (max (+ (posn-x p) (vel-dx v)) (/ (image-width img) 2)) (- SPACE-WIDTH (/ (image-width img) 2)))
-             (min (max (+ (posn-y p) (vel-dy v)) (/ (image-height img) 2)) (- SPACE-HEIGHT (/ (image-height img) 2)))))
+  (make-posn (min (max (+ (posn-x p) (vel-dx v)) (x-min img)) (x-max img))
+             (min (max (+ (posn-y p) (vel-dy v)) (y-min img)) (y-max img))))
 
 (define (ufo-move u)
   (make-ufo (ufo-img u)
