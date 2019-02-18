@@ -1,0 +1,8 @@
+Exercise 120. Discriminate the legal from the illegal sentences:
+Explain why the sentences are legal or illegal. Determine whether the legal ones belong to the category expr or def. 
+
+(x); illegal, could be a variable if it didn't have ( )
+
+(+ 1 (not x)); legal, primitive expression then a value then another expression 
+
+(+ 1 2 3); legal primitive expression (primitive expression expression expression)
