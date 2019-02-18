@@ -1332,3 +1332,26 @@ all of these start with define, has a list of variables, and ends with an expres
 (+ 117 361)
 
 478
+
+//Exercise 123
+(cond
+    [exp-test exp-then]
+    [else exp-else])
+    
+//Exercise 124
+a)
+(define PRICE 5)
+(define SALES-TAX (* 0.08 PRICE))
+(define TOTAL (+ PRICE SALES-TAX))
+
+(define PRICE 5)
+(define SALES-TAX 0.4)
+(define TOTAL (+ PRICE SALES-TAX))
+
+(define PRICE 5)
+(define SALES-TAX 0.4)
+(define TOTAL 5.4)
+
+b. This throws an error because the method is defined after it is called
+
+c. Here the method is defined first, so it doenst throw an error
