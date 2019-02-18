@@ -1,0 +1,7 @@
+Exercise 118. Take a look at the following sentences:
+Explain why they are syntactically legal definitions 
+(define (f x) x); (f x) is (variable variable) and x is also a variable
+
+(define (f x) y); same as above 
+
+(define (f x y) 3); similar as above (f x y) (variable variable variable) and final 3 an expression
