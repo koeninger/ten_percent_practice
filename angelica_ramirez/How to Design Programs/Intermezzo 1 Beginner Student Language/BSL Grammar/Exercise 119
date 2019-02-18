@@ -1,0 +1,6 @@
+Exercise 119. Consider the following sentences:
+Explain why they are syntactically illegal. 
+
+(define (f "x") x); "x" is a value and not a variable 
+
+(define (f x y z) (x)); (x) is not valid as an expression 
