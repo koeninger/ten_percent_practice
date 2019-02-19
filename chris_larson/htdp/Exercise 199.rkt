@@ -184,3 +184,15 @@
     [(empty? s) '()]
     [else (cons (select-album (first s) t) (select-albums-list (rest s) t))]))
 (check-expect (select-albums-list (list "album" "Album Name") LTRACKS-1) (list (list TRACK-1) (list TRACK-2)))
+
+; String, LAssoc, Any -> Assoc
+; returns first association whose first item equals s
+(define (find-association s loa a)
+  (cond
+    [(empty? loa) '()]
+    [else (if (string=? s (first (first loa))) (first loa) (find-association s (rest loa) a))]))
+
+
+(check-expect (find-association "Album" LASSOC-1 "") ALBUM-1)
+(check-expect (find-association "Album" LASSOC-2 "") ALBUM-2)
+(check-expect (find-association "Not Here" LASSOC-2 "") '())
