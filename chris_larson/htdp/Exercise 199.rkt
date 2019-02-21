@@ -36,23 +36,25 @@
 (define ARTWORK-1 (cons "Artwork Count" (cons 1 '())))
 (define NAME-1 (cons "Name" (cons "Name" '())))
 (define ALBUM-1 (cons "Album" (cons "Album" '())))
+(define TIME-1 (cons "Total Time" (cons 10000 '())))
 
 (define ARTWORK-2 (cons "Artwork Count" (cons 2 '())))
 (define NAME-2 (cons "Name" (cons "Name 2" '())))
 (define ALBUM-2 (cons "Album" (cons "Album 2" '())))
+(define TIME-2 (cons "Total Time" (cons 20000 '())))
 
 ; A BSDN is one of: 
 ; – Boolean
 ; – Number
 ; – String
 ; – Date
-(define LASSOC-1 (list ARTWORK-1 NAME-1 ALBUM-1))
-(define LASSOC-2 (list ARTWORK-2 NAME-2 ALBUM-2))
+(define LASSOC-1 (list ARTWORK-1 NAME-1 ALBUM-1 TIME-1))
+(define LASSOC-2 (list ARTWORK-2 NAME-2 ALBUM-2 TIME-2))
 
 ; An LLists is one of:
 ; – '()
 ; – (cons LAssoc LLists)
-(list LASSOC-1 LASSOC-2)
+(define LLIST-1 (list LASSOC-1 LASSOC-2))
 
 ; An LTracks is one of:
 ; – '()
@@ -196,3 +198,23 @@
 (check-expect (find-association "Album" LASSOC-1 "") ALBUM-1)
 (check-expect (find-association "Album" LASSOC-2 "") ALBUM-2)
 (check-expect (find-association "Not Here" LASSOC-2 "") '())
+(check-expect (find-association "Total Time" (first LLIST-1) "") TIME-1)
+
+; ASSOC -> Any
+; returns the value of the association
+(define (get-value a)
+(cond
+  [(empty? a) 0]
+  [else (second a)]))
+(check-expect (get-value TIME-1) 10000)
+(check-expect (get-value TIME-2) 20000)
+
+; LList -> Number
+; adds up the play times
+; Association is "Total Time"
+(define (total-time/list l)
+  (cond
+    [(empty? l) 0]
+    [else (+ (get-value (find-association "Total Time" (first l) "")) (total-time/list (rest l)))]))
+(check-expect (total-time/list LLIST-1) 30000)
+  

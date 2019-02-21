@@ -93,7 +93,11 @@
                         (missile-vel m))]))
 
 (define (si-move s)
-  (make-sigs (ufo-move (sigs-ufo s))
+  (make-sigs (cond
+               [(boolean? (sigs-ufo s)) (make-ufo UFO-IMAGE
+                                                  (make-posn (/ SPACE-WIDTH 2) (x-min (UFO-IMAGE)))
+                                                  (make-vel UFO-DX UFO-DY))]
+               [else (ufo-move (sigs-ufo s))])
              (tank-move (sigs-tank s))
              (missile-move (sigs-missile s))))
 
@@ -132,7 +136,7 @@
     [(boolean? m) (cond
                     [(key=? key " ") (make-missile MISSILE-IMAGE
                                                    (tank-posn t)
-                                                   MISSILE-VEL)]
+                                                   (make-vel MISSILE-DX MISSILE-DY))]
                     [else m])]
     [else m]))
                   
@@ -148,15 +152,11 @@
      [to-draw si-render]
      [on-key si-control]))
 
-
-(si (make-sigs (make-ufo UFO-IMAGE
-                         (make-posn (/ SPACE-WIDTH 2)
-                                    (/ (image-height UFO-IMAGE) 2))
-                         (make-vel UFO-DX UFO-DY))
+(si (make-sigs #false
                (make-tank TANK-IMAGE
                           (make-posn (/ SPACE-WIDTH 2)
-                                     (- SPACE-HEIGHT (/ (image-height TANK-IMAGE) 2)))
-                          (make-vel TANK-DX UFO-DY))
+                                     (y-max TANK-IMAGE))
+                          (make-vel TANK-DX TANK-DY))
                #false))
 
 ;function headers, tests
