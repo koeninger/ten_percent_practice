@@ -660,21 +660,53 @@
 (define (editor-ins ed k)
   (make-editor (cons k (editor-pre ed)) (editor-post ed)))
 
+; Editor KeyEvent -> Editor
+; deals with a key event, given some editor
+(define (editor-kh ed k)
+  (cond
+    [(key=? k "left") (editor-lft ed)]
+    [(key=? k "right") (editor-rgt ed)]
+    [(key=? k "\b") (editor-del ed)]
+    [(key=? k "\t") ed]
+    [(key=? k "\r") ed]
+    [(= (string-length k) 1) (editor-ins ed k)]
+    [else ed]))
+
+
+; Exercise 179.
+
+; Editor -> Editor
+; moves the cursor position one 1String left, if possible
+(check-expect (editor-lft (make-editor '() '())) (make-editor '() '()))
+(check-expect (editor-lft (make-editor (list "d") (list "f" "g")))
+  (make-editor '() (list "d" "f" "g")))
+(define (editor-lft ed)
+  (if (empty? (editor-pre ed)) ed
+    (make-editor (rest (editor-pre ed))
+      (cons (first (editor-pre ed)) (editor-post ed)))))
+
+; Editor -> Editor
+; moves the cursor position one 1String right, if possible
+(check-expect (editor-rgt (make-editor '() '())) (make-editor '() '()))
+(check-expect (editor-rgt (make-editor (list "d") (list "f" "g")))
+  (make-editor (list "f" "d") (list "g")))
+(define (editor-rgt ed)
+  (if (empty? (editor-post ed)) ed
+    (make-editor (cons (first (editor-post ed)) (editor-pre ed))
+      (rest (editor-post ed)))))
+
+; Editor -> Editor
+; deletes a 1String to the left of the cursor, if possible
+(check-expect (editor-del (make-editor '() '())) (make-editor '() '()))
+(check-expect (editor-del (make-editor (list "d") (list "f" "g")))
+  (make-editor '() (list "f" "g")))
+(define (editor-del ed)
+  (if (empty? (editor-pre ed)) ed
+    (make-editor (rest (editor-pre ed)) (editor-post ed))))
+
 ; main : String -> Editor
 ; launches the editor given some initial string
 (define (main s)
    (big-bang (create-editor s "")
      [on-key editor-kh]
      [to-draw editor-render]))
-
-; Editor KeyEvent -> Editor
-; deals with a key event, given some editor
-(define (editor-kh ed k)
-  (cond
-    [(key=? k "left") ed]
-    [(key=? k "right") ed]
-    [(key=? k "\b") ed]
-    [(key=? k "\t") ed]
-    [(key=? k "\r") ed]
-    [(= (string-length k) 1) (editor-ins ed k)]
-    [else ed]))
