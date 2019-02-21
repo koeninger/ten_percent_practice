@@ -57,12 +57,12 @@
 1 0 10 #"text-box%\0"
 1 0 32 #"(lib \"text-snipclass.ss\" \"xml\")\0"
 1 0 1 6 #"wxloc\0"
-          0 0 69 0 1 #"\0"
+          0 0 70 0 1 #"\0"
 0 75 1 #"\0"
 0 12 90 -1 90 -1 3 -1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 255 255 255 1 -1 0 9
 #"Standard\0"
 0 75 6 #"Menlo\0"
-0 11 90 -1 90 -1 3 -1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 255 255 255 1 -1 2 1
+0 9 90 -1 90 -1 3 -1 0 1 0 1 0 0 0 0 0 0 0 0 0 0 0 255 255 255 1 -1 2 1
 #"\0"
 0 -1 1 #"\0"
 1 0 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 1 1 1 1 1 1 0 0 0 0 0 0 -1 -1 2 24
@@ -221,7 +221,7 @@
 1.0 0 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0 0 0 1.0 1.0 1.0 0 100 0 0 0 0 -1
 -1 0 1 #"\0"
 0 75 6 #"Menlo\0"
-0.0 12 90 -1 90 -1 3 -1 0 1 0 1 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
+0.0 11 90 -1 90 -1 3 -1 0 1 0 1 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
 255 255 1 -1 2 1 #"\0"
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 -1 -1 -1 0 0 0 0 0 0 0.0 0.0 0.0 1.0 1.0 1.0 0 0 0 0 0 0
@@ -234,7 +234,10 @@
 0 -1 -1 2 1 #"\0"
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 93 -1 -1 0 1 0 0 0 0 0.0 0.0 0.0 1.0 1.0 1.0 0 0 175 0 0
-0 -1 -1 24 1 #"\0"
+0 -1 -1 0 1 #"\0"
+0 75 6 #"Menlo\0"
+0.0 12 90 -1 90 -1 3 -1 0 1 0 1 0 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
+255 255 1 -1 24 1 #"\0"
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 -1 -1 -1 0 0 0 0 1 0 0.0 0.0 0.0 0.0 0.0 0.0 0 0 0 255
 255 255 -1 -1 15 1 #"\0"
@@ -261,7 +264,7 @@
 -1 -1 2 1 #"\0"
 0 -1 1 #"\0"
 1.0 0 -1 -1 -1 -1 -1 -1 1 0 0 0 0 0 0.0 0.0 0.0 1.0 1.0 1.0 65 105 225 0
-0 0 -1 -1           0 410 0 4 3 85
+0 0 -1 -1           0 407 0 4 3 85
 (
  #";; The first three lines of this file were inserted by DrRacket. The"
  #"y record metadata"
@@ -282,20 +285,23 @@
  #"; In this section we continue our virtual zoo project from Virtual P"
  #"et Worlds. Specifically, the goal of the exercise is to "
 ) 0 0 17 3 40 #"combine the cat world program with the p"
-0 0 17 11 81
+0 0 17 3 81
 (
  #"rogram for managing its happiness gauge. When the combined program r"
  #"uns, you see "
-) 0 0 17 11 122
+) 0 0 17 11 4 #"the "
+0 0 17 3 118
 (
- #"the cat walking across the canvas, and, with each step, its happines"
- #"s goes down. The only way to make the cat happy is to "
-) 0 0 17 3 53 #"feed it (down arrow) or to pet it (up arrow). Finally"
-0 0 17 11 69
+ #"cat walking across the canvas, and, with each step, its happiness go"
+ #"es down. The only way to make the cat happy is to "
+) 0 0 17 11 8 #"feed it "
+0 0 17 3 45 #"(down arrow) or to pet it (up arrow). Finally"
+0 0 17 3 69
 (
  #", the goal of the last exercise in this section is to create another"
  #" "
-) 0 0 17 3 19 #"virtual, happy pet."
+) 0 0 17 11 9 #"virtual, "
+0 0 17 3 10 #"happy pet."
 0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
@@ -307,9 +313,6 @@
  #"happiness. Then formulate a data "
 ) 0 0 17 3 62
 #"definition for cats, dubbed VCat, including an interpretation."
-0 0 24 29 1 #"\n"
-0 0 24 29 1 #"\n"
-0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
@@ -344,9 +347,6 @@
 0 0 24 3 1 #" "
 0 0 19 3 7 #"\"black\""
 0 0 24 3 2 #"))"
-0 0 24 29 1 #"\n"
-0 0 17 3 49 #";(define meter (rectangle 490 56  \"solid\" \"red\"))"
-0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
 0 0 24 29 1 #"\n"
