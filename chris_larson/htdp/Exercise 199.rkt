@@ -37,19 +37,21 @@
 (define NAME-1 (cons "Name" (cons "Name" '())))
 (define ALBUM-1 (cons "Album" (cons "Album" '())))
 (define TIME-1 (cons "Total Time" (cons 10000 '())))
+(define PLAYED-1 (cons "Played" (cons #false '())))
 
 (define ARTWORK-2 (cons "Artwork Count" (cons 2 '())))
 (define NAME-2 (cons "Name" (cons "Name 2" '())))
 (define ALBUM-2 (cons "Album" (cons "Album 2" '())))
 (define TIME-2 (cons "Total Time" (cons 20000 '())))
+(define PLAYED-2 (cons "Played" (cons #true '())))
 
 ; A BSDN is one of: 
 ; – Boolean
 ; – Number
 ; – String
 ; – Date
-(define LASSOC-1 (list ARTWORK-1 NAME-1 ALBUM-1 TIME-1))
-(define LASSOC-2 (list ARTWORK-2 NAME-2 ALBUM-2 TIME-2))
+(define LASSOC-1 (list ARTWORK-1 NAME-1 ALBUM-1 TIME-1 PLAYED-1))
+(define LASSOC-2 (list ARTWORK-2 NAME-2 ALBUM-2 TIME-2 PLAYED-2))
 
 ; An LLists is one of:
 ; – '()
@@ -217,4 +219,25 @@
     [(empty? l) 0]
     [else (+ (get-value (find-association "Total Time" (first l) "")) (total-time/list (rest l)))]))
 (check-expect (total-time/list LLIST-1) 30000)
-  
+
+; LList -> List-of-strings
+; returns Associations that are boolean
+(define (boolean-attributes l)
+  (create-set (bool-list-assoc l)))
+(check-expect (boolean-attributes LLIST-1) (list "Played"))
+
+; LLIST -> List-of-Strings
+; returns list of associations with bool vlaues
+(define (bool-list-assoc l)
+  (cond
+    [(empty? l) '()]
+    [else (append (bool-track-assoc (first l)) (bool-list-assoc (rest l)))]))
+(check-expect (bool-list-assoc LLIST-1) (list "Played" "Played"))
+
+; Track -> List-of-Strings
+; returns list of association names that have bool values
+(define (bool-track-assoc t)
+  (cond
+    [(empty? t) '()]
+    [else (if (boolean? (get-value (first t))) (cons (first (first t)) (bool-track-assoc (rest t))) (bool-track-assoc (rest t)))]))
+(check-expect (bool-track-assoc LASSOC-1 ) (list "Played"))
