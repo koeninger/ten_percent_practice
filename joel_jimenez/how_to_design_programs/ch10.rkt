@@ -1,4 +1,6 @@
 (require 2htdp/batch-io)
+(require 2htdp/universe)
+(require 2htdp/image)
 
 ; 10.1 Functions that Produce Lists
 
@@ -630,3 +632,81 @@
   (make-editor (list "O" "L" "L" "E" "H")(list "W" "O" "R" "L" "D")))
 (define (create-editor s1 s2)
   (make-editor (rev (explode s1)) (explode s2)))
+
+
+; Exercise 178.
+
+(define HEIGHT 20) ; the height of the editor
+(define WIDTH 200) ; its width
+(define FONT-SIZE 16) ; the font size
+(define FONT-COLOR "black") ; the font color
+
+(define MT (empty-scene WIDTH HEIGHT))
+(define CURSOR (rectangle 1 HEIGHT "solid" "red"))
+
+; Editor -> Image
+; renders an editor as an image of the two texts
+; separated by the cursor
+(define (editor-render e) MT)
+
+; Editor 1String -> Editor
+; insert the 1String k between pre and post
+(check-expect (editor-ins (make-editor '() '()) "e")
+  (make-editor (cons "e" '()) '()))
+(check-expect (editor-ins
+    (make-editor (cons "d" '()) (cons "f" (cons "g" '()))) "e")
+  (make-editor (cons "e" (cons "d" '()))
+               (cons "f" (cons "g" '()))))
+(define (editor-ins ed k)
+  (make-editor (cons k (editor-pre ed)) (editor-post ed)))
+
+; Editor KeyEvent -> Editor
+; deals with a key event, given some editor
+(define (editor-kh ed k)
+  (cond
+    [(key=? k "left") (editor-lft ed)]
+    [(key=? k "right") (editor-rgt ed)]
+    [(key=? k "\b") (editor-del ed)]
+    [(key=? k "\t") ed]
+    [(key=? k "\r") ed]
+    [(= (string-length k) 1) (editor-ins ed k)]
+    [else ed]))
+
+
+; Exercise 179.
+
+; Editor -> Editor
+; moves the cursor position one 1String left, if possible
+(check-expect (editor-lft (make-editor '() '())) (make-editor '() '()))
+(check-expect (editor-lft (make-editor (list "d") (list "f" "g")))
+  (make-editor '() (list "d" "f" "g")))
+(define (editor-lft ed)
+  (if (empty? (editor-pre ed)) ed
+    (make-editor (rest (editor-pre ed))
+      (cons (first (editor-pre ed)) (editor-post ed)))))
+
+; Editor -> Editor
+; moves the cursor position one 1String right, if possible
+(check-expect (editor-rgt (make-editor '() '())) (make-editor '() '()))
+(check-expect (editor-rgt (make-editor (list "d") (list "f" "g")))
+  (make-editor (list "f" "d") (list "g")))
+(define (editor-rgt ed)
+  (if (empty? (editor-post ed)) ed
+    (make-editor (cons (first (editor-post ed)) (editor-pre ed))
+      (rest (editor-post ed)))))
+
+; Editor -> Editor
+; deletes a 1String to the left of the cursor, if possible
+(check-expect (editor-del (make-editor '() '())) (make-editor '() '()))
+(check-expect (editor-del (make-editor (list "d") (list "f" "g")))
+  (make-editor '() (list "f" "g")))
+(define (editor-del ed)
+  (if (empty? (editor-pre ed)) ed
+    (make-editor (rest (editor-pre ed)) (editor-post ed))))
+
+; main : String -> Editor
+; launches the editor given some initial string
+(define (main s)
+   (big-bang (create-editor s "")
+     [on-key editor-kh]
+     [to-draw editor-render]))

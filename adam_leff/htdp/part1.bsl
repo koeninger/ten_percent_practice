@@ -1355,3 +1355,10 @@ a)
 b. This throws an error because the method is defined after it is called
 
 c. Here the method is defined first, so it doenst throw an error
+
+//Exercise 125
+1. Illegal because it doesnt have any members
+
+2. Legal
+
+3. Illegal because the name is an object
