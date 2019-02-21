@@ -1,4 +1,6 @@
 (require 2htdp/batch-io)
+(require 2htdp/universe)
+(require 2htdp/image)
 
 ; 10.1 Functions that Produce Lists
 
@@ -630,3 +632,49 @@
   (make-editor (list "O" "L" "L" "E" "H")(list "W" "O" "R" "L" "D")))
 (define (create-editor s1 s2)
   (make-editor (rev (explode s1)) (explode s2)))
+
+
+; Exercise 178.
+
+(define HEIGHT 20) ; the height of the editor
+(define WIDTH 200) ; its width
+(define FONT-SIZE 16) ; the font size
+(define FONT-COLOR "black") ; the font color
+
+(define MT (empty-scene WIDTH HEIGHT))
+(define CURSOR (rectangle 1 HEIGHT "solid" "red"))
+
+; Editor -> Image
+; renders an editor as an image of the two texts
+; separated by the cursor
+(define (editor-render e) MT)
+
+; Editor 1String -> Editor
+; insert the 1String k between pre and post
+(check-expect (editor-ins (make-editor '() '()) "e")
+  (make-editor (cons "e" '()) '()))
+(check-expect (editor-ins
+    (make-editor (cons "d" '()) (cons "f" (cons "g" '()))) "e")
+  (make-editor (cons "e" (cons "d" '()))
+               (cons "f" (cons "g" '()))))
+(define (editor-ins ed k)
+  (make-editor (cons k (editor-pre ed)) (editor-post ed)))
+
+; main : String -> Editor
+; launches the editor given some initial string
+(define (main s)
+   (big-bang (create-editor s "")
+     [on-key editor-kh]
+     [to-draw editor-render]))
+
+; Editor KeyEvent -> Editor
+; deals with a key event, given some editor
+(define (editor-kh ed k)
+  (cond
+    [(key=? k "left") ed]
+    [(key=? k "right") ed]
+    [(key=? k "\b") ed]
+    [(key=? k "\t") ed]
+    [(key=? k "\r") ed]
+    [(= (string-length k) 1) (editor-ins ed k)]
+    [else ed]))
