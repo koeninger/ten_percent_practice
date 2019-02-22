@@ -647,7 +647,15 @@
 ; Editor -> Image
 ; renders an editor as an image of the two texts
 ; separated by the cursor
-(define (editor-render e) MT)
+(define (editor-render ed)
+  (place-image/align
+    (beside (editor-text (reverse (editor-pre ed)))
+            CURSOR
+            (editor-text (editor-post ed)))
+    1 1
+    "left" "top"
+    MT))
+
 
 ; Editor 1String -> Editor
 ; insert the 1String k between pre and post
@@ -703,6 +711,31 @@
 (define (editor-del ed)
   (if (empty? (editor-pre ed)) ed
     (make-editor (rest (editor-pre ed)) (editor-post ed))))
+
+
+; Exercise 180.
+
+; Lo1s -> Image
+; renders a list of 1Strings as a text image
+(check-expect
+  (editor-text
+   (cons "p" (cons "o" (cons "s" (cons "t" '())))))
+  (text "post" FONT-SIZE FONT-COLOR))
+(define (editor-text s)
+  (text (implode-text s) FONT-SIZE FONT-COLOR))
+
+; Lo1s -> Image
+; renders a list of 1Strings as a text image
+(check-expect (implode-text '()) "")
+(check-expect
+  (implode-text
+   (cons "p" (cons "o" (cons "s" (cons "t" '())))))
+  "post")
+(define (implode-text s)
+  (cond
+    [(empty? s) ""]
+    [else (string-append (first s) (implode-text (rest s)))]))
+
 
 ; main : String -> Editor
 ; launches the editor given some initial string
