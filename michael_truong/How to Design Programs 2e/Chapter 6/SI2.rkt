@@ -77,7 +77,9 @@
 
 (define (ufo-move u)
   (make-ufo (ufo-img u)
-            (move-position (ufo-img u) (ufo-posn u) (ufo-vel u))
+            (move-position (ufo-img u) (ufo-posn u) (make-vel (random (neg (vel-dx (ufo-vel u)))
+                                                                      (vel-dx (ufo-vel u)))
+                                                              (vel-dy (ufo-vel u))))
             (ufo-vel u)))
 
 (define (tank-move t)
