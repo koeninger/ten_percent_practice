@@ -15,4 +15,4 @@
     [else -1]))
 
 (define (fits? ani cage)
-  (<= (animal-sace ani) cage))
+  (<= (animal-space ani) cage))
