@@ -32,21 +32,21 @@
 (define (insert-everywhere/in-all-words s low)
   (cond
     [(empty? low) '()]
-    [else (cons (insert-everywhere s '() (first low)) (insert-everywhere/in-all-words s (rest low)))]))
+    [else (append (insert-everywhere s '() (first low)) (insert-everywhere/in-all-words s (rest low)))]))
 (check-expect (insert-everywhere/in-all-words "d" (list (list"e"))) (list (list "d" "e") (list "e" "d")))
 
 ; 1String Word -> List-of-words
 ; puts one string in each position
 (define (insert-everywhere s a p)
   (cond
-    [(empty? p) '()]
-    [else (cons (insert-1string s a p) (insert-everywhere s (cons a (first p)) (rest p)))]))
+    [(empty? p) (cons (insert-1string s a p) '())]
+    [else (cons (insert-1string s a p) (insert-everywhere s (append a (list (first p))) (rest p)))]))
 (check-expect (insert-everywhere "a" '() (list "e")) (list (list "a" "e") (list "e" "a")))
 
 ; 1String Word Word -> Word
 ; inserts 1String between words
 (define (insert-1string s a p)
-  (append a s p))
+  (append a (list s) p))
 (check-expect (insert-1string "a" (list "b" "c") (list "d" "e")) (list "b" "c" "a" "d" "e"))
 
 ; List-of-strings -> Boolean
