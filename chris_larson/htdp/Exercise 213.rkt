@@ -53,6 +53,9 @@
 (define (all-words-from-rat? w)
   (and
     (member? "rat" w) (member? "art" w) (member? "tar" w)))
+(define (all-words-from-fold? w)
+  (and
+   (member? "fold" w) (member? "old" w)))
  
 ; String -> List-of-strings
 ; finds all words that the letters of some given word spell
