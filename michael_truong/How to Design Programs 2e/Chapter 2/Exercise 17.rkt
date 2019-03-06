@@ -5,5 +5,6 @@
 (define (image-classify img)
    (cond
      [(> (image-height img) (image-width img)) "tall"]
-     [(> (image-width img) (image-height img)) "wide"]
-     [else "square"]))
+     [(= (image-height img) (image-width img)) "square"]
+     [(< (image-height img) (image-width img)) "wide"]
+     [else ""]))
