@@ -16,7 +16,10 @@
 ; state of the world by evaluating (render cw) 
 (define (render cw)
   (place-image DOT (posn-x (WorldState-p cw)) (posn-y (WorldState-p cw)) BACKGROUND))
- 
+
+(define (game-over-render cw)
+  (place-image (text "worm hit border" 24 "orange")  120 (- HEIGHT 50) (place-image DOT (posn-x (WorldState-p cw)) (posn-y (WorldState-p cw)) BACKGROUND)))
+
 ; WorldState -> WorldState
 ; for each tick of the clock, big-bang obtains the next 
 ; state of the world from (clock-tick-handler cw) 
@@ -24,10 +27,15 @@
   (cond
     [(string=? (WorldState-d cw) "down") (make-WorldState (make-posn (posn-x (WorldState-p cw)) (+ (posn-y (WorldState-p cw)) STEP)) (WorldState-d cw))]
     [(string=? (WorldState-d cw) "up") (make-WorldState (make-posn (posn-x (WorldState-p cw)) (- (posn-y (WorldState-p cw)) STEP)) (WorldState-d cw))]
-    [(string=? (WorldState-d cw) "right") (make-WorldState (make-posn (posn-x (WorldState-p cw)) (+ (posn-y (WorldState-p cw)) STEP)) (WorldState-d cw))]
+    [(string=? (WorldState-d cw) "right") (make-WorldState (make-posn (+ (posn-x (WorldState-p cw)) STEP) (posn-y (WorldState-p cw))) (WorldState-d cw))]
     [(string=? (WorldState-d cw) "left") (make-WorldState (make-posn (- (posn-x (WorldState-p cw)) STEP) (posn-y (WorldState-p cw))) (WorldState-d cw))]
-    [else (make-WorldState (make-posn (+ (posn-x (WorldState-p cw)) STEP) (posn-y (WorldState-p cw))) (WorldState-d cw))]))
- 
+    [else (make-WorldState (make-posn (+ (posn-x (WorldState-p cw)) STEP) (posn-y (WorldState-p cw))) "right")]))
+(check-expect (clock-tick-handler (make-WorldState (make-posn 300 300) "")) (make-WorldState (make-posn (+ STEP 300) 300) "right"))
+(check-expect (clock-tick-handler (make-WorldState (make-posn 300 300) "right")) (make-WorldState (make-posn (+ STEP 300) 300) "right"))
+(check-expect (clock-tick-handler (make-WorldState (make-posn 300 300) "down")) (make-WorldState (make-posn 300 (+ STEP 300)) "down"))
+(check-expect (clock-tick-handler (make-WorldState (make-posn 300 300) "up")) (make-WorldState (make-posn 300 (- 300 STEP)) "up"))
+(check-expect (clock-tick-handler (make-WorldState (make-posn 300 300) "left")) (make-WorldState (make-posn (- 300 STEP) 300) "left"))
+
 ; WorldState String -> WorldState 
 ; for each keystroke, big-bang obtains the next state 
 ; from (keystroke-handler cw ke); ke represents the key
@@ -46,15 +54,20 @@
     [(> (posn-x (WorldState-p cw)) WIDTH) #true]
     [(< (posn-x (WorldState-p cw)) 0) #true]
     [(> (posn-y (WorldState-p cw)) HEIGHT) #true]
-    [(< (posn-x (WorldState-p cw)) 0) #true]
+    [(< (posn-y (WorldState-p cw)) 0) #true]
     [else #false]))
-    
+(check-expect (end? (make-WorldState (make-posn (- WIDTH STEP) (- HEIGHT STEP)) "")) #false)  
+(check-expect (end? (make-WorldState (make-posn (+ WIDTH STEP) (- HEIGHT STEP)) "")) #true)
+(check-expect (end? (make-WorldState (make-posn (- WIDTH STEP) (+ HEIGHT STEP)) "")) #true)
+(check-expect (end? (make-WorldState (make-posn 0 0) "")) #false)
+(check-expect (end? (make-WorldState (make-posn (- WIDTH STEP) (- 0 STEP)) "")) #true)
+(check-expect (end? (make-WorldState (make-posn (- 0 STEP) (- HEIGHT STEP)) "")) #true)
 
 (define (main y)
   (big-bang y
     [on-tick clock-tick-handler 1]
-    [stop-when end?]
+    [stop-when end? game-over-render]
     [to-draw render]
     [on-key keystroke-handler]))
 
-; (main (make-WorldState (make-posn 300 300) ""))
+; (main (make-WorldState (make-posn 600 300) ""))
