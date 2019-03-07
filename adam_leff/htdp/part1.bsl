@@ -1362,3 +1362,32 @@ c. Here the method is defined first, so it doenst throw an error
 2. Legal
 
 3. Illegal because the name is an object
+
+//Exercise 126
+1. (make-point 1 2 3)
+
+2. (make-point (make-point 1 2 3) 4 5)
+
+3. (make-point 3 3 4)
+
+4. (make-none)
+
+5. (make-point 1 4 5)
+
+//Exercise 127
+1. #false
+
+2. 3
+
+3. 6
+
+4. error
+
+5. error
+
+//Exercise 128
+- none of them are the same
+-0.01 is not in that distance
+- not the same
+- swapped
+- 4 is not odd
