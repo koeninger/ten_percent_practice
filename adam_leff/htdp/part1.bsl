@@ -1384,3 +1384,10 @@ c. Here the method is defined first, so it doenst throw an error
 4. error
 
 5. error
+
+//Exercise 128
+- none of them are the same
+-0.01 is not in that distance
+- not the same
+- swapped
+- 4 is not odd
