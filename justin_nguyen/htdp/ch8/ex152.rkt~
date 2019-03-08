@@ -23,4 +23,4 @@
 (define (row x i)
   (cond
     [(zero? x) empty-image]
-    [else (beside i (row (sub1 x) i))]))
+    [else (beside i (col (sub1 x) i))]))
