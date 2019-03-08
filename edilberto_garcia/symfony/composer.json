@@ -1,0 +1,12 @@
+{
+    "name": "egarcia/symfony",
+    "authors": [
+        {
+            "name": "Edilberto Garcia",
+            "email": "egarcia@federatedmedia.net"
+        }
+    ],
+    "require": {
+    "symfony/symfony" : "4.2.*"
+    }
+}
