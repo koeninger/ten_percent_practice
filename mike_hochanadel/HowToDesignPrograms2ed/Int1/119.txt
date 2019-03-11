@@ -1,0 +1,6 @@
+1.(define (f "x") x)
+Everything is correct except that is a value as part of the definiton grouping
+and not allowed.
+(define (f x y z) (x))
+Everything is correct except the last expression as it is missing an expression
+to go with the variable x.
