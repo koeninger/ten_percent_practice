@@ -1,0 +1,9 @@
+1. (3 + 4)
+This groups an expressions by expression, primitive, expression.  It should be
+primitive, expression, expression.
+2. number?
+It's the start of an expression but is not syntactially correct, missing a check
+and the wrapping parenthesis
+3. (x)
+The variable is grouped as part of an expression but there needs to at least two
+expressions included.
