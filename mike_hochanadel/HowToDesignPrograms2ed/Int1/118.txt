@@ -1,9 +1,9 @@
 1. (define (f x) x)
-It is grouped correctly, there are at least two variables to set the define,
+It is grouped correctly, there are at least one variables to set the define,
 and there is an expression (variable) at the end.
 2. (define (f x) y)
-It is grouped correctly, there are at least two variables to set the define,
+It is grouped correctly, there are at least one variables to set the define,
 and there is an expression (variable) at the end.
 3. (define (f x y) 3)
-It is grouped correctly, there are at least two variables to set the define,
+It is grouped correctly, there are at least one variables to set the define,
 and there is an expression (value) at the end.

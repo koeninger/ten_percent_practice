@@ -1,0 +1,8 @@
+1. (x)
+Illegal because the expression for grouping a variable requires at least one
+other expressions after the variable.
+2. (+ 1 (not x))
+Legal because the primitive for not only needs one expression, it should also
+belongs to expr
+3. (+ 1 2 3)
+Legal and belongs to the expr set
