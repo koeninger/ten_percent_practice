@@ -1,0 +1,8 @@
+1. x
+This appears to be an expression of some variable x
+2. (= y z)
+This is a primitive expression that checks for equality on y and z
+3. (= (= y z) 0)
+This is a correctly formatted compound of primitive expressions that checks
+for equality on y and z then then that result with 0.  Syntactically it is
+correct.
