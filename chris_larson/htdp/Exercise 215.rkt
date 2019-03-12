@@ -11,6 +11,8 @@
 ; Worm p, Direction d
 (define-struct WorldState [p d])
 
+(define START (make-WorldState (cons (make-posn 300 300) (cons (make-posn 285 300) (cons (make-posn 270 300) '()))) ""))
+
 ; a worm is one of:
 ; - '()
 ; - (cons posn worm)
@@ -20,6 +22,7 @@
 ; state of the world by evaluating (render cw) 
 (define (render cw)
   (render-worm (WorldState-p cw) BACKGROUND))
+(check-expect (render START) (place-image DOT 300 300 (place-image DOT 285 300 (place-image DOT 270 300 BACKGROUND))))
 
 ; List-of-posn -> Image
 ; places dots at list-of-posn
@@ -27,9 +30,13 @@
   (cond
     [(empty? lop) image]
     [else (place-image DOT (posn-x (first lop)) (posn-y (first lop)) (render-worm (rest lop) image))]))
-  
+
 (define (game-over-render cw)
   (place-image (text "worm hit border" 24 "orange")  120 (- HEIGHT 50) (render-worm (WorldState-p cw) BACKGROUND)))
+(check-expect (game-over-render START) (place-image (text "worm hit border" 24 "orange")  120 (- HEIGHT 50)
+                                                    (place-image DOT 300 300
+                                                                 (place-image DOT 285 300
+                                                                              (place-image DOT 270 300 BACKGROUND)))))
 
 ; WorldState -> WorldState
 ; for each tick of the clock, big-bang obtains the next 
