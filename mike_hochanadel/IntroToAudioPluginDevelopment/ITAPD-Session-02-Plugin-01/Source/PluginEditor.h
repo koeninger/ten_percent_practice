@@ -16,7 +16,8 @@
 //==============================================================================
 /**
 */
-class Itapdsession02plugin01AudioProcessorEditor  : public AudioProcessorEditor
+class Itapdsession02plugin01AudioProcessorEditor  : public AudioProcessorEditor,
+                                                    public Slider::Listener
 {
 public:
     Itapdsession02plugin01AudioProcessorEditor (Itapdsession02plugin01AudioProcessor&);
@@ -25,10 +26,14 @@ public:
     //==============================================================================
     void paint (Graphics&) override;
     void resized() override;
+    
+    void sliderValueChanged (Slider* slider) override;
 
 private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
+    Slider mGainControlSlider;
+    
     Itapdsession02plugin01AudioProcessor& processor;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (Itapdsession02plugin01AudioProcessorEditor)

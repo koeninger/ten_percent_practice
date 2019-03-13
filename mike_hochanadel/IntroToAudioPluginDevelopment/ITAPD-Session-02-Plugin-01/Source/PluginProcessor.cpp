@@ -24,6 +24,12 @@ Itapdsession02plugin01AudioProcessor::Itapdsession02plugin01AudioProcessor()
                        )
 #endif
 {
+    addParameter(mGainParameter = new AudioParameterFloat("gain",
+                                                          "Gain",
+                                                          0.0f,
+                                                          1.0f,
+                                                          0.5f));
+    mGainSmoothed = mGainParameter->get();
 }
 
 Itapdsession02plugin01AudioProcessor::~Itapdsession02plugin01AudioProcessor()
@@ -150,23 +156,29 @@ void Itapdsession02plugin01AudioProcessor::processBlock (AudioBuffer<float>& buf
     // the samples and the outer loop is handling the channels.
     // Alternatively, you can process the samples with the channels
     // interleaved by keeping the same state.
-    for (int channel = 0; channel < totalNumInputChannels; ++channel)
-    {
-        auto* channelData = buffer.getWritePointer (channel);
+    auto* channelLeft = buffer.getWritePointer (0);
+    auto* channelRight = buffer.getWritePointer (1);
 
-        // ..do something to the data...
+    // ..do something to the data...
+    //int sampleBuffer = buffer.getNumSamples();
+    for (int sample = 0; sample < buffer.getNumSamples(); sample++)
+    {
+        mGainSmoothed = mGainSmoothed - 0.004 * (mGainSmoothed - mGainParameter->get());
+        channelLeft[sample] *= mGainSmoothed;
+        channelRight[sample] *= mGainSmoothed;
     }
+
 }
 
 //==============================================================================
 bool Itapdsession02plugin01AudioProcessor::hasEditor() const
 {
-    return false; // (change this to false if you choose to not supply an editor)
+    return true; // (change this to false if you choose to not supply an editor)
 }
 
 AudioProcessorEditor* Itapdsession02plugin01AudioProcessor::createEditor()
 {
-    return nullptr;
+    return new Itapdsession02plugin01AudioProcessorEditor(*this);
 }
 
 //==============================================================================
