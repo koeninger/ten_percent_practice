@@ -12,6 +12,7 @@
 (define-struct WorldState [p d])
 
 (define START (make-WorldState (cons (make-posn 300 300) (cons (make-posn 285 300) (cons (make-posn 270 300) '()))) ""))
+(define HIT-SELF (make-WorldState (cons (make-posn 300 300) (cons (make-posn 285 300) (cons (make-posn 270 300) (cons (make-posn 300 300) '())))) ""))
 
 ; a worm is one of:
 ; - '()
@@ -32,12 +33,16 @@
     [else (place-image DOT (posn-x (first lop)) (posn-y (first lop)) (render-worm (rest lop) image))]))
 
 (define (game-over-render cw)
-  (place-image (text "worm hit border" 24 "orange")  120 (- HEIGHT 50) (render-worm (WorldState-p cw) BACKGROUND)))
+  (place-image (if (hit-self? cw) (text "worm hit self" 24 "orange") (text "worm hit border" 24 "orange")) 120 (- HEIGHT 50) (render-worm (WorldState-p cw) BACKGROUND)))
 (check-expect (game-over-render START) (place-image (text "worm hit border" 24 "orange")  120 (- HEIGHT 50)
                                                     (place-image DOT 300 300
                                                                  (place-image DOT 285 300
                                                                               (place-image DOT 270 300 BACKGROUND)))))
-
+(check-expect (game-over-render HIT-SELF) (place-image (text "worm hit self" 24 "orange")  120 (- HEIGHT 50)
+                                                    (place-image DOT 300 300
+                                                                 (place-image DOT 285 300
+                                                                              (place-image DOT 270 300
+                                                                                           (place-image DOT 300 300 BACKGROUND))))))
 ; WorldState -> WorldState
 ; for each tick of the clock, big-bang obtains the next 
 ; state of the world from (clock-tick-handler cw) 
@@ -77,22 +82,40 @@
       [(key=? ke "right") (make-WorldState (WorldState-p cw) "right")]
       [(key=? ke "left") (make-WorldState (WorldState-p cw) "left")]
       [else cw]))
- 
+
 ; WorldState -> Boolean
 ; after each event, big-bang evaluates (end? cw) 
 (define (end? cw)
+  (cond
+    [(hit-wall? cw) #true]
+    [(hit-self? cw) #true]
+    [else #false]))
+(check-expect (end? START) #false)
+(check-expect (end? HIT-SELF) #true)
+(check-expect (end? (make-WorldState (list (make-posn (+ WIDTH STEP) (- HEIGHT STEP))) "")) #true)
+
+; WorldState -> Boolean
+; after each event, big-bang evaluates (end? cw) 
+(define (hit-wall? cw)
   (cond
     [(> (posn-x (first (WorldState-p cw))) WIDTH) #true]
     [(< (posn-x (first (WorldState-p cw))) 0) #true]
     [(> (posn-y (first (WorldState-p cw))) HEIGHT) #true]
     [(< (posn-y (first (WorldState-p cw))) 0) #true]
     [else #false]))
-(check-expect (end? (make-WorldState (list (make-posn (- WIDTH STEP) (- HEIGHT STEP))) "")) #false)  
-(check-expect (end? (make-WorldState (list (make-posn (+ WIDTH STEP) (- HEIGHT STEP))) "")) #true)
-(check-expect (end? (make-WorldState (list (make-posn (- WIDTH STEP) (+ HEIGHT STEP))) "")) #true)
-(check-expect (end? (make-WorldState (list (make-posn 0 0)) "")) #false)
-(check-expect (end? (make-WorldState (list (make-posn (- WIDTH STEP) (- 0 STEP))) "")) #true)
-(check-expect (end? (make-WorldState (list (make-posn (- 0 STEP) (- HEIGHT STEP))) "")) #true)
+(check-expect (hit-wall? (make-WorldState (list (make-posn (- WIDTH STEP) (- HEIGHT STEP))) "")) #false)  
+(check-expect (hit-wall? (make-WorldState (list (make-posn (+ WIDTH STEP) (- HEIGHT STEP))) "")) #true)
+(check-expect (hit-wall? (make-WorldState (list (make-posn (- WIDTH STEP) (+ HEIGHT STEP))) "")) #true)
+(check-expect (hit-wall? (make-WorldState (list (make-posn 0 0)) "")) #false)
+(check-expect (hit-wall? (make-WorldState (list (make-posn (- WIDTH STEP) (- 0 STEP))) "")) #true)
+(check-expect (hit-wall? (make-WorldState (list (make-posn (- 0 STEP) (- HEIGHT STEP))) "")) #true)
+
+; WorldState -> Boolean
+;
+(define (hit-self? cw)
+  (member? (first (WorldState-p cw)) (rest (WorldState-p cw))))
+(check-expect (hit-self? START) #false)
+(check-expect (hit-self? HIT-SELF) #true)
 
 (define (main y)
   (big-bang y
